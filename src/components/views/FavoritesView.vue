@@ -12,7 +12,7 @@ const emit = defineEmits<{
   'open-workbench': []
 }>()
 
-const { favoriteNotes, deleteNote, toggleFavorite, isFavorite, updateFavoriteOrder } = useNotes()
+const { favoriteNotes, toggleFavorite, isFavorite, updateFavoriteOrder } = useNotes()
 
 // Computed property for vuedraggable to manage the order
 const favoritesList = computed({
@@ -61,10 +61,10 @@ const favoritesList = computed({
             <NoteCard 
               :note="element.note"
               :id="element.id"
+              mode="favorites"
               :is-favorite="isFavorite(element.id)"
               :draggable="true"
               @toggle-favorite="toggleFavorite"
-              @delete="deleteNote"
               @open-workbench="emit('open-workbench')"
             />
           </div>

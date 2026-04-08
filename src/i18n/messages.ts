@@ -48,7 +48,8 @@ export const messages = {
     },
     history: {
       title: '翻開舊紀錄',
-      description: '這些是你以前計畫過的筆記，隨時可以重新把它們搬上備料台',
+      description: '這裡記錄了你所有的歷史製作清單，方便隨時翻閱',
+      autoDeleteWarning: '最多保留 20 筆歷史紀錄，超過時最舊的一筆將會被自動刪除。想要永久保留的筆記，請記得按下星號將它加入「收藏的小筆記」中喔！',
       emptyTitle: '筆記本目前是空白的喔',
       emptyDescription: '去「寫張新筆記」開始你的第一步吧！',
       syncing: '回憶讀取中...',
@@ -125,7 +126,8 @@ export const messages = {
     },
     history: {
       title: '翻开旧纪录',
-      description: '这些是你以前计画过的笔记，随时可以重新把它们搬上备料台',
+      description: '这里记录了你所有的历史制作清单，方便随时翻阅',
+      autoDeleteWarning: '最多保留 20 笔历史纪录，超过时最旧的一笔将会被自动删除。想要永久保留的笔记，请记得按下星号将它加入“收藏的小笔记”中喔！',
       emptyTitle: '笔记本目前是空白的喔',
       emptyDescription: '去“写张新笔记”开始你的第一步吧！',
       syncing: '回忆读取中...',
@@ -202,7 +204,8 @@ export const messages = {
     },
     history: {
       title: 'Dusty Records',
-      description: 'Your previous plans. Toss them back on the workbench anytime.',
+      description: 'Your previous crafting lists are recorded here for easy access.',
+      autoDeleteWarning: 'A maximum of 20 historical records are kept. Be sure to star the notes you wish to permanently save in your favorites!',
       emptyTitle: 'Notebook is empty',
       emptyDescription: 'Go to Jot New Note and plan your first craft!',
       syncing: 'Recalling memories...',
@@ -279,7 +282,8 @@ export const messages = {
     },
     history: {
       title: '過去の記録をめくる',
-      description: '以前計画したノートだよ。いつでも仕込み台に戻せるよ。',
+      description: '過去の製作リストがここに記録されるよ。いつでも見返せるね。',
+      autoDeleteWarning: '履歴は最大20件まで保存され、自動的に古いものから消えていくよ。大切にしたいノートは星マークを押して「お気に入り」に保存してね！',
       emptyTitle: 'ノートはまだ真っ白だよ',
       emptyDescription: '「新しいノートを書く」から始めてみてね！',
       syncing: '思い出を探しています...',

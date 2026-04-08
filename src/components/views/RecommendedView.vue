@@ -99,6 +99,7 @@ const onSearchValueUpdate = (val: string | undefined) => {
           v-for="note in pagedNotes" 
           :key="note.id" 
           :note="note"
+          mode="recommended"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
           @open-workbench="emit('open-workbench')"

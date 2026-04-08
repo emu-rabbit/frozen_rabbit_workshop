@@ -5,10 +5,11 @@ import { computed } from 'vue'
 import recommendedNotesData from '../data/recommended.json'
 
 const NOTES_KEY = 'frozen-rabbit-notes'
-const FAVORITES_KEY = 'frozen-rabbit-favorites'
+const FAVORITES_STORE_KEY = 'frozen-rabbit-favorites-data'
 
 const notes = useLocalStorage<Note[]>(NOTES_KEY, [])
-const favoriteIds = useLocalStorage<string[]>(FAVORITES_KEY, [])
+// Using deep copies instead of IDs. Migrates old users implicitly (starts empty if format changes or just starts empty for new key)
+const favoriteNotesStore = useLocalStorage<Note[]>(FAVORITES_STORE_KEY, [])
 const recommendedNotes = recommendedNotesData as Note[]
 
 export function useNotes() {
@@ -40,54 +41,64 @@ export function useNotes() {
       items: items,
       createdAt: new Date()
     }
-    notes.value.unshift(newNote) // Add to the top
+    
+    // Add to history and enforce 20 item limit
+    notes.value.unshift(newNote)
+    if (notes.value.length > 20) {
+      notes.value = notes.value.slice(0, 20)
+    }
     
     if (shouldFavorite) {
-      favoriteIds.value.unshift(id) // Add to the top of favorites too
+      // Deep copy to favorites
+      favoriteNotesStore.value.unshift(JSON.parse(JSON.stringify(newNote)))
     }
   }
 
   const getNotes = () => notes.value
 
-  const deleteNote = (id: string) => {
-    notes.value = notes.value.filter(note => note.id !== id)
-  }
-
-  const toggleFavorite = (id: string) => {
-    if (favoriteIds.value.includes(id)) {
-      favoriteIds.value = favoriteIds.value.filter(favId => favId !== id)
+  const toggleFavorite = (noteOrId: Note | { id: string }) => {
+    if (isFavorite(noteOrId.id)) {
+      favoriteNotesStore.value = favoriteNotesStore.value.filter(n => n.id !== noteOrId.id)
     } else {
-      favoriteIds.value.push(id)
+      // Must be a full Note to add
+      if ('name' in noteOrId) {
+        favoriteNotesStore.value.unshift(JSON.parse(JSON.stringify(noteOrId)))
+      }
     }
   }
 
-  const isFavorite = (id: string) => favoriteIds.value.includes(id)
+  const isFavorite = (id: string) => favoriteNotesStore.value.some(n => n.id === id)
 
-  const favoritesCount = computed(() => favoriteIds.value.length)
+  const favoritesCount = computed(() => favoriteNotesStore.value.length)
   const recommendedCount = computed(() => recommendedNotes.length)
 
   const favoriteNotes = computed(() => {
-    // Maintain order according to favoriteIds
-    return favoriteIds.value.map(id => {
-      // Find in local notes first, then in recommended notes
-      const note = notes.value.find(n => n.id === id) || recommendedNotes.find(n => n.id === id) || null
-      return { id, note }
-    })
+    // Map favoriteNotesStore to the shape { id, note } expected by UI
+    return favoriteNotesStore.value.map(note => ({ id: note.id, note }))
   })
 
-  const updateFavoriteOrder = (newIds: string[]) => {
-    favoriteIds.value = newIds
+  // Allows drag-and-drop to reorder
+  const updateFavoriteOrder = (newOrder: string[]) => {
+    // Reorder our deep-copied store based on the array of IDs
+    const currentList = [...favoriteNotesStore.value]
+    const reordered: Note[] = []
+    
+    newOrder.forEach(id => {
+      const found = currentList.find(n => n.id === id)
+      if (found) reordered.push(found)
+    })
+    
+    favoriteNotesStore.value = reordered
   }
 
   return {
     notes,
     recommendedNotes,
-    favoriteIds,
+    favoriteNotesStore,
     favoritesCount,
     recommendedCount,
     favoriteNotes,
     addNote,
-    deleteNote,
     getNotes,
     toggleFavorite,
     isFavorite,

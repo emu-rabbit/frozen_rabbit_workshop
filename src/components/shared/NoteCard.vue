@@ -6,18 +6,20 @@ import type { Note, LocalizedString } from '../../types/note'
 const { t, locale } = useI18n()
 const isDev = import.meta.env.DEV
 
-defineProps<{
+const props = defineProps<{
   note: Note | null
   id?: string // Fallback ID if note is null
   isFavorite: boolean
   draggable?: boolean
+  mode?: 'history' | 'favorites' | 'recommended'
 }>()
 
 const emit = defineEmits<{
-  'toggle-favorite': [id: string]
-  'delete': [id: string]
+  'toggle-favorite': [noteOrId: Note | { id: string }]
   'open-workbench': [id: string]
 }>()
+
+const currentMode = props.mode || 'history'
 
 const getLocalizedName = (name: string | LocalizedString | undefined) => {
   if (!name) return ''
@@ -111,7 +113,7 @@ const formatDate = (date: Date | string) => {
     <div class="flex gap-2 shrink-0 items-center">
       <!-- Dev Only: Copy for Recommendation -->
       <button 
-        v-if="isDev && note"
+        v-if="isDev && note && currentMode === 'history'"
         @click="copyAsJson(note)"
         class="w-10 h-10 rounded-full flex items-center justify-center text-slate-300 hover:bg-soft-green-50 hover:text-soft-green-500 transition-colors"
         title="複製為站長推薦格式 (JSON)"
@@ -120,19 +122,13 @@ const formatDate = (date: Date | string) => {
       </button>
 
       <button 
-        @click="emit('toggle-favorite', note?.id || (id as string))" 
+        @click="emit('toggle-favorite', note ? note : { id: id as string })" 
         class="w-10 h-10 flex items-center justify-center transition-all duration-300 transform active:scale-90"
         :class="isFavorite ? 'text-orange-400' : 'text-slate-300 hover:text-orange-300'"
         :title="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
       >
         <i class="pi" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
       </button>
-
-      <template v-if="note && note.id.startsWith('history_')">
-        <button @click="emit('delete', note.id)" class="w-10 h-10 rounded-full flex items-center justify-center text-red-200 hover:bg-red-50 hover:text-red-500 transition-colors" :title="t('noteCard.delete')">
-          <i class="pi pi-trash"></i>
-        </button>
-      </template>
 
       <button v-if="note" @click="emit('open-workbench', note.id)" class="w-36 h-10 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-sm transition-colors text-sm font-bold gap-2 whitespace-nowrap">
           {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-sm"></i>

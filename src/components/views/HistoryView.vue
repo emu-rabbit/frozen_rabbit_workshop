@@ -10,14 +10,20 @@ const emit = defineEmits<{
   'open-workbench': []
 }>()
 
-const { notes, deleteNote, toggleFavorite, isFavorite } = useNotes()
+const { notes, toggleFavorite, isFavorite } = useNotes()
 </script>
 
 <template>
   <div class="p-8 max-w-4xl w-full mx-auto">
     <header class="mb-8">
       <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('history.title') }}</h2>
-      <p class="text-slate-500 text-sm">{{ t('history.description') }}</p>
+      <p class="text-slate-500 text-sm mb-4">{{ t('history.description') }}</p>
+      
+      <!-- Auto delete warning -->
+      <div v-if="notes.length > 0" class="bg-orange-50 border border-orange-100 rounded-lg p-3 flex items-start gap-3 mt-4 text-orange-600 text-sm">
+        <i class="pi pi-info-circle mt-0.5"></i>
+        <span>{{ t('history.autoDeleteWarning') }}</span>
+      </div>
     </header>
     
     <div v-if="notes.length === 0" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex items-center justify-center flex-col min-h-[300px]">
@@ -37,14 +43,15 @@ const { notes, deleteNote, toggleFavorite, isFavorite } = useNotes()
           v-for="note in notes" 
           :key="note.id" 
           :note="note"
+          mode="history"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
-          @delete="deleteNote"
           @open-workbench="emit('open-workbench')"
         />
       </div>
     </div>
   </div>
 </template>
+
 
 
