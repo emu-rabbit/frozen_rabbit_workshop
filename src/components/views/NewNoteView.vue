@@ -3,11 +3,13 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { searchItems, type MockItem } from '../../services/dictionary'
 import { useDebounceFn } from '@vueuse/core'
+import { useSettings } from '../../composables/useSettings'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const { debugMode } = useSettings()
 
 const emit = defineEmits<{
   'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
@@ -81,6 +83,33 @@ const canAddRow = computed(() => {
   return !!lastRow.selectedItem
 })
 
+const handleCopyJson = () => {
+  if (!noteTitle.value) return;
+
+  const validItems = searchRows.value
+    .filter(row => row.selectedItem !== null)
+    .map(row => ({
+      id: row.selectedItem!.id,
+      quantity: row.quantity
+    }))
+
+  const recommendedFormat = {
+    id: 'recommend_XXXXX',
+    name: {
+      tw: locale.value === 'tw' ? noteTitle.value : '',
+      cn: locale.value === 'cn' ? noteTitle.value : '',
+      en: locale.value === 'en' ? noteTitle.value : '',
+      ja: locale.value === 'ja' ? noteTitle.value : ''
+    },
+    items: validItems,
+    createdAt: new Date().toISOString()
+  }
+  
+  navigator.clipboard.writeText(JSON.stringify(recommendedFormat, null, 2))
+    .then(() => alert('已複製站長推薦格式 JSON 到剪貼簿！\n請記得手動修改 ID 的 XXXXX 部分。'))
+    .catch(err => console.error('無法複製:', err))
+}
+
 const handleCreateNote = () => {
   if (!noteTitle.value) return;
   
@@ -125,6 +154,12 @@ const handleCreateNote = () => {
             class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
             size="large"
           />
+        </div>
+        
+        <div class="flex-1 flex gap-2" v-if="debugMode && noteTitle">
+           <button @click="handleCopyJson" class="text-xs text-soft-green-600 hover:text-soft-green-700 bg-soft-green-50 px-3 py-1 rounded-lg border border-soft-green-100 flex items-center gap-1.5 transition-colors transition-opacity ml-1">
+             <i class="pi pi-copy text-[10px]"></i> {{ t('newNote.copyJson') }}
+           </button>
         </div>
         
         <div class="flex flex-col gap-4 mt-2">
@@ -213,9 +248,24 @@ const handleCreateNote = () => {
               <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
             </label>
 
-            <button @click="handleCreateNote" :disabled="!noteTitle" class="bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-lg">
-              <i class="pi pi-save"></i> {{ t('newNote.save') }}
-            </button>
+            <div class="flex items-center gap-3">
+              <button 
+                v-if="debugMode" 
+                @click="handleCopyJson" 
+                :disabled="!noteTitle"
+                class="group flex items-center gap-0 hover:gap-3 px-3 py-3.5 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
+                :title="t('newNote.copyJson')"
+              >
+                <i class="pi pi-copy text-xl"></i>
+                <span class="max-w-0 group-hover:max-w-[300px] opacity-0 group-hover:opacity-100 whitespace-nowrap transition-all duration-500 text-sm">
+                  {{ t('newNote.copyJson') }}
+                </span>
+              </button>
+              
+              <button @click="handleCreateNote" :disabled="!noteTitle" class="bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-lg">
+                <i class="pi pi-save"></i> {{ t('newNote.save') }}
+              </button>
+            </div>
         </div>
       </div>
     </div>
