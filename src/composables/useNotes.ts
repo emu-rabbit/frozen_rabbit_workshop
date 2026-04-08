@@ -2,11 +2,14 @@ import { useLocalStorage } from '@vueuse/core'
 import type { Note, NoteItem } from '../types/note'
 import { computed } from 'vue'
 
+import recommendedNotesData from '../data/recommended.json'
+
 const NOTES_KEY = 'frozen-rabbit-notes'
 const FAVORITES_KEY = 'frozen-rabbit-favorites'
 
 const notes = useLocalStorage<Note[]>(NOTES_KEY, [])
 const favoriteIds = useLocalStorage<string[]>(FAVORITES_KEY, [])
+const recommendedNotes = recommendedNotesData as Note[]
 
 export function useNotes() {
   /**
@@ -61,11 +64,13 @@ export function useNotes() {
   const isFavorite = (id: string) => favoriteIds.value.includes(id)
 
   const favoritesCount = computed(() => favoriteIds.value.length)
+  const recommendedCount = computed(() => recommendedNotes.length)
 
   const favoriteNotes = computed(() => {
     // Maintain order according to favoriteIds
     return favoriteIds.value.map(id => {
-      const note = notes.value.find(n => n.id === id) || null
+      // Find in local notes first, then in recommended notes
+      const note = notes.value.find(n => n.id === id) || recommendedNotes.find(n => n.id === id) || null
       return { id, note }
     })
   })
@@ -76,8 +81,10 @@ export function useNotes() {
 
   return {
     notes,
+    recommendedNotes,
     favoriteIds,
     favoritesCount,
+    recommendedCount,
     favoriteNotes,
     addNote,
     deleteNote,

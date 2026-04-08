@@ -4,7 +4,7 @@ import { computed } from 'vue'
 import { useNotes } from '../../composables/useNotes'
 
 const { t } = useI18n()
-const { notes, favoritesCount } = useNotes()
+const { notes, favoritesCount, recommendedCount } = useNotes()
 
 const props = defineProps<{
   currentTab: string
@@ -49,7 +49,7 @@ const activeTab = computed({
       >
         <i class="pi pi-star shrink-0"></i>
         <span v-html="t('nav.favorites')" class="leading-tight flex-1"></span>
-        <span v-if="favoritesCount > 0" class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ favoritesCount }}</span>
+        <span class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ favoritesCount }}</span>
       </button>
 
       <button 
@@ -58,7 +58,8 @@ const activeTab = computed({
         :class="activeTab === 'recommended' ? 'bg-soft-green-100 text-soft-green-800 shadow-sm' : 'text-slate-600 hover:bg-soft-green-50 hover:text-soft-green-700'"
       >
         <i class="pi pi-heart shrink-0"></i>
-        <span v-html="t('nav.recommended')" class="leading-tight"></span>
+        <span v-html="t('nav.recommended')" class="leading-tight flex-1"></span>
+        <span class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ recommendedCount }}</span>
       </button>
 
       <button 

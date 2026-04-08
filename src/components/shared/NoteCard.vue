@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { getDictionaryItem } from '../../services/dictionary'
-import type { Note } from '../../types/note'
+import type { Note, LocalizedString } from '../../types/note'
 
 const { t, locale } = useI18n()
+const isDev = import.meta.env.DEV
 
 defineProps<{
   note: Note | null
@@ -17,6 +18,34 @@ const emit = defineEmits<{
   'delete': [id: string]
   'open-workbench': [id: string]
 }>()
+
+const getLocalizedName = (name: string | LocalizedString | undefined) => {
+  if (!name) return ''
+  if (typeof name === 'string') return name
+  
+  const l = locale.value as keyof LocalizedString
+  return (name as LocalizedString)[l] || (name as LocalizedString).en || (name as LocalizedString).tw || ''
+}
+
+const copyAsJson = (note: Note) => {
+  const currentName = typeof note.name === 'string' ? note.name : (note.name as LocalizedString)[locale.value as keyof LocalizedString] || ''
+  
+  const recommendedFormat = {
+    id: 'recommend_XXXXX',
+    name: {
+      tw: locale.value === 'tw' ? currentName : '',
+      cn: locale.value === 'cn' ? currentName : '',
+      en: locale.value === 'en' ? currentName : '',
+      ja: locale.value === 'ja' ? currentName : ''
+    },
+    items: note.items,
+    createdAt: new Date().toISOString()
+  }
+  
+  navigator.clipboard.writeText(JSON.stringify(recommendedFormat, null, 2))
+    .then(() => alert('已複製站長推薦格式 JSON 到剪貼簿！\n請記得手動修改 ID 的 XXXXX 部分。'))
+    .catch(err => console.error('無法複製:', err))
+}
 
 const formatDate = (date: Date | string) => {
   if (!date) return ''
@@ -46,7 +75,9 @@ const formatDate = (date: Date | string) => {
     
     <div class="md:w-48 shrink-0">
       <template v-if="note">
-        <h3 class="text-xl font-bold text-soft-green-900 mb-2 leading-tight truncate" :title="note.name">{{ note.name }}</h3>
+        <h3 class="text-xl font-bold text-soft-green-900 mb-2 leading-tight truncate" :title="getLocalizedName(note.name)">
+          {{ getLocalizedName(note.name) }}
+        </h3>
         <p class="text-xs text-slate-400 flex items-center gap-1.5 font-sans whitespace-nowrap mt-1">
           <i class="pi pi-clock text-[10px]"></i> {{ formatDate(note.createdAt) }}
         </p>
@@ -78,6 +109,16 @@ const formatDate = (date: Date | string) => {
     </div>
     
     <div class="flex gap-2 shrink-0 items-center">
+      <!-- Dev Only: Copy for Recommendation -->
+      <button 
+        v-if="isDev && note"
+        @click="copyAsJson(note)"
+        class="w-10 h-10 rounded-full flex items-center justify-center text-slate-300 hover:bg-soft-green-50 hover:text-soft-green-500 transition-colors"
+        title="複製為站長推薦格式 (JSON)"
+      >
+        <i class="pi pi-copy"></i>
+      </button>
+
       <button 
         @click="emit('toggle-favorite', note?.id || (id as string))" 
         class="w-10 h-10 flex items-center justify-center transition-all duration-300 transform active:scale-90"
@@ -87,16 +128,17 @@ const formatDate = (date: Date | string) => {
         <i class="pi" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
       </button>
 
-      <template v-if="note">
+      <template v-if="note && note.id.startsWith('history_')">
         <button @click="emit('delete', note.id)" class="w-10 h-10 rounded-full flex items-center justify-center text-red-200 hover:bg-red-50 hover:text-red-500 transition-colors" :title="t('noteCard.delete')">
           <i class="pi pi-trash"></i>
         </button>
-
-        <button @click="emit('open-workbench', note.id)" class="w-36 h-10 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-sm transition-colors text-sm font-bold gap-2 whitespace-nowrap">
-          {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-sm"></i>
-        </button>
       </template>
+
+      <button v-if="note" @click="emit('open-workbench', note.id)" class="w-36 h-10 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-sm transition-colors text-sm font-bold gap-2 whitespace-nowrap">
+          {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-sm"></i>
+      </button>
     </div>
   </div>
 </template>
+
 

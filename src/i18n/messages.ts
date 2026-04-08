@@ -12,15 +12,23 @@ export const messages = {
       settings: '設定'
     },
     noteCard: {
-      addFavorite: '加入收藏',
+      addFavorite: '加入我的收藏',
       removeFavorite: '取消收藏',
-      delete: '刪除筆記'
+      delete: '刪除紀錄',
+      copyJson: '複製為站長推薦格式 (JSON)'
     },
     favorites: {
       title: '收藏的小筆記',
       description: '在這裡管理你最常用的製作清單',
       emptyTitle: '還沒有收藏的筆記',
       emptyDescription: '在「翻開舊紀錄」中點擊星星來收藏吧！'
+    },
+    recommended: {
+      title: '兔肉私心筆記',
+      description: '這些是站長整理出來實用的清單，你可以隨意瀏覽、搜尋並直接放上備料台，或按星星收藏。',
+      searchPlaceholder: '支援多國語系關鍵字搜尋...',
+      emptyTitle: '找不到相符的筆記',
+      emptyDescription: '換個關鍵字試試看吧！'
     },
     newNote: {
       title: '寫張新筆記',
@@ -62,13 +70,13 @@ export const messages = {
       language: '使用語言',
       langOptions: {
         tw: '繁體中文 (Traditional Chinese)',
-        zh: '簡體中文 (Simplified Chinese)',
+        cn: '簡體中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
       }
     }
   },
-  zh: {
+  cn: {
     app: {
       title: '冷冻兔肉的工坊',
       subtitle: '兔肉不私藏的好笔记本'
@@ -81,15 +89,23 @@ export const messages = {
       settings: '设立'
     },
     noteCard: {
-      addFavorite: '加入收藏',
+      addFavorite: '加入我的收藏',
       removeFavorite: '取消收藏',
-      delete: '删除笔记'
+      delete: '删除纪录',
+      copyJson: '复制为站长推荐格式 (JSON)'
     },
     favorites: {
       title: '收藏的小笔记',
       description: '在这里管理你最常用的制作清单',
       emptyTitle: '还没有收藏的笔记',
       emptyDescription: '在“翻开旧纪录”中点击星星來收藏吧！'
+    },
+    recommended: {
+      title: '兔肉私心笔记',
+      description: '这些是站长整理出来实用的清单，你可以随意浏览、搜寻并直接放上备料台，或按星星收藏。',
+      searchPlaceholder: '支援多国语系关键字搜寻...',
+      emptyTitle: '找不到相符的笔记',
+      emptyDescription: '换个关键字试试看吧！'
     },
     newNote: {
       title: '写张新笔记',
@@ -131,7 +147,7 @@ export const messages = {
       language: '使用语言',
       langOptions: {
         tw: '繁體中文 (Traditional Chinese)',
-        zh: '简体中文 (Simplified Chinese)',
+        cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
       }
@@ -151,14 +167,22 @@ export const messages = {
     },
     noteCard: {
       addFavorite: 'Add to Favorites',
-      removeFavorite: 'Remove Favorite',
-      delete: 'Delete Note'
+      removeFavorite: 'Remove from Favorites',
+      delete: 'Delete Record',
+      copyJson: 'Copy as Recommended Format (JSON)'
     },
     favorites: {
       title: 'Favorite Notes',
       description: 'Manage your most frequently used crafting lists here.',
       emptyTitle: 'No favorites yet',
       emptyDescription: 'Click the star in "Historical Records" to add some!'
+    },
+    recommended: {
+      title: 'Rabbit\'s Picks',
+      description: 'These are practical lists compiled by the rabbit. Browse, search, use them, or star them for later.',
+      searchPlaceholder: 'Search notes (multi-language support)...',
+      emptyTitle: 'No Matching Notes Found',
+      emptyDescription: 'Try a different keyword!'
     },
     newNote: {
       title: 'Jot a New Note',
@@ -200,7 +224,7 @@ export const messages = {
       language: 'Language',
       langOptions: {
         tw: '繁體中文 (Traditional Chinese)',
-        zh: '简体中文 (Simplified Chinese)',
+        cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
       }
@@ -221,13 +245,21 @@ export const messages = {
     noteCard: {
       addFavorite: 'お気に入りに追加',
       removeFavorite: 'お気に入りから削除',
-      delete: 'ノートを削除'
+      delete: '記録を削除',
+      copyJson: '推奨形式としてコピー (JSON)'
     },
     favorites: {
       title: 'お気に入りノート',
       description: 'よく使う制作リストをここで管理しよう。',
       emptyTitle: 'お気に入りはまだないよ',
       emptyDescription: '「過去の紀錄」で星マークを押して追加してね！'
+    },
+    recommended: {
+      title: 'うさぎのオススメ',
+      description: 'うさぎがまとめた便利なリストだよ。検索して仕込み台に置いたり、お気に入りに追加してね。',
+      searchPlaceholder: 'ノートを検索（多言語対応）...',
+      emptyTitle: '見つからないみたい',
+      emptyDescription: '別のキーワードを試してね！'
     },
     newNote: {
       title: '新しくノートを書く',
@@ -269,7 +301,7 @@ export const messages = {
       language: '言語',
       langOptions: {
         tw: '繁體中文 (Traditional Chinese)',
-        zh: '简体中文 (Simplified Chinese)',
+        cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
       }

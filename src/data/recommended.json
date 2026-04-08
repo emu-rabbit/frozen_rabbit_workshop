@@ -1,0 +1,30 @@
+[
+  {
+    "id": "recommend_00001",
+    "name": {
+      "tw": "白金詠咒飾品",
+      "cn": "白金咏咒饰品",
+      "en": "Platinum Casting Accessories",
+      "ja": "プラチナ・キャスターアクセサリー"
+    },
+    "items": [
+      {
+        "id": 9079,
+        "quantity": 1
+      },
+      {
+        "id": 9080,
+        "quantity": 1
+      },
+      {
+        "id": 9078,
+        "quantity": 1
+      },
+      {
+        "id": 9081,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-08T14:34:06.606Z"
+  }
+]
