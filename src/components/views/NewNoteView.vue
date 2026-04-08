@@ -1,0 +1,213 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { searchItems, type MockItem } from '../../services/dictionary'
+import { useDebounceFn } from '@vueuse/core'
+
+import InputText from 'primevue/inputtext'
+import AutoComplete from 'primevue/autocomplete'
+
+const { t } = useI18n()
+
+const emit = defineEmits<{
+  'create-note': [title: string, items: { id: number, quantity: number }[]]
+}>()
+
+const noteTitle = ref('')
+
+interface SearchRow {
+  id: string
+  query: string
+  selectedItem: MockItem | null
+  quantity: number
+  suggestions: MockItem[]
+  searching: boolean
+  searchedEmpty: boolean
+}
+
+const searchRows = ref<SearchRow[]>([{
+  id: crypto.randomUUID(),
+  query: '',
+  quantity: 1,
+  selectedItem: null,
+  suggestions: [],
+  searching: false,
+  searchedEmpty: false
+}])
+
+const onSearch = useDebounceFn(async (event: any, index: number) => {
+  const row = searchRows.value[index]
+  if (!row) return
+  
+  row.searching = true
+  row.searchedEmpty = false
+  
+  const results = await searchItems(event.query)
+  row.suggestions = results
+  row.searching = false
+  
+  if (results.length === 0 && event.query.trim() !== '') {
+    row.searchedEmpty = true
+  }
+}, 400)
+
+const addSearchRow = () => {
+  const lastRow = searchRows.value[searchRows.value.length - 1]
+  if (lastRow && !lastRow.selectedItem) {
+    return
+  }
+  searchRows.value.push({
+    id: crypto.randomUUID(),
+    query: '',
+    quantity: 1,
+    selectedItem: null,
+    suggestions: [],
+    searching: false,
+    searchedEmpty: false
+  })
+}
+
+const removeSearchRow = (index: number) => {
+  searchRows.value.splice(index, 1)
+  if (searchRows.value.length === 0) {
+    addSearchRow()
+  }
+}
+
+const canAddRow = computed(() => {
+  if (searchRows.value.length === 0) return true;
+  const lastRow = searchRows.value[searchRows.value.length - 1]
+  return !!lastRow.selectedItem
+})
+
+const handleCreateNote = () => {
+  if (!noteTitle.value) return;
+  
+  const validItems = searchRows.value
+    .filter(row => row.selectedItem !== null)
+    .map(row => ({
+      id: row.selectedItem!.id,
+      quantity: row.quantity
+    }))
+
+  emit('create-note', noteTitle.value, validItems)
+  
+  noteTitle.value = ''
+  searchRows.value = [{
+    id: crypto.randomUUID(),
+    query: '',
+    quantity: 1,
+    selectedItem: null,
+    suggestions: [],
+    searching: false,
+    searchedEmpty: false
+  }]
+}
+</script>
+
+<template>
+  <div class="p-8 max-w-4xl w-full mx-auto">
+    <header class="mb-8">
+      <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('newNote.title') }}</h2>
+      <p class="text-slate-500 text-sm">{{ t('newNote.description') }}</p>
+    </header>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8">
+      <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-2">
+          <label for="item-name" class="font-bold text-soft-green-900 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
+          <InputText 
+            id="item-name" 
+            v-model="noteTitle" 
+            :placeholder="t('newNote.placeholderTitle')" 
+            class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
+            size="large"
+          />
+        </div>
+        
+        <div class="flex flex-col gap-4 mt-2">
+          <div class="ml-1">
+            <h3 class="font-bold text-soft-green-900 text-lg">{{ t('newNote.itemsTitle') }}</h3>
+            <p class="text-sm text-slate-500">{{ t('newNote.itemsDescription') }}</p>
+          </div>
+
+          <div class="flex flex-col gap-3">
+            <div 
+              v-for="(row, index) in searchRows" 
+              :key="row.id"
+              class="flex items-start gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"
+            >
+              <div class="w-10 h-10 flex items-center justify-center bg-soft-green-100 text-soft-green-600 rounded-lg shrink-0 mt-0.5">
+                {{ index + 1 }}
+              </div>
+
+              <div class="flex-1 min-w-0">
+                  <AutoComplete 
+                    v-model="row.selectedItem" 
+                    :suggestions="row.suggestions" 
+                    @complete="onSearch($event, index)"
+                    :delay="0" 
+                    optionLabel="name" 
+                    :placeholder="t('newNote.searchPlaceholder')" 
+                    class="w-full"
+                    :pt="{
+                      input: { class: 'w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3' }
+                    }"
+                  >
+                    <template #option="slotProps">
+                        <div class="flex items-center gap-3 w-full">
+                            <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
+                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 bg-slate-100 rounded-sm" v-else></div>
+                            <div class="flex-1 truncate">{{ slotProps.option.name }}</div>
+                        </div>
+                    </template>
+                    <template #empty>
+                        <div class="p-3 text-slate-500 text-sm flex items-center gap-2">
+                          <i v-if="row.searching" class="pi pi-spinner pi-spin"></i>
+                          <i v-else-if="row.searchedEmpty" class="pi pi-exclamation-triangle text-orange-400"></i>
+                          <span v-if="row.searching">{{ t('newNote.searching') }}</span>
+                          <span v-else-if="row.searchedEmpty">{{ t('newNote.notFound') }}</span>
+                          <span v-else>{{ t('newNote.initialSearch') }}</span>
+                        </div>
+                    </template>
+                  </AutoComplete>
+
+                  <div v-if="row.selectedItem" class="mt-2 text-sm text-soft-green-700 bg-soft-green-100 border border-soft-green-200 px-3 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans">
+                    <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
+                    <span class="truncate font-medium">ID: {{ row.selectedItem.id }}</span>
+                  </div>
+              </div>
+
+              <div class="flex items-center gap-1 mt-0.5 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm shrink-0">
+                <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
+                  <i class="pi pi-minus text-sm"></i>
+                </button>
+                <input type="number" v-model.number="row.quantity" min="1" class="w-12 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent" />
+                <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
+                  <i class="pi pi-plus text-sm"></i>
+                </button>
+              </div>
+
+              <button @click="removeSearchRow(index)" class="w-10 h-10 mt-0.5 rounded-lg flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <button @click="addSearchRow" :disabled="!canAddRow" class="flex items-center gap-2 px-4 py-2 mt-2 border-2 border-dashed rounded-xl transition-all duration-300 font-medium text-sm" :class="canAddRow ? 'border-soft-green-300 text-soft-green-600 hover:bg-soft-green-50 hover:border-soft-green-400' : 'border-slate-200 text-slate-400 cursor-not-allowed bg-slate-50/50'">
+              <i class="pi pi-plus"></i> {{ t('newNote.addRow') }}
+            </button>
+            <p v-if="!canAddRow" class="text-xs text-orange-400 mt-2 ml-1">{{ t('newNote.rowHint') }}</p>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-soft-green-100 flex justify-end">
+            <button @click="handleCreateNote" :disabled="!noteTitle" class="bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-lg">
+              <i class="pi pi-save"></i> {{ t('newNote.save') }}
+            </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
