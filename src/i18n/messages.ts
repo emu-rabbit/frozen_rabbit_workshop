@@ -249,8 +249,8 @@ export const messages = {
     },
     nav: {
       newNote: '新しいノートを書く',
-      favorites: 'お気に入りノート',
-      recommended: 'うさぎのオススメ',
+      favorites: 'お気に入り<br />ノート',
+      recommended: 'うさぎの<br />オススメ',
       history: '過去の記録<br />をめくる',
       settings: '設定'
     },
