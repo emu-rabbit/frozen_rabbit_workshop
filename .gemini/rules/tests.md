@@ -11,4 +11,9 @@
 - 確認所有重要組件渲染時都無發生警告 (Warning) 或報錯 (Error)。
 - 若有使用到 Vue Router，可 mock routing 以測試 View 組件是否正常將資料傳遞到對應的子組件。
 
-如果可以，每次改版完成前，務必執行 `npm run test:unit` 確認沒有破壞現有的測試項目。
+If it's possible, always run `npm run test:unit` before each release to ensure no existing tests are broken.
+
+## 3. 開發流程與重構規範
+- **優先重構 (Refactor First)**：在進行大型功能開發前，應先檢視現有架構是否足夠支撐。若組件過於肥大 (如超過 300 行)，必須先進行拆解與模組化。
+- **Lint 與 品質清理**：在完成功能後，必須清理所有未使用的引用 (Unused imports) 以及修復 IDE 提出的樣式警告 (Lint warnings)。
+- **Git 提交**：在確保所有測試通過且高品質完成任務後，可進行合併提交（Squash commit），訊息應簡潔並具描述性。
