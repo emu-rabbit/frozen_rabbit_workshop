@@ -1,11 +1,16 @@
 import { shallowRef, ref } from 'vue';
 
-const SOURCE_URLS = {
-  tw: 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/tw/tw-items.json',
+const BASE_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json';
+const DICT_URLS: Record<string, string> = {
+  tw: `${BASE_URL}/tw/tw-items.json`,
+  zh: `${BASE_URL}/zh/zh-items.json`,
+  en: `${BASE_URL}/items.json`,
+  ja: `${BASE_URL}/ja/ja-items.json`, // Will likely 404, but handled now
 };
 
-const ICONS_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/item-icons.json';
-const RECIPES_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json/recipes.json';
+const ICONS_URL = `${BASE_URL}/item-icons.json`;
+const RECIPES_URL = `${BASE_URL}/recipes.json`;
+const ENGLISH_URL = `${BASE_URL}/items.json`;
 
 export interface Recipe {
     id: number;
@@ -28,7 +33,17 @@ export const globalDictionaryCache = shallowRef<MockItem[] | null>(null);
 export const globalRecipesCache = shallowRef<Recipe[] | null>(null);
 export const isDictionaryLoading = ref(false);
 
-const currentLanguage: keyof typeof SOURCE_URLS = 'tw';
+const internalEnglishCache = shallowRef<Record<string, any> | null>(null);
+const internalIconsCache = shallowRef<Record<string, string> | null>(null);
+
+let currentLanguage = 'tw';
+
+export function setDictionaryLanguage(lang: string) {
+  if (currentLanguage !== lang) {
+    currentLanguage = lang;
+    globalDictionaryCache.value = null; 
+  }
+}
 
 async function generateFallbackItemData() {
     return [
@@ -42,7 +57,6 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
   }
 
   if (isDictionaryLoading.value) {
-      // Loop wait until loading finished by another caller
       while(isDictionaryLoading.value) {
           await new Promise(r => setTimeout(r, 100));
       }
@@ -51,68 +65,86 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
 
   isDictionaryLoading.value = true;
   try {
-      console.log(`[Dictionary] Starting download of huge datasets for lang: ${currentLanguage}...`);
+      console.log(`[Dictionary] Starting sync for lang: ${currentLanguage}...`);
       
-      const [namesResponse, iconsResponse, recipesResponse] = await Promise.all([
-        fetch(SOURCE_URLS[currentLanguage]),
+      const fetchQueue = [
+        fetch(DICT_URLS[currentLanguage] || DICT_URLS.tw),
         fetch(ICONS_URL),
         fetch(RECIPES_URL)
-      ]);
+      ];
 
-      if (!namesResponse.ok || !iconsResponse.ok || !recipesResponse.ok) {
-          throw new Error(`Failed to fetch dictionary data.`);
+      const needsEnglish = currentLanguage !== 'en' && !internalEnglishCache.value;
+      if (needsEnglish) {
+        fetchQueue.push(fetch(ENGLISH_URL));
+      }
+
+      const results = await Promise.all(fetchQueue);
+      
+      // Target Dictionary Fallback (If Target Lang 404s, we don't crash)
+      let rawTargetNames: Record<string, any> = {};
+      if (results[0].ok) {
+        rawTargetNames = await results[0].json();
+      } else {
+        console.warn(`[Dictionary] Target language ${currentLanguage} data not found, falling back to English.`);
+      }
+
+      // Vital files check
+      if (!results[1].ok || !results[2].ok) {
+        throw new Error("Vital dictionary files (Icons or Recipes) failed to load.");
+      }
+
+      const rawIcons = await results[1].json();
+      const rawRecipes: Recipe[] = await results[2].json();
+      
+      if (needsEnglish) {
+        if (results[3].ok) {
+          internalEnglishCache.value = await results[3].json();
+        }
+      } else if (currentLanguage === 'en') {
+        internalEnglishCache.value = rawTargetNames;
       }
       
-      const rawNames = await namesResponse.json();
-      const rawIcons = await iconsResponse.json();
-      const rawRecipes: Recipe[] = await recipesResponse.json();
-      
-      // Cache recipes globally
+      internalIconsCache.value = rawIcons;
       globalRecipesCache.value = rawRecipes;
 
-      // Build Set of craftable Item IDs
-      const craftableSet = new Set<number>();
+      const craftableIds = new Set<number>();
       for (const recipe of rawRecipes) {
           if (recipe.result) {
-              craftableSet.add(recipe.result);
+              craftableIds.add(recipe.result);
           }
       }
 
       const itemsList: MockItem[] = [];
-      const keys = Object.keys(rawNames);
       
-      for (const idStr of keys) {
-         const id = parseInt(idStr, 10);
+      const extractName = (entry: any) => {
+        if (typeof entry === 'string') return entry;
+        if (entry && typeof entry === 'object') {
+          return entry[currentLanguage] || entry['en'] || Object.values(entry)[0];
+        }
+        return '';
+      };
+
+      for (const id of craftableIds) {
+         const idStr = id.toString();
          
-         // CRAFTER'S FILTER: Only keep if the item is a recipe result
-         if (!craftableSet.has(id)) {
-             continue;
+         let iconUrl = '';
+         const iconPath = rawIcons[idStr];
+         if (iconPath) {
+           iconUrl = `https://xivapi.com${iconPath}`;
          }
 
-         const itemDoc = rawNames[idStr];
-         let finalName = '';
-         if (typeof itemDoc === 'string') finalName = itemDoc;
-         else if (itemDoc[currentLanguage]) finalName = itemDoc[currentLanguage];
-         else if (itemDoc['en']) finalName = itemDoc['en']; // default
+         const targetEntry = rawTargetNames[idStr];
+         const englishEntry = internalEnglishCache.value?.[idStr];
          
-         if (finalName) {
-             let iconUrl = '';
-             let iconPath = rawIcons[idStr];
-             if (iconPath) {
-                 iconUrl = `https://xivapi.com${iconPath}`;
-             }
-             itemsList.push({
-                 id,
-                 name: finalName,
-                 icon: iconUrl
-             });
-         }
+         const name = extractName(targetEntry) || extractName(englishEntry) || `Item #${id}`;
+
+         itemsList.push({ id, name: name, icon: iconUrl });
       }
       
       globalDictionaryCache.value = itemsList;
-      console.log(`[Dictionary] Download complete! Parsed ${itemsList.length} craftable items to RAM cache. Recipes count: ${globalRecipesCache.value.length}`);
+      console.log(`[Dictionary] Sync complete. Language: ${currentLanguage}. Count: ${itemsList.length}`);
   } catch (err) {
-      console.error("[Dictionary] Download failed, dropping down to fallback dictionary:", err);
+      console.error("[Dictionary] Sync failed:", err);
       globalDictionaryCache.value = await generateFallbackItemData();
   } finally {
       isDictionaryLoading.value = false;
@@ -121,7 +153,6 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
   return globalDictionaryCache.value!;
 }
 
-// Reactivity helper
 export function getDictionaryItem(id: number): MockItem | undefined {
     return globalDictionaryCache.value?.find(item => item.id === id);
 }
@@ -140,7 +171,6 @@ export async function searchItems(query: string): Promise<MockItem[]> {
 
   const normalizedQuery = query.toLowerCase().trim();
   
-  // Return early items max 50 to prevent freezing the UI.
   return dictionary.filter(item => 
     item.name.toLowerCase().includes(normalizedQuery)
   ).slice(0, 50);

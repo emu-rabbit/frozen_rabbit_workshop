@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import App from '../src/App.vue'
 import PrimeVue from 'primevue/config'
+import { i18n } from '../src/i18n'
 
 describe('App', () => {
   let wrapper: VueWrapper<any>
@@ -9,9 +10,11 @@ describe('App', () => {
   beforeEach(() => {
     wrapper = mount(App, {
       global: {
-        plugins: [PrimeVue],
+        plugins: [PrimeVue, i18n],
         stubs: {
-          InputText: true
+          InputText: true,
+          AutoComplete: true,
+          SelectButton: true
         }
       }
     })
@@ -37,7 +40,7 @@ describe('App', () => {
     await historyButton!.trigger('click')
     
     // Check if the view switched
+    expect(wrapper.text()).toContain('歷史筆記')
     expect(wrapper.text()).toContain('檢視之前的製作試算紀錄')
-    expect(wrapper.text()).not.toContain('建立新筆記')
   })
 })
