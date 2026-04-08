@@ -156,12 +156,6 @@ const handleCreateNote = () => {
           />
         </div>
         
-        <div class="flex-1 flex gap-2" v-if="debugMode && noteTitle">
-           <button @click="handleCopyJson" class="text-xs text-soft-green-600 hover:text-soft-green-700 bg-soft-green-50 px-3 py-1 rounded-lg border border-soft-green-100 flex items-center gap-1.5 transition-colors transition-opacity ml-1">
-             <i class="pi pi-copy text-[10px]"></i> {{ t('newNote.copyJson') }}
-           </button>
-        </div>
-        
         <div class="flex flex-col gap-4 mt-2">
           <div class="ml-1">
             <h3 class="font-bold text-soft-green-900 text-lg">{{ t('newNote.itemsTitle') }}</h3>
