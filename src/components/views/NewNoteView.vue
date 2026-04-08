@@ -10,10 +10,11 @@ import AutoComplete from 'primevue/autocomplete'
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  'create-note': [title: string, items: { id: number, quantity: number }[]]
+  'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
 }>()
 
 const noteTitle = ref('')
+const shouldFavorite = ref(false)
 
 interface SearchRow {
   id: string
@@ -90,9 +91,10 @@ const handleCreateNote = () => {
       quantity: row.quantity
     }))
 
-  emit('create-note', noteTitle.value, validItems)
+  emit('create-note', noteTitle.value, validItems, shouldFavorite.value)
   
   noteTitle.value = ''
+  shouldFavorite.value = false
   searchRows.value = [{
     id: crypto.randomUUID(),
     query: '',
@@ -202,7 +204,15 @@ const handleCreateNote = () => {
           </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-soft-green-100 flex justify-end">
+        <div class="mt-8 pt-6 border-t border-soft-green-100 flex items-center justify-between">
+            <label class="flex items-center gap-3 cursor-pointer group select-none">
+              <div class="relative flex items-center justify-center">
+                <input type="checkbox" v-model="shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
+                <i class="pi pi-check absolute text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all duration-300 pointer-events-none text-xs font-bold"></i>
+              </div>
+              <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
+            </label>
+
             <button @click="handleCreateNote" :disabled="!noteTitle" class="bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-lg">
               <i class="pi pi-save"></i> {{ t('newNote.save') }}
             </button>

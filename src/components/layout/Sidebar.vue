@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
+import { useNotes } from '../../composables/useNotes'
 
 const { t } = useI18n()
+const { notes, favoritesCount } = useNotes()
 
 const props = defineProps<{
   currentTab: string
-  notesCount: number
 }>()
 
 const emit = defineEmits<{
@@ -47,7 +48,8 @@ const activeTab = computed({
         :class="activeTab === 'favorites' ? 'bg-soft-green-100 text-soft-green-800 shadow-sm' : 'text-slate-600 hover:bg-soft-green-50 hover:text-soft-green-700'"
       >
         <i class="pi pi-star shrink-0"></i>
-        <span v-html="t('nav.favorites')" class="leading-tight"></span>
+        <span v-html="t('nav.favorites')" class="leading-tight flex-1"></span>
+        <span v-if="favoritesCount > 0" class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ favoritesCount }}</span>
       </button>
 
       <button 
@@ -66,7 +68,7 @@ const activeTab = computed({
       >
         <i class="pi pi-book shrink-0"></i>
         <span v-html="t('nav.history')" class="leading-tight flex-1"></span>
-        <span v-if="notesCount > 0" class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ notesCount }}</span>
+        <span v-if="notes.length > 0" class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ notes.length }}</span>
       </button>
       
       <div class="mt-auto"></div>

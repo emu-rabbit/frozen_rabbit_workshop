@@ -11,6 +11,17 @@ export const messages = {
       history: '翻開舊紀錄',
       settings: '設定'
     },
+    noteCard: {
+      addFavorite: '加入收藏',
+      removeFavorite: '取消收藏',
+      delete: '刪除筆記'
+    },
+    favorites: {
+      title: '收藏的小筆記',
+      description: '在這裡管理你最常用的製作清單',
+      emptyTitle: '還沒有收藏的筆記',
+      emptyDescription: '在「翻開舊紀錄」中點擊星星來收藏吧！'
+    },
     newNote: {
       title: '寫張新筆記',
       description: '輸入筆記名稱與欲追蹤的物品以建立配方清單',
@@ -24,7 +35,8 @@ export const messages = {
       initialSearch: '輸入物品名稱開始',
       addRow: '還需要準備其他東西？',
       rowHint: '* 必須確保上一列已經填入並選擇物品後，才能繼續新增。',
-      save: '好，把這些放上備料台！'
+      save: '好，把這些放上備料台！',
+      addToFavorites: '立刻將此筆記加入我的收藏'
     },
     history: {
       title: '翻開舊紀錄',
@@ -68,6 +80,17 @@ export const messages = {
       history: '翻开旧纪录',
       settings: '设立'
     },
+    noteCard: {
+      addFavorite: '加入收藏',
+      removeFavorite: '取消收藏',
+      delete: '删除笔记'
+    },
+    favorites: {
+      title: '收藏的小笔记',
+      description: '在这里管理你最常用的制作清单',
+      emptyTitle: '还没有收藏的笔记',
+      emptyDescription: '在“翻开旧纪录”中点击星星來收藏吧！'
+    },
     newNote: {
       title: '写张新笔记',
       description: '输入笔记名称与欲追踪的物品以建立配方清单',
@@ -81,7 +104,8 @@ export const messages = {
       initialSearch: '输入物品名称开始',
       addRow: '还需要准备其他东西？',
       rowHint: '* 必须确保上一列已经填入并选择物品后，才能继续新增。',
-      save: '好，把这些放上备料台！'
+      save: '好，把这些放上备料台！',
+      addToFavorites: '立刻将此笔记加入我的收藏'
     },
     history: {
       title: '翻开旧纪录',
@@ -119,11 +143,22 @@ export const messages = {
       subtitle: 'A cozy crafting notebook'
     },
     nav: {
-      newNote: 'Jot New Note',
-      favorites: 'Little Favorites',
-      recommended: "Rabbit's Picks",
-      history: 'Dusty Records',
+      newNote: 'Write a New Note',
+      favorites: 'Favorite Notes',
+      recommended: 'Rabbit\'s Picks',
+      history: 'Historical Records',
       settings: 'Settings'
+    },
+    noteCard: {
+      addFavorite: 'Add to Favorites',
+      removeFavorite: 'Remove Favorite',
+      delete: 'Delete Note'
+    },
+    favorites: {
+      title: 'Favorite Notes',
+      description: 'Manage your most frequently used crafting lists here.',
+      emptyTitle: 'No favorites yet',
+      emptyDescription: 'Click the star in "Historical Records" to add some!'
     },
     newNote: {
       title: 'Jot a New Note',
@@ -138,7 +173,8 @@ export const messages = {
       initialSearch: 'Type to begin',
       addRow: 'Need anything else?',
       rowHint: '* Fill out the previous row before adding another.',
-      save: 'Toss these on the Workbench!'
+      save: 'Toss these on the Workbench!',
+      addToFavorites: 'Add to favorites immediately'
     },
     history: {
       title: 'Dusty Records',
@@ -182,6 +218,17 @@ export const messages = {
       history: '過去の記録<br />をめくる',
       settings: '設定'
     },
+    noteCard: {
+      addFavorite: 'お気に入りに追加',
+      removeFavorite: 'お気に入りから削除',
+      delete: 'ノートを削除'
+    },
+    favorites: {
+      title: 'お気に入りノート',
+      description: 'よく使う制作リストをここで管理しよう。',
+      emptyTitle: 'お気に入りはまだないよ',
+      emptyDescription: '「過去の紀錄」で星マークを押して追加してね！'
+    },
     newNote: {
       title: '新しくノートを書く',
       description: 'ノートの名前を決めて、仕込み台に置きたいアイテムを選んでね！',
@@ -195,7 +242,8 @@ export const messages = {
       initialSearch: '名前を入れてね',
       addRow: '他に欲しいものはある？',
       rowHint: '* 追加する前に今選んでいるアイテムを決めてね！',
-      save: 'よし、これを仕込み台へ！'
+      save: 'よし、これを仕込み台へ！',
+      addToFavorites: '同時にお気に入りに追加する'
     },
     history: {
       title: '過去の記録をめくる',

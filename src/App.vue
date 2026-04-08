@@ -21,7 +21,7 @@ import SettingsView from './components/views/SettingsView.vue'
 
 const { locale } = useI18n()
 const { language } = useSettings()
-const { notes, addNote, deleteNote } = useNotes()
+const { addNote } = useNotes()
 
 // Sync i18n locale and dictionary language with settings
 watch(language, (newLang) => {
@@ -33,8 +33,8 @@ watch(language, (newLang) => {
 // State for navigation
 const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench'
 
-const handleCreateNote = (title: string, items: { id: number, quantity: number }[]) => {
-  addNote(title, items)
+const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
+  addNote(title, items, shouldFavorite)
   currentTab.value = 'workbench'
 }
 
@@ -46,7 +46,7 @@ const handleLanguageUpdate = (val: string) => {
 <template>
   <div class="flex h-screen w-screen bg-soft-green-50 overflow-hidden text-slate-800 font-sans">
     <!-- Sidebar -->
-    <Sidebar v-model:currentTab="currentTab" :notesCount="notes.length" />
+    <Sidebar v-model:currentTab="currentTab" />
 
     <!-- Main Content -->
     <main class="flex-1 flex flex-col overflow-y-auto relative">
@@ -68,8 +68,6 @@ const handleLanguageUpdate = (val: string) => {
       
       <HistoryView 
         v-if="currentTab === 'history'" 
-        :notes="notes"
-        @delete-note="deleteNote"
         @open-workbench="currentTab = 'workbench'"
       />
       
@@ -85,6 +83,7 @@ const handleLanguageUpdate = (val: string) => {
     </main>
   </div>
 </template>
+
 
 <style>
 /* Global resets for number inputs */
