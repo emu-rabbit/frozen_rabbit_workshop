@@ -25,6 +25,7 @@ export interface Recipe {
 export interface MockItem {
   id: number;
   name: string; // localized name
+  enName?: string; // English name for cross-language search
   icon: string;
 }
 
@@ -116,10 +117,11 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
 
       const itemsList: MockItem[] = [];
       
-      const extractName = (entry: any) => {
+      const extractName = (entry: any, langOverride?: string) => {
         if (typeof entry === 'string') return entry;
         if (entry && typeof entry === 'object') {
-          return entry[currentLanguage] || entry['en'] || Object.values(entry)[0];
+          const l = langOverride || currentLanguage;
+          return entry[l] || entry['en'] || Object.values(entry)[0];
         }
         return '';
       };
@@ -137,8 +139,9 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
          const englishEntry = internalEnglishCache.value?.[idStr];
          
          const name = extractName(targetEntry) || extractName(englishEntry) || `Item #${id}`;
+         const enName = extractName(englishEntry, 'en');
 
-         itemsList.push({ id, name: name, icon: iconUrl });
+         itemsList.push({ id, name, enName, icon: iconUrl });
       }
       
       globalDictionaryCache.value = itemsList;
@@ -171,7 +174,9 @@ export async function searchItems(query: string): Promise<MockItem[]> {
 
   const normalizedQuery = query.toLowerCase().trim();
   
-  return dictionary.filter(item => 
-    item.name.toLowerCase().includes(normalizedQuery)
-  ).slice(0, 50);
+  return dictionary.filter(item => {
+    const mainMatch = item.name.toLowerCase().includes(normalizedQuery);
+    const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
+    return mainMatch || enMatch;
+  }).slice(0, 50);
 }
