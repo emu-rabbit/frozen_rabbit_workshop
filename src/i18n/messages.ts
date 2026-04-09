@@ -105,7 +105,7 @@ export const messages = {
           generateList: '生成製作清單'
         },
         tooltip: {
-          budget: '標價依據當下伺服器提供的平均價格做計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
+          budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
           time: '時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響'
         }
       }
@@ -235,7 +235,7 @@ export const messages = {
           generateList: '生成制作清单'
         },
         tooltip: {
-          budget: '标价依据当下服务器提供的平均价格做计算，且价格来源经过快取，實際真實的價格需要看當下真正的市場價格而定',
+          budget: '预算依据当前服务器依照市场最低价格做模拟买入计算，且价格来源经过快取，实际真实的价格需要看当下真正的市场价格而定',
           time: '时间仅仅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影响'
         }
       }
@@ -365,7 +365,7 @@ export const messages = {
           generateList: 'Generate List'
         },
         tooltip: {
-          budget: 'Prices are based on cached average data from current data center. Actual market board prices may vary.',
+          budget: 'Budget is calculated as a simulated purchase based on the lowest current market prices. Prices are cached and may differ from live values.',
           time: 'Time is a rough estimation based on common crafting/gathering flow. Actual speed depends on your stats and timed node availability.'
         }
       }
@@ -495,7 +495,7 @@ export const messages = {
           generateList: 'リスト作成'
         },
         tooltip: {
-          budget: '価格は全データセンターのキャッシュされた平均値に基づいています。実際の相場とは異なる場合があります。',
+          budget: '予算は現在のマーケットの最安値に基づいた模擬購入によって計算されています。価格はキャッシュされているため、実際の相場とは異なる場合があります。',
           time: '所要時間は一般的な製作・採集フローに基づく概算です。装備や限定ノードの状況により変動します。'
         }
       }
