@@ -40,7 +40,7 @@ const getUnallocated = (id: number) => {
 }
 
 const formatMoney = (val: number | null) => { 
-    if (val === null) return '無上架'
+    if (val === null) return t('workbench.view.status.nonePrice')
     return new Intl.NumberFormat().format(Math.floor(val)) + ' Gil' 
 }
 
@@ -66,13 +66,13 @@ const summary = computed(() => {
         
         // 2. 時間成本與職業清單
         if (d.craft > 0 && item.crafting) {
-            craftJobs.add(`${item.crafting.jobName} Lv.${item.crafting.level}${item.crafting.stars > 0 ? '★'.repeat(item.crafting.stars) : ''}`)
+            craftJobs.add(item.crafting.jobName + '|' + item.crafting.level + '|' + item.crafting.stars)
             const craftCount = Math.ceil(d.craft / item.crafting.yields)
             totalTime += craftCount * (item.crafting.stars > 0 ? 60 : 30)
         }
         
         if (d.gather > 0 && item.gathering) {
-            gatherJobs.add(`${item.gathering.jobName} Lv.${item.gathering.level}${item.gathering.stars > 0 ? '★'.repeat(item.gathering.stars) : ''}`)
+            gatherJobs.add(item.gathering.jobName + '|' + item.gathering.level + '|' + item.gathering.stars)
             totalTime += (d.gather * 5) // 每 6 個材料耗費 30 秒
         }
     })
@@ -100,6 +100,11 @@ const setDecisionRaw = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', v
     ;(decisions[String(id)] as any)[key] = Math.max(0, isNaN(val) ? 0 : val)
 }
 
+const handleReset = () => {
+    expandedItems.value = {}
+    initialize()
+}
+
 const expandedItems = ref<Record<number, boolean>>({})
 const toggleExpand = (id: number) => { expandedItems.value[id] = !expandedItems.value[id] }
 
@@ -107,16 +112,16 @@ const toggleExpand = (id: number) => { expandedItems.value[id] = !expandedItems.
 const renderStars = (count: number) => '★'.repeat(count)
 
 const formatTime = (seconds: number) => {
-    if (seconds <= 0) return '0 分'
+    if (seconds <= 0) return `0 ${t('workbench.view.summary.mins')}`
     const h = Math.floor(seconds / 3600)
     const m = Math.floor((seconds % 3600) / 60)
     const s = seconds % 60
     
     let res = ''
-    if (h > 0) res += `${h} 小時 `
-    if (m > 0 || h > 0) res += `${m} 分 `
+    if (h > 0) res += `${h} ${t('workbench.view.summary.hours')} `
+    if (m > 0 || h > 0) res += `${m} ${t('workbench.view.summary.mins')} `
     // 只有在不到一小時的情況下才顯示秒
-    if (h === 0 && s > 0) res += `${s} 秒`
+    if (h === 0 && s > 0) res += `${s} ${t('workbench.view.summary.secs')}`
     return res.trim()
 }
 </script>
@@ -131,7 +136,7 @@ const formatTime = (seconds: number) => {
         </div>
         <div v-if="activeWorkbenchNote" class="bg-white/70 backdrop-blur-md px-6 py-4 rounded-3xl border border-soft-green-100 shadow-lg flex items-center gap-6">
             <div class="flex flex-col min-w-0">
-                <span class="text-[15px] font-black text-soft-green-400 uppercase tracking-widest mb-0.5">正在備料</span>
+                <span class="text-[15px] font-black text-soft-green-400 uppercase tracking-widest mb-0.5">{{ t('workbench.view.prepping') }}</span>
                 <span class="font-black text-soft-green-900 text-lg truncate max-w-[200px]">{{ getLocalizedName(activeWorkbenchNote.name) }}</span>
             </div>
             <div class="h-10 w-px bg-soft-green-100"></div>
@@ -146,7 +151,7 @@ const formatTime = (seconds: number) => {
 
       <div v-if="isLoading" class="py-20 text-center">
           <i class="pi pi-spin pi-spinner text-4xl text-soft-green-500 mb-4"></i>
-          <p class="text-slate-400 font-bold">正在載入真實資料與市場價格...</p>
+          <p class="text-slate-400 font-bold">{{ t('workbench.view.analyzing') }}</p>
       </div>
 
       <div v-else class="flex flex-col gap-6 pb-96">
@@ -175,11 +180,11 @@ const formatTime = (seconds: number) => {
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">
-                                {{ workbenchItems[id]?.crafting?.jobName }} Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
+                                {{ t(workbenchItems[id]?.crafting?.jobName) }} Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
                             </span>
                             <!-- Gathering Badge -->
                             <span v-if="workbenchItems[id]?.gathering" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">
-                                {{ workbenchItems[id]?.gathering?.jobName }} Lv.{{ workbenchItems[id]?.gathering?.level }}{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
+                                {{ t(workbenchItems[id]?.gathering?.jobName) }} Lv.{{ workbenchItems[id]?.gathering?.level }}{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
                             </span>
                         </div>
                     </div>
@@ -191,7 +196,7 @@ const formatTime = (seconds: number) => {
                          <!-- BUY -->
                         <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
                              :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-300 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-100'">
-                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">購買</span>
+                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
@@ -202,8 +207,8 @@ const formatTime = (seconds: number) => {
                         <!-- CRAFT -->
                         <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200" 
                              :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-50' : 'bg-slate-50/80 border-slate-100')]">
-                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
-                               {{ !workbenchItems[id]?.canCraft ? '不可製作' : '製作' }}
+                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
+                               {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
@@ -215,8 +220,8 @@ const formatTime = (seconds: number) => {
                         <!-- GATHER -->
                         <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
                              :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-200 ring-2 ring-amber-50' : 'bg-slate-50/80 border-slate-100')]">
-                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
-                               {{ !workbenchItems[id]?.canGather ? '不可採集' : '採集' }}
+                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
+                               {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
@@ -228,7 +233,7 @@ const formatTime = (seconds: number) => {
                         <!-- OTHER -->
                         <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
                              :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-100'">
-                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">庫存</span>
+                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
@@ -245,7 +250,7 @@ const formatTime = (seconds: number) => {
                     >
                         <i class="pi pi-exclamation-circle text-sm"></i>
                         <span>
-                           {{ getUnallocated(id) > 0 ? `尚缺 ${getUnallocated(id)} 個` : `多出 ${Math.abs(getUnallocated(id))} 個` }}
+                           {{ getUnallocated(id) > 0 ? t('workbench.view.status.missing', { n: getUnallocated(id) }) : t('workbench.view.status.excess', { n: Math.abs(getUnallocated(id)) }) }}
                         </span>
                     </div>
 
@@ -258,26 +263,26 @@ const formatTime = (seconds: number) => {
             <div v-show="expandedItems[id]" class="border-t border-slate-50 bg-slate-50/20 p-6">
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div v-if="workbenchItems[id]?.gathering" class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">採集地點與詳情</span>
+                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">{{ t('workbench.view.details.gatherTitle') }}</span>
                         <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-xs font-bold">{{ workbenchItems[id].gathering.jobName }} Lv.{{ workbenchItems[id].gathering.level }}</span>
+                            <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-xs font-bold">{{ t(workbenchItems[id].gathering.jobName) }} Lv.{{ workbenchItems[id].gathering.level }}</span>
                             <span v-if="workbenchItems[id].gathering.isLimited" class="px-2 py-0.5 bg-red-50 text-red-600 rounded text-xs font-bold flex items-center gap-1">
-                                <i class="pi pi-clock scale-75"></i> 限時
+                                <i class="pi pi-clock scale-75"></i> {{ t('workbench.view.details.limited') }}
                             </span>
                         </div>
                         <div class="text-[16px] font-bold text-slate-700 mb-1">
-                            {{ workbenchItems[id].gathering.zoneName || '未知地點' }}
+                            {{ workbenchItems[id].gathering.zoneName || t('workbench.view.details.unknownZone') }}
                             <span v-if="workbenchItems[id].gathering.x" class="text-slate-400 text-sm ml-1">({{ workbenchItems[id].gathering.x.toFixed(1) }}, {{ workbenchItems[id].gathering.y.toFixed(1) }})</span>
                         </div>
                         <div v-if="workbenchItems[id].gathering.spawns.length > 0" class="text-xs text-slate-500 font-bold">
-                            出現時間: {{ workbenchItems[id].gathering.spawns.join(', ') }} (持續 {{ workbenchItems[id].gathering.duration / 60 }} 小時)
+                            {{ t('workbench.view.details.spawnTime') }}: {{ workbenchItems[id].gathering.spawns.join(', ') }} ({{ t('workbench.view.details.duration', { n: workbenchItems[id].gathering.duration / 60 }) }})
                         </div>
                     </div>
                     <div v-if="workbenchItems[id]?.crafting" class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">製作配方需求</span>
+                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">{{ t('workbench.view.details.craftTitle') }}</span>
                         <div class="mb-3">
-                            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded text-xs font-bold">{{ workbenchItems[id].crafting.jobName }} Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}</span>
-                            <span class="text-slate-400 text-xs font-bold ml-2">單次產量: {{ workbenchItems[id].crafting.yields }}</span>
+                            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded text-xs font-bold">{{ t(workbenchItems[id].crafting.jobName) }} Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}</span>
+                            <span class="text-slate-400 text-xs font-bold ml-2">{{ t('workbench.view.details.yield') }}: {{ workbenchItems[id].crafting.yields }}</span>
                         </div>
                         <div class="flex flex-wrap gap-2">
                              <div v-for="ing in workbenchItems[id].crafting.ingredients" :key="ing.id" class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
@@ -294,7 +299,7 @@ const formatTime = (seconds: number) => {
 
       <div v-if="!activeWorkbenchNote || activeItemIds.length === 0" class="py-24 text-center bg-white rounded-3xl border-2 border-dashed border-soft-green-50">
           <i class="pi pi-briefcase text-6xl text-soft-green-50 mb-4"></i>
-          <p class="text-slate-400 font-bold text-lg">目前沒有備料計畫</p>
+          <p class="text-slate-400 font-bold text-lg">{{ t('workbench.view.emptyTitle') }}</p>
       </div>
     </div>
 
@@ -303,33 +308,37 @@ const formatTime = (seconds: number) => {
         <div class="flex items-center gap-8 text-left">
             <div class="flex flex-col">
                 <div class="flex items-center gap-1.5 mb-0.5">
-                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">物資籌備預算</span>
-                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" title="標價依據當下伺服器提供的平均價格做計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定"></i>
+                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.budgetTitle') }}</span>
+                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" :title="t('workbench.view.tooltip.budget')"></i>
                 </div>
-                <span v-if="summary.hasUnknownPrice" class="text-2xl font-black text-orange-500 italic">無法預估</span>
+                <span v-if="summary.hasUnknownPrice" class="text-2xl font-black text-orange-500 italic">{{ t('workbench.view.summary.cannotEstimate') }}</span>
                 <span v-else class="text-2xl font-black text-soft-green-600 font-mono">{{ formatMoney(summary.totalCost) }}</span>
             </div>
             <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
             <div class="flex flex-col">
                 <div class="flex items-center gap-1.5 mb-0.5">
-                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">預計時間耗費</span>
-                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" title="時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響"></i>
+                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.time') }}</span>
+                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" :title="t('workbench.view.tooltip.time')"></i>
                 </div>
                 <span class="text-2xl font-black text-soft-green-600 font-mono">{{ formatTime(summary.totalTime) }}</span>
             </div>
             <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
             <div class="hidden md:flex flex-wrap gap-1.5 max-w-[400px]">
-                <span v-for="job in summary.craftJobs" :key="job" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">{{ job }}</span>
-                <span v-for="job in summary.gatherJobs" :key="job" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">{{ job }}</span>
+                <span v-for="jobRaw in summary.craftJobs" :key="jobRaw" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">
+                    {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}{{ renderStars(parseInt(jobRaw.split('|')[2])) }}
+                </span>
+                <span v-for="jobRaw in summary.gatherJobs" :key="jobRaw" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">
+                    {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}{{ renderStars(parseInt(jobRaw.split('|')[2])) }}
+                </span>
             </div>
         </div>
         
         <div class="flex items-center gap-3 w-full md:w-auto">
-            <button @click="initialize" class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
-                <i class="pi pi-sync"></i> 重設
+            <button @click="handleReset" class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
+                <i class="pi pi-sync"></i> {{ t('workbench.view.button.reset') }}
             </button>
             <button class="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 transition-all flex items-center justify-center gap-3 text-base">
-                <i class="pi pi-list"></i> 生成製作清單 <i class="pi pi-arrow-right scale-90"></i>
+                <i class="pi pi-list"></i> {{ t('workbench.view.button.generateList') }} <i class="pi pi-arrow-right scale-90"></i>
             </button>
         </div>
     </div>

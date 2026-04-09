@@ -49,8 +49,8 @@ export function useWorkbench() {
 
   // 職稱映射（可用於 CraftingInfo）
   const CRAFT_JOB_NAMES: Record<number, string> = {
-    8: '木工師', 9: '鍛鐵師', 10: '鑄甲師', 11: '雕金師',
-    12: '製革師', 13: '裁縫師', 14: '鍊金術士', 15: '烹調師'
+    8: 'jobs.crp', 9: 'jobs.bsm', 10: 'jobs.arm', 11: 'jobs.gsm',
+    12: 'jobs.lwr', 13: 'jobs.wvr', 14: 'jobs.alc', 15: 'jobs.cul'
   };
 
   /**
@@ -85,8 +85,9 @@ export function useWorkbench() {
         ensureGatheringDataLoaded()
       ]);
 
-      // 1.5 強力清除決策物件所有欄位
+      // 1.5 強力清除決策與物品緩存 (確保完全重建樹狀結構)
       Object.keys(decisions).forEach(k => delete decisions[k]);
+      workbenchItems.value = {};
 
       // 2. 獲取初始項目資料
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);

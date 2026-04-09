@@ -63,8 +63,55 @@ export const messages = {
     workbench: {
       title: '備料台',
       description: '在這裡制定你的製作計畫與開銷總結吧！',
-      wipTitle: '施工中...',
-      wipDescription: '兔肉們正在努力打造配方拆解引擎，未來的神奇決策樹就會出現在這裡！請敬請期待！'
+      view: {
+        analyzing: '正在載入真實資料與市場價格...',
+        emptyTitle: '目前沒有備料計畫',
+        emptyDescription: '去「寫張新筆記」開始你的第一步吧！',
+        prepping: '正在備料',
+        source: {
+          buy: '購買',
+          craft: '製作',
+          gather: '採集',
+          other: '庫存 (其他)',
+          cannotCraft: '不可製作',
+          cannotGather: '不可採集'
+        },
+        status: {
+          missing: '尚缺 {n} 個',
+          excess: '多出 {n} 個',
+          nonePrice: '無上架'
+        },
+        details: {
+          gatherTitle: '採集地點與詳情',
+          limited: '限時',
+          unknownZone: '未知地點',
+          spawnTime: '出現時間',
+          duration: '持續 {n} 小時',
+          craftTitle: '製作配方需求',
+          yield: '單次產量'
+        },
+        summary: {
+          budgetTitle: '物資籌備預算',
+          time: '預計時間耗費',
+          cannotEstimate: '無法預估',
+          hours: '小時',
+          mins: '分',
+          secs: '秒'
+        },
+        button: {
+          reset: '重設',
+          generateList: '生成製作清單'
+        },
+        tooltip: {
+          budget: '標價依據當下伺服器提供的平均價格做計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
+          time: '時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響'
+        }
+      }
+    },
+    jobs: {
+      crp: '木工師', bsm: '鍛鐵師', arm: '鑄甲師', gsm: '雕金師',
+      lwr: '製革師', wvr: '裁縫師', alc: '鍊金術士', cul: '烹調師',
+      min: '採礦工', btn: '園藝工', fsh: '釣魚人', gather: '採集'
     },
     settings: {
       title: '工坊設定',
@@ -130,8 +177,8 @@ export const messages = {
     },
     history: {
       title: '翻开旧纪录',
-      description: '这里记录了你所有的历史制作清单，方便随时翻阅',
-      autoDeleteWarning: '最多保留 20 笔历史纪录，超过时最旧的一笔将会被自动删除。想要永久保留的笔记，请记得按下星号将它加入“收藏的小笔记”中喔！',
+      description: '这里记录了你所有的历史制作清单，方便随时翻閱',
+      autoDeleteWarning: '最多保留 20 筆歷史紀錄，超過時最舊的一筆將會被自動刪除。想要永久保留的筆記，請記得按下星號將它加入「收藏的小筆記」中喔！',
       emptyTitle: '笔记本目前是空白的喔',
       emptyDescription: '去“写张新笔记”开始你的第一步吧！',
       syncing: '回忆读取中...',
@@ -144,15 +191,62 @@ export const messages = {
     workbench: {
       title: '备料台',
       description: '在这里制定你的制作计画与开销总结吧！',
-      wipTitle: '施工中...',
-      wipDescription: '兔肉们正在努力打造配方拆解引擎，未来的神奇决策树就会出现在这裡！敬请期待！'
+      view: {
+        analyzing: '正在载入真实资料与市场价格...',
+        emptyTitle: '目前没有备料计划',
+        emptyDescription: '去「写张新笔记」開始你的第一步吧！',
+        prepping: '正在备料',
+        source: {
+          buy: '购买',
+          craft: '制作',
+          gather: '采集',
+          other: '库存 (其他)',
+          cannotCraft: '不可制作',
+          cannotGather: '不可采集'
+        },
+        status: {
+          missing: '尚缺 {n} 个',
+          excess: '多出 {n} 个',
+          nonePrice: '无上架'
+        },
+        details: {
+          gatherTitle: '采集地点与详情',
+          limited: '限时',
+          unknownZone: '未知地点',
+          spawnTime: '出现时间',
+          duration: '持续 {n} 小时',
+          craftTitle: '制作配方需求',
+          yield: '单次产量'
+        },
+        summary: {
+          budgetTitle: '物资筹备预算',
+          time: '预计时间耗费',
+          cannotEstimate: '无法预估',
+          hours: '小时',
+          mins: '分',
+          secs: '秒'
+        },
+        button: {
+          reset: '重设',
+          generateList: '生成制作清单'
+        },
+        tooltip: {
+          budget: '标价依据当下服务器提供的平均价格做计算，且价格来源经过快取，實際真實的價格需要看當下真正的市場價格而定',
+          time: '时间仅仅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影响'
+        }
+      }
+    },
+    jobs: {
+      crp: '木工师', bsm: '锻铁师', arm: '铸甲师', gsm: '雕金师',
+      lwr: '制革师', wvr: '裁缝师', alc: '炼金术士', cul: '烹调师',
+      min: '采矿工', btn: '园艺工', fsh: '钓鱼人', gather: '采集'
     },
     settings: {
       title: '工坊设定',
       description: '调整工坊的各项偏好设定',
       language: '语言版本',
       debugMode: '调试模式',
-      debugModeDesc: '开启后可于创建新笔记时复制站长推荐 JSON 格式',
+      debugModeDesc: '开启后可於创建新笔记时复制站长推荐 JSON 格式',
       langOptions: {
         tw: '繁體中文 (Traditional Chinese)',
         cn: '简体中文 (Simplified Chinese)',
@@ -177,7 +271,7 @@ export const messages = {
       addFavorite: 'Add to Favorites',
       removeFavorite: 'Remove from Favorites',
       delete: 'Delete Record',
-      copyJson: 'Copy as Recommended Format (JSON)'
+      exportNote: 'Export JSON'
     },
     favorites: {
       title: 'Favorite Notes',
@@ -225,8 +319,55 @@ export const messages = {
     workbench: {
       title: 'The Workbench',
       description: 'Plan your crafting strategies and expenses right here!',
-      wipTitle: 'Under Construction...',
-      wipDescription: 'The rabbit engineers are currently building the recipe unpacking engine. Epic planning boards coming soon!'
+      view: {
+        analyzing: 'Fetching live data and market prices...',
+        emptyTitle: 'No active planning',
+        emptyDescription: 'Go to "Write a New Note" to start your journey!',
+        prepping: 'In Prep',
+        source: {
+          buy: 'Market',
+          craft: 'Craft',
+          gather: 'Gather',
+          other: 'Stock+',
+          cannotCraft: 'No Recipe',
+          cannotGather: 'No Node'
+        },
+        status: {
+          missing: '{n} more needed',
+          excess: '{n} in excess',
+          nonePrice: 'No Listing'
+        },
+        details: {
+          gatherTitle: 'Gathering Details',
+          limited: 'Timed',
+          unknownZone: 'Unknown Zone',
+          spawnTime: 'Spawns',
+          duration: 'Lasts {n}h',
+          craftTitle: 'Crafting Recipe',
+          yield: 'Yield'
+        },
+        summary: {
+          budgetTitle: 'Materials Budget',
+          time: 'Estimated Time',
+          cannotEstimate: 'Undetermined',
+          hours: 'hr',
+          mins: 'min',
+          secs: 'sec'
+        },
+        button: {
+          reset: 'Reset',
+          generateList: 'Generate List'
+        },
+        tooltip: {
+          budget: 'Prices are based on cached average data from current data center. Actual market board prices may vary.',
+          time: 'Time is a rough estimation based on common crafting/gathering flow. Actual speed depends on your stats and timed node availability.'
+        }
+      }
+    },
+    jobs: {
+      crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
+      lwr: 'Leatherworker', wvr: 'Weaver', alc: 'Alchemist', cul: 'Culinarian',
+      min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering'
     },
     settings: {
       title: 'Workshop Settings',
@@ -258,7 +399,7 @@ export const messages = {
       addFavorite: 'お気に入りに追加',
       removeFavorite: 'お気に入りから削除',
       delete: '記録を削除',
-      copyJson: '推奨形式としてコピー (JSON)'
+      exportNote: 'JSON 形式で出力'
     },
     favorites: {
       title: 'お気に入りノート',
@@ -306,8 +447,55 @@ export const messages = {
     workbench: {
       title: '仕込み台',
       description: 'ここで制作の計画とコストをまとめよう！',
-      wipTitle: '工事中...',
-      wipDescription: 'うさぎの技術者たちが現在レシピ分解エンジンを組み立てています。すごい計画ボードがもうすぐ完成するよ！'
+      view: {
+        analyzing: '市場価格とデータを取得中...',
+        emptyTitle: '現在、計画はありません',
+        emptyDescription: '「新しいノートを書く」から始めてね！',
+        prepping: '準備中',
+        source: {
+          buy: '購入',
+          craft: '製作',
+          gather: '採集',
+          other: '在庫+',
+          cannotCraft: '製作不可',
+          cannotGather: '採集不可'
+        },
+        status: {
+          missing: 'あと {n} 個',
+          excess: '{n} 個多い',
+          nonePrice: '出品なし'
+        },
+        details: {
+          gatherTitle: '採集場所と詳細',
+          limited: 'ＥＴ限定',
+          unknownZone: '未知の場所',
+          spawnTime: '出現時間',
+          duration: '{n} 時間持続',
+          craftTitle: '製作レシピ',
+          yield: '製作数'
+        },
+        summary: {
+          budgetTitle: '素材準備費用',
+          time: '予想所要時間',
+          cannotEstimate: '判定不能',
+          hours: '時間',
+          mins: '分',
+          secs: '秒'
+        },
+        button: {
+          reset: 'リセット',
+          generateList: 'リスト作成'
+        },
+        tooltip: {
+          budget: '価格は全データセンターのキャッシュされた平均値に基づいています。実際の相場とは異なる場合があります。',
+          time: '所要時間は一般的な製作・採集フローに基づく概算です。装備や限定ノードの状況により変動します。'
+        }
+      }
+    },
+    jobs: {
+      crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
+      lwr: '革細工師', wvr: '裁縫師', alc: '錬金術士', cul: '調理師',
+      min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集'
     },
     settings: {
       title: '工房の設定',

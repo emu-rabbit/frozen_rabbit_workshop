@@ -31,10 +31,10 @@ let isLoading = false;
 let loadPromise: Promise<void> | null = null;
 
 const GATHER_JOB_NAMES: Record<number, string> = {
-  0: '採礦工',
-  1: '園藝工',
-  2: '釣魚人',
-  3: '釣魚人',
+  0: 'jobs.min',
+  1: 'jobs.btn',
+  2: 'jobs.fsh',
+  3: 'jobs.fsh',
 };
 
 /**
