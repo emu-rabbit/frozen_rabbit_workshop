@@ -24,10 +24,11 @@ export interface DataCenter {
 /** Price data for a single item. */
 export interface ItemPrice {
   itemId: number;
-  minPriceNQ: number;
-  minPriceHQ: number;
-  currentAveragePriceNQ: number;
-  currentAveragePriceHQ: number;
+  minPriceNQ: number | null;
+  minPriceHQ: number | null;
+  currentAveragePrice: number | null;
+  currentAveragePriceNQ: number | null;
+  currentAveragePriceHQ: number | null;
   lastUploadTime: number; // Unix ms
   worldName?: string;     // present for single-world queries
   dcName?: string;
@@ -116,10 +117,11 @@ export function setSelectedDC(dc: string) {
 function parseItemPrice(itemId: number, raw: any): ItemPrice {
   return {
     itemId,
-    minPriceNQ: raw.minPriceNQ ?? 0,
-    minPriceHQ: raw.minPriceHQ ?? 0,
-    currentAveragePriceNQ: raw.currentAveragePriceNQ ?? 0,
-    currentAveragePriceHQ: raw.currentAveragePriceHQ ?? 0,
+    minPriceNQ: raw.minPriceNQ && raw.minPriceNQ > 0 ? raw.minPriceNQ : null,
+    minPriceHQ: raw.minPriceHQ && raw.minPriceHQ > 0 ? raw.minPriceHQ : null,
+    currentAveragePrice: raw.currentAveragePrice && raw.currentAveragePrice > 0 ? raw.currentAveragePrice : null,
+    currentAveragePriceNQ: raw.currentAveragePriceNQ && raw.currentAveragePriceNQ > 0 ? raw.currentAveragePriceNQ : null,
+    currentAveragePriceHQ: raw.currentAveragePriceHQ && raw.currentAveragePriceHQ > 0 ? raw.currentAveragePriceHQ : null,
     lastUploadTime: raw.lastUploadTime ?? 0,
     worldName: raw.worldName,
     dcName: raw.dcName,

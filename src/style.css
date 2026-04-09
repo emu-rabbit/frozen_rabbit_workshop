@@ -5,6 +5,7 @@
 @layer base {
   body {
     @apply bg-soft-green-50 text-slate-800 antialiased font-sans m-0 p-0 h-screen w-screen overflow-hidden;
+    scrollbar-gutter: stable;
   }
   
   /* Remove arrows from number inputs */

@@ -45,6 +45,11 @@ export const isDictionaryLoading = ref(false);
 const internalEnglishCache = shallowRef<Record<string, any> | null>(null);
 const internalIconsCache = shallowRef<Record<string, string> | null>(null);
 
+/** Raw name map from the current target language — includes ALL items, not just craftable ones */
+let internalRawTargetNames: Record<string, any> = {};
+/** Raw icon map — includes ALL items */
+let internalRawIcons: Record<string, string> = {};
+
 /** tw-places.json cache — { [zoneId: string]: { tw: string } } */
 let globalPlacesCache: Record<string, { tw?: string }> | null = null;
 let placesLoadPromise: Promise<void> | null = null;
@@ -118,6 +123,8 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
       }
       
       internalIconsCache.value = rawIcons;
+      internalRawIcons = rawIcons;
+      internalRawTargetNames = rawTargetNames;
       globalRecipesCache.value = rawRecipes;
 
       const craftableIds = new Set<number>();
@@ -170,6 +177,30 @@ export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
 
 export function getDictionaryItem(id: number): MockItem | undefined {
     return globalDictionaryCache.value?.find(item => item.id === id);
+}
+
+/**
+ * Looks up any item by ID using the full raw data, even if it's not in the craftable list.
+ * Falls back to English name when TW name is missing.
+ */
+export function getRawItemData(id: number): { name: string; icon: string } {
+    const idStr = id.toString();
+    const targetEntry = internalRawTargetNames[idStr];
+    const englishEntry = internalEnglishCache.value?.[idStr];
+    
+    const extractName = (entry: any, lang?: string) => {
+        if (typeof entry === 'string') return entry;
+        if (entry && typeof entry === 'object') {
+            const l = lang || 'tw';
+            return entry[l] || entry['en'] || Object.values(entry)[0] as string;
+        }
+        return '';
+    };
+
+    const name = extractName(targetEntry) || extractName(englishEntry, 'en') || `Item #${id}`;
+    const iconPath = internalRawIcons[idStr];
+    const icon = iconPath ? `https://xivapi.com${iconPath}` : '';
+    return { name, icon };
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
