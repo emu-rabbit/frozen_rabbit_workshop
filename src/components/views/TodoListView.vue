@@ -118,19 +118,22 @@ const toggleCheck = (sectionKey: string, id: number) => {
                 </div>
 
                 <!-- Progress Tracker (Matches Workbench Summary Card style) -->
-                <div class="bg-white/70 backdrop-blur-md px-6 py-4 rounded-3xl border border-soft-green-100 shadow-lg flex items-center gap-6 min-w-[320px]">
-                    <div class="flex flex-col flex-1">
-                        <div class="flex justify-between items-end mb-1.5">
-                            <span class="text-[13px] font-black text-soft-green-500 uppercase tracking-widest">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
-                            <span class="text-2xl font-black text-soft-green-900 font-mono tracking-tighter">{{ Math.round(progress.percent) }}%</span>
+                <div class="bg-white/70 backdrop-blur-md px-6 py-4 rounded-2xl border border-soft-green-100 shadow-lg flex items-center gap-6 min-w-[340px]">
+                    <div class="flex flex-col flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1.5 gap-4">
+                            <span class="text-[13px] font-black text-soft-green-500 uppercase tracking-widest truncate">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
+                            <span class="text-2xl font-black text-soft-green-900 font-mono tracking-tighter shrink-0">{{ Math.round(progress.percent) }}%</span>
                         </div>
                         <div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                             <div class="h-full bg-gradient-to-r from-soft-green-400 to-soft-green-600 transition-all duration-700 ease-out shadow-sm" :style="{ width: `${progress.percent}%` }"></div>
                         </div>
                     </div>
-                    <div class="h-10 w-px bg-soft-green-100"></div>
-                    <div class="flex -space-x-2">
+                    <div class="h-10 w-px bg-soft-green-100 shrink-0"></div>
+                    <div class="flex -space-x-2 shrink-0">
                         <img v-for="item in activeWorkbenchNote?.items.slice(0, 3)" :key="item.id" :src="workbenchItems[item.id]?.icon" class="w-10 h-10 rounded-lg border-2 border-white shadow-sm ring-1 ring-soft-green-50" />
+                        <div v-if="activeWorkbenchNote && activeWorkbenchNote.items.length > 3" class="w-10 h-10 rounded-lg bg-slate-50 border-2 border-white shadow-sm ring-1 ring-soft-green-50 flex items-center justify-center">
+                            <span class="text-[10px] font-black text-slate-400">+{{ activeWorkbenchNote.items.length - 3 }}</span>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -141,9 +144,9 @@ const toggleCheck = (sectionKey: string, id: number) => {
                 <div class="lg:col-span-12 space-y-12">
                     <template v-for="section in generateTodoSections" :key="section.key">
                         <section v-if="sectionItems[section.key]?.length > 0" class="todo-section">
-                            <div class="flex items-center gap-3 mb-6 px-2">
-                                <div class="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3" :class="[getSectionConfig(section.key).bg, getSectionConfig(section.key).border, 'border-2']">
-                                    <i class="pi text-xl" :class="[getSectionConfig(section.key).icon, getSectionConfig(section.key).text]"></i>
+                            <div class="flex items-center gap-6 mb-8 px-2">
+                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 shrink-0" :class="[getSectionConfig(section.key).bg, getSectionConfig(section.key).border, 'border-2']">
+                                    <i class="pi text-3xl" :class="[getSectionConfig(section.key).icon, getSectionConfig(section.key).text]"></i>
                                 </div>
                                 <div>
                                     <h3 class="text-2xl font-black tracking-tight leading-none mb-1" :class="getSectionConfig(section.key).text">
@@ -166,7 +169,7 @@ const toggleCheck = (sectionKey: string, id: number) => {
                                 animation="300"
                             >
                                 <template #item="{ element: item }">
-                                    <div class="group relative bg-white/90 backdrop-blur-md rounded-[2.5rem] border-2 transition-all duration-400 flex items-center p-3 sm:p-4 gap-4 sm:gap-6 cursor-pointer select-none"
+                                    <div class="group relative bg-white/90 backdrop-blur-md rounded-2xl border-2 transition-all duration-400 flex items-center p-3 sm:p-4 gap-4 sm:gap-6 cursor-pointer select-none"
                                          @click="toggleCheck(section.key, item.id)"
                                          :class="[
                                              todoChecked[`${section.key}_${item.id}`] 
@@ -182,7 +185,7 @@ const toggleCheck = (sectionKey: string, id: number) => {
                                                 <i class="pi pi-ellipsis-v text-sm -ml-1"></i>
                                             </div>
 
-                                            <div class="w-12 h-12 rounded-[1.25rem] border-2 flex items-center justify-center transition-all duration-700 shadow-sm"
+                                            <div class="w-12 h-12 rounded-xl border-2 flex items-center justify-center transition-all duration-700 shadow-sm"
                                                  :class="[
                                                      todoChecked[`${section.key}_${item.id}`]
                                                         ? 'bg-soft-green-500 border-soft-green-500 ring-4 ring-soft-green-50'
@@ -241,7 +244,7 @@ const toggleCheck = (sectionKey: string, id: number) => {
                                         </div>
 
                                         <!-- GOAL: Quantitative display (Right Side) -->
-                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 rounded-[1.75rem] px-6 py-4 min-w-[110px] border border-slate-200/50 shadow-inner group-hover:bg-soft-green-100/50 transition-all duration-300">
+                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 rounded-xl px-6 py-4 min-w-[110px] border border-slate-200/50 shadow-inner group-hover:bg-soft-green-100/50 transition-all duration-300">
                                             <div class="flex items-baseline gap-1">
                                                 <span class="text-base font-black text-slate-400 leading-none">x</span>
                                                 <span class="text-4xl font-black text-soft-green-950 leading-none drop-shadow-sm">{{ item.quantity }}</span>
@@ -271,7 +274,7 @@ const toggleCheck = (sectionKey: string, id: number) => {
 .ghost-item {
     background: #f1f5f9 !important;
     border: 2px dashed #92c5b2 !important;
-    border-radius: 2.5rem !important;
+    border-radius: 1rem !important;
     opacity: 0.4;
     transform: scale(0.98);
 }
