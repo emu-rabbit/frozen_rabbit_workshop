@@ -46,13 +46,16 @@ const formatMoney = (val: number | null) => {
 
 const summary = computed(() => {
     let totalCost = 0
-    let jobs = new Set<string>()
+    let totalTime = 0
+    let craftJobs = new Set<string>()
+    let gatherJobs = new Set<string>()
     let hasUnknownPrice = false
     activeItemIds.value.forEach(id => {
         const item = workbenchItems.value[id]
         const d = decisions[String(id)]
         if (!item || !d) return
         
+        // 1. 金錢成本
         if (d.buy > 0) {
             if (item.marketPrice !== null) {
                 totalCost += (d.buy * item.marketPrice)
@@ -61,21 +64,35 @@ const summary = computed(() => {
             }
         }
         
-        if (d.craft && item.crafting) {
-            jobs.add(`${item.crafting.jobName} Lv.${item.crafting.level}${item.crafting.stars > 0 ? '★'.repeat(item.crafting.stars) : ''}`)
+        // 2. 時間成本與職業清單
+        if (d.craft > 0 && item.crafting) {
+            craftJobs.add(`${item.crafting.jobName} Lv.${item.crafting.level}${item.crafting.stars > 0 ? '★'.repeat(item.crafting.stars) : ''}`)
+            const craftCount = Math.ceil(d.craft / item.crafting.yields)
+            totalTime += craftCount * (item.crafting.stars > 0 ? 60 : 30)
         }
         
-        if (d.gather && item.gathering) {
-            jobs.add(`${item.gathering.jobName} Lv.${item.gathering.level}${item.gathering.stars > 0 ? '★'.repeat(item.gathering.stars) : ''}`)
+        if (d.gather > 0 && item.gathering) {
+            gatherJobs.add(`${item.gathering.jobName} Lv.${item.gathering.level}${item.gathering.stars > 0 ? '★'.repeat(item.gathering.stars) : ''}`)
+            totalTime += (d.gather * 5) // 每 6 個材料耗費 30 秒
         }
     })
-    return { totalCost, jobs: Array.from(jobs), hasUnknownPrice }
+    return { totalCost, totalTime, craftJobs: Array.from(craftJobs), gatherJobs: Array.from(gatherJobs), hasUnknownPrice }
 })
 
 const updateDecision = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', delta: number) => {
     if (!decisions[String(id)]) return
-    const current = (decisions[String(id)] as any)[key]
-    ;(decisions[String(id)] as any)[key] = Math.max(0, current + delta)
+    if (delta > 0) {
+        // 全量投入 (Max)：歸零其他，設定此項為需求總額
+        const total = totalDemands.value[id] || 0
+        decisions[String(id)].buy = 0
+        decisions[String(id)].craft = 0
+        decisions[String(id)].gather = 0
+        decisions[String(id)].other = 0
+        ;(decisions[String(id)] as any)[key] = total
+    } else {
+        // 歸零 (Min)
+        ;(decisions[String(id)] as any)[key] = 0
+    }
 }
 
 const setDecisionRaw = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', val: number) => {
@@ -88,6 +105,20 @@ const toggleExpand = (id: number) => { expandedItems.value[id] = !expandedItems.
 
 // Helper for stars display
 const renderStars = (count: number) => '★'.repeat(count)
+
+const formatTime = (seconds: number) => {
+    if (seconds <= 0) return '0 分'
+    const h = Math.floor(seconds / 3600)
+    const m = Math.floor((seconds % 3600) / 60)
+    const s = seconds % 60
+    
+    let res = ''
+    if (h > 0) res += `${h} 小時 `
+    if (m > 0 || h > 0) res += `${m} 分 `
+    // 只有在不到一小時的情況下才顯示秒
+    if (h === 0 && s > 0) res += `${s} 秒`
+    return res.trim()
+}
 </script>
 
 <template>
@@ -124,7 +155,7 @@ const renderStars = (count: number) => '★'.repeat(count)
             v-for="id in activeItemIds" 
             :key="id" 
             class="item-card bg-white border rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-xl group"
-            :class="getUnallocated(id) !== 0 ? 'border-orange-200' : 'border-slate-100'"
+            :class="getUnallocated(id) !== 0 ? 'border-red-400 border-2 shadow-[0_0_25px_-5px_rgba(239,68,68,0.15)] bg-red-50/5' : 'border-slate-100'"
           >
             <div class="p-6 flex flex-col lg:flex-row items-stretch lg:items-center gap-6">
                 <!-- Icon & Info -->
@@ -158,42 +189,50 @@ const renderStars = (count: number) => '★'.repeat(count)
                 <div class="flex-1 min-w-0">
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                          <!-- BUY -->
-                        <div class="bg-slate-50/80 p-3 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                           <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">購買</span>
+                        <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
+                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-300 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-100'">
+                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">購買</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">-</button>
+                               <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
-                               <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">+</button>
+                               <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- CRAFT -->
-                        <div class="bg-slate-50/80 p-3 rounded-2xl border border-slate-100 flex flex-col items-center gap-2" :class="{ 'opacity-20 pointer-events-none grayscale': !workbenchItems[id]?.canCraft }">
-                           <span class="text-[15px] font-black text-indigo-400 uppercase tracking-widest">製作</span>
+                        <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200" 
+                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-50' : 'bg-slate-50/80 border-slate-100')]">
+                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
+                               {{ !workbenchItems[id]?.canCraft ? '不可製作' : '製作' }}
+                           </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">-</button>
+                               <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
-                               <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">+</button>
+                               <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- GATHER -->
-                        <div class="bg-slate-50/80 p-3 rounded-2xl border border-slate-100 flex flex-col items-center gap-2" :class="{ 'opacity-20 pointer-events-none grayscale': !workbenchItems[id]?.canGather }">
-                           <span class="text-[15px] font-black text-amber-500 uppercase tracking-widest">採集</span>
+                        <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
+                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-200 ring-2 ring-amber-50' : 'bg-slate-50/80 border-slate-100')]">
+                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
+                               {{ !workbenchItems[id]?.canGather ? '不可採集' : '採集' }}
+                           </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">-</button>
+                               <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
-                               <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">+</button>
+                               <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- OTHER -->
-                        <div class="bg-slate-50/80 p-3 rounded-2xl border border-slate-100 flex flex-col items-center gap-2">
-                           <span class="text-[15px] font-black text-emerald-500 uppercase tracking-widest">庫存</span>
+                        <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
+                             :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-100'">
+                           <span class="text-[15px] font-black uppercase tracking-widest" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">庫存</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">-</button>
+                               <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
-                               <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-soft-green-400 flex items-center justify-center font-bold text-xs">+</button>
+                               <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
                     </div>
@@ -201,12 +240,12 @@ const renderStars = (count: number) => '★'.repeat(count)
 
                 <!-- Status & Expand -->
                 <div class="flex items-center gap-3 w-full lg:w-auto lg:shrink-0 justify-end">
-                    <div class="h-12 px-4 min-w-[100px] rounded-xl flex items-center justify-center text-xs font-black shadow-sm border transition-colors"
-                        :class="getUnallocated(id) === 0 ? 'bg-soft-green-500 text-white border-soft-green-600' : (getUnallocated(id) > 0 ? 'bg-orange-50 text-orange-600 border-orange-200' : 'bg-red-50 text-red-600 border-red-200')"
+                    <div v-if="getUnallocated(id) !== 0" 
+                        class="h-12 px-4 rounded-xl flex items-center justify-center gap-2 text-xs font-black shadow-sm border transition-all bg-red-50 text-red-600 border-red-200 animate-in fade-in zoom-in duration-300"
                     >
-                        <i v-if="getUnallocated(id) === 0" class="pi pi-check text-sm"></i>
-                        <span v-else>
-                           {{ getUnallocated(id) > 0 ? `還缺 ${getUnallocated(id)} 個` : `超出 ${Math.abs(getUnallocated(id))} 個` }}
+                        <i class="pi pi-exclamation-circle text-sm"></i>
+                        <span>
+                           {{ getUnallocated(id) > 0 ? `尚缺 ${getUnallocated(id)} 個` : `多出 ${Math.abs(getUnallocated(id))} 個` }}
                         </span>
                     </div>
 
@@ -263,18 +302,30 @@ const renderStars = (count: number) => '★'.repeat(count)
     <div v-if="activeWorkbenchNote && activeItemIds.length > 0" class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white/95 backdrop-blur-md border-t border-soft-green-100 shadow-[0_-10px_40px_-20px_rgba(0,0,0,0.1)] py-5 px-8 flex flex-col md:flex-row items-center justify-between gap-6 z-40">
         <div class="flex items-center gap-8 text-left">
             <div class="flex flex-col">
-                <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest mb-0.5">總工程預算</span>
+                <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">物資籌備預算</span>
+                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" title="標價依據當下伺服器提供的平均價格做計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定"></i>
+                </div>
                 <span v-if="summary.hasUnknownPrice" class="text-2xl font-black text-orange-500 italic">無法預估</span>
                 <span v-else class="text-2xl font-black text-soft-green-600 font-mono">{{ formatMoney(summary.totalCost) }}</span>
             </div>
             <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
-            <div class="hidden md:flex flex-wrap gap-1.5 max-w-[300px]">
-                <span v-for="job in summary.jobs" :key="job" class="text-[9px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">{{ job }}</span>
+            <div class="flex flex-col">
+                <div class="flex items-center gap-1.5 mb-0.5">
+                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">預計時間耗費</span>
+                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" title="時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響"></i>
+                </div>
+                <span class="text-2xl font-black text-soft-green-600 font-mono">{{ formatTime(summary.totalTime) }}</span>
+            </div>
+            <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
+            <div class="hidden md:flex flex-wrap gap-1.5 max-w-[400px]">
+                <span v-for="job in summary.craftJobs" :key="job" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">{{ job }}</span>
+                <span v-for="job in summary.gatherJobs" :key="job" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">{{ job }}</span>
             </div>
         </div>
         
         <div class="flex items-center gap-3 w-full md:w-auto">
-            <button class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
+            <button @click="initialize" class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
                 <i class="pi pi-sync"></i> 重設
             </button>
             <button class="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 transition-all flex items-center justify-center gap-3 text-base">

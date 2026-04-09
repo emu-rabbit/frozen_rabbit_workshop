@@ -41,6 +41,8 @@ export interface ItemDecision {
 export function useWorkbench() {
   const { activeWorkbenchNote } = useNotes();
   
+  const CRYSTAL_IDS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
+  
   const workbenchItems = ref<Record<number, WorkbenchItem>>({});
   const decisions = reactive<Record<string, ItemDecision>>({});
   const isLoading = ref(false);
@@ -49,6 +51,24 @@ export function useWorkbench() {
   const CRAFT_JOB_NAMES: Record<number, string> = {
     8: '木工師', 9: '鍛鐵師', 10: '鑄甲師', 11: '雕金師',
     12: '製革師', 13: '裁縫師', 14: '鍊金術士', 15: '烹調師'
+  };
+
+  /**
+   * 智慧型初始化單個項目的決策
+   */
+  const initSingleItemDecision = (id: number, demand: number) => {
+    if (decisions[String(id)]) return;
+    const itemData = workbenchItems.value[id];
+    
+    if (CRYSTAL_IDS.has(id)) {
+        decisions[String(id)] = { buy: 0, craft: 0, gather: 0, other: demand };
+    } else if (itemData?.canCraft) {
+        decisions[String(id)] = { buy: 0, craft: demand, gather: 0, other: 0 };
+    } else if (itemData?.canGather) {
+        decisions[String(id)] = { buy: 0, craft: 0, gather: demand, other: 0 };
+    } else {
+        decisions[String(id)] = { buy: demand, craft: 0, gather: 0, other: 0 };
+    }
   };
 
   /**
@@ -65,27 +85,25 @@ export function useWorkbench() {
         ensureGatheringDataLoaded()
       ]);
 
-      // 1.5 重置決策 (防止舊資料殘留)
+      // 1.5 強力清除決策物件所有欄位
       Object.keys(decisions).forEach(k => delete decisions[k]);
 
       // 2. 獲取初始項目資料
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
       await refreshItemsData(rootIds);
 
-      // 3. 初始化決策 (優先製作 > 優先採集 > 優先購買)
-      // 重要：decisions 鍵值必須統一使用字串，否則 BFS 的 String(id) 存取會找不到
+      // 3. 初始分配根節點決策
       activeWorkbenchNote.value.items.forEach(item => {
-        const itemData = workbenchItems.value[item.id];
-        if (itemData?.canCraft) {
-            decisions[String(item.id)] = { buy: 0, craft: item.quantity, gather: 0, other: 0 };
-        } else if (itemData?.canGather) {
-            decisions[String(item.id)] = { buy: 0, craft: 0, gather: item.quantity, other: 0 };
-        } else {
-            decisions[String(item.id)] = { buy: item.quantity, craft: 0, gather: 0, other: 0 };
-        }
+        initSingleItemDecision(item.id, item.quantity);
       });
 
-      await fetchPrices(rootIds);
+      // 4. 針對目前已展開的所有項目（如果有）進行補完初始化
+      // 這是修復「重置後清空但 activeItemIds 未變動導致 watch 不觸發」的關鍵
+      activeItemIds.value.forEach(id => {
+          initSingleItemDecision(id, totalDemands.value[id] || 0);
+      });
+
+      await fetchPrices(activeItemIds.value);
     } finally {
       isLoading.value = false;
     }
@@ -239,20 +257,34 @@ export function useWorkbench() {
       }
     }
 
-    return ids;
+    return ids.sort((a, b) => {
+        const itemA = workbenchItems.value[a];
+        const itemB = workbenchItems.value[b];
+        const isRootA = rootIds.includes(a);
+        const isRootB = rootIds.includes(b);
+        const isCrystalA = CRYSTAL_IDS.has(a);
+        const isCrystalB = CRYSTAL_IDS.has(b);
+
+        // 1. 成品項目最優先
+        if (isRootA !== isRootB) return isRootA ? -1 : 1;
+        // 2. 碎晶/水晶最後面
+        if (isCrystalA !== isCrystalB) return isCrystalA ? 1 : -1;
+        // 3. 可製作優先於不可製作 (材料部分)
+        if (itemA?.canCraft !== itemB?.canCraft) return itemA?.canCraft ? -1 : 1;
+        // 4. 可採集優先於不可採集
+        if (itemA?.canGather !== itemB?.canGather) return itemA?.canGather ? -1 : 1;
+        
+        return 0; // 保持原有 BFS 相對序
+    });
   });
 
   /**
    * 當新材料被展開時，確保其資料、價格以及決策物件被初始化
    */
   watch(activeItemIds, async (newIds) => {
-    // 1. 初始化遺失的決策物件 (避免需求的 side effect)
-    const demands = totalDemands.value;
+    // 1. 初始化遺失的決策物件
     newIds.forEach(id => {
-      if (!decisions[String(id)]) {
-        // 子材料預設為「購買」，且數量等於當前需求
-        decisions[String(id)] = { buy: demands[id] || 0, craft: 0, gather: 0, other: 0 };
-      }
+      initSingleItemDecision(id, totalDemands.value[id] || 0);
     });
 
     // 2. 獲取遺失的物品詳細資料
