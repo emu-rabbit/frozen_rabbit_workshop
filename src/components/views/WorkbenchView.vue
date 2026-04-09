@@ -207,7 +207,7 @@ const formatTime = (seconds: number) => {
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                          <!-- BUY -->
                         <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-300 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-100'">
+                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-400 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-200'">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
@@ -218,7 +218,7 @@ const formatTime = (seconds: number) => {
 
                         <!-- CRAFT -->
                         <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200" 
-                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-200 ring-2 ring-indigo-50' : 'bg-slate-50/80 border-slate-100')]">
+                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-400 ring-2 ring-indigo-50' : 'bg-slate-50/80 border-slate-200')]">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
@@ -231,7 +231,7 @@ const formatTime = (seconds: number) => {
 
                         <!-- GATHER -->
                         <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-200 ring-2 ring-amber-50' : 'bg-slate-50/80 border-slate-100')]">
+                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-50' : 'bg-slate-50/80 border-slate-200')]">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
                                {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
@@ -244,7 +244,7 @@ const formatTime = (seconds: number) => {
 
                         <!-- OTHER -->
                         <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-100'">
+                             :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-200'">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-emerald-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
