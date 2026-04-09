@@ -7,7 +7,7 @@ import {
   getRawItemData
 } from '../services/dictionary';
 import type { Recipe } from '../services/dictionary';
-import { fetchItemPrices } from '../services/universalis';
+import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateSimulatedPrice } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
@@ -68,6 +68,7 @@ const workbenchItems = ref<Record<number, WorkbenchItem>>({});
 const decisions = reactive<Record<string, ItemDecision>>({});
 const isLoading = ref(false);
 const lastNoteId = ref<string | null>(null);
+const lastDC = ref<string | null>(null);
 
 // Todo List State
 const todoChecked = reactive<Record<string, boolean>>({});
@@ -141,7 +142,15 @@ const refreshItemsData = async (ids: number[]) => {
  * 批次獲取價格
  */
 const fetchPrices = async (ids: number[]) => {
+  const currentDC = selectedDC.value;
   const prices = await fetchItemPrices(ids);
+  
+  // 校驗：如果在請求期間大區發生變動，則捨棄此次過時的回傳
+  if (selectedDC.value !== currentDC) {
+    console.warn(`[Workbench] DC changed from "${currentDC}" to "${selectedDC.value}" during fetch, discarding stale data.`);
+    return;
+  }
+
   ids.forEach(id => {
     const item = workbenchItems.value[id];
     if (item) {
@@ -371,10 +380,12 @@ export function useWorkbench() {
   const initialize = async () => {
     if (!activeWorkbenchNote.value) return;
     
-    // 檢查是否是切換筆記
+    const currentDC = selectedDC.value;
     const isNewNote = activeWorkbenchNote.value.id !== lastNoteId.value;
-    if (!isNewNote && Object.keys(workbenchItems.value).length > 0) {
-        // 同一份筆記且已有資料，不需要全量初始化 (保留 RAM 中的決策)
+    const isNewDC = currentDC !== lastDC.value;
+
+    // 如果筆記沒換、大區沒換，且已有資料，則跳過全量初始化
+    if (!isNewNote && !isNewDC && Object.keys(workbenchItems.value).length > 0) {
         return;
     }
 
@@ -386,31 +397,48 @@ export function useWorkbench() {
       ]);
 
       if (isNewNote) {
-          // 切換新筆記時才強制重置決策與代辦清單
+          // 情況 A：切換新筆記 -> 全量重設決策與緩存
+          console.log(`[Workbench] Initializing new note: ${activeWorkbenchNote.value.id}`);
           Object.keys(decisions).forEach(k => delete decisions[k]);
           Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
           Object.keys(todoOrder).forEach(k => delete todoOrder[k]);
           workbenchItems.value = {};
-          lastNoteId.value = activeWorkbenchNote.value.id;
+      } else if (isNewDC) {
+          // 情況 B：同一份筆記但大區變更 -> 只重設價格標記與數值，保留決策
+          console.log(`[Workbench] DC changed (${lastDC.value} -> ${currentDC}), refreshing prices.`);
+          Object.values(workbenchItems.value).forEach(item => {
+              item.priceFetched = false;
+              item.marketPrice = null;
+              item.listings = [];
+          });
       }
+
+      lastNoteId.value = activeWorkbenchNote.value.id;
+      lastDC.value = currentDC;
 
       // 2. 獲取初始項目資料
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
       await refreshItemsData(rootIds);
 
-      // 3. 初始分配根節點決策
-      activeWorkbenchNote.value.items.forEach(item => {
-        initSingleItemDecision(item.id, item.quantity, true);
-      });
+      // 3. 初始分配根節點決策 (僅在切換新筆記時需要在此執行)
+      if (isNewNote) {
+          activeWorkbenchNote.value.items.forEach(item => {
+            initSingleItemDecision(item.id, item.quantity, true);
+          });
+      }
 
-      // 4. 初始化展開項目的決策 (非根節點預設購買)
+      // 4. 初始化展開項目的決策 (會觸發 activeItemIds 變化)
       activeItemIds.value.forEach(id => {
           const isRoot = activeWorkbenchNote.value?.items.some(ri => ri.id === id) || false;
           initSingleItemDecision(id, totalDemands.value[id] || 0, isRoot);
       });
 
       await refreshItemsData(activeItemIds.value);
+      
+      // 5. 發起價格抓取 (fetchPrices 內部已有版本校驗)
       await fetchPrices(activeItemIds.value);
+    } catch (err) {
+      console.error('[Workbench] Initialization failed:', err);
     } finally {
       isLoading.value = false;
     }

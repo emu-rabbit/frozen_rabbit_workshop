@@ -141,6 +141,21 @@ export const messages = {
         cn: '簡體中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
+      },
+      marketTitle: '市場資料設定',
+      marketRegion: '市場地區',
+      marketDC: '資料中心',
+      marketDesc: '設定市場價格查詢的來源大區',
+      regions: {
+        China: '中國',
+        Japan: '日本',
+        'North-America': '北美',
+        Europe: '歐洲',
+        Oceania: '大洋洲',
+        'NA-Cloud-DC': '北美雲端',
+        '中国': '中國服',
+        '한국': '韓國服',
+        '繁中服': '繁中服'
       }
     }
   },
@@ -286,6 +301,21 @@ export const messages = {
         cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
+      },
+      marketTitle: '市场资料设定',
+      marketRegion: '市场地区',
+      marketDC: '资料中心',
+      marketDesc: '设定市场价格查询的来源大区',
+      regions: {
+        China: '中国',
+        Japan: '日本',
+        'North-America': '北美',
+        Europe: '欧洲',
+        Oceania: '大洋洲',
+        'NA-Cloud-DC': '北美云端',
+        '中国': '中国服',
+        '한국': '韩国服',
+        '繁中服': '繁中服'
       }
     }
   },
@@ -431,6 +461,21 @@ export const messages = {
         cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
+      },
+      marketTitle: 'Market Data Source',
+      marketRegion: 'Region',
+      marketDC: 'Data Center',
+      marketDesc: 'Select the region and data center for market price queries.',
+      regions: {
+        China: 'China',
+        Japan: 'Japan',
+        'North-America': 'North America',
+        Europe: 'Europe',
+        Oceania: 'Oceania',
+        'NA-Cloud-DC': 'NA Cloud',
+        '中国': 'China Server',
+        '한국': 'KT (Korea)',
+        '繁中服': 'TW Server'
       }
     }
   },
@@ -576,6 +621,21 @@ export const messages = {
         cn: '简体中文 (Simplified Chinese)',
         en: 'English',
         ja: '日本語 (Japanese)'
+      },
+      marketTitle: 'マーケットデータ設定',
+      marketRegion: 'リージョン',
+      marketDC: 'データセンター',
+      marketDesc: 'マーケット価格を取得する數據センターを設定します。',
+      regions: {
+        China: '中国',
+        Japan: '日本',
+        'North-America': '北米',
+        Europe: '欧州',
+        Oceania: 'オセアニア',
+        'NA-Cloud-DC': '北米クラウド',
+        '中国': '中国鯖',
+        '한국': '韓国鯖',
+        '繁中服': '繁中鯖'
       }
     }
   }

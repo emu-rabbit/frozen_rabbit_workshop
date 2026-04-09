@@ -76,16 +76,15 @@ function setCache(dc: string, price: ItemPrice) {
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────
+import { useSettings } from '../composables/useSettings'
+const { marketDC } = useSettings()
 
 const _dataCenters = ref<DataCenter[]>([]);
-const _selectedDC = ref<string>(
-  localStorage.getItem('universalis_dc') ?? '陸行鳥'
-);
 const _isFetchingPrices = ref(false);
 const _isPriceError = ref(false);
 
 export const dataCenters = readonly(_dataCenters);
-export const selectedDC = readonly(_selectedDC);
+export const selectedDC = readonly(marketDC);
 export const isFetchingPrices = readonly(_isFetchingPrices);
 export const isPriceError = readonly(_isPriceError);
 
@@ -114,10 +113,9 @@ export async function ensureDataCentersLoaded(): Promise<DataCenter[]> {
   return _dcFetchPromise;
 }
 
-/** Persists the selected data center to localStorage. */
+/** Persists the selected data center to settings. */
 export function setSelectedDC(dc: string) {
-  _selectedDC.value = dc;
-  localStorage.setItem('universalis_dc', dc);
+  marketDC.value = dc;
   // Invalidate the existing cache when DC changes
   priceCache.clear();
   inflightRequests.clear();
@@ -155,7 +153,7 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
 export async function fetchItemPrices(
   itemIds: number[]
 ): Promise<Map<number, ItemPrice>> {
-  const dc = _selectedDC.value;
+  const dc = marketDC.value;
   const result = new Map<number, ItemPrice>();
 
   // Ensure unique IDs to avoid redundant work

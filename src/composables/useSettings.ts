@@ -5,9 +5,13 @@ export type Language = 'tw' | 'en' | 'ja' | 'cn'
 export function useSettings() {
   const language = useLocalStorage<Language>('frozen-rabbit-lang', 'tw')
   const debugMode = useLocalStorage<boolean>('frozen-rabbit-debug-mode', false)
+  const marketRegion = useLocalStorage<string>('frozen-rabbit-market-region', 'China')
+  const marketDC = useLocalStorage<string>('frozen-rabbit-market-dc', '陸行鳥')
 
   return {
     language,
-    debugMode
+    debugMode,
+    marketRegion,
+    marketDC
   }
 }
