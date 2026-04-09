@@ -7,7 +7,7 @@ import { useSettings } from '../../composables/useSettings'
 import { dataCenters, ensureDataCentersLoaded, setSelectedDC } from '../../services/universalis'
 
 const { t } = useI18n()
-const { language, marketRegion, marketDC } = useSettings()
+const { language, debugMode, marketRegion, marketDC } = useSettings()
 
 defineProps<{
   language: string
