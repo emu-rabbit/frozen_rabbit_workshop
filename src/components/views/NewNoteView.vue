@@ -3,13 +3,11 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { searchItems, type MockItem } from '../../services/dictionary'
 import { useDebounceFn } from '@vueuse/core'
-import { useSettings } from '../../composables/useSettings'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
 
 const { t, locale } = useI18n()
-const { debugMode } = useSettings()
 
 const emit = defineEmits<{
   'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
