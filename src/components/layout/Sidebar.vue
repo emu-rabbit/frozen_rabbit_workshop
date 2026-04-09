@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useNotes } from '../../composables/useNotes'
+import logo from '../../assets/logo.png'
 
 const { t } = useI18n()
 const { notes, favoritesCount, recommendedCount } = useNotes()
@@ -24,7 +25,7 @@ const activeTab = computed({
   <aside class="w-64 bg-white shadow-lg border-r border-soft-green-100 flex flex-col transition-all overflow-y-auto">
     <div class="p-6 pb-2">
       <h1 class="text-lg font-bold text-soft-green-800 flex items-center gap-2 leading-tight">
-        <img src="/logo.png" class="w-8 h-8 rounded-lg shadow-sm" alt="Logo" />
+        <img :src="logo" class="w-8 h-8 rounded-lg shadow-sm" alt="Logo" />
         {{ t('app.title') }}
       </h1>
       <p class="text-xs text-soft-green-600 mt-2">{{ t('app.subtitle') }}</p>

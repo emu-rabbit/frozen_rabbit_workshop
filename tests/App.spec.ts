@@ -48,6 +48,6 @@ describe('App', () => {
     
     // Check if the view switched
     expect(wrapper.text()).toContain('翻開舊紀錄')
-    expect(wrapper.text()).toContain('這些是你以前計畫過的筆記')
+    expect(wrapper.text()).toContain('這裡記錄了你所有的歷史製作清單')
   })
 })
