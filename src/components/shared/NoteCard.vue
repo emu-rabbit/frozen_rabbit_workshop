@@ -152,7 +152,7 @@ const handleExportJson = () => {
           <button 
             @click="handleToggleFavorite" 
             class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-orange-50"
-            :class="isFavorite ? 'text-orange-400' : 'text-slate-300 hover:text-orange-300'"
+            :class="isFavorite ? 'text-orange-400' : 'text-slate-400 hover:text-orange-300'"
             :title="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
           >
             <i class="pi text-xl" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
@@ -161,7 +161,7 @@ const handleExportJson = () => {
           <button 
             v-if="note" 
             @click="handleExportJson" 
-            class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-300 hover:text-soft-green-500"
+            class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-400 hover:text-soft-green-500"
             :title="t('noteCard.exportNote')"
           >
             <i class="pi pi-copy text-xl"></i>

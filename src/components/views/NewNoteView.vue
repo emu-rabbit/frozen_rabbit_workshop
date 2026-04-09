@@ -36,21 +36,24 @@ const searchRows = ref<SearchRow[]>([{
   searchedEmpty: false
 }])
 
-const onSearch = useDebounceFn(async (event: any, index: number) => {
+const onSearch = async (event: any, index: number) => {
   const row = searchRows.value[index]
   if (!row) return
   
   row.searching = true
   row.searchedEmpty = false
   
-  const results = await searchItems(event.query)
+  // Update query string for focus tracking if needed
+  row.query = event.query || ''
+  
+  const results = await searchItems(row.query)
   row.suggestions = results
   row.searching = false
   
-  if (results.length === 0 && event.query.trim() !== '') {
+  if (results.length === 0 && row.query.trim() !== '') {
     row.searchedEmpty = true
   }
-}, 400)
+}
 
 const addSearchRow = () => {
   const lastRow = searchRows.value[searchRows.value.length - 1]
@@ -170,7 +173,9 @@ const handleCreateNote = () => {
                     v-model="row.selectedItem" 
                     :suggestions="row.suggestions" 
                     @complete="onSearch($event, index)"
-                    :delay="0" 
+                    completeOnFocus
+                    :minQueryLength="0"
+                    :delay="400" 
                     optionLabel="name" 
                     :placeholder="t('newNote.searchPlaceholder')" 
                     class="w-full"

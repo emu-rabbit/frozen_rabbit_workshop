@@ -79,7 +79,9 @@ export const messages = {
         status: {
           missing: '尚缺 {n} 個',
           excess: '多出 {n} 個',
-          nonePrice: '無上架'
+          mismatch: '目前的數量分配與目標對不上喔，請檢查一下各個項目的數字是否正確！',
+          nonePrice: '無上架',
+          priceSuffix: '/ 個'
         },
         details: {
           gatherTitle: '採集地點與詳情',
@@ -207,7 +209,9 @@ export const messages = {
         status: {
           missing: '尚缺 {n} 个',
           excess: '多出 {n} 个',
-          nonePrice: '无上架'
+          mismatch: '目前的数量分配与目标对不上哦，请检查一下各个项目的数字是否正确！',
+          nonePrice: '无上架',
+          priceSuffix: '/ 个'
         },
         details: {
           gatherTitle: '采集地点与详情',
@@ -335,7 +339,9 @@ export const messages = {
         status: {
           missing: '{n} more needed',
           excess: '{n} in excess',
-          nonePrice: 'No Listing'
+          mismatch: "The numbers don't seem to add up! Please double-check your quantity allocation.",
+          nonePrice: 'No Listing',
+          priceSuffix: '/ ea'
         },
         details: {
           gatherTitle: 'Gathering Details',
@@ -463,7 +469,9 @@ export const messages = {
         status: {
           missing: 'あと {n} 個',
           excess: '{n} 個多い',
-          nonePrice: '出品なし'
+          mismatch: '数量の配分が目標と合っていないようです。各項目の数字を見直してみてくださいね。',
+          nonePrice: '出品なし',
+          priceSuffix: '/ 個'
         },
         details: {
           gatherTitle: '採集場所と詳細',

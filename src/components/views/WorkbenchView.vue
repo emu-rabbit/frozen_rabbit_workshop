@@ -188,7 +188,7 @@ const formatTime = (seconds: number) => {
                         <div class="flex flex-wrap gap-2 mt-1.5">
                             <!-- Price Badge -->
                             <span class="text-[15px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold border border-slate-200/50">
-                                {{ formatMoney(workbenchItems[id]?.marketPrice) }}
+                                {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">
@@ -211,7 +211,7 @@ const formatTime = (seconds: number) => {
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
+                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
                                <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
@@ -224,7 +224,7 @@ const formatTime = (seconds: number) => {
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
+                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
                                <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
@@ -237,7 +237,7 @@ const formatTime = (seconds: number) => {
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
+                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
                                <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
@@ -248,7 +248,7 @@ const formatTime = (seconds: number) => {
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
                                <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-8 text-center text-sm font-black focus:outline-none bg-transparent" />
+                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
                                <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
@@ -257,18 +257,19 @@ const formatTime = (seconds: number) => {
 
                 <!-- Status & Expand -->
                 <div class="flex items-center gap-3 w-full lg:w-auto lg:shrink-0 justify-end">
-                    <div v-if="getUnallocated(id) !== 0" 
-                        class="h-12 px-4 rounded-xl flex items-center justify-center gap-2 text-xs font-black shadow-sm border transition-all bg-red-50 text-red-600 border-red-200 animate-in fade-in zoom-in duration-300"
-                    >
-                        <i class="pi pi-exclamation-circle text-sm"></i>
-                        <span>
-                           {{ getUnallocated(id) > 0 ? t('workbench.view.status.missing', { n: getUnallocated(id) }) : t('workbench.view.status.excess', { n: Math.abs(getUnallocated(id)) }) }}
-                        </span>
-                    </div>
-
                     <button @click="toggleExpand(id)" class="w-12 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center border border-slate-200 transition-colors">
                         <i class="pi text-sm" :class="expandedItems[id] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
                     </button>
+                </div>
+            </div>
+
+            <!-- Mismatch Row -->
+            <div v-if="getUnallocated(id) !== 0" class="px-6 pb-5 -mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div class="bg-red-50/80 border border-red-100 rounded-2xl px-5 py-3.5 flex items-center gap-3 text-red-600 shadow-sm">
+                    <i class="pi pi-exclamation-circle text-xl shrink-0"></i>
+                    <span class="text-[13px] font-bold leading-relaxed">
+                        {{ t('workbench.view.status.mismatch') }}
+                    </span>
                 </div>
             </div>
 
