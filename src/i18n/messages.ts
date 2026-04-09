@@ -102,13 +102,28 @@ export const messages = {
         },
         button: {
           reset: '重設',
-          generateList: '生成製作清單'
+          generateList: '生成代辦清單'
         },
         tooltip: {
           budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
           time: '時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響'
         }
       }
+    },
+    todo: {
+      title: '代辦清單',
+      backToWorkbench: '返回備料台',
+      progress: '已完成 {n}/{total} 項',
+      section: {
+        other: '庫存 / 其他來源',
+        buy: '待購買物品',
+        gather: '待採集物品',
+        craft: '待製作物品'
+      },
+      targetQty: '目標',
+      targetPrice: '參考單價',
+      gatherLocation: '採集點',
+      emptySection: '此區塊無項目'
     },
     jobs: {
       crp: '木工師', bsm: '鍛鐵師', arm: '鑄甲師', gsm: '雕金師',
@@ -232,13 +247,28 @@ export const messages = {
         },
         button: {
           reset: '重设',
-          generateList: '生成制作清单'
+          generateList: '生成待办清单'
         },
         tooltip: {
           budget: '预算依据当前服务器依照市场最低价格做模拟买入计算，且价格来源经过快取，实际真实的价格需要看当下真正的市场价格而定',
           time: '时间仅仅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影响'
         }
       }
+    },
+    todo: {
+      title: '待办清单',
+      backToWorkbench: '返回备料台',
+      progress: '已完成 {n}/{total} 项',
+      section: {
+        other: '库存 / 其他来源',
+        buy: '待购买物品',
+        gather: '待采集物品',
+        craft: '待制作物品'
+      },
+      targetQty: '目标',
+      targetPrice: '参考单价',
+      gatherLocation: '采集点',
+      emptySection: '此区块无项目'
     },
     jobs: {
       crp: '木工师', bsm: '锻铁师', arm: '铸甲师', gsm: '雕金师',
@@ -362,13 +392,28 @@ export const messages = {
         },
         button: {
           reset: 'Reset',
-          generateList: 'Generate List'
+          generateList: 'Generate Todo List'
         },
         tooltip: {
           budget: 'Budget is calculated as a simulated purchase based on the lowest current market prices. Prices are cached and may differ from live values.',
           time: 'Time is a rough estimation based on common crafting/gathering flow. Actual speed depends on your stats and timed node availability.'
         }
       }
+    },
+    todo: {
+      title: 'Todo List',
+      backToWorkbench: 'Back to Workbench',
+      progress: '{n}/{total} Completed',
+      section: {
+        other: 'Stock & Other Sources',
+        buy: 'Items to Purchase',
+        gather: 'Items to Gather',
+        craft: 'Items to Craft'
+      },
+      targetQty: 'Target',
+      targetPrice: 'Ref. Price',
+      gatherLocation: 'Node',
+      emptySection: 'No items in this section'
     },
     jobs: {
       crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
@@ -492,13 +537,28 @@ export const messages = {
         },
         button: {
           reset: 'リセット',
-          generateList: 'リスト作成'
+          generateList: 'やることリストを作成'
         },
         tooltip: {
           budget: '予算は現在のマーケットの最安値に基づいた模擬購入によって計算されています。価格はキャッシュされているため、実際の相場とは異なる場合があります。',
           time: '所要時間は一般的な製作・採集フローに基づく概算です。装備や限定ノードの状況により変動します。'
         }
       }
+    },
+    todo: {
+      title: 'やることリスト',
+      backToWorkbench: '仕込み台に戻る',
+      progress: '{n}/{total} 完了',
+      section: {
+        other: '在庫・その他',
+        buy: '購入するもの',
+        gather: '採集するもの',
+        craft: '制作するもの'
+      },
+      targetQty: '目標',
+      targetPrice: '参考単価',
+      gatherLocation: '採集ポイント',
+      emptySection: 'このセクションには項目がありません'
     },
     jobs: {
       crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',

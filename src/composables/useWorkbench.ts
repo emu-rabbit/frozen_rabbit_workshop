@@ -41,6 +41,22 @@ export interface ItemDecision {
   other: number;
 }
 
+export interface TodoItem {
+  sectionKey: 'other' | 'buy' | 'gather' | 'craft';
+  id: number;
+  quantity: number;
+  name: any;
+  icon: string;
+  marketPrice: number | null;
+  gathering?: any;
+  crafting?: any;
+}
+
+export interface TodoSection {
+  key: 'other' | 'buy' | 'gather' | 'craft';
+  items: TodoItem[];
+}
+
 export function useWorkbench() {
   const { activeWorkbenchNote } = useNotes();
   
@@ -49,6 +65,10 @@ export function useWorkbench() {
   const workbenchItems = ref<Record<number, WorkbenchItem>>({});
   const decisions = reactive<Record<string, ItemDecision>>({});
   const isLoading = ref(false);
+
+  // Todo List State
+  const todoChecked = reactive<Record<string, boolean>>({});
+  const todoOrder = reactive<Record<string, number[]>>({});
 
   // 職稱映射（可用於 CraftingInfo）
   const CRAFT_JOB_NAMES: Record<number, string> = {
@@ -112,6 +132,10 @@ export function useWorkbench() {
 
       // 5. 初始獲取價格
       await fetchPrices(activeItemIds.value);
+
+      // 6. 清除代辦清單狀態 (重新進入備料台強制重置)
+      Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
+      Object.keys(todoOrder).forEach(k => delete todoOrder[k]);
     } finally {
       isLoading.value = false;
     }
@@ -322,21 +346,138 @@ export function useWorkbench() {
   });
 
   /**
+   * 生成代辦清單結構資料
+   */
+  const generateTodoSections = computed(() => {
+    const sections: Record<string, TodoItem[]> = {
+      other: [],
+      buy: [],
+      gather: [],
+      craft: []
+    };
+
+    activeItemIds.value.forEach(id => {
+      const item = workbenchItems.value[id];
+      const d = decisions[String(id)];
+      if (!item || !d) return;
+
+      // 1. Stock / Other
+      if ((d.other > 0) || (CRYSTAL_IDS.has(id) && d.other > 0)) {
+        sections.other.push({
+          sectionKey: 'other',
+          id,
+          quantity: d.other,
+          name: item.name,
+          icon: item.icon,
+          marketPrice: null
+        });
+      }
+
+      // 2. Buy
+      if (d.buy > 0) {
+        sections.buy.push({
+          sectionKey: 'buy',
+          id,
+          quantity: d.buy,
+          name: item.name,
+          icon: item.icon,
+          marketPrice: item.marketPrice
+        });
+      }
+
+      // 3. Gather
+      if (d.gather > 0) {
+        sections.gather.push({
+          sectionKey: 'gather',
+          id,
+          quantity: d.gather,
+          name: item.name,
+          icon: item.icon,
+          marketPrice: null,
+          gathering: item.gathering
+        });
+      }
+
+      // 4. Craft
+      if (d.craft > 0) {
+        sections.craft.push({
+          sectionKey: 'craft',
+          id,
+          quantity: d.craft,
+          name: item.name,
+          icon: item.icon,
+          marketPrice: null,
+          crafting: item.crafting
+        });
+      }
+    });
+
+    // Sort Crafting by BFS Depth (Pre-requisites first)
+    // We can infer depth from the existing activeItemIds order which is already somewhat BFS,
+    // but the request was "pre-requisites first, final products last".
+    // Since activeItemIds is sorted (Root first, then craftables...), we just need to REVERSE it for crafting.
+    sections.craft.sort((a, b) => {
+        const indexA = activeItemIds.value.indexOf(a.id);
+        const indexB = activeItemIds.value.indexOf(b.id);
+        return indexB - indexA; // Higher index (deeper) first
+    });
+
+    // Sort Gathering by zone
+    sections.gather.sort((a, b) => {
+        const zoneA = a.gathering?.zoneName?.en || '';
+        const zoneB = b.gathering?.zoneName?.en || '';
+        return zoneA.localeCompare(zoneB);
+    });
+
+    // Apply custom order if exists
+    const result: TodoSection[] = [
+      { key: 'other', items: sections.other },
+      { key: 'buy', items: sections.buy },
+      { key: 'gather', items: sections.gather },
+      { key: 'craft', items: sections.craft }
+    ];
+
+    result.forEach(s => {
+      const order = todoOrder[s.key];
+      if (order && order.length > 0) {
+         // Sort items based on stored order
+         s.items.sort((a, b) => {
+             const idxA = order.indexOf(a.id);
+             const idxB = order.indexOf(b.id);
+             if (idxA === -1 && idxB === -1) return 0;
+             if (idxA === -1) return 1;
+             if (idxB === -1) return -1;
+             return idxA - idxB;
+         });
+      }
+    });
+
+    return result.filter(s => s.items.length > 0);
+  });
+
+  /**
+   * 監聽決策變化，重設代辦清單勾選狀態 (實作計畫中的第 8.3 點)
+   */
+  watch(decisions, () => {
+    Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
+  }, { deep: true });
+
+  /**
    * 當新材料被展開時，確保其資料、價格以及決策物件被初始化
    */
   watch(activeItemIds, async (newIds) => {
-    if (isLoading.value) return; // 正在大量初始化時跳過，由 initialize 完成後或後續變化觸發
+    if (isLoading.value) return; 
     
-    // 1. 初始化遺失的決策物件
-    newIds.forEach(id => {
-      initSingleItemDecision(id, totalDemands.value[id] || 0);
-    });
-
-    // 2. 獲取遺失的物品詳細資料
+    // 1. 獲取遺失的物品詳細資料 (必須先獲取資料，才能正確判斷 default 決策，如 canCraft)
     const missingDataIds = newIds.filter(id => !workbenchItems.value[id]);
     if (missingDataIds.length > 0) {
       await refreshItemsData(missingDataIds);
     }
+
+    // 2. 初始化遺失的決策物件 (現在有了 workbenchItems 資料，可以正確判定預設是製作、採集還是購買)
+    newIds.forEach(id => {
+      initSingleItemDecision(id, totalDemands.value[id] || 0);
+    });
     
     // 3. 獲取遺失的價格資料
     const missingPriceIds = newIds.filter(id => !workbenchItems.value[id]?.priceFetched);
@@ -363,12 +504,29 @@ export function useWorkbench() {
     });
   }, { deep: true });
 
+  /**
+   * 檢查是否存在數量配置不符的情況
+   */
+  const hasMismatch = computed(() => {
+    return activeItemIds.value.some(id => {
+        const needed = totalDemands.value[id] || 0;
+        const d = decisions[String(id)];
+        if (!d) return needed !== 0;
+        const sum = (d.buy || 0) + (d.craft || 0) + (d.gather || 0) + (d.other || 0);
+        return Math.abs(needed - sum) > 0.001; // 使用差值檢查避免浮點數問題
+    });
+  });
+
   return {
     workbenchItems,
     decisions,
     totalDemands,
     activeItemIds,
     isLoading,
+    hasMismatch,
+    todoChecked,
+    todoOrder,
+    generateTodoSections,
     initialize
   };
 }

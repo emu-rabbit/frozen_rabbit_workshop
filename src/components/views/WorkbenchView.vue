@@ -12,8 +12,11 @@ const {
   totalDemands, 
   activeItemIds, 
   isLoading, 
+  hasMismatch,
   initialize 
 } = useWorkbench()
+
+const emit = defineEmits(['generate-todo'])
 
 onMounted(() => {
   initialize()
@@ -346,11 +349,21 @@ const formatTime = (seconds: number) => {
             </div>
         </div>
         
-        <div class="flex items-center gap-3 w-full md:w-auto">
+        <div class="flex items-center gap-4 w-full md:w-auto">
+            <!-- Mismatch warning next to button -->
+            <transition name="fade">
+                <div v-if="hasMismatch" class="hidden lg:flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-xl border border-amber-200">
+                    <i class="pi pi-exclamation-triangle"></i>
+                    <span class="text-xs font-bold">{{ t('workbench.view.status.mismatch') }}</span>
+                </div>
+            </transition>
+
             <button @click="handleReset" class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
                 <i class="pi pi-sync"></i> {{ t('workbench.view.button.reset') }}
             </button>
-            <button class="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 transition-all flex items-center justify-center gap-3 text-base">
+            <button @click="$emit('generate-todo')" 
+                    :disabled="hasMismatch || isLoading"
+                    class="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 disabled:bg-slate-200 disabled:shadow-none disabled:text-slate-400 disabled:cursor-not-allowed disabled:scale-100 transition-all flex items-center justify-center gap-3 text-base">
                 <i class="pi pi-list"></i> {{ t('workbench.view.button.generateList') }} <i class="pi pi-arrow-right scale-90"></i>
             </button>
         </div>
@@ -362,6 +375,9 @@ const formatTime = (seconds: number) => {
 .item-card { transform-origin: center; }
 .list-enter-active, .list-leave-active { transition: all 0.4s ease; }
 .list-enter-from, .list-leave-to { opacity: 0; transform: translateY(20px); }
+
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 
 .workbench-container {
     background: transparent;

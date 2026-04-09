@@ -18,6 +18,7 @@ import FavoritesView from './components/views/FavoritesView.vue'
 import RecommendedView from './components/views/RecommendedView.vue'
 import WorkbenchView from './components/views/WorkbenchView.vue'
 import SettingsView from './components/views/SettingsView.vue'
+import TodoListView from './components/views/TodoListView.vue'
 
 const { locale } = useI18n()
 const { language } = useSettings()
@@ -31,7 +32,7 @@ watch(language, (newLang) => {
 }, { immediate: true })
 
 // State for navigation
-const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench'
+const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
 
 const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
   addNote(title, items, shouldFavorite)
@@ -85,6 +86,12 @@ const handleLanguageUpdate = (val: string) => {
       
       <WorkbenchView 
         v-if="currentTab === 'workbench'" 
+        @generate-todo="currentTab = 'todo'"
+      />
+
+      <TodoListView
+        v-if="currentTab === 'todo'"
+        @back="currentTab = 'workbench'"
       />
       
       <SettingsView 
