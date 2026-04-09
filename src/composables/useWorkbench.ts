@@ -8,6 +8,8 @@ import {
 } from '../services/dictionary';
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices } from '../services/universalis';
+import type { MarketListing } from '../services/universalis';
+import { calculateSimulatedPrice } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
 
 export interface CraftingInfo {
@@ -27,6 +29,7 @@ export interface WorkbenchItem {
   canGather: boolean;
   marketPrice: number | null;
   priceFetched: boolean;
+  listings?: MarketListing[];
   crafting: CraftingInfo | null;
   gathering: any | null; // GatheringInfo from gathering.ts
 }
@@ -164,7 +167,16 @@ export function useWorkbench() {
       if (item) {
         // Fix: prices is a Map, use .get(id)
         const priceData = prices.get(id);
-        item.marketPrice = priceData?.currentAveragePrice ?? null;
+        item.listings = priceData?.listings || [];
+        
+        // Calculate simulated price based on current demand
+        const demand = totalDemands.value[id] || 0;
+        item.marketPrice = calculateSimulatedPrice(
+          item.listings,
+          demand,
+          priceData?.currentAveragePrice ?? null
+        );
+        
         item.priceFetched = true;
       }
     });
@@ -326,6 +338,24 @@ export function useWorkbench() {
       await fetchPrices(missingPriceIds);
     }
   }, { immediate: true, deep: true });
+
+  /**
+   * 監聽總需求變化，動態更新模擬購買成本
+   */
+  watch(totalDemands, (newDemands) => {
+    Object.keys(newDemands).forEach(idStr => {
+      const id = Number(idStr);
+      const item = workbenchItems.value[id];
+      if (item && item.listings && item.listings.length > 0) {
+        // 重新計算基於新數量的模擬價格
+        item.marketPrice = calculateSimulatedPrice(
+          item.listings,
+          newDemands[id] || 0,
+          item.marketPrice // 使用舊價格作為 fallback
+        );
+      }
+    });
+  }, { deep: true });
 
   return {
     workbenchItems,

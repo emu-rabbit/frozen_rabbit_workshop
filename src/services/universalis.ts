@@ -29,9 +29,16 @@ export interface ItemPrice {
   currentAveragePrice: number | null;
   currentAveragePriceNQ: number | null;
   currentAveragePriceHQ: number | null;
+  listings: MarketListing[];
   lastUploadTime: number; // Unix ms
   worldName?: string;     // present for single-world queries
   dcName?: string;
+}
+
+export interface MarketListing {
+  pricePerUnit: number;
+  quantity: number;
+  hq: boolean;
 }
 
 // ─── Cache ────────────────────────────────────────────────────────────────────
@@ -115,6 +122,12 @@ export function setSelectedDC(dc: string) {
 // ─── Price Fetching ───────────────────────────────────────────────────────────
 
 function parseItemPrice(itemId: number, raw: any): ItemPrice {
+  const listings: MarketListing[] = (raw.listings || []).map((l: any) => ({
+    pricePerUnit: l.pricePerUnit,
+    quantity: l.quantity,
+    hq: l.hq
+  })).sort((a: MarketListing, b: MarketListing) => a.pricePerUnit - b.pricePerUnit);
+
   return {
     itemId,
     minPriceNQ: raw.minPriceNQ && raw.minPriceNQ > 0 ? raw.minPriceNQ : null,
@@ -122,6 +135,7 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
     currentAveragePrice: raw.currentAveragePrice && raw.currentAveragePrice > 0 ? raw.currentAveragePrice : null,
     currentAveragePriceNQ: raw.currentAveragePriceNQ && raw.currentAveragePriceNQ > 0 ? raw.currentAveragePriceNQ : null,
     currentAveragePriceHQ: raw.currentAveragePriceHQ && raw.currentAveragePriceHQ > 0 ? raw.currentAveragePriceHQ : null,
+    listings,
     lastUploadTime: raw.lastUploadTime ?? 0,
     worldName: raw.worldName,
     dcName: raw.dcName,
