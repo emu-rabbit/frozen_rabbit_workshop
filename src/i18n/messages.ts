@@ -15,7 +15,7 @@ export const messages = {
       addFavorite: '加入我的收藏',
       removeFavorite: '取消收藏',
       delete: '刪除紀錄',
-      copyJson: '複製為站長推薦格式 (JSON)'
+      exportNote: '匯出筆記 (JSON)'
     },
     favorites: {
       title: '收藏的小筆記',
@@ -35,7 +35,7 @@ export const messages = {
       description: '輸入筆記名稱與欲追蹤的物品以建立配方清單',
       labelTitle: '筆記名稱',
       placeholderTitle: '例如：640HQ 裝備儲備、生產用半成品...',
-      copyJson: '預覽並複製站長推薦格式',
+      copyJson: '匯出此筆記 (JSON)',
       itemsTitle: '放上備料台的物品',
       itemsDescription: '輸入關鍵字（如「舊日王國」）查詢完整物品並準備分析',
       searchPlaceholder: '找尋物品...',
@@ -90,13 +90,13 @@ export const messages = {
       favorites: '收藏的小笔记',
       recommended: '兔肉私心笔记',
       history: '翻开旧纪录',
-      settings: '设立'
+      settings: '设定'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
       removeFavorite: '取消收藏',
       delete: '删除纪录',
-      copyJson: '复制为站长推荐格式 (JSON)'
+      exportNote: '导出笔记 (JSON)'
     },
     favorites: {
       title: '收藏的小笔记',
@@ -116,7 +116,7 @@ export const messages = {
       description: '输入笔记名称与欲追踪的物品以建立配方清单',
       labelTitle: '笔记名称',
       placeholderTitle: '例如：640HQ 装备储备、生产用半成品...',
-      copyJson: '预览并复制站长推荐格式',
+      copyJson: '导出此笔记 (JSON)',
       itemsTitle: '放上备料台的物品',
       itemsDescription: '输入关键字（如“旧日王国”）查询完整物品并准备分析',
       searchPlaceholder: '寻觅物品...',

@@ -4,6 +4,7 @@ const BASE_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcr
 const DICT_URLS: Record<string, string> = {
   tw: `${BASE_URL}/tw/tw-items.json`,
   zh: `${BASE_URL}/zh/zh-items.json`,
+  cn: `${BASE_URL}/zh/zh-items.json`,
   en: `${BASE_URL}/items.json`,
   ja: `${BASE_URL}/ja/ja-items.json`, // Will likely 404, but handled now
 };

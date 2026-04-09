@@ -70,7 +70,7 @@ const activeTab = computed({
       >
         <i class="pi pi-book shrink-0"></i>
         <span v-html="t('nav.history')" class="leading-tight flex-1"></span>
-        <span v-if="notes.length > 0" class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ notes.length }}</span>
+        <span class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ notes.length }}</span>
       </button>
       
       <div class="mt-auto"></div>

@@ -56,6 +56,21 @@ const formattedDate = computed(() => {
 const handleToggleFavorite = () => {
   emit('toggle-favorite', props.note ? props.note : { id: props.id as string })
 }
+
+const handleExportJson = () => {
+  if (!props.note) return
+  
+  const exportData = {
+    id: props.note.id,
+    name: localizedName.value,
+    items: props.note.items.map(i => ({ id: i.id, quantity: i.quantity })),
+    createdAt: props.note.createdAt
+  }
+  
+  navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
+    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪贴板！' : '筆記 JSON 已匯出至剪貼簿！'))
+    .catch(err => console.error('Export failed:', err))
+}
 </script>
 
 <template>
@@ -141,6 +156,15 @@ const handleToggleFavorite = () => {
             :title="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
           >
             <i class="pi text-xl" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
+          </button>
+
+          <button 
+            v-if="note" 
+            @click="handleExportJson" 
+            class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-300 hover:text-soft-green-500"
+            :title="t('noteCard.exportNote')"
+          >
+            <i class="pi pi-copy text-xl"></i>
           </button>
 
           <button 

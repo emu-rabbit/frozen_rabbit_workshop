@@ -83,7 +83,7 @@ const canAddRow = computed(() => {
   return !!lastRow.selectedItem
 })
 
-const handleCopyJson = () => {
+const handleExportJson = () => {
   if (!noteTitle.value) return;
 
   const validItems = searchRows.value
@@ -93,21 +93,16 @@ const handleCopyJson = () => {
       quantity: row.quantity
     }))
 
-  const recommendedFormat = {
+  const exportData = {
     id: crypto.randomUUID(),
-    name: {
-      tw: locale.value === 'tw' ? noteTitle.value : '',
-      cn: locale.value === 'cn' ? noteTitle.value : '',
-      en: locale.value === 'en' ? noteTitle.value : '',
-      ja: locale.value === 'ja' ? noteTitle.value : ''
-    },
+    name: noteTitle.value,
     items: validItems,
     createdAt: new Date().toISOString()
   }
   
-  navigator.clipboard.writeText(JSON.stringify(recommendedFormat, null, 2))
-    .then(() => alert('已複製站長推薦格式 JSON 到剪貼簿！'))
-    .catch(err => console.error('無法複製:', err))
+  navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
+    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪贴板！' : '筆記 JSON 已匯出至剪貼簿！'))
+    .catch(err => console.error('Export failed:', err))
 }
 
 const handleCreateNote = () => {
@@ -244,8 +239,7 @@ const handleCreateNote = () => {
 
             <div class="flex items-center gap-3">
               <button 
-                v-if="debugMode" 
-                @click="handleCopyJson" 
+                @click="handleExportJson" 
                 :disabled="!noteTitle"
                 class="group flex items-center gap-0 hover:gap-3 px-3 py-3.5 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
                 :title="t('newNote.copyJson')"

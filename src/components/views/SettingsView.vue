@@ -49,8 +49,8 @@ const langOptions = [
           </div>
       </div>
 
-      <!-- Debug Mode Settings -->
-      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+      <!-- Debug Mode Settings (Temporarily Hidden) -->
+      <div v-if="false" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
           <div class="flex items-center justify-between gap-4">
               <div class="flex flex-col gap-1">
                 <div class="flex items-center gap-3 text-soft-green-900 mb-1">
