@@ -13,28 +13,8 @@ const favoriteNotesStore = useLocalStorage<Note[]>(FAVORITES_STORE_KEY, [])
 const recommendedNotes = recommendedNotesData as Note[]
 
 export function useNotes() {
-  /**
-   * Generates the next sequential history ID in history_XXXXX format.
-   * Scans existing notes to find the current maximum number.
-   */
-  const generateNextHistoryId = () => {
-    let maxNum = 0
-    const pattern = /^history_(\d{5})$/
-
-    notes.value.forEach(note => {
-      const match = note.id.match(pattern)
-      if (match) {
-        const num = parseInt(match[1], 10)
-        if (num > maxNum) maxNum = num
-      }
-    })
-
-    const nextNum = maxNum + 1
-    return `history_${String(nextNum).padStart(5, '0')}`
-  }
-
   const addNote = (name: string, items: NoteItem[], shouldFavorite: boolean = false) => {
-    const id = generateNextHistoryId()
+    const id = crypto.randomUUID()
     const newNote: Note = {
       id,
       name: name.trim(),

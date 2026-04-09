@@ -94,7 +94,7 @@ const handleCopyJson = () => {
     }))
 
   const recommendedFormat = {
-    id: 'recommend_XXXXX',
+    id: crypto.randomUUID(),
     name: {
       tw: locale.value === 'tw' ? noteTitle.value : '',
       cn: locale.value === 'cn' ? noteTitle.value : '',
@@ -106,7 +106,7 @@ const handleCopyJson = () => {
   }
   
   navigator.clipboard.writeText(JSON.stringify(recommendedFormat, null, 2))
-    .then(() => alert('已複製站長推薦格式 JSON 到剪貼簿！\n請記得手動修改 ID 的 XXXXX 部分。'))
+    .then(() => alert('已複製站長推薦格式 JSON 到剪貼簿！'))
     .catch(err => console.error('無法複製:', err))
 }
 
