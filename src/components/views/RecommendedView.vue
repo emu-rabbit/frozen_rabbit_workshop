@@ -13,7 +13,7 @@ const { t } = useI18n()
 const { recommendedNotes, toggleFavorite, isFavorite } = useNotes()
 
 const emit = defineEmits<{
-  'open-workbench': []
+  'open-workbench': [note: any]
 }>()
 
 const searchQuery = ref('')
@@ -102,7 +102,7 @@ const onSearchValueUpdate = (val: string | undefined) => {
           mode="recommended"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
-          @open-workbench="emit('open-workbench')"
+          @open-workbench="emit('open-workbench', $event)"
         />
       </div>
 

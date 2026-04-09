@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'toggle-favorite': [noteOrId: Note | { id: string }]
-  'open-workbench': [id: string]
+  'open-workbench': [note: Note]
 }>()
 
 // --- Computed Helpers ---
@@ -169,7 +169,7 @@ const handleExportJson = () => {
 
           <button 
             v-if="note" 
-            @click="emit('open-workbench', note.id)" 
+            @click="emit('open-workbench', note)" 
             class="h-11 px-8 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-md hover:shadow-lg transition-all text-sm font-bold gap-2 whitespace-nowrap active:scale-95"
           >
               {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-sm"></i>

@@ -21,7 +21,7 @@ import SettingsView from './components/views/SettingsView.vue'
 
 const { locale } = useI18n()
 const { language } = useSettings()
-const { addNote } = useNotes()
+const { addNote, activeWorkbenchNote, notes } = useNotes()
 
 // Sync i18n locale and dictionary language with settings
 watch(language, (newLang) => {
@@ -35,6 +35,16 @@ const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 
 
 const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
   addNote(title, items, shouldFavorite)
+  // The newly added note is at the top of the list
+  const newNote = notes.value[0]
+  if (newNote) {
+    activeWorkbenchNote.value = newNote
+  }
+  currentTab.value = 'workbench'
+}
+
+const handleOpenWorkbench = (note: any) => {
+  activeWorkbenchNote.value = note
   currentTab.value = 'workbench'
 }
 
@@ -60,15 +70,17 @@ const handleLanguageUpdate = (val: string) => {
       
       <FavoritesView 
         v-if="currentTab === 'favorites'" 
+        @open-workbench="handleOpenWorkbench"
       />
       
       <RecommendedView 
         v-if="currentTab === 'recommended'" 
+        @open-workbench="handleOpenWorkbench"
       />
       
       <HistoryView 
         v-if="currentTab === 'history'" 
-        @open-workbench="currentTab = 'workbench'"
+        @open-workbench="handleOpenWorkbench"
       />
       
       <WorkbenchView 
@@ -94,6 +106,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 input[type="number"] {
   appearance: textfield;
+}
+
+/* Prevent layout shift when scrollbar appears */
+main {
+  scrollbar-gutter: stable;
 }
 
 /* Custom styles for SelectButton to match theme */

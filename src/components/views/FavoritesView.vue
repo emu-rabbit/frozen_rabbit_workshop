@@ -9,7 +9,7 @@ import draggable from 'vuedraggable'
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  'open-workbench': []
+  'open-workbench': [note: any]
 }>()
 
 const { favoriteNotes, toggleFavorite, isFavorite, updateFavoriteOrder } = useNotes()
@@ -65,7 +65,7 @@ const favoritesList = computed({
               :is-favorite="isFavorite(element.id)"
               :draggable="true"
               @toggle-favorite="toggleFavorite"
-              @open-workbench="emit('open-workbench')"
+              @open-workbench="emit('open-workbench', $event)"
             />
           </div>
         </template>

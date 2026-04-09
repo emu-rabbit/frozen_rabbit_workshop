@@ -7,7 +7,7 @@ import NoteCard from '../shared/NoteCard.vue'
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  'open-workbench': []
+  'open-workbench': [note: any]
 }>()
 
 const { notes, toggleFavorite, isFavorite } = useNotes()
@@ -46,7 +46,7 @@ const { notes, toggleFavorite, isFavorite } = useNotes()
           mode="history"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
-          @open-workbench="emit('open-workbench')"
+          @open-workbench="emit('open-workbench', $event)"
         />
       </div>
     </div>

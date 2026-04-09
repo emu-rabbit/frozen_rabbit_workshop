@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@vueuse/core'
 import type { Note, NoteItem } from '../types/note'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 import recommendedNotesData from '../data/recommended.json'
 
@@ -11,6 +11,8 @@ const notes = useLocalStorage<Note[]>(NOTES_KEY, [])
 // Using deep copies instead of IDs. Migrates old users implicitly (starts empty if format changes or just starts empty for new key)
 const favoriteNotesStore = useLocalStorage<Note[]>(FAVORITES_STORE_KEY, [])
 const recommendedNotes = recommendedNotesData as Note[]
+
+const activeWorkbenchNote = ref<Note | null>(null)
 
 export function useNotes() {
   const addNote = (name: string, items: NoteItem[], shouldFavorite: boolean = false) => {
@@ -78,6 +80,7 @@ export function useNotes() {
     favoritesCount,
     recommendedCount,
     favoriteNotes,
+    activeWorkbenchNote,
     addNote,
     getNotes,
     toggleFavorite,
