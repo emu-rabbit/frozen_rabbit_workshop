@@ -210,9 +210,9 @@ const formatTime = (seconds: number) => {
                              :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-300 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-100'">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
-                               <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
+                               <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -223,9 +223,9 @@ const formatTime = (seconds: number) => {
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
-                               <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-indigo-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-indigo-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
+                               <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-indigo-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -236,9 +236,9 @@ const formatTime = (seconds: number) => {
                                {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
-                               <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-amber-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-amber-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
+                               <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-amber-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -247,9 +247,9 @@ const formatTime = (seconds: number) => {
                              :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-200 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-100'">
                            <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-10 text-center text-sm font-black focus:outline-none bg-white border border-slate-200 rounded-md py-0.5 shadow-sm" />
-                               <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:border-emerald-400 flex items-center justify-center font-bold text-xs"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-emerald-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
+                               <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-emerald-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
                     </div>
