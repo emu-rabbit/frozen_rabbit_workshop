@@ -20,28 +20,31 @@ const searchQuery = ref('')
 const first = ref(0)
 const rows = ref(20)
 
-// Helper to check if a string contains the query (case insensitive)
-const matchQuery = (text: string, query: string) => {
-  if (!text) return false
-  return text.toLowerCase().includes(query.toLowerCase())
-}
 
 const filteredNotes = computed(() => {
-  const query = searchQuery.value.trim()
-  if (!query) return recommendedNotes
+  const rawQuery = searchQuery.value.trim().toLowerCase()
+  if (!rawQuery) return recommendedNotes
+
+  // Split query into tokens by whitespace
+  const tokens = rawQuery.split(/\s+/).filter(t => t.length > 0)
 
   return recommendedNotes.filter(note => {
-    // If it's a simple string
+    // Collect all available text for this note to search against
+    const searchableTexts: string[] = []
     if (typeof note.name === 'string') {
-      return matchQuery(note.name, query)
+      searchableTexts.push(note.name.toLowerCase())
+    } else {
+      const loc = note.name as LocalizedString
+      if (loc.tw) searchableTexts.push(loc.tw.toLowerCase())
+      if (loc.cn) searchableTexts.push(loc.cn.toLowerCase())
+      if (loc.en) searchableTexts.push(loc.en.toLowerCase())
+      if (loc.ja) searchableTexts.push(loc.ja.toLowerCase())
     }
     
-    // Cross language search
-    const loc = note.name as LocalizedString
-    return matchQuery(loc.tw, query) || 
-           matchQuery(loc.cn, query) || 
-           matchQuery(loc.en, query) || 
-           matchQuery(loc.ja, query)
+    // Requirement: EVERY token must be found in AT LEAST ONE of the translations
+    return tokens.every(token => 
+      searchableTexts.some(text => text.includes(token))
+    )
   })
 })
 
