@@ -72,12 +72,14 @@ export function useWorkbench() {
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
       await refreshItemsData(rootIds);
 
-      // 3. 初始化決策 (根據 canCraft 設定預設)
+      // 3. 初始化決策 (優先製作 > 優先採集 > 優先購買)
       // 重要：decisions 鍵值必須統一使用字串，否則 BFS 的 String(id) 存取會找不到
       activeWorkbenchNote.value.items.forEach(item => {
         const itemData = workbenchItems.value[item.id];
         if (itemData?.canCraft) {
             decisions[String(item.id)] = { buy: 0, craft: item.quantity, gather: 0, other: 0 };
+        } else if (itemData?.canGather) {
+            decisions[String(item.id)] = { buy: 0, craft: 0, gather: item.quantity, other: 0 };
         } else {
             decisions[String(item.id)] = { buy: item.quantity, craft: 0, gather: 0, other: 0 };
         }
