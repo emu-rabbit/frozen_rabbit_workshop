@@ -47,9 +47,11 @@ const formatMoney = (val: number | null) => {
 const summary = computed(() => {
     let totalCost = 0
     let totalTime = 0
-    let craftJobs = new Set<string>()
-    let gatherJobs = new Set<string>()
+    // Track max requirements per job: { jobName: { level, stars } }
+    let maxCraft = new Map<string, { level: number, stars: number }>()
+    let maxGather = new Map<string, { level: number, stars: number }>()
     let hasUnknownPrice = false
+
     activeItemIds.value.forEach(id => {
         const item = workbenchItems.value[id]
         const d = decisions[String(id)]
@@ -66,17 +68,27 @@ const summary = computed(() => {
         
         // 2. 時間成本與職業清單
         if (d.craft > 0 && item.crafting) {
-            craftJobs.add(item.crafting.jobName + '|' + item.crafting.level + '|' + item.crafting.stars)
+            const current = maxCraft.get(item.crafting.jobName)
+            if (!current || item.crafting.level > current.level || (item.crafting.level === current.level && item.crafting.stars > current.stars)) {
+                maxCraft.set(item.crafting.jobName, { level: item.crafting.level, stars: item.crafting.stars })
+            }
             const craftCount = Math.ceil(d.craft / item.crafting.yields)
             totalTime += craftCount * (item.crafting.stars > 0 ? 60 : 30)
         }
         
         if (d.gather > 0 && item.gathering) {
-            gatherJobs.add(item.gathering.jobName + '|' + item.gathering.level + '|' + item.gathering.stars)
-            totalTime += (d.gather * 5) // 每 6 個材料耗費 30 秒
+            const current = maxGather.get(item.gathering.jobName)
+            if (!current || item.gathering.level > current.level || (item.gathering.level === current.level && item.gathering.stars > current.stars)) {
+                maxGather.set(item.gathering.jobName, { level: item.gathering.level, stars: item.gathering.stars })
+            }
+            totalTime += (d.gather * 5)
         }
     })
-    return { totalCost, totalTime, craftJobs: Array.from(craftJobs), gatherJobs: Array.from(gatherJobs), hasUnknownPrice }
+
+    const craftJobs = Array.from(maxCraft.entries()).map(([name, req]) => `${name}|${req.level}|${req.stars}`)
+    const gatherJobs = Array.from(maxGather.entries()).map(([name, req]) => `${name}|${req.level}|${req.stars}`)
+
+    return { totalCost, totalTime, craftJobs, gatherJobs, hasUnknownPrice }
 })
 
 const updateDecision = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', delta: number) => {
