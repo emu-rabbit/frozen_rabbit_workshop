@@ -1,8 +1,11 @@
 import { shallowRef, ref } from 'vue';
 
 const BASE_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json';
+// The tw/ locale directory lives on the `staging` branch
+const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
+
 const DICT_URLS: Record<string, string> = {
-  tw: `${BASE_URL}/tw/tw-items.json`,
+  tw: `${BASE_URL_STAGING}/tw/tw-items.json`,
   zh: `${BASE_URL}/zh/zh-items.json`,
   cn: `${BASE_URL}/zh/zh-items.json`,
   en: `${BASE_URL}/items.json`,
@@ -12,6 +15,10 @@ const DICT_URLS: Record<string, string> = {
 const ICONS_URL = `${BASE_URL}/item-icons.json`;
 const RECIPES_URL = `${BASE_URL}/recipes.json`;
 const ENGLISH_URL = `${BASE_URL}/items.json`;
+
+// tw-places.json: Provides Traditional Chinese zone/map names for gathering nodes.
+// Key: zoneid (string) → { tw: "繁中地名" }
+const TW_PLACES_URL = `${BASE_URL_STAGING}/tw/tw-places.json`;
 
 export interface Recipe {
     id: number;
@@ -37,6 +44,10 @@ export const isDictionaryLoading = ref(false);
 
 const internalEnglishCache = shallowRef<Record<string, any> | null>(null);
 const internalIconsCache = shallowRef<Record<string, string> | null>(null);
+
+/** tw-places.json cache — { [zoneId: string]: { tw: string } } */
+let globalPlacesCache: Record<string, { tw?: string }> | null = null;
+let placesLoadPromise: Promise<void> | null = null;
 
 let currentLanguage = 'tw';
 
@@ -180,4 +191,45 @@ export async function searchItems(query: string): Promise<MockItem[]> {
     const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
     return mainMatch || enMatch;
   }).slice(0, 50);
+}
+
+// ─── Places (Gathering Zone Names) ──────────────────────────────────────────
+
+/**
+ * Lazy-loads tw-places.json (once per session).
+ * Used to display Traditional Chinese zone names for gathering nodes.
+ */
+export async function ensurePlacesLoaded(): Promise<void> {
+  if (globalPlacesCache !== null) return;
+  if (placesLoadPromise) return placesLoadPromise;
+
+  placesLoadPromise = fetch(TW_PLACES_URL)
+    .then(r => {
+      if (!r.ok) throw new Error(`tw-places.json fetch failed: ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      globalPlacesCache = data;
+      console.log('[Dictionary] tw-places.json loaded.');
+    })
+    .catch(err => {
+      console.warn('[Dictionary] Could not load tw-places.json:', err);
+      globalPlacesCache = {}; // fallback to empty so we don't keep retrying
+    })
+    .finally(() => {
+      placesLoadPromise = null;
+    });
+
+  return placesLoadPromise;
+}
+
+/**
+ * Returns the Traditional Chinese name for a zone ID.
+ * Falls back to English name if TW translation is missing.
+ * @param zoneId - The zoneid from nodes.json
+ * @param enFallback - English name to display if TW is unavailable
+ */
+export function getPlaceName(zoneId: number, enFallback?: string): string {
+  const entry = globalPlacesCache?.[zoneId.toString()];
+  return entry?.tw || enFallback || `Zone #${zoneId}`;
 }
