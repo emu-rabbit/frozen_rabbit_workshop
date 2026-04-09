@@ -32,9 +32,10 @@ let loadPromise: Promise<void> | null = null;
 
 const GATHER_JOB_NAMES: Record<number, string> = {
   0: 'jobs.min',
-  1: 'jobs.btn',
-  2: 'jobs.fsh',
-  3: 'jobs.fsh',
+  1: 'jobs.min',
+  2: 'jobs.btn',
+  3: 'jobs.btn',
+  4: 'jobs.fsh',
 };
 
 /**

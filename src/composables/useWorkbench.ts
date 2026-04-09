@@ -266,16 +266,42 @@ export function useWorkbench() {
         const isCrystalA = CRYSTAL_IDS.has(a);
         const isCrystalB = CRYSTAL_IDS.has(b);
 
-        // 1. 成品項目最優先
-        if (isRootA !== isRootB) return isRootA ? -1 : 1;
-        // 2. 碎晶/水晶最後面
-        if (isCrystalA !== isCrystalB) return isCrystalA ? 1 : -1;
-        // 3. 可製作優先於不可製作 (材料部分)
-        if (itemA?.canCraft !== itemB?.canCraft) return itemA?.canCraft ? -1 : 1;
-        // 4. 可採集優先於不可採集
-        if (itemA?.canGather !== itemB?.canGather) return itemA?.canGather ? -1 : 1;
-        
-        return 0; // 保持原有 BFS 相對序
+        // Tier 1: Category Weight
+        const getWeight = (id: number, item: any, isRoot: boolean, isCrystal: boolean) => {
+            if (isRoot) return 0;
+            if (isCrystal) return 4; // Always at bottom
+            if (item?.canCraft) return 1;
+            if (item?.canGather) return 2;
+            return 3; // Marketable / Others
+        };
+
+        const wA = getWeight(a, itemA, isRootA, isCrystalA);
+        const wB = getWeight(b, itemB, isRootB, isCrystalB);
+
+        if (wA !== wB) return wA - wB;
+
+        // Tier 2: Refined Sub-sorting
+        if (wA === 1 || wA === 2) {
+            // Craftable (1) or Gatherable (2)
+            const metaA = wA === 1 ? itemA?.crafting : itemA?.gathering;
+            const metaB = wA === 1 ? itemB?.crafting : itemB?.gathering;
+            
+            if (metaA && metaB) {
+                // 1. Level Descending
+                if (metaB.level !== metaA.level) return metaB.level - metaA.level;
+                // 2. Stars Descending
+                if (metaB.stars !== metaA.stars) return metaB.stars - metaA.stars;
+                // 3. Job ID Ascending (Group by profession)
+                const jobA = wA === 1 ? metaA.job : metaA.type;
+                const jobB = wA === 1 ? metaB.job : metaB.type;
+                if (jobA !== jobB) return jobA - jobB;
+            }
+        } else if (wA === 4) {
+            // Crystals: ID Descending (Cluster > Crystal > Shard)
+            return b - a;
+        }
+
+        return 0; // Maintain BFS relative order for others (stable sort)
     });
   });
 
