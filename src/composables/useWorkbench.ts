@@ -107,6 +107,10 @@ export function useWorkbench() {
           initSingleItemDecision(id, totalDemands.value[id] || 0);
       });
 
+      // 4.5 確保所有展開項目的基礎資料都已載入 (Icon, Name)
+      await refreshItemsData(activeItemIds.value);
+
+      // 5. 初始獲取價格
       await fetchPrices(activeItemIds.value);
     } finally {
       isLoading.value = false;
@@ -321,6 +325,8 @@ export function useWorkbench() {
    * 當新材料被展開時，確保其資料、價格以及決策物件被初始化
    */
   watch(activeItemIds, async (newIds) => {
+    if (isLoading.value) return; // 正在大量初始化時跳過，由 initialize 完成後或後續變化觸發
+    
     // 1. 初始化遺失的決策物件
     newIds.forEach(id => {
       initSingleItemDecision(id, totalDemands.value[id] || 0);

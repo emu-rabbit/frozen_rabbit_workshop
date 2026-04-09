@@ -51,6 +51,9 @@ interface CacheEntry {
 /** Session-level price cache: `{dc}:{itemId}` → CacheEntry */
 const priceCache = new Map<string, CacheEntry>();
 
+/** Currently active requests: `{dc}:{itemId}` → Promise<ItemPrice> */
+const inflightRequests = new Map<string, Promise<ItemPrice>>();
+
 function cacheKey(dc: string, itemId: number) {
   return `${dc}:${itemId}`;
 }
@@ -117,6 +120,7 @@ export function setSelectedDC(dc: string) {
   localStorage.setItem('universalis_dc', dc);
   // Invalidate the existing cache when DC changes
   priceCache.clear();
+  inflightRequests.clear();
 }
 
 // ─── Price Fetching ───────────────────────────────────────────────────────────
@@ -145,8 +149,8 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
 /**
  * Fetches prices for the given item IDs from Universalis.
  * - Returns cached results for items still within TTL.
+ * - Deduplicates concurrent requests for the same item.
  * - Batches uncached items (max 100 per request) into one API call.
- * - Should be called when the Workbench opens.
  */
 export async function fetchItemPrices(
   itemIds: number[]
@@ -154,17 +158,35 @@ export async function fetchItemPrices(
   const dc = _selectedDC.value;
   const result = new Map<number, ItemPrice>();
 
-  if (!itemIds.length) return result;
+  // Ensure unique IDs to avoid redundant work
+  const uniqueIds = Array.from(new Set(itemIds));
+  if (!uniqueIds.length) return result;
 
-  // Separate cached vs. needs-fetch
   const toFetch: number[] = [];
-  for (const id of itemIds) {
+  const awaitingInflight: { id: number; promise: Promise<ItemPrice> }[] = [];
+
+  for (const id of uniqueIds) {
     const cached = getCached(dc, id);
     if (cached) {
       result.set(id, cached);
-    } else {
-      toFetch.push(id);
+      continue;
     }
+
+    const inflight = inflightRequests.get(cacheKey(dc, id));
+    if (inflight) {
+      awaitingInflight.push({ id, promise: inflight });
+      continue;
+    }
+
+    toFetch.push(id);
+  }
+
+  // Handle items that are already being fetched by another call
+  if (awaitingInflight.length > 0) {
+    const prices = await Promise.all(awaitingInflight.map(a => a.promise));
+    awaitingInflight.forEach((a, index) => {
+      result.set(a.id, prices[index]);
+    });
   }
 
   if (!toFetch.length) return result;
@@ -173,35 +195,51 @@ export async function fetchItemPrices(
   _isPriceError.value = false;
 
   try {
-    // Universalis supports up to 100 IDs per request (comma-separated)
     const BATCH_SIZE = 100;
     for (let i = 0; i < toFetch.length; i += BATCH_SIZE) {
       const batch = toFetch.slice(i, i + BATCH_SIZE);
-      const encodedDC = encodeURIComponent(dc);
-      const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
+      
+      // Create deferred promises for this batch to track in inflightRequests
+      const resolvers: Record<number, (val: ItemPrice) => void> = {};
+      const rejecters: Record<number, (reason: any) => void> = {};
+      
+      batch.forEach(id => {
+        const promise = new Promise<ItemPrice>((resolve, reject) => {
+          resolvers[id] = resolve;
+          rejecters[id] = reject;
+        });
+        inflightRequests.set(cacheKey(dc, id), promise);
+      });
 
-      const resp = await fetch(url);
-      if (!resp.ok) {
-        throw new Error(`Universalis returned ${resp.status} for DC "${dc}"`);
-      }
-
-      const json = await resp.json();
-
-      if (batch.length === 1) {
-        // Single-item response shape
-        const price = parseItemPrice(batch[0], json);
-        setCache(dc, price);
-        result.set(batch[0], price);
-      } else {
-        // Multi-item response shape: { items: { [itemId]: {...} }, unresolvedItems: [...] }
-        const items: Record<string, any> = json.items ?? {};
-        for (const [idStr, raw] of Object.entries(items)) {
-          const id = parseInt(idStr, 10);
-          const price = parseItemPrice(id, raw);
+      try {
+        const encodedDC = encodeURIComponent(dc);
+        const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
+        const resp = await fetch(url);
+        
+        if (!resp.ok) throw new Error(`Universalis returned ${resp.status}`);
+        
+        const json = await resp.json();
+        
+        if (batch.length === 1) {
+          const price = parseItemPrice(batch[0], json);
           setCache(dc, price);
-          result.set(id, price);
+          result.set(batch[0], price);
+          resolvers[batch[0]](price);
+        } else {
+          const items: Record<string, any> = json.items ?? {};
+          batch.forEach(id => {
+            const raw = items[String(id)];
+            const price = parseItemPrice(id, raw || { lastUploadTime: 0, listings: [] });
+            setCache(dc, price);
+            result.set(id, price);
+            resolvers[id](price);
+          });
         }
-        // unresolvedItems are just items with no market data — skip silently
+      } catch (err) {
+        batch.forEach(id => rejecters[id](err));
+        throw err;
+      } finally {
+        batch.forEach(id => inflightRequests.delete(cacheKey(dc, id)));
       }
     }
   } catch (err) {
