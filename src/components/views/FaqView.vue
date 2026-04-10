@@ -1,7 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t, tm } = useI18n()
+
+interface FaqItem {
+  q: string
+  a: string
+}
+
+const faqItems = computed(() => tm('faq.items') as FaqItem[])
 </script>
 
 <template>
@@ -13,7 +21,7 @@ const { t, tm } = useI18n()
 
     <div class="flex flex-col gap-6">
       <div 
-        v-for="(item, index) in tm('faq.items')" 
+        v-for="(item, index) in faqItems" 
         :key="index"
         class="bg-white rounded-2xl shadow-sm border border-soft-green-100 overflow-hidden hover:shadow-md transition-all duration-300"
       >
