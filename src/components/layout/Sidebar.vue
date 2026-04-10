@@ -72,6 +72,15 @@ const activeTab = computed({
         <span v-html="t('nav.history')" class="leading-tight flex-1"></span>
         <span class="ml-2 bg-soft-green-200 text-soft-green-800 text-xs px-2 py-0.5 rounded-full shrink-0">{{ notes.length }}</span>
       </button>
+
+      <button 
+        @click="activeTab = 'faq'"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-left font-medium"
+        :class="activeTab === 'faq' ? 'bg-soft-green-100 text-soft-green-800 shadow-sm' : 'text-slate-600 hover:bg-soft-green-50 hover:text-soft-green-700'"
+      >
+        <i class="pi pi-question-circle shrink-0"></i>
+        <span v-html="t('nav.faq')" class="leading-tight"></span>
+      </button>
       
       <div class="mt-auto"></div>
     </nav>

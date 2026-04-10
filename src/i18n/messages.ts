@@ -9,6 +9,7 @@ export const messages = {
       favorites: '收藏的小筆記',
       recommended: '兔肉私心筆記',
       history: '翻開舊紀錄',
+      faq: '常見問題',
       settings: '設定'
     },
     noteCard: {
@@ -145,7 +146,6 @@ export const messages = {
       marketTitle: '市場資料設定',
       marketRegion: '市場地區',
       marketDC: '資料中心',
-      marketDesc: '設定市場價格查詢的來源大區',
       regions: {
         China: '中國',
         Japan: '日本',
@@ -157,6 +157,16 @@ export const messages = {
         '한국': '韓國服',
         '繁中服': '繁中服'
       }
+    },
+    faq: {
+      title: '常見問題',
+      description: '這裡整理了一些大家常遇到的疑問與工坊的運作機制',
+      items: [
+        {
+          q: '我使用了網站估算金錢成本，為什麼在遊戲裡的市場板看不到這個價格呢？',
+          a: '網站顯示的成本是透過拉取指定大區的市場快取資料，並針對你的目標數量進行「模擬購買」後計算出的預估值。這會因為你實際所在的伺服器、資料更新非即時、以及市場波動等因素導致價格偏差。另外也請多加留意「設定」區中的市場來源設定是否正確喔（預設為繁中服大區）。'
+        }
+      ]
     }
   },
   cn: {
@@ -168,7 +178,8 @@ export const messages = {
       newNote: '写张新笔记',
       favorites: '收藏的小笔记',
       recommended: '兔肉私心笔记',
-      history: '翻开旧纪录',
+      history: '翻开舊紀錄',
+      faq: '常見問題',
       settings: '设定'
     },
     noteCard: {
@@ -305,7 +316,6 @@ export const messages = {
       marketTitle: '市场资料设定',
       marketRegion: '市场地区',
       marketDC: '资料中心',
-      marketDesc: '设定市场价格查询的来源大区',
       regions: {
         China: '中国',
         Japan: '日本',
@@ -317,6 +327,16 @@ export const messages = {
         '한국': '韩国服',
         '繁中服': '繁中服'
       }
+    },
+    faq: {
+      title: '常見問題',
+      description: '這裡整理了一些大家常遇到的疑問與工坊的運作機制',
+      items: [
+        {
+          q: '我使用了网站估算金钱成本，为什么在游戏里的市场板看不到这个价格呢？',
+          a: '网站显示的成本是通过拉取指定大区的市场快取资料，并针对你的目标数量进行“模拟购买”后计算出的预估值。这会因为你实际所在的服务器、资料更新非即时、以及市场波动等因素导致价格偏差。另外也请多加留意“设定”区中的市场来源设定是否正确喔（预设为繁中服大区）。'
+        }
+      ]
     }
   },
   en: {
@@ -329,6 +349,7 @@ export const messages = {
       favorites: 'Favorite Notes',
       recommended: 'Rabbit\'s Picks',
       history: 'Historical Records',
+      faq: 'FAQ',
       settings: 'Settings'
     },
     noteCard: {
@@ -465,7 +486,6 @@ export const messages = {
       marketTitle: 'Market Data Source',
       marketRegion: 'Region',
       marketDC: 'Data Center',
-      marketDesc: 'Select the region and data center for market price queries.',
       regions: {
         China: 'China',
         Japan: 'Japan',
@@ -477,6 +497,16 @@ export const messages = {
         '한국': 'KT (Korea)',
         '繁中服': 'TW Server'
       }
+    },
+    faq: {
+      title: 'FAQ',
+      description: 'Frequently asked questions and how the workshop handles data.',
+      items: [
+        {
+          q: 'Why are the market costs estimated here different from what I see in-game?',
+          a: 'The costs displayed on the website are estimates calculated by simulating purchases using cached market data from your specified region. Because this data is not real-time, and due to server-specific pricing fluctuations and other market variables, actual prices may differ. Please ensure your "Region" and "Data Center" in Settings match your in-game location (default is Prosperous/TW server).'
+        }
+      ]
     }
   },
   ja: {
@@ -489,6 +519,7 @@ export const messages = {
       favorites: 'お気に入り<br />ノート',
       recommended: 'うさぎの<br />オススメ',
       history: '過去の記録<br />をめくる',
+      faq: 'よくある<br />質問',
       settings: '設定'
     },
     noteCard: {
@@ -637,6 +668,16 @@ export const messages = {
         '한국': '韓国鯖',
         '繁中服': '繁中鯖'
       }
+    },
+    faq: {
+      title: 'よくある質問',
+      description: '工坊の使い方や、よくある疑問についてまとめています。',
+      items: [
+        {
+          q: 'サイトで表示される市場コストがゲーム内と違うのはなぜですか？',
+          a: 'サイトのコストは、指定されたデータセンターのキャッシュデータを用いて「目標数分を購入した」と仮定して算出されたシミュレーション価格です。データはリアルタイムではなく、サーバーごとの物価変動やその他の要素により、実際のゲーム内価格とは異なる場合があります。また、「設定」でマーケットデータの取得先が正しいか（デフォルトは繁中鯖です）も確認してください。'
+        }
+      ]
     }
   }
 }

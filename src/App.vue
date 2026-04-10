@@ -19,6 +19,7 @@ import RecommendedView from './components/views/RecommendedView.vue'
 import WorkbenchView from './components/views/WorkbenchView.vue'
 import SettingsView from './components/views/SettingsView.vue'
 import TodoListView from './components/views/TodoListView.vue'
+import FaqView from './components/views/FaqView.vue'
 
 const { locale } = useI18n()
 const { language } = useSettings()
@@ -92,6 +93,10 @@ const handleLanguageUpdate = (val: string) => {
       <TodoListView
         v-if="currentTab === 'todo'"
         @back="currentTab = 'workbench'"
+      />
+      
+      <FaqView
+        v-if="currentTab === 'faq'"
       />
       
       <SettingsView 
