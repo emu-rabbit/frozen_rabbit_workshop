@@ -496,12 +496,34 @@ export function useWorkbench() {
     Object.keys(newDemands).forEach(idStr => {
       const id = Number(idStr);
       const item = workbenchItems.value[id];
+      const newTotal = newDemands[id] || 0;
+
+      // 1. 動態更新市場價格與獲取預估
       if (item && item.listings && item.listings.length > 0) {
         item.marketPrice = calculateSimulatedPrice(
           item.listings,
-          newDemands[id] || 0,
+          newTotal,
           item.marketPrice
         );
+      }
+
+      // 2. 智慧補位邏輯：如果使用者將此材料全量投入單一來源，則自動跟隨需求變動
+      const d = decisions[idStr];
+      if (d) {
+        const categories: (keyof ItemDecision)[] = ['buy', 'craft', 'gather', 'other'];
+        const activeCategories = categories.filter(cat => d[cat] > 0);
+        
+        // 只有在原先恰好只有一個來源大於 0 的情況下才自動補位
+        if (activeCategories.length === 1) {
+          const activeCat = activeCategories[0];
+          if (d[activeCat] !== newTotal) {
+             d[activeCat] = newTotal;
+          }
+        } else if (activeCategories.length === 0 && newTotal > 0) {
+           // 特殊情況：如果原本是 0（可能是剛出現的新項目），則套用預設邏輯
+           const isRoot = activeWorkbenchNote.value?.items.some(ri => ri.id === id) || false;
+           initSingleItemDecision(id, newTotal, isRoot);
+        }
       }
     });
   }, { deep: true });
