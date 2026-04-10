@@ -27,6 +27,10 @@ watch(activeWorkbenchNote, () => {
   initialize()
 })
 
+watch(locale, () => {
+  initialize()
+})
+
 const getLocalizedName = (name: any) => {
     if (typeof name === 'string') return name
     if (!name) return 'Unknown'

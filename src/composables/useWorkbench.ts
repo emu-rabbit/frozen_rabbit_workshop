@@ -4,13 +4,15 @@ import {
   ensureDictionaryLoaded, 
   globalRecipesCache, 
   getDictionaryItem,
-  getRawItemData
+  getRawItemData,
+  setDictionaryLanguage
 } from '../services/dictionary';
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateSimulatedPrice } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
+import { useI18n } from 'vue-i18n';
 
 export interface CraftingInfo {
   job: number;
@@ -69,6 +71,7 @@ const decisions = reactive<Record<string, ItemDecision>>({});
 const isLoading = ref(false);
 const lastNoteId = ref<string | null>(null);
 const lastDC = ref<string | null>(null);
+const lastLocale = ref<string | null>(null);
 
 // Todo List State
 const todoChecked = reactive<Record<string, boolean>>({});
@@ -380,12 +383,16 @@ export function useWorkbench() {
   const initialize = async () => {
     if (!activeWorkbenchNote.value) return;
     
+    const { locale } = useI18n();
     const currentDC = selectedDC.value;
+    const currentLocale = locale.value;
+    
     const isNewNote = activeWorkbenchNote.value.id !== lastNoteId.value;
     const isNewDC = currentDC !== lastDC.value;
+    const isNewLocale = currentLocale !== lastLocale.value;
 
-    // 如果筆記沒換、大區沒換，且已有資料，則跳過全量初始化
-    if (!isNewNote && !isNewDC && Object.keys(workbenchItems.value).length > 0) {
+    // 如果都不變，且已有資料，則跳過初始化
+    if (!isNewNote && !isNewDC && !isNewLocale && Object.keys(workbenchItems.value).length > 0) {
         return;
     }
 
@@ -411,10 +418,16 @@ export function useWorkbench() {
               item.marketPrice = null;
               item.listings = [];
           });
+      } else if (isNewLocale) {
+          // 情況 C：語言變更 -> 清除辭典語言設定並重設物品名稱快取，保留決策
+          console.log(`[Workbench] Locale changed (${lastLocale.value} -> ${currentLocale}), refreshing item names.`);
+          setDictionaryLanguage(currentLocale);
+          workbenchItems.value = {};
       }
 
       lastNoteId.value = activeWorkbenchNote.value.id;
       lastDC.value = currentDC;
+      lastLocale.value = currentLocale;
 
       // 2. 獲取初始項目資料
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
