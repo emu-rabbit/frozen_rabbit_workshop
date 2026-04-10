@@ -146,6 +146,7 @@ export const messages = {
       marketTitle: '市場資料設定',
       marketRegion: '市場地區',
       marketDC: '資料中心',
+      marketDesc: '設定你要從哪一個資料中心獲取市場價格資料。',
       regions: {
         China: '中國',
         Japan: '日本',
@@ -316,6 +317,7 @@ export const messages = {
       marketTitle: '市场资料设定',
       marketRegion: '市场地区',
       marketDC: '资料中心',
+      marketDesc: '设定你要从哪一个数据中心获取市场价格数据。',
       regions: {
         China: '中国',
         Japan: '日本',
@@ -486,6 +488,7 @@ export const messages = {
       marketTitle: 'Market Data Source',
       marketRegion: 'Region',
       marketDC: 'Data Center',
+      marketDesc: 'Select the data center you wish to fetch market price data from.',
       regions: {
         China: 'China',
         Japan: 'Japan',
@@ -656,7 +659,7 @@ export const messages = {
       marketTitle: 'マーケットデータ設定',
       marketRegion: 'リージョン',
       marketDC: 'データセンター',
-      marketDesc: 'マーケット価格を取得する數據センターを設定します。',
+      marketDesc: 'マーケット価格を取得するデータセンターを設定します。',
       regions: {
         China: '中国',
         Japan: '日本',
