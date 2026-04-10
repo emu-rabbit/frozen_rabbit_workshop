@@ -31,6 +31,18 @@ onMounted(async () => {
   dcLoading.value = true
   try {
     await ensureDataCentersLoaded()
+    
+    // Safety check: Ensure current selection matches available data
+    const regionExists = regionOptions.value.some(r => r.value === marketRegion.value)
+    if (!regionExists && regionOptions.value.length > 0) {
+      marketRegion.value = regionOptions.value[0].value
+    } else {
+        // Even if region exists, check if DC exists in that region
+        const dcExists = filteredDCs.value.some(dc => dc.value === marketDC.value)
+        if (!dcExists && filteredDCs.value.length > 0) {
+            marketDC.value = filteredDCs.value[0].value
+        }
+    }
   } finally {
     dcLoading.value = false
   }
@@ -118,6 +130,8 @@ watch(marketDC, (newVal) => {
                     :options="regionOptions" 
                     optionLabel="label" 
                     optionValue="value"
+                    :loading="dcLoading"
+                    :disabled="dcLoading"
                     class="w-full !border-soft-green-100 !rounded-xl"
                   />
                 </div>
@@ -130,6 +144,8 @@ watch(marketDC, (newVal) => {
                     :options="filteredDCs" 
                     optionLabel="label" 
                     optionValue="value"
+                    :loading="dcLoading"
+                    :disabled="dcLoading"
                     class="w-full !border-soft-green-100 !rounded-xl"
                   />
                 </div>
