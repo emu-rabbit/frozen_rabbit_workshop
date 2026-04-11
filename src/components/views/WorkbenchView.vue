@@ -290,7 +290,11 @@ const formatTime = (seconds: number) => {
                                 <i class="pi pi-clock scale-75"></i> {{ t('workbench.view.details.limited') }}
                             </span>
                         </div>
-                        <div class="text-[16px] font-bold text-slate-700 mb-1">
+                        <div v-if="workbenchItems[id].gathering.parentZoneName && workbenchItems[id].gathering.parentZoneName !== workbenchItems[id].gathering.zoneName" class="text-[18px] font-black text-slate-800 tracking-tight mb-0.5">
+                            {{ workbenchItems[id].gathering.parentZoneName }}
+                        </div>
+                        <div class="text-[14px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                            <i class="pi pi-map-marker text-[10px] opacity-70"></i>
                             {{ workbenchItems[id].gathering.zoneName || t('workbench.view.details.unknownZone') }}
                             <span v-if="workbenchItems[id].gathering.x" class="text-slate-400 text-sm ml-1">({{ workbenchItems[id].gathering.x.toFixed(1) }}, {{ workbenchItems[id].gathering.y.toFixed(1) }})</span>
                         </div>

@@ -1,4 +1,4 @@
-import { ensurePlacesLoaded, getPlaceName } from './dictionary';
+import { ensurePlacesLoaded, getPlaceName, ensureMapsLoaded, getMapData } from './dictionary';
 
 const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
 const GATHERING_ITEMS_URL = `${BASE_URL_STAGING}/gathering-items.json`;
@@ -10,6 +10,8 @@ export interface GatheringInfo {
   level: number;
   stars: number;
   zoneName?: string;
+  parentZoneName?: string;
+  regionName?: string;
   x?: number;
   y?: number;
   isLimited: boolean;  // 是否為定時節點
@@ -53,6 +55,7 @@ export async function ensureGatheringDataLoaded(): Promise<void> {
         fetch(GATHERING_ITEMS_URL),
         fetch(NODES_URL),
         ensurePlacesLoaded(), // 同步載入地名
+        ensureMapsLoaded(),   // 同步載入地圖元資料 (用於階層)
       ]);
 
       if (!itemsRes.ok || !nodesRes.ok) {
@@ -126,6 +129,22 @@ export function getGatheringInfo(itemId: number, locale: string = 'tw'): Gatheri
   // 映射地名
   const zoneName = getPlaceName(node.zoneid, node.mapName);
   
+  // 映射階層地名 (Parent & Region)
+  let parentZoneName: string | undefined;
+  let regionName: string | undefined;
+
+  if (node.map) {
+      const mapData = getMapData(node.map);
+      if (mapData) {
+          if (mapData.placename_id) {
+              parentZoneName = getPlaceName(mapData.placename_id);
+          }
+          if (mapData.region_id) {
+              regionName = getPlaceName(mapData.region_id);
+          }
+      }
+  }
+
   // 優先使用項目特定的 level/stars，若無則從節點資料中提取
   const itemData = itemToGatheringData[itemId];
   const level = itemData?.level || node.level || 1;
@@ -136,7 +155,9 @@ export function getGatheringInfo(itemId: number, locale: string = 'tw'): Gatheri
     jobName: GATHER_JOB_NAMES[node.type] || '採集',
     level,
     stars,
-    zoneName: zoneName,
+    zoneName,
+    parentZoneName,
+    regionName,
     x: node.x,
     y: node.y,
     isLimited: !!node.limited || (node.spawns && node.spawns.length > 0),

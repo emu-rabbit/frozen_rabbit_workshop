@@ -15,6 +15,7 @@ const DICT_URLS: Record<string, string> = {
 const ICONS_URL = `${BASE_URL}/item-icons.json`;
 const RECIPES_URL = `${BASE_URL}/recipes.json`;
 const ENGLISH_URL = `${BASE_URL}/items.json`;
+const MAPS_URL = `${BASE_URL}/maps.json`;
 
 // tw-places.json: Provides Traditional Chinese zone/map names for gathering nodes.
 // Key: zoneid (string) → { tw: "繁中地名" }
@@ -53,6 +54,10 @@ let internalRawIcons: Record<string, string> = {};
 /** tw-places.json cache — { [zoneId: string]: { tw: string } } */
 let globalPlacesCache: Record<string, { tw?: string }> | null = null;
 let placesLoadPromise: Promise<void> | null = null;
+
+/** maps.json cache — { [mapId: string]: any } */
+let globalMapsCache: Record<string, any> | null = null;
+let mapsLoadPromise: Promise<void> | null = null;
 
 let currentLanguage = 'tw';
 
@@ -263,4 +268,39 @@ export async function ensurePlacesLoaded(): Promise<void> {
 export function getPlaceName(zoneId: number, enFallback?: string): string {
   const entry = globalPlacesCache?.[zoneId.toString()];
   return entry?.tw || enFallback || `Zone #${zoneId}`;
+}
+
+/**
+ * Lazy-loads maps.json (once per session).
+ * Provides metadata for map hierarchy (region_id, placename_id).
+ */
+export async function ensureMapsLoaded(): Promise<void> {
+  if (globalMapsCache !== null) return;
+  if (mapsLoadPromise) return mapsLoadPromise;
+
+  mapsLoadPromise = fetch(MAPS_URL)
+    .then(r => {
+      if (!r.ok) throw new Error(`maps.json fetch failed: ${r.status}`);
+      return r.json();
+    })
+    .then(data => {
+      globalMapsCache = data;
+      console.log('[Dictionary] maps.json loaded.');
+    })
+    .catch(err => {
+      console.warn('[Dictionary] Could not load maps.json:', err);
+      globalMapsCache = {};
+    })
+    .finally(() => {
+      mapsLoadPromise = null;
+    });
+
+  return mapsLoadPromise;
+}
+
+/**
+ * Returns map metadata for a given map ID.
+ */
+export function getMapData(mapId: number): any | undefined {
+  return globalMapsCache?.[mapId.toString()];
 }

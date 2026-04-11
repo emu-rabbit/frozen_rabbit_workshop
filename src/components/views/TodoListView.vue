@@ -216,16 +216,21 @@ const toggleCheck = (sectionKey: string, id: number) => {
                                         <div class="hidden md:flex flex-col items-end justify-center px-8 border-r border-slate-100 min-w-[220px]">
                                             <!-- Buy: Price -->
                                             <template v-if="section.key === 'buy'">
-                                                <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
-                                                <span class="text-2xl font-black text-orange-600 font-mono tracking-tight leading-none">{{ formatMoney(item.marketPrice) }}</span>
+                                                <span class="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
+                                                <span class="text-3xl font-black text-orange-600 font-mono tracking-tight leading-none">{{ formatMoney(item.marketPrice) }}</span>
                                             </template>
 
                                             <!-- Gather: Info -->
                                             <template v-if="section.key === 'gather' && item.gathering">
                                                 <div class="flex flex-col items-end gap-2.5">
-                                                    <div class="flex items-center gap-1.5 text-slate-500">
-                                                        <i class="pi pi-map-marker text-xs"></i>
-                                                        <span class="text-base font-bold truncate max-w-[180px]">{{ getLocalizedName(item.gathering.zoneName) }}</span>
+                                                    <div class="flex flex-col items-end gap-0.5 text-slate-500">
+                                                        <span v-if="item.gathering.parentZoneName && item.gathering.parentZoneName !== item.gathering.zoneName" class="text-[17px] font-black text-slate-700 tracking-tight leading-none">
+                                                            {{ item.gathering.parentZoneName }}
+                                                        </span>
+                                                        <div class="flex items-center gap-1">
+                                                            <i class="pi pi-map-marker text-[10px] opacity-70"></i>
+                                                            <span class="text-[13px] font-bold truncate max-w-[180px] text-slate-400 leading-tight">{{ getLocalizedName(item.gathering.zoneName) }}</span>
+                                                        </div>
                                                     </div>
                                                     <span class="text-sm font-black bg-amber-50 text-amber-600 px-4 py-1.5 rounded-full border border-amber-100 shadow-sm leading-none">
                                                         {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
