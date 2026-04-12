@@ -159,24 +159,49 @@ watch(marketDC, (newVal) => {
       </div>
 
       <!-- Debug Mode Settings (Temporarily Hidden) -->
-      <div v-if="false" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
-          <div class="flex items-center justify-between gap-4">
-              <div class="flex flex-col gap-1">
-                <div class="flex items-center gap-3 text-soft-green-900 mb-1">
-                  <i class="pi pi-cog text-xl"></i>
-                  <label class="font-bold text-lg cursor-pointer" for="debug-toggle">{{ t('settings.debugMode') }}</label>
+        <div v-if="false" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+          <!-- ... existing debug toggle ... -->
+        </div>
+
+        <!-- About & Credits Section -->
+        <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+            <div class="flex flex-col gap-6">
+                <div class="flex items-center gap-3 text-soft-green-900">
+                  <i class="pi pi-info-circle text-xl"></i>
+                  <label class="font-bold text-lg">{{ t('settings.about.title') }}</label>
                 </div>
-                <p class="text-slate-500 text-sm">{{ t('settings.debugModeDesc') }}</p>
-              </div>
-              
-              <label class="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" id="debug-toggle" v-model="debugMode" class="sr-only peer">
-                <div class="w-14 h-7 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-soft-green-500"></div>
-              </label>
-          </div>
+                
+                <p class="text-slate-500 text-sm -mt-3">{{ t('settings.about.description') }}</p>
+
+                <div class="grid grid-cols-1 gap-4 mt-2">
+                  <a href="https://universalis.app" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                    <div class="flex flex-col gap-0.5">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">Universalis</span>
+                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.universalis') }}</span>
+                    </div>
+                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                  </a>
+
+                  <a href="https://ffxivteamcraft.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                    <div class="flex flex-col gap-0.5">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">Teamcraft</span>
+                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.teamcraft') }}</span>
+                    </div>
+                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                  </a>
+
+                  <a href="https://xivapi.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                    <div class="flex flex-col gap-0.5">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">XIVAPI</span>
+                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.xivapi') }}</span>
+                    </div>
+                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                  </a>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
