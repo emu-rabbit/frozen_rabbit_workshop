@@ -226,6 +226,7 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                                                             </template>
                                                             <template v-if="section.key === 'gather' && item.gathering">
                                                                 <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
+                                                                <span class="text-[9px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}</span>
                                                             </template>
                                                         </div>
                                                     </template>
@@ -256,6 +257,9 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                                                             <span>ET {{ formatET(item.gathering.spawns, item.gathering.duration) }}</span>
                                                         </div>
                                                     </div>
+                                                    <span class="text-[10px] md:text-sm font-black bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-100 shadow-sm leading-none whitespace-nowrap">
+                                                        {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
+                                                    </span>
                                                 </div>
                                             </template>
 
