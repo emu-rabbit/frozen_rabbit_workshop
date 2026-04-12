@@ -39,8 +39,7 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
                 <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center shrink-0 font-bold text-lg">
                   A
                 </div>
-                <div class="flex-1 text-slate-600 leading-relaxed py-1">
-                  {{ item.a }}
+                <div class="flex-1 text-slate-600 leading-relaxed py-1" v-html="item.a">
                 </div>
               </div>
             </div>
