@@ -9,6 +9,7 @@ export const messages = {
       favorites: '收藏的小筆記',
       recommended: '兔肉私心筆記',
       history: '翻開舊紀錄',
+      faq: '常見問題',
       settings: '設定',
       github: 'GitHub 專案',
       sponsor: '贊助我一顆馬卡龍吧！'
@@ -196,9 +197,10 @@ export const messages = {
       favorites: '收藏的小笔记',
       recommended: '兔肉私心笔记',
       history: '翻开舊紀錄',
+      faq: '常见问题',
       settings: '设定',
       github: 'GitHub 项目',
-      sponsor: '赞助我一颗马卡龙吧！'
+      sponsor: '赞助我一颗馬卡龍吧！'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
@@ -383,6 +385,7 @@ export const messages = {
       favorites: 'Favorite Notes',
       recommended: 'Rabbit\'s Picks',
       history: 'Historical Records',
+      faq: 'FAQ',
       settings: 'Settings',
       github: 'GitHub Project',
       sponsor: 'Sponsor me a Macaron!'
@@ -570,6 +573,7 @@ export const messages = {
       favorites: 'お気に入り<br />ノート',
       recommended: 'うさぎの<br />オススメ',
       history: '過去の記録<br />をめくる',
+      faq: 'よくある<br />質問',
       settings: '設定',
       github: 'GitHub プロジェクト',
       sponsor: 'マカロンを奢る（寄付）'
