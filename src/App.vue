@@ -35,11 +35,15 @@ watch(language, (newLang) => {
 
 // State for navigation
 const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
+const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 
-// Close mobile menu when tab changes
+// Scroll to top when tab changes
 watch(currentTab, () => {
   isMobileMenuOpen.value = false
+  if (mainContainer.value) {
+    mainContainer.value.scrollTo({ top: 0, behavior: 'auto' })
+  }
 })
 
 const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
@@ -90,7 +94,7 @@ const handleLanguageUpdate = (val: string) => {
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
+    <main ref="mainContainer" class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
       <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->
