@@ -107,7 +107,197 @@ export const messages = {
           generateList: '生成代辦清單'
         },
         tooltip: {
-          budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定'}
+          budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
+          time: '時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響'
+        }
+      }
+    },
+    todo: {
+      title: '代辦清單',
+      backToWorkbench: '返回備料台',
+      progress: '已完成 {n}/{total} 項',
+      section: {
+        other: '庫存 / 其他來源',
+        buy: '待購買物品',
+        gather: '待採集物品',
+        craft: '待製作物品'
+      },
+      targetQty: '目標',
+      targetPrice: '參考單價',
+      gatherLocation: '採集點',
+      emptySection: '此區塊無項目'
+    },
+    jobs: {
+      crp: '木工師', bsm: '鍛鐵師', arm: '鑄甲師', gsm: '雕金師',
+      lwr: '製革師', wvr: '裁縫師', alc: '鍊金術士', cul: '烹調師',
+      min: '採礦工', btn: '園藝工', fsh: '釣魚人', gather: '採集'
+    },
+    settings: {
+      title: '工坊設定',
+      description: '調整工坊的各項偏好設定',
+      language: '語言版本',
+      debugMode: '除錯模式',
+      debugModeDesc: '開啟後可於創建新筆記時複製站長推薦 JSON 格式',
+      langOptions: {
+        tw: '繁體中文 (Traditional Chinese)',
+        cn: '簡體中文 (Simplified Chinese)',
+        en: 'English',
+        ja: '日本語 (Japanese)'
+      },
+      marketTitle: '市場資料設定',
+      marketRegion: '市場地區',
+      marketDC: '資料中心',
+      marketDesc: '設定你要從哪一個資料中心獲取市場價格資料。',
+      regions: {
+        China: '中國',
+        Japan: '日本',
+        'North-America': '北美',
+        Europe: '歐洲',
+        Oceania: '大洋洲',
+        'NA-Cloud-DC': '北美雲端',
+        '中国': '中國服',
+        '한국': '韓國服',
+        '繁中服': '繁中服'
+      },
+      about: {
+        title: '關於與致謝',
+        description: '工坊背後的資料與技術支援',
+        universalis: 'Universalis - 全球 FFXIV 市場資料快取',
+        teamcraft: 'Teamcraft - 物品、配方與採集資料來源',
+        xivapi: 'XIVAPI - 提供遊戲內圖示與物品 API 支援'
+      }
+    },
+    faq: {
+      title: '常見問題',
+      description: '這裡整理了一些大家常遇到的疑問與工坊的運作機制',
+      items: [
+        {
+          q: '我使用了網站估算金錢成本，為什麼在遊戲裡的市場板看不到這個價格呢？',
+          a: '網站顯示的成本是透過拉取指定大區的市場快取資料，並針對你的目標數量進行「模擬購買」後計算出的預估值。這會因為你實際所在的伺服器、資料更新非即時、以及市場波動等因素導致價格偏差。另外也請多加留意「設定」區中的市場來源設定是否正確喔（預設為繁中服大區）。'
+        },
+        {
+          q: '本網站的時間成本是如何估算的',
+          a: '本網站目前的時間成本僅用非常簡單的粗估方法，製作一個物品30秒，高難製作耗費一分鐘，採集則是5秒一個物品，倘若你有很好的想法，歡迎前往Github issue提供想法'
+        },
+        {
+          q: '為甚麼要把兔肉冷凍起來，可以烤來吃嗎？',
+          a: '不可以'
+        }
+      ]
+    }
+  },
+  cn: {
+    app: {
+      title: '冷冻兔肉的工坊',
+      subtitle: '兔肉不私藏的好笔记本'
+    },
+    nav: {
+      newNote: '写张新笔记',
+      favorites: '收藏的小笔记',
+      recommended: '兔肉私心笔记',
+      history: '翻开舊紀錄',
+      settings: '设定',
+      github: 'GitHub 项目',
+      sponsor: '赞助我一颗马卡龙吧！'
+    },
+    noteCard: {
+      addFavorite: '加入我的收藏',
+      removeFavorite: '取消收藏',
+      delete: '删除纪录',
+      exportNote: '导出笔记 (JSON)'
+    },
+    favorites: {
+      title: '收藏的小笔记',
+      description: '在这里管理你最常用的制作清单',
+      emptyTitle: '还没有收藏的笔记',
+      emptyDescription: '在“翻开旧纪录”中点击星星來收藏吧！'
+    },
+    recommended: {
+      title: '兔肉私心笔记',
+      description: '这些是站长整理出来实用的清单，你可以随意浏览、搜寻并直接放上备料台，或按星星收藏。',
+      searchPlaceholder: '支援多国语系关键字搜寻...',
+      emptyTitle: '找不到相符的笔记',
+      emptyDescription: '换个关键字试试看吧！'
+    },
+    newNote: {
+      title: '写张新笔记',
+      description: '输入笔记名称与欲追踪的物品以建立配方清单',
+      labelTitle: '笔记名称',
+      placeholderTitle: '例如：640HQ 装备储备、生产用半成品...',
+      copyJson: '导出此笔记 (JSON)',
+      itemsTitle: '放上备料台的物品',
+      itemsDescription: '输入关键字（如“旧日王国”）查询完整物品并准备分析',
+      searchPlaceholder: '寻觅物品...',
+      searching: '兔兔在字典里寻找中...',
+      notFound: '找不到这个东西，换个关键字吧',
+      initialSearch: '输入物品名称开始',
+      addRow: '还需要准备其他东西？',
+      rowHint: '* 必须确保上一列已经填入并选择物品后，才能继续新增。',
+      save: '好，把这些放上备料台！',
+      addToFavorites: '立刻将此笔记加入我的收藏'
+    },
+    history: {
+      title: '翻开旧纪录',
+      description: '这里记录了你所有的历史制作清单，方便随时翻閱',
+      autoDeleteWarning: '最多保留 20 筆歷史紀錄，超過時最舊的一筆將會被自動刪除。想要永久保留的筆記，請記得按下星號將它加入「收藏的小筆記」中喔！',
+      emptyTitle: '笔记本目前是空白的喔',
+      emptyDescription: '去“写张新笔记”开始你的第一步吧！',
+      syncing: '回忆读取中...',
+      itemsCount: '这张笔记里面有',
+      noItems: '这张笔记空无一物。',
+      unknownItem: '未知的神秘物品',
+      unknownDate: '神秘的时间点',
+      openWorkbench: '放上备料台'
+    },
+    workbench: {
+      title: '备料台',
+      description: '在这里制定你的制作计画与开销总结吧！',
+      view: {
+        analyzing: '正在载入真实资料与市场价格...',
+        emptyTitle: '目前没有备料计划',
+        emptyDescription: '去「写张新笔记」開始你的第一步吧！',
+        prepping: '正在备料',
+        source: {
+          buy: '购买',
+          craft: '制作',
+          gather: '采集',
+          other: '库存 (其他)',
+          cannotCraft: '不可制作',
+          cannotGather: '不可采集'
+        },
+        status: {
+          missing: '尚缺 {n} 个',
+          excess: '多出 {n} 个',
+          mismatch: '目前的数量分配与目标对不上哦，请检查一下各个项目的数字是否正确！',
+          nonePrice: '无上架',
+          priceSuffix: '/ 个'
+        },
+        details: {
+          gatherTitle: '采集地点与详情',
+          limited: '限时',
+          unknownZone: '未知地点',
+          spawnTime: '出现时间',
+          duration: '持续 {n} 小时',
+          craftTitle: '制作配方需求',
+          yield: '单次产量'
+        },
+        summary: {
+          budgetTitle: '物资筹备预算',
+          time: '预计时间耗费',
+          cannotEstimate: '无法预估',
+          hours: '小时',
+          mins: '分',
+          secs: '秒'
+        },
+        button: {
+          reset: '重设',
+          generateList: '生成待办清单'
+        },
+        tooltip: {
+          budget: '预算依据当前服务器依照市场最低价格做模拟买入计算，且价格来源经过快取，实际真实的价格需要看当下真正的市场价格而定',
+          time: '时间仅仅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影响'
+        }
+      }
     },
     todo: {
       title: '待办清单',
@@ -294,14 +484,7 @@ export const messages = {
           budget: 'Budget is calculated as a simulated purchase based on the lowest current market prices. Prices are cached and may differ from live values.',
           time: 'Time is a rough estimation based on common crafting/gathering flow. Actual speed depends on your stats and timed node availability.'
         }
-       ,
-    about: {
-      title: '关于与致谢',
-      description: '工坊背后的资料与技术支持',
-      universalis: 'Universalis - 全球 FFXIV 市场资料缓存',
-      teamcraft: 'Teamcraft - 物品、配方与采集资料来源',
-      xivapi: 'XIVAPI - 提供游戏内图标与物品 API 支持'
-    }}
+      }
     },
     todo: {
       title: 'Todo List',
@@ -488,14 +671,7 @@ export const messages = {
           budget: '予算は現在のマーケットの最安値に基づいた模擬購入によって計算されています。価格はキャッシュされているため、実際の相場とは異なる場合があります。',
           time: '所要時間は一般的な製作・採集フローに基づく概算です。装備や限定ノードの状況により変動します。'
         }
-       ,
-    about: {
-      title: 'About & Credits',
-      description: 'Data sources and technical support behind the workshop',
-      universalis: 'Universalis - Global FFXIV market data cache',
-      teamcraft: 'Teamcraft - Source for item, recipe, and gathering data',
-      xivapi: 'XIVAPI - FFXIV icon and item API support'
-    }}
+      }
     },
     todo: {
       title: 'やることリスト',
@@ -541,6 +717,7 @@ export const messages = {
         Oceania: 'オセアニア',
         'NA-Cloud-DC': '北米クラウド',
         '中国': '中国鯖',
+        '한국': '韓国鯖',
         '繁中服': '繁中鯖'
       },
       about: {
@@ -569,12 +746,5 @@ export const messages = {
         }
       ]
     }
-   ,
-    about: {
-      title: 'このサイトについて',
-      description: '工房を支えるデータソースと技術支援',
-      universalis: 'Universalis - FFXIV 全世界のマーケットデータ',
-      teamcraft: 'Teamcraft - アイテム、レシピ、採集データのソース',
-      xivapi: 'XIVAPI - アイコンとアイテムの API サポート'
-    }}
+  }
 }
