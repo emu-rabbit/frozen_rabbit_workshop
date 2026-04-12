@@ -20,6 +20,7 @@ import WorkbenchView from './components/views/WorkbenchView.vue'
 import SettingsView from './components/views/SettingsView.vue'
 import TodoListView from './components/views/TodoListView.vue'
 import FaqView from './components/views/FaqView.vue'
+import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
 const { language } = useSettings()
@@ -66,7 +67,7 @@ const handleLanguageUpdate = (val: string) => {
     <!-- Mobile Header -->
     <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-soft-green-100 flex items-center justify-between px-6 z-50">
       <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-soft-green-500 rounded-lg flex items-center justify-center text-white font-black italic">R</div>
+        <img :src="logo" class="w-8 h-8 rounded-lg shadow-sm" alt="Logo" />
         <span class="font-bold text-soft-green-800 tracking-tight">{{ t('app.title') }}</span>
       </div>
       <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="w-10 h-10 rounded-xl bg-soft-green-50 text-soft-green-600 flex items-center justify-center border border-soft-green-100 active:scale-95 transition-all">

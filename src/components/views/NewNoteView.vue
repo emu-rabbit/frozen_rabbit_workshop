@@ -133,7 +133,7 @@ const handleCreateNote = () => {
 </script>
 
 <template>
-  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto">
+  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
       <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('newNote.title') }}</h2>
       <p class="text-slate-500 text-sm">{{ t('newNote.description') }}</p>
