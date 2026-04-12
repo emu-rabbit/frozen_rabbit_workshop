@@ -170,6 +170,10 @@ export const messages = {
         {
           q: '本網站的時間成本是如何估算的',
           a: '本網站目前的時間成本僅用非常簡單的粗估方法，製作一個物品30秒，高難製作耗費一分鐘，採集則是5秒一個物品，倘若你有很好的想法，歡迎前往Github issue提供想法'
+        },
+        {
+          q: '為甚麼要把兔肉冷凍起來，可以烤來吃嗎？',
+          a: '不可以'
         }
       ]
     }
@@ -345,6 +349,10 @@ export const messages = {
         {
           q: '本网站的时间成本是如何估算的',
           a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗费一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往Github issue提供想法'
+        },
+        {
+          q: '为什么要把兔肉冷冻起来，可以烤来吃吗？',
+          a: '不可以'
         }
       ]
     }
@@ -520,6 +528,10 @@ export const messages = {
         {
           q: 'How is the "Estimated Time" calculated?',
           a: 'Currently, the estimated time uses a very simplified calculation: 30 seconds for regular crafting, 1 minute for high-difficulty crafting, and 5 seconds per item for gathering. If you have better ideas for calculation, feel free to open a GitHub issue!'
+        },
+        {
+          q: 'Why freeze the rabbit? Can I roast it instead?',
+          a: 'No.'
         }
       ]
     }
@@ -695,6 +707,10 @@ export const messages = {
         {
           q: '所要時間はどのように計算されていますか？',
           a: '現在の所要時間は非常に単純な概算に基づいています。通常の製作は1アイテム30秒、高難易度製作は1分、採集は1アイテムにつき5秒として計算しています。より良い計算方法のアイデアがあれば、ぜひGitHubのissueで提案してください！'
+        },
+        {
+          q: 'どうしてうさぎを冷凍するのですか？焼いて食べてもいいですか？',
+          a: 'ダメです。'
         }
       ]
     }
