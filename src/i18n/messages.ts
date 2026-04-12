@@ -28,8 +28,8 @@ export const messages = {
     },
     recommended: {
       title: '兔肉私心筆記',
-      description: '這些是站長整理出來實用的清單，你可以隨意瀏覽、搜尋並直接放上備料台，或按星星收藏。（小技巧：搜尋時可以用空白鍵分隔多個關鍵字喔！）',
-      searchPlaceholder: '關鍵字搜尋 (可用空白鍵搜尋多個)...',
+      description: '這些是站長整理出來實用的清單。可以用空白鍵串聯檢索條件。',
+      searchPlaceholder: '搜尋...',
       emptyTitle: '找不到相符的筆記',
       emptyDescription: '換個關鍵字試試看吧！'
     },
@@ -220,8 +220,8 @@ export const messages = {
     },
     recommended: {
       title: '兔肉私心笔记',
-      description: '这些是站长整理出来实用的清单，你可以随意浏览、搜寻并直接放上备料台，或按星星收藏。（小技巧：搜索时可以用空格键分隔多个关键字喔！）',
-      searchPlaceholder: '关键字搜索 (可用空格键搜索多个)...',
+      description: '这些是站长整理出来实用的清单。可以用空格键串联检索条件。',
+      searchPlaceholder: '搜索...',
       emptyTitle: '找不到相符的笔记',
       emptyDescription: '换个关键字试试看吧！'
     },
@@ -412,8 +412,8 @@ export const messages = {
     },
     recommended: {
       title: 'Rabbit\'s Picks',
-      description: 'These are practical lists compiled by the rabbit. Browse, search, use them, or star them for later. (Pro tip: use spaces to search for multiple keywords!)',
-      searchPlaceholder: 'Search notes (use spaces for multiple)...',
+      description: 'Practical lists compiled by the rabbit. Use spaces to link search criteria.',
+      searchPlaceholder: 'Search...',
       emptyTitle: 'No Matching Notes Found',
       emptyDescription: 'Try a different keyword!'
     },
@@ -604,8 +604,8 @@ export const messages = {
     },
     recommended: {
       title: 'うさぎのオススメ',
-      description: 'うさぎがまとめた便利なリストだよ。検索して仕込み台に置いたり、お気に入りに追加してね。（ヒント：スペース区切りで複数のキーワードを検索できます！）',
-      searchPlaceholder: 'キーワード検索 (スペース区切りで複数可)...',
+      description: 'うさぎがまとめた便利なリストです。スペース区切りで条件を串聯（同時指定）できます。',
+      searchPlaceholder: '検索...',
       emptyTitle: '見つからないみたい',
       emptyDescription: '別のキーワードを試してね！'
     },
