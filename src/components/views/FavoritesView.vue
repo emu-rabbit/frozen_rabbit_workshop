@@ -25,11 +25,11 @@ const favoritesList = computed({
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
-    <header class="mb-8">
+  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
+    <header class="mb-6 md:mb-8">
       <div class="flex items-center gap-3 mb-2 text-soft-green-800">
-        <i class="pi pi-star-fill text-2xl"></i>
-        <h2 class="text-3xl font-bold">{{ t('favorites.title') }}</h2>
+        <i class="pi pi-star-fill text-xl md:text-2xl"></i>
+        <h2 class="text-2xl md:text-3xl font-bold">{{ t('favorites.title') }}</h2>
       </div>
       <p class="text-slate-500 text-sm">{{ t('favorites.description') }}</p>
     </header>

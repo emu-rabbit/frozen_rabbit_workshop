@@ -22,7 +22,7 @@ const activeTab = computed({
 </script>
 
 <template>
-  <aside class="w-64 bg-white shadow-lg border-r border-soft-green-100 flex flex-col transition-all overflow-y-auto">
+  <aside class="w-full bg-white flex flex-col transition-all overflow-y-auto border-r border-soft-green-100 h-full">
     <div class="p-6 pb-2">
       <h1 class="text-lg font-bold text-soft-green-800 flex items-center gap-2 leading-tight">
         <img :src="logo" class="w-8 h-8 rounded-lg shadow-sm" alt="Logo" />

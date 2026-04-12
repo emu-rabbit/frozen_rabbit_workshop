@@ -64,13 +64,13 @@ const onSearchValueUpdate = (val: string | undefined) => {
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
+  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6">
       <div class="flex items-center gap-3 mb-2 text-soft-green-800">
-        <i class="pi pi-thumbs-up-fill text-2xl"></i>
-        <h2 class="text-3xl font-bold">{{ t('recommended.title') }}</h2>
+        <i class="pi pi-thumbs-up-fill text-xl md:text-2xl"></i>
+        <h2 class="text-2xl md:text-3xl font-bold">{{ t('recommended.title') }}</h2>
       </div>
-      <p class="text-slate-500 text-sm mb-6">{{ t('recommended.description') }}</p>
+      <p class="text-slate-500 text-sm mb-4 md:mb-6">{{ t('recommended.description') }}</p>
 
       <span class="relative block">
         <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>

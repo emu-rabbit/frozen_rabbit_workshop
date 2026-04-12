@@ -14,10 +14,10 @@ const { notes, toggleFavorite, isFavorite } = useNotes()
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
-    <header class="mb-8">
-      <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('history.title') }}</h2>
-      <p class="text-slate-500 text-sm mb-4">{{ t('history.description') }}</p>
+  <div class="px-4 py-6 md:p-8 max-w-4xl w-full mx-auto pb-24">
+    <header class="mb-6 md:mb-8">
+      <h2 class="text-xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('history.title') }}</h2>
+      <p class="text-slate-500 text-sm mb-3 md:mb-4">{{ t('history.description') }}</p>
       
       <!-- Auto delete warning -->
       <div v-if="notes.length > 0" class="bg-orange-50 border border-orange-100 rounded-lg p-3 flex items-start gap-3 mt-4 text-orange-600 text-sm">

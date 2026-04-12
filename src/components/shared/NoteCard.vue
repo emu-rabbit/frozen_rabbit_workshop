@@ -75,7 +75,7 @@ const handleExportJson = () => {
 
 <template>
   <div 
-    class="bg-white rounded-2xl shadow-sm border p-6 flex flex-col gap-5 hover:shadow-md transition-shadow relative overflow-hidden group"
+    class="bg-white rounded-2xl shadow-sm border p-4 md:p-6 flex flex-col gap-4 md:gap-5 hover:shadow-md transition-shadow relative overflow-hidden group"
     :class="!note ? 'border-red-100 bg-red-50/30' : 'border-soft-green-100'"
   >
     <!-- Side Accent -->
@@ -88,7 +88,7 @@ const handleExportJson = () => {
     <div class="flex items-start justify-between gap-4">
       <div class="flex-1 min-w-0">
         <template v-if="note">
-          <h3 class="text-2xl font-bold text-soft-green-900 mb-1.5 leading-tight group-hover:text-lime-green-700 transition-colors" :title="localizedName">
+          <h3 class="text-xl md:text-2xl font-bold text-soft-green-900 mb-1 leading-tight group-hover:text-lime-green-700 transition-colors" :title="localizedName">
             {{ localizedName }}
           </h3>
           <p class="text-xs text-slate-400 flex items-center gap-1.5 font-sans mt-0.5">
@@ -148,31 +148,31 @@ const handleExportJson = () => {
         </div>
         
         <!-- Action Buttons -->
-        <div class="flex gap-3 shrink-0 items-center justify-end">
+        <div class="flex gap-2 md:gap-3 shrink-0 items-center justify-end w-full md:w-auto mt-2 md:mt-0">
           <button 
             @click="handleToggleFavorite" 
-            class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-orange-50"
+            class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-orange-50 shrink-0"
             :class="isFavorite ? 'text-orange-400' : 'text-slate-400 hover:text-orange-300'"
             :title="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
           >
-            <i class="pi text-xl" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
+            <i class="pi text-lg md:text-xl" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
           </button>
 
           <button 
             v-if="note" 
             @click="handleExportJson" 
-            class="w-11 h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-400 hover:text-soft-green-500"
+            class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-400 hover:text-soft-green-500 shrink-0"
             :title="t('noteCard.exportNote')"
           >
-            <i class="pi pi-copy text-xl"></i>
+            <i class="pi pi-copy text-lg md:text-xl"></i>
           </button>
 
           <button 
             v-if="note" 
             @click="emit('open-workbench', note)" 
-            class="h-11 px-8 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-md hover:shadow-lg transition-all text-sm font-bold gap-2 whitespace-nowrap active:scale-95"
+            class="flex-1 md:flex-none h-10 md:h-11 px-6 md:px-8 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 shadow-md hover:shadow-lg transition-all text-xs md:text-sm font-bold gap-2 whitespace-nowrap active:scale-95"
           >
-              {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-sm"></i>
+              {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-xs md:text-sm"></i>
           </button>
         </div>
     </div>

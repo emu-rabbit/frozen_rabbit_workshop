@@ -111,40 +111,37 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
 
 <template>
     <div class="todo-view min-h-screen bg-soft-green-50/50">
-        <div class="p-6 max-w-6xl w-full mx-auto pb-32">
+        <div class="px-4 py-6 md:p-6 max-w-6xl w-full mx-auto pb-32">
             <!-- Header (Synced style with WorkbenchView) -->
-            <header class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                <div class="flex items-center gap-5">
+            <header class="mb-8 md:mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div class="flex items-center gap-3 md:gap-5">
                     <button @click="emit('back')" 
-                            class="w-12 h-12 rounded-2xl bg-white border border-soft-green-100 flex items-center justify-center hover:bg-soft-green-50 transition-all shadow-sm active:scale-95 group">
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white border border-soft-green-100 flex items-center justify-center hover:bg-soft-green-50 transition-all shadow-sm active:scale-95 group">
                         <i class="pi pi-arrow-left text-soft-green-600 group-hover:-translate-x-0.5 transition-transform"></i>
                     </button>
                     <div>
-                        <h2 class="text-3xl font-black text-soft-green-950 mb-1 drop-shadow-sm">{{ t('todo.title') }}</h2>
-                        <div v-if="activeWorkbenchNote" class="flex items-center gap-2 text-slate-500 font-bold text-sm opacity-80">
-                            <i class="pi pi-book text-xs"></i>
-                            {{ getLocalizedName(activeWorkbenchNote.name) }}
+                        <h2 class="text-2xl md:text-3xl font-black text-soft-green-950 mb-0.5 md:mb-1 drop-shadow-sm">{{ t('todo.title') }}</h2>
+                        <div v-if="activeWorkbenchNote" class="flex items-center gap-2 text-slate-500 font-bold text-[11px] md:text-sm opacity-80">
+                            <i class="pi pi-book text-[10px] md:text-xs"></i>
+                            <span class="truncate max-w-[150px] md:max-w-none">{{ getLocalizedName(activeWorkbenchNote.name) }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Progress Tracker (Matches Workbench Summary Card style) -->
-                <div class="bg-white/70 backdrop-blur-md px-6 py-4 rounded-2xl border border-soft-green-100 shadow-lg flex items-center gap-6 min-w-[340px]">
+                <div class="bg-white/70 backdrop-blur-md px-5 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl border border-soft-green-100 shadow-lg flex items-center gap-4 md:gap-6 min-w-0 md:min-w-[340px]">
                     <div class="flex flex-col flex-1 min-w-0">
-                        <div class="flex items-center justify-between mb-1.5 gap-4">
-                            <span class="text-[13px] font-black text-soft-green-500 uppercase tracking-widest truncate">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
-                            <span class="text-2xl font-black text-soft-green-900 font-mono tracking-tighter shrink-0">{{ Math.round(progress.percent) }}%</span>
+                        <div class="flex items-center justify-between mb-1 md:mb-1.5 gap-2 md:gap-4">
+                            <span class="text-[11px] md:text-[13px] font-black text-soft-green-500 uppercase tracking-widest truncate">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
+                            <span class="text-xl md:text-2xl font-black text-soft-green-900 font-mono tracking-tighter shrink-0">{{ Math.round(progress.percent) }}%</span>
                         </div>
-                        <div class="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
+                        <div class="h-2 md:h-2.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
                             <div class="h-full bg-gradient-to-r from-soft-green-400 to-soft-green-600 transition-all duration-700 ease-out shadow-sm" :style="{ width: `${progress.percent}%` }"></div>
                         </div>
                     </div>
-                    <div class="h-10 w-px bg-soft-green-100 shrink-0"></div>
-                    <div class="flex -space-x-2 shrink-0">
-                        <img v-for="item in activeWorkbenchNote?.items.slice(0, 3)" :key="item.id" :src="workbenchItems[item.id]?.icon" class="w-10 h-10 rounded-lg border-2 border-white shadow-sm ring-1 ring-soft-green-50" />
-                        <div v-if="activeWorkbenchNote && activeWorkbenchNote.items.length > 3" class="w-10 h-10 rounded-lg bg-slate-50 border-2 border-white shadow-sm ring-1 ring-soft-green-50 flex items-center justify-center">
-                            <span class="text-[10px] font-black text-slate-400">+{{ activeWorkbenchNote.items.length - 3 }}</span>
-                        </div>
+                    <div class="h-8 md:h-10 w-px bg-soft-green-100 shrink-0 hidden xs:block"></div>
+                    <div class="hidden xs:flex -space-x-2 shrink-0">
+                        <img v-for="item in activeWorkbenchNote?.items.slice(0, 3)" :key="item.id" :src="workbenchItems[item.id]?.icon" class="w-8 h-8 md:w-10 md:h-10 rounded-lg border-2 border-white shadow-sm ring-1 ring-soft-green-50" />
                     </div>
                 </div>
             </header>
@@ -155,19 +152,19 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                 <div class="lg:col-span-12 space-y-12">
                     <template v-for="section in generateTodoSections" :key="section.key">
                         <section v-if="sectionItems[section.key]?.length > 0" class="todo-section">
-                            <div class="flex items-center gap-6 mb-8 px-2">
-                                <div class="w-16 h-16 rounded-2xl flex items-center justify-center shadow-xl transform rotate-3 shrink-0" :class="[getSectionConfig(section.key).bg, getSectionConfig(section.key).border, 'border-2']">
-                                    <i class="pi text-3xl" :class="[getSectionConfig(section.key).icon, getSectionConfig(section.key).text]"></i>
+                            <div class="flex items-center gap-4 md:gap-6 mb-6 md:mb-8 px-2">
+                                <div class="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center shadow-lg transform rotate-3 shrink-0" :class="[getSectionConfig(section.key).bg, getSectionConfig(section.key).border, 'border-2']">
+                                    <i class="pi text-xl md:text-3xl" :class="[getSectionConfig(section.key).icon, getSectionConfig(section.key).text]"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-2xl font-black tracking-tight leading-none mb-1" :class="getSectionConfig(section.key).text">
+                                    <h3 class="text-xl md:text-2xl font-black tracking-tight leading-none mb-1" :class="getSectionConfig(section.key).text">
                                         {{ t(`todo.section.${section.key}`) }}
                                     </h3>
-                                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] opacity-70">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] opacity-70">
                                         {{ sectionItems[section.key].length }} {{ sectionItems[section.key].length > 1 ? 'Items' : 'Item' }}
                                     </p>
                                 </div>
-                                <div class="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-4"></div>
+                                <div class="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-2 md:ml-4"></div>
                             </div>
 
                             <draggable 
@@ -180,7 +177,7 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                                 animation="300"
                             >
                                 <template #item="{ element: item }">
-                                    <div class="group relative bg-white/90 backdrop-blur-md rounded-2xl border-2 transition-all duration-400 flex items-center p-3 sm:p-4 gap-4 sm:gap-6 cursor-pointer select-none"
+                                    <div class="group relative bg-white/90 backdrop-blur-md rounded-2xl border-2 transition-all duration-400 flex items-center p-3 md:p-4 gap-3 md:gap-6 cursor-pointer select-none"
                                          @click="toggleCheck(section.key, item.id)"
                                          :class="[
                                              todoChecked[`${section.key}_${item.id}`] 
@@ -188,85 +185,95 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                                                 : 'border-white shadow-soft hover:shadow-2xl hover:border-soft-green-200 hover:-translate-y-1'
                                          ]">
                                         
-                                        <!-- LEFT: Actions -->
-                                        <div class="flex items-center gap-3">
-                                            <div class="drag-handle cursor-grab active:cursor-grabbing text-slate-200 hover:text-soft-green-400 p-2 transition-colors"
+                                        <!-- LEFT: Status & Drag -->
+                                        <div class="flex items-center gap-1.5 md:gap-3">
+                                            <div class="drag-handle cursor-grab active:cursor-grabbing text-slate-200 hover:text-soft-green-400 p-1 md:p-2 transition-colors hidden sm:block"
                                                  @click.stop>
                                                 <i class="pi pi-ellipsis-v text-sm"></i>
                                                 <i class="pi pi-ellipsis-v text-sm -ml-1"></i>
                                             </div>
 
-                                            <div class="w-12 h-12 rounded-xl border-2 flex items-center justify-center transition-all duration-700 shadow-sm"
+                                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl border-2 flex items-center justify-center transition-all duration-700 shadow-sm"
                                                  :class="[
                                                      todoChecked[`${section.key}_${item.id}`]
                                                         ? 'bg-soft-green-500 border-soft-green-500 ring-4 ring-soft-green-50'
                                                         : 'border-slate-300 hover:border-soft-green-300 bg-white'
                                                  ]">
-                                                <i v-if="todoChecked[`${section.key}_${item.id}`]" class="pi pi-check text-white text-base font-black"></i>
+                                                <i v-if="todoChecked[`${section.key}_${item.id}`]" class="pi pi-check text-white text-sm md:text-base font-black"></i>
                                             </div>
                                         </div>
 
                                         <!-- SUBJECT: Icon & Name -->
-                                        <div class="flex items-center gap-5 flex-1 min-w-0">
+                                        <div class="flex items-center gap-3 md:gap-5 flex-1 min-w-0">
                                             <div class="relative shrink-0">
-                                                <div class="absolute inset-0 bg-soft-green-200 rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-opacity"></div>
-                                                <img :src="item.icon" class="relative w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform group-hover:scale-105" />
+                                                <img :src="item.icon" class="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform group-hover:scale-105" />
                                             </div>
                                             <div class="flex flex-col min-w-0">
-                                                <h4 class="font-black text-xl lg:text-2xl truncate leading-none tracking-tight mb-1.5" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
+                                                <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight mb-1" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
                                                     {{ getLocalizedName(item.name) }}
                                                 </h4>
-                                                <div class="flex items-center gap-2">
-                                                    <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[10px] font-black bg-soft-green-100 text-soft-green-600 px-2 py-0.5 rounded-full uppercase tracking-tighter">Completed</span>
-                                                    <span v-else class="text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60">ID #{{ item.id }}</span>
+                                                
+                                                <!-- Compact Metadata for Mobile -->
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[9px] md:text-[10px] font-black bg-soft-green-100 text-soft-green-600 px-1.5 py-0.5 rounded-full uppercase tracking-tighter shrink-0">Done</span>
+                                                    <template v-else>
+                                                        <span class="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60 shrink-0">#{{ item.id }}</span>
+                                                        
+                                                        <!-- Mobile Only Metadata -->
+                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                                            <template v-if="section.key === 'buy'">
+                                                                <span class="text-orange-600 font-black">{{ formatMoney(item.marketPrice) }}</span>
+                                                            </template>
+                                                            <template v-if="section.key === 'gather' && item.gathering">
+                                                                <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
+                                                            </template>
+                                                        </div>
+                                                    </template>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- INFO: Metadata column (Visible on wide screens) -->
-                                        <div class="hidden md:flex flex-col items-end justify-center px-8 border-r border-slate-100 min-w-[220px]">
+                                        <!-- INFO: Metadata column (Visible on md+ screens) -->
+                                        <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 min-w-0 md:min-w-[220px]">
                                             <!-- Buy: Price -->
                                             <template v-if="section.key === 'buy'">
                                                 <span class="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
-                                                <span class="text-3xl font-black text-orange-600 font-mono tracking-tight leading-none">{{ formatMoney(item.marketPrice) }}</span>
+                                                <span class="text-2xl md:text-3xl font-black text-orange-600 font-mono tracking-tight leading-none shrink-0">{{ formatMoney(item.marketPrice) }}</span>
                                             </template>
 
                                             <!-- Gather: Info -->
                                             <template v-if="section.key === 'gather' && item.gathering">
-                                                <div class="flex flex-col items-end gap-2">
+                                                <div class="flex flex-col items-end gap-1.5 md:gap-2">
                                                     <div class="flex flex-col items-end text-slate-500">
-                                                        <div class="flex items-center gap-1.5 text-slate-700">
-                                                            <i class="pi pi-map-marker text-xs opacity-70"></i>
-                                                            <span class="text-[17px] font-black tracking-tight leading-none">
+                                                        <div class="flex items-center gap-1 text-slate-700">
+                                                            <i class="pi pi-map-marker text-[10px] md:text-xs opacity-70"></i>
+                                                            <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
                                                                 {{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}
                                                             </span>
                                                         </div>
-                                                        <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[11px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100 shadow-sm">
-                                                            <i class="pi pi-clock text-[10px]"></i>
+                                                        <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[9px] md:text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 shadow-sm">
+                                                            <i class="pi pi-clock text-[9px]"></i>
                                                             <span>ET {{ formatET(item.gathering.spawns, item.gathering.duration) }}</span>
                                                         </div>
                                                     </div>
-                                                    <span class="text-sm font-black bg-amber-100/50 text-amber-700 px-4 py-1.5 rounded-full border border-amber-200/50 shadow-sm leading-none">
-                                                        {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
-                                                    </span>
                                                 </div>
                                             </template>
 
                                             <!-- Craft: Info -->
                                             <template v-if="section.key === 'craft' && item.crafting">
-                                                <div class="flex flex-col items-end gap-1">
-                                                     <span class="text-sm font-black bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full border border-indigo-100 shadow-sm leading-none">
-                                                        {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}
+                                                <div class="flex flex-col items-end">
+                                                     <span class="text-[10px] md:text-sm font-black bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100 shadow-sm leading-none whitespace-nowrap">
+                                                        {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}
                                                     </span>
                                                 </div>
                                             </template>
                                         </div>
 
-                                        <!-- GOAL: Quantitative display (Right Side) -->
-                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 rounded-xl px-6 py-4 min-w-[110px] border border-slate-200/50 shadow-inner group-hover:bg-soft-green-100/50 transition-all duration-300">
-                                            <div class="flex items-baseline gap-1">
-                                                <span class="text-base font-black text-slate-400 leading-none">x</span>
-                                                <span class="text-4xl font-black text-soft-green-950 leading-none drop-shadow-sm">{{ item.quantity }}</span>
+                                        <!-- GOAL: Quantitative display -->
+                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 rounded-xl px-4 py-3 md:px-6 md:py-4 min-w-[70px] md:min-w-[110px] border border-slate-200/50 shadow-inner group-hover:bg-soft-green-100/50 transition-all duration-300">
+                                            <div class="flex items-baseline gap-0.5 md:gap-1">
+                                                <span class="text-xs md:text-base font-black text-slate-400 leading-none">x</span>
+                                                <span class="text-2xl md:text-4xl font-black text-soft-green-950 leading-none drop-shadow-sm">{{ item.quantity }}</span>
                                             </div>
                                         </div>
                                     </div>

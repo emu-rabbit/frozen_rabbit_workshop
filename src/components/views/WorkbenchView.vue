@@ -147,8 +147,8 @@ const formatTime = (seconds: number) => {
 
 <template>
   <div class="workbench-container min-h-screen">
-    <div class="p-6 max-w-6xl w-full mx-auto">
-      <header class="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="px-4 py-6 md:p-6 max-w-6xl w-full mx-auto">
+      <header class="mb-6 md:mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
           <h2 class="text-3xl font-black text-soft-green-950 mb-1 drop-shadow-sm">{{ t('workbench.title') }}</h2>
           <p class="text-slate-500 font-bold text-sm opacity-80">{{ t('workbench.description') }}</p>
@@ -178,92 +178,96 @@ const formatTime = (seconds: number) => {
           <div 
             v-for="id in activeItemIds" 
             :key="id" 
-            class="item-card bg-white border rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-xl group"
+            class="item-card bg-white border rounded-2xl md:rounded-[2rem] overflow-hidden transition-all duration-300 hover:shadow-xl group"
             :class="getUnallocated(id) !== 0 ? 'border-red-400 border-2 shadow-[0_0_25px_-5px_rgba(239,68,68,0.15)] bg-red-50/5' : 'border-slate-100'"
           >
-            <div class="p-6 flex flex-col lg:flex-row items-stretch lg:items-center gap-6">
+            <div class="p-4 md:p-6 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 md:gap-6">
                 <!-- Icon & Info -->
-                <div class="flex items-center gap-4 min-w-0 w-full lg:w-1/3">
-                    <div class="relative w-16 h-16 shrink-0">
-                        <img :src="workbenchItems[id]?.icon" class="w-full h-full rounded-2xl shadow-md border border-slate-50" />
-                        <div class="absolute -bottom-2 -right-2 bg-soft-green-600 text-white text-sm font-black px-2.5 py-1 rounded-xl border-2 border-white shadow-md z-10">
+                <div class="flex items-center gap-4 min-w-0 w-full lg:w-[35%]">
+                    <div class="relative w-14 h-14 md:w-16 md:h-16 shrink-0">
+                        <img :src="workbenchItems[id]?.icon" class="w-full h-full rounded-xl md:rounded-2xl shadow-md border border-slate-50" />
+                        <div class="absolute -bottom-1 -right-1 md:-bottom-2 md:-right-2 bg-soft-green-600 text-white text-xs md:text-sm font-black px-2 py-0.5 md:px-2.5 md:py-1 rounded-lg md:rounded-xl border-2 border-white shadow-md z-10">
                            x{{ totalDemands[id] }}
                         </div>
                     </div>
-                    <div class="min-w-0">
-                        <h3 class="text-lg font-black text-slate-900 truncate tracking-tight">{{ workbenchItems[id]?.name }}</h3>
-                        <div class="flex flex-wrap gap-2 mt-1.5">
+                    <div class="min-w-0 flex-1">
+                        <h3 class="text-base md:text-lg font-black text-slate-900 truncate tracking-tight">{{ workbenchItems[id]?.name }}</h3>
+                        <div class="flex flex-wrap gap-1.5 mt-1">
                             <!-- Price Badge -->
-                            <span class="text-[15px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-bold border border-slate-200/50">
-                                {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
+                            <span class="text-[12px] md:text-[14px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50">
+                                {{ formatMoney(workbenchItems[id]?.marketPrice) }}
                             </span>
                             <!-- Crafting Badge -->
-                            <span v-if="workbenchItems[id]?.crafting" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">
+                            <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100">
                                 {{ t(workbenchItems[id]?.crafting?.jobName) }} Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
                             </span>
                             <!-- Gathering Badge -->
-                            <span v-if="workbenchItems[id]?.gathering" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">
+                            <span v-if="workbenchItems[id]?.gathering" class="text-[12px] md:text-[14px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded-md font-bold border border-amber-100">
                                 {{ t(workbenchItems[id]?.gathering?.jobName) }} Lv.{{ workbenchItems[id]?.gathering?.level }}{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
                             </span>
                         </div>
                     </div>
+                    
+                    <button @click="toggleExpand(id)" class="lg:hidden w-10 h-10 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center border border-slate-200 transition-colors shrink-0">
+                        <i class="pi text-xs" :class="expandedItems[id] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                    </button>
                 </div>
 
                 <!-- Source Allocation - GRID VIEW -->
                 <div class="flex-1 min-w-0">
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
                          <!-- BUY -->
-                        <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-400 ring-2 ring-slate-100' : 'bg-slate-50/80 border-slate-200'">
-                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
-                           <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'buy', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
-                               <button @click="updateDecision(id, 'buy', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
+                        <div class="p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
+                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 border-slate-400 ring-2 ring-slate-100 shadow-sm' : 'bg-slate-50/80 border-slate-200'">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600' : 'text-slate-400'">{{ t('workbench.view.source.buy') }}</span>
+                           <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
+                               <button @click="updateDecision(id, 'buy', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-slate-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white border border-slate-300 rounded-md" />
+                               <button @click="updateDecision(id, 'buy', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-slate-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- CRAFT -->
-                        <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200" 
-                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-400 ring-2 ring-indigo-50' : 'bg-slate-50/80 border-slate-200')]">
-                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
+                        <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200" 
+                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 border-indigo-300 ring-2 ring-indigo-50 shadow-sm' : 'bg-slate-50/80 border-slate-200')]">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600' : 'text-indigo-400'">
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
-                           <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'craft', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-indigo-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
-                               <button @click="updateDecision(id, 'craft', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-indigo-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
+                           <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
+                               <button @click="updateDecision(id, 'craft', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-indigo-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white border border-slate-300 rounded-md" />
+                               <button @click="updateDecision(id, 'craft', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-indigo-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- GATHER -->
-                        <div class="relative p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-400 ring-2 ring-amber-50' : 'bg-slate-50/80 border-slate-200')]">
-                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
+                        <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
+                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 border-amber-300 ring-2 ring-amber-50 shadow-sm' : 'bg-slate-50/80 border-slate-200')]">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600' : 'text-amber-500'">
                                {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
-                           <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'gather', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-amber-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
-                               <button @click="updateDecision(id, 'gather', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-amber-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
+                           <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
+                               <button @click="updateDecision(id, 'gather', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-amber-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white border border-slate-300 rounded-md" />
+                               <button @click="updateDecision(id, 'gather', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-amber-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
                         <!-- OTHER -->
-                        <div class="p-3 rounded-2xl border flex flex-col items-center gap-2 transition-all duration-200"
-                             :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-400 ring-2 ring-emerald-50' : 'bg-slate-50/80 border-slate-200'">
-                           <span class="text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
-                           <div v-if="decisions[String(id)]" class="flex items-center gap-2">
-                               <button @click="updateDecision(id, 'other', -1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-emerald-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-10 h-7 text-center text-sm font-black focus:outline-none bg-white border border-slate-400 rounded-md shadow-sm" />
-                               <button @click="updateDecision(id, 'other', 1)" class="w-7 h-7 rounded-lg bg-white border border-slate-400 hover:border-emerald-600 flex items-center justify-center font-bold text-xs transition-colors"><i class="pi pi-angle-double-right scale-75"></i></button>
+                        <div class="p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
+                             :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-50 shadow-sm' : 'bg-slate-50/80 border-slate-200'">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600' : 'text-emerald-500'">{{ t('workbench.view.source.other') }}</span>
+                           <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
+                               <button @click="updateDecision(id, 'other', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-emerald-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white border border-slate-300 rounded-md" />
+                               <button @click="updateDecision(id, 'other', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white border border-slate-300 hover:border-emerald-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Status & Expand -->
-                <div class="flex items-center gap-3 w-full lg:w-auto lg:shrink-0 justify-end">
+                <div class="hidden lg:flex items-center gap-3 shrink-0 justify-end">
                     <button @click="toggleExpand(id)" class="w-12 h-12 rounded-xl bg-slate-50 hover:bg-slate-100 flex items-center justify-center border border-slate-200 transition-colors">
                         <i class="pi text-sm" :class="expandedItems[id] ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
                     </button>
@@ -328,50 +332,50 @@ const formatTime = (seconds: number) => {
     </div>
 
     <!-- Summary Sticky Footer -->
-    <div v-if="activeWorkbenchNote && activeItemIds.length > 0" class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white/95 backdrop-blur-md border-t border-soft-green-100 shadow-[0_-10px_40px_-20px_rgba(0,0,0,0.1)] py-5 px-8 flex flex-col md:flex-row items-center justify-between gap-6 z-40">
-        <div class="flex items-center gap-8 text-left">
-            <div class="flex flex-col">
+    <div v-if="activeWorkbenchNote && activeItemIds.length > 0" class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white/95 backdrop-blur-md border-t border-soft-green-100 shadow-[0_-10px_40px_-20px_rgba(0,0,0,0.1)] p-4 md:py-5 md:px-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-6 z-40">
+        <div class="flex items-center md:items-center gap-4 md:gap-8 text-left overflow-x-auto no-scrollbar md:overflow-visible pb-2 md:pb-0">
+            <div class="flex flex-col shrink-0">
                 <div class="flex items-center gap-1.5 mb-0.5">
-                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.budgetTitle') }}</span>
-                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" :title="t('workbench.view.tooltip.budget')"></i>
+                    <span class="text-[12px] md:text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.budgetTitle') }}</span>
+                    <i class="pi pi-info-circle text-slate-300 text-[10px] md:text-xs cursor-help" :title="t('workbench.view.tooltip.budget')"></i>
                 </div>
-                <span v-if="summary.hasUnknownPrice" class="text-2xl font-black text-orange-500 italic">{{ t('workbench.view.summary.cannotEstimate') }}</span>
-                <span v-else class="text-2xl font-black text-soft-green-600 font-mono">{{ formatMoney(summary.totalCost) }}</span>
+                <span v-if="summary.hasUnknownPrice" class="text-xl md:text-2xl font-black text-orange-500 italic leading-none">{{ t('workbench.view.summary.cannotEstimate') }}</span>
+                <span v-else class="text-xl md:text-2xl font-black text-soft-green-600 font-mono leading-none">{{ formatMoney(summary.totalCost) }}</span>
             </div>
-            <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
-            <div class="flex flex-col">
+            <div class="h-8 md:h-10 w-px bg-slate-100 shrink-0"></div>
+            <div class="flex flex-col shrink-0">
                 <div class="flex items-center gap-1.5 mb-0.5">
-                    <span class="text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.time') }}</span>
-                    <i class="pi pi-info-circle text-slate-300 text-xs cursor-help" :title="t('workbench.view.tooltip.time')"></i>
+                    <span class="text-[12px] md:text-[15px] font-black text-slate-400 uppercase tracking-widest">{{ t('workbench.view.summary.time') }}</span>
+                    <i class="pi pi-info-circle text-slate-300 text-[10px] md:text-xs cursor-help" :title="t('workbench.view.tooltip.time')"></i>
                 </div>
-                <span class="text-2xl font-black text-soft-green-600 font-mono">{{ formatTime(summary.totalTime) }}</span>
+                <span class="text-xl md:text-2xl font-black text-soft-green-600 font-mono leading-none">{{ formatTime(summary.totalTime) }}</span>
             </div>
-            <div class="h-10 w-px bg-slate-100 hidden md:block"></div>
-            <div class="hidden md:flex flex-wrap gap-1.5 max-w-[400px]">
-                <span v-for="jobRaw in summary.craftJobs" :key="jobRaw" class="text-[15px] bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-md font-bold border border-indigo-100">
+            <div class="h-8 md:h-10 w-px bg-slate-100 shrink-0 hidden sm:block"></div>
+            <div class="hidden sm:flex flex-wrap gap-1 md:gap-1.5 max-w-[200px] md:max-w-[400px]">
+                <span v-for="jobRaw in summary.craftJobs" :key="jobRaw" class="text-[11px] md:text-[15px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100 whitespace-nowrap">
                     {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}{{ renderStars(parseInt(jobRaw.split('|')[2])) }}
                 </span>
-                <span v-for="jobRaw in summary.gatherJobs" :key="jobRaw" class="text-[15px] bg-amber-50 text-amber-600 px-2 py-0.5 rounded-md font-bold border border-amber-100">
+                <span v-for="jobRaw in summary.gatherJobs" :key="jobRaw" class="text-[11px] md:text-[15px] bg-amber-50 text-amber-600 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 whitespace-nowrap">
                     {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}{{ renderStars(parseInt(jobRaw.split('|')[2])) }}
                 </span>
             </div>
         </div>
         
-        <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="flex items-center gap-3 md:gap-4 w-full md:w-auto">
             <!-- Mismatch warning next to button -->
             <transition name="fade">
-                <div v-if="hasMismatch" class="hidden lg:flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-xl border border-amber-200">
+                <div v-if="hasMismatch" class="hidden xl:flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-xl border border-amber-200">
                     <i class="pi pi-exclamation-triangle"></i>
                     <span class="text-xs font-bold">{{ t('workbench.view.status.mismatch') }}</span>
                 </div>
             </transition>
 
-            <button @click="handleReset" class="flex-1 md:flex-none h-12 px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-sm">
+            <button @click="handleReset" class="flex-1 md:flex-none h-10 md:h-12 px-4 md:px-6 rounded-xl bg-white border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-2 text-xs md:text-sm">
                 <i class="pi pi-sync"></i> {{ t('workbench.view.button.reset') }}
             </button>
             <button @click="$emit('generate-todo')" 
                     :disabled="hasMismatch || isLoading"
-                    class="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 disabled:bg-slate-200 disabled:shadow-none disabled:text-slate-400 disabled:cursor-not-allowed disabled:scale-100 transition-all flex items-center justify-center gap-3 text-base">
+                    class="flex-[2] md:flex-none h-12 md:h-14 px-6 md:px-8 rounded-xl md:rounded-2xl bg-soft-green-600 text-white font-black shadow-lg shadow-soft-green-100 hover:bg-soft-green-700 active:scale-95 disabled:bg-slate-200 disabled:shadow-none disabled:text-slate-400 disabled:cursor-not-allowed disabled:scale-100 transition-all flex items-center justify-center gap-2 md:gap-3 text-sm md:text-base">
                 <i class="pi pi-list"></i> {{ t('workbench.view.button.generateList') }} <i class="pi pi-arrow-right scale-90"></i>
             </button>
         </div>
@@ -386,6 +390,10 @@ const formatTime = (seconds: number) => {
 
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* Custom scrollbar reset */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 .workbench-container {
     background: transparent;

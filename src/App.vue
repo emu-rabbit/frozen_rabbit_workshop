@@ -21,7 +21,7 @@ import SettingsView from './components/views/SettingsView.vue'
 import TodoListView from './components/views/TodoListView.vue'
 import FaqView from './components/views/FaqView.vue'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const { language } = useSettings()
 const { addNote, activeWorkbenchNote, notes } = useNotes()
 
@@ -34,6 +34,12 @@ watch(language, (newLang) => {
 
 // State for navigation
 const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
+const isMobileMenuOpen = ref(false)
+
+// Close mobile menu when tab changes
+watch(currentTab, () => {
+  isMobileMenuOpen.value = false
+})
 
 const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
   addNote(title, items, shouldFavorite)
@@ -56,12 +62,34 @@ const handleLanguageUpdate = (val: string) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen bg-soft-green-50 overflow-hidden text-slate-800 font-sans">
-    <!-- Sidebar -->
-    <Sidebar v-model:currentTab="currentTab" />
+  <div class="flex h-screen w-screen bg-soft-green-50 overflow-hidden text-slate-800 font-sans relative">
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-soft-green-100 flex items-center justify-between px-6 z-50">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-soft-green-500 rounded-lg flex items-center justify-center text-white font-black italic">R</div>
+        <span class="font-bold text-soft-green-800 tracking-tight">{{ t('app.title') }}</span>
+      </div>
+      <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="w-10 h-10 rounded-xl bg-soft-green-50 text-soft-green-600 flex items-center justify-center border border-soft-green-100 active:scale-95 transition-all">
+        <i class="pi" :class="isMobileMenuOpen ? 'pi-times' : 'pi-bars'"></i>
+      </button>
+    </header>
+
+    <!-- Sidebar & Drawer -->
+    <div 
+      class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] lg:hidden transition-opacity duration-300"
+      :class="isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'"
+      @click="isMobileMenuOpen = false"
+    ></div>
+
+    <aside 
+      class="fixed inset-y-0 left-0 w-72 bg-white z-[70] lg:relative lg:w-64 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
+      :class="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
+    >
+      <Sidebar v-model:currentTab="currentTab" class="w-full h-full" />
+    </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col overflow-y-auto relative">
+    <main class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
       <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->

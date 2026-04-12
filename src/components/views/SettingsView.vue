@@ -81,41 +81,43 @@ watch(marketDC, (newVal) => {
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
-    <header class="mb-8">
-      <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('settings.title') }}</h2>
+  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
+    <header class="mb-6 md:mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('settings.title') }}</h2>
       <p class="text-slate-500 text-sm">{{ t('settings.description') }}</p>
     </header>
 
     <div class="flex flex-col gap-6">
       <!-- Language Settings -->
-      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
           <div class="flex flex-col gap-4">
               <div class="flex items-center gap-3 text-soft-green-900 mb-1">
                 <i class="pi pi-language text-xl"></i>
                 <label class="font-bold text-lg">{{ t('settings.language') }}</label>
               </div>
-              <SelectButton 
-                :modelValue="language" 
-                @update:modelValue="emit('update:language', $event)" 
-                :options="langOptions" 
-                optionLabel="label" 
-                optionValue="value" 
-                aria-labelledby="basic" 
-                class="settings-lang-toggle" 
-              />
+              <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
+                  <SelectButton 
+                    :modelValue="language" 
+                    @update:modelValue="emit('update:language', $event)" 
+                    :options="langOptions" 
+                    optionLabel="label" 
+                    optionValue="value" 
+                    aria-labelledby="basic" 
+                    class="settings-lang-toggle whitespace-nowrap min-w-max" 
+                  />
+              </div>
           </div>
       </div>
 
       <!-- Market Data Settings -->
-      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
           <div class="flex flex-col gap-6">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3 text-soft-green-900">
                   <i class="pi pi-database text-xl"></i>
-                  <label class="font-bold text-lg">{{ t('settings.marketTitle') }}</label>
+                  <label class="font-bold text-base md:text-lg">{{ t('settings.marketTitle') }}</label>
                 </div>
-                <div v-if="dcLoading" class="flex items-center gap-2 text-slate-400 text-xs">
+                <div v-if="dcLoading" class="flex items-center gap-2 text-slate-400 text-[10px] md:text-xs">
                   <i class="pi pi-spinner pi-spin"></i>
                   <span>Syncing...</span>
                 </div>
@@ -164,38 +166,38 @@ watch(marketDC, (newVal) => {
         </div>
 
         <!-- About & Credits Section -->
-        <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+        <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
             <div class="flex flex-col gap-6">
                 <div class="flex items-center gap-3 text-soft-green-900">
                   <i class="pi pi-info-circle text-xl"></i>
                   <label class="font-bold text-lg">{{ t('settings.about.title') }}</label>
                 </div>
                 
-                <p class="text-slate-500 text-sm -mt-3">{{ t('settings.about.description') }}</p>
+                <p class="text-slate-500 text-sm -mt-3 leading-relaxed">{{ t('settings.about.description') }}</p>
 
-                <div class="grid grid-cols-1 gap-4 mt-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-2">
                   <a href="https://universalis.app" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
-                    <div class="flex flex-col gap-0.5">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">Universalis</span>
-                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.universalis') }}</span>
+                    <div class="flex flex-col gap-0.5 min-w-0">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">Universalis</span>
+                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.universalis') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
 
                   <a href="https://ffxivteamcraft.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
-                    <div class="flex flex-col gap-0.5">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">Teamcraft</span>
-                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.teamcraft') }}</span>
+                    <div class="flex flex-col gap-0.5 min-w-0">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">Teamcraft</span>
+                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.teamcraft') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
 
                   <a href="https://xivapi.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
-                    <div class="flex flex-col gap-0.5">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700">XIVAPI</span>
-                      <span class="text-xs text-slate-400 font-medium">{{ t('settings.about.xivapi') }}</span>
+                    <div class="flex flex-col gap-0.5 min-w-0">
+                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">XIVAPI</span>
+                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.xivapi') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-xs text-slate-300 group-hover:text-soft-green-500"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
                 </div>
             </div>
@@ -205,7 +207,6 @@ watch(marketDC, (newVal) => {
 </template>
 
 <style scoped>
-/* Scoped styles moved to App.vue or kept here as plain CSS if needed, 
-   but @apply in child components often triggers IDE warnings. 
-   Moving back to App.vue for global consistency. */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>

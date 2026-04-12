@@ -133,13 +133,13 @@ const handleCreateNote = () => {
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
-    <header class="mb-8">
-      <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('newNote.title') }}</h2>
+  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto">
+    <header class="mb-6 md:mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('newNote.title') }}</h2>
       <p class="text-slate-500 text-sm">{{ t('newNote.description') }}</p>
     </header>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8">
+    <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8">
       <div class="flex flex-col gap-8">
         <div class="flex flex-col gap-2">
           <label for="item-name" class="font-bold text-soft-green-900 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
@@ -158,14 +158,22 @@ const handleCreateNote = () => {
             <p class="text-sm text-slate-500">{{ t('newNote.itemsDescription') }}</p>
           </div>
 
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-4">
             <div 
               v-for="(row, index) in searchRows" 
               :key="row.id"
-              class="flex items-start gap-3 bg-slate-50 p-3 rounded-xl border border-slate-100"
+              class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100"
             >
-              <div class="w-10 h-10 flex items-center justify-center bg-soft-green-100 text-soft-green-600 rounded-lg shrink-0 mt-0.5">
-                {{ index + 1 }}
+              <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 flex items-center justify-center bg-soft-green-100 text-soft-green-600 rounded-lg shrink-0 font-bold">
+                    {{ index + 1 }}
+                  </div>
+                  
+                  <div class="sm:hidden flex-1">
+                    <button v-if="searchRows.length > 1" @click="removeSearchRow(index)" class="float-right text-slate-300 hover:text-red-400 p-1">
+                        <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
               </div>
 
               <div class="flex-1 min-w-0">
@@ -187,7 +195,7 @@ const handleCreateNote = () => {
                         <div class="flex items-center gap-3 w-full">
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
                             <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 bg-slate-100 rounded-sm" v-else></div>
-                            <div class="flex-1 truncate">{{ slotProps.option.name }}</div>
+                            <div class="flex-1 truncate text-sm">{{ slotProps.option.name }}</div>
                         </div>
                     </template>
                     <template #empty>
@@ -201,25 +209,27 @@ const handleCreateNote = () => {
                     </template>
                   </AutoComplete>
 
-                  <div v-if="row.selectedItem" class="mt-2 text-sm text-soft-green-700 bg-soft-green-100 border border-soft-green-200 px-3 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans">
+                  <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 bg-soft-green-100 border border-soft-green-200 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans">
                     <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
                     <span class="truncate font-medium">ID: {{ row.selectedItem.id }}</span>
                   </div>
               </div>
 
-              <div class="flex items-center gap-1 mt-0.5 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm shrink-0">
-                <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
-                  <i class="pi pi-minus text-sm"></i>
-                </button>
-                <input type="number" v-model.number="row.quantity" min="1" class="w-12 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent" />
-                <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
-                  <i class="pi pi-plus text-sm"></i>
-                </button>
-              </div>
+              <div class="flex items-center justify-between sm:justify-start gap-2">
+                  <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm shrink-0">
+                    <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
+                      <i class="pi pi-minus text-sm"></i>
+                    </button>
+                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent" />
+                    <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
+                      <i class="pi pi-plus text-sm"></i>
+                    </button>
+                  </div>
 
-              <button @click="removeSearchRow(index)" class="w-10 h-10 mt-0.5 rounded-lg flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-500 transition-colors shrink-0">
-                <i class="pi pi-trash"></i>
-              </button>
+                  <button @click="removeSearchRow(index)" class="hidden sm:flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 hover:bg-neutral-100 hover:text-red-500 transition-colors shrink-0">
+                    <i class="pi pi-trash"></i>
+                  </button>
+              </div>
             </div>
           </div>
 
@@ -231,7 +241,7 @@ const handleCreateNote = () => {
           </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-soft-green-100 flex items-center justify-between">
+        <div class="mt-8 pt-6 border-t border-soft-green-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <label class="flex items-center gap-3 cursor-pointer group select-none">
               <div class="relative flex items-center justify-center">
                 <input type="checkbox" v-model="shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
@@ -240,11 +250,11 @@ const handleCreateNote = () => {
               <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
             </label>
 
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 w-full md:w-auto">
               <button 
                 @click="handleExportJson" 
                 :disabled="!noteTitle"
-                class="group flex items-center gap-0 hover:gap-3 px-3 py-3.5 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
+                class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
                 :title="t('newNote.copyJson')"
               >
                 <i class="pi pi-copy text-xl"></i>
@@ -253,7 +263,7 @@ const handleCreateNote = () => {
                 </span>
               </button>
               
-              <button @click="handleCreateNote" :disabled="!noteTitle" class="bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-lg">
+              <button @click="handleCreateNote" :disabled="!noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
                 <i class="pi pi-save"></i> {{ t('newNote.save') }}
               </button>
             </div>

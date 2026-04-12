@@ -13,10 +13,10 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
 </script>
 
 <template>
-  <div class="p-8 max-w-4xl w-full mx-auto">
-    <header class="mb-10">
-      <h2 class="text-3xl font-bold text-soft-green-800 mb-2">{{ t('faq.title') }}</h2>
-      <p class="text-slate-500 text-sm leading-relaxed">{{ t('faq.description') }}</p>
+  <div class="px-4 py-8 md:p-8 max-w-3xl w-full mx-auto pb-24">
+    <header class="mb-6 md:mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('nav.faq') }}</h2>
+      <p class="text-slate-500 text-sm">{{ t('settings.description') }}</p>
     </header>
 
     <div class="flex flex-col gap-6">
