@@ -28,8 +28,8 @@ export const messages = {
     },
     recommended: {
       title: '兔肉私心筆記',
-      description: '這些是站長整理出來實用的清單，你可以隨意瀏覽、搜尋並直接放上備料台，或按星星收藏。',
-      searchPlaceholder: '支援多國語系關鍵字搜尋...',
+      description: '這些是站長整理出來實用的清單，你可以隨意瀏覽、搜尋並直接放上備料台，或按星星收藏。（小技巧：搜尋時可以用空白鍵分隔多個關鍵字喔！）',
+      searchPlaceholder: '關鍵字搜尋 (可用空白鍵搜尋多個)...',
       emptyTitle: '找不到相符的筆記',
       emptyDescription: '換個關鍵字試試看吧！'
     },
@@ -40,7 +40,7 @@ export const messages = {
       placeholderTitle: '例如：640HQ 裝備儲備、生產用半成品...',
       copyJson: '匯出此筆記 (JSON)',
       itemsTitle: '放上備料台的物品',
-      itemsDescription: '輸入關鍵字（如「舊日王國」）查詢完整物品並準備分析',
+      itemsDescription: '輸入關鍵字（如「白金」）查詢完整物品並準備分析',
       searchPlaceholder: '找尋物品...',
       searching: '兔兔在字典裡尋找中...',
       notFound: '找不到這個東西，換個關鍵字吧',
@@ -65,7 +65,7 @@ export const messages = {
     },
     workbench: {
       title: '備料台',
-      description: '在這裡制定你的製作計畫與開銷總結吧！',
+      description: '巧匠大大今天要買要做還是要自己採呢？在這裡制定你的製作計畫與開銷總結吧！',
       view: {
         analyzing: '正在載入真實資料與市場價格...',
         emptyTitle: '目前沒有備料計畫',
@@ -108,7 +108,7 @@ export const messages = {
           generateList: '生成代辦清單'
         },
         tooltip: {
-          budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實的價格需要看當下真正的市場價格而定',
+          budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實價格需要看當下真正的市場價格而定',
           time: '時間僅僅是大略的估算，實際的耗費時間將依照使用者的生產採集裝備數值而定，另外也會受到限時採集點的影響'
         }
       }
@@ -220,8 +220,8 @@ export const messages = {
     },
     recommended: {
       title: '兔肉私心笔记',
-      description: '这些是站长整理出来实用的清单，你可以随意浏览、搜寻并直接放上备料台，或按星星收藏。',
-      searchPlaceholder: '支援多国语系关键字搜寻...',
+      description: '这些是站长整理出来实用的清单，你可以随意浏览、搜寻并直接放上备料台，或按星星收藏。（小技巧：搜索时可以用空格键分隔多个关键字喔！）',
+      searchPlaceholder: '关键字搜索 (可用空格键搜索多个)...',
       emptyTitle: '找不到相符的笔记',
       emptyDescription: '换个关键字试试看吧！'
     },
@@ -232,7 +232,7 @@ export const messages = {
       placeholderTitle: '例如：640HQ 装备储备、生产用半成品...',
       copyJson: '导出此笔记 (JSON)',
       itemsTitle: '放上备料台的物品',
-      itemsDescription: '输入关键字（如“旧日王国”）查询完整物品并准备分析',
+      itemsDescription: '输入关键字（如“白金”）查询完整物品并准备分析',
       searchPlaceholder: '寻觅物品...',
       searching: '兔兔在字典里寻找中...',
       notFound: '找不到这个东西，换个关键字吧',
@@ -257,7 +257,7 @@ export const messages = {
     },
     workbench: {
       title: '备料台',
-      description: '在这里制定你的制作计画与开销总结吧！',
+      description: '巧匠大大今天要买要做还是要自己采呢？在这里制定你的制作计画与开销总结吧！',
       view: {
         analyzing: '正在载入真实资料与市场价格...',
         emptyTitle: '目前没有备料计划',
@@ -366,10 +366,10 @@ export const messages = {
       items: [
         {
           q: '我使用了网站估算金钱成本，为什么在游戏里的市场板看不到这个价格呢？',
-          a: '网站显示的成本是通过拉取指定大区的市场快取资料，并针对你的目标数量进行“模拟购买”后计算出的预估值。这会因为你实际所在的服务器、资料更新非即时、以及市场波动等因素导致价格偏差。另外也请多加留意“设定”区中的市场来源设定是否正确喔（预设为繁中服大区）。'
+          a: '网站显示的成本是通过拉取指定大區的市场快取资料，并针对你的目标数量进行“模拟购买”后计算出的预估值。这会因为你实际所在的服务器、资料更新非即时、以及市场波动等因素导致价格偏差。另外也请多加留意“设定”区中的市场来源设定是否正确喔（预设为繁中服大区）。'
         },
         {
-          q: '本网站的时间成本是如何估算的',
+          q: '本网站的時間成本是如何估算的',
           a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗费一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
         },
         {
@@ -378,7 +378,7 @@ export const messages = {
         },
         {
           q: '关于网站现在的状态',
-          a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同时也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
+          a: '网站现在在超先行测试運行中，很多东西还不是稳定状态，但同時也在搜集各方的意見，有Bug有任何意見欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
         }
       ]
     }
@@ -412,8 +412,8 @@ export const messages = {
     },
     recommended: {
       title: 'Rabbit\'s Picks',
-      description: 'These are practical lists compiled by the rabbit. Browse, search, use them, or star them for later.',
-      searchPlaceholder: 'Search notes (multi-language support)...',
+      description: 'These are practical lists compiled by the rabbit. Browse, search, use them, or star them for later. (Pro tip: use spaces to search for multiple keywords!)',
+      searchPlaceholder: 'Search notes (use spaces for multiple)...',
       emptyTitle: 'No Matching Notes Found',
       emptyDescription: 'Try a different keyword!'
     },
@@ -424,7 +424,7 @@ export const messages = {
       placeholderTitle: 'e.g., 640HQ gear prep, intermediate materials...',
       copyJson: 'Copy as Recommended Format',
       itemsTitle: 'Items on Prep Table',
-      itemsDescription: 'Search and pick items you want to plan for.',
+      itemsDescription: 'Search and pick items you want to plan for (e.g., "Platinum").',
       searchPlaceholder: 'Hunting for...',
       searching: 'Bunnies checking the dictionary...',
       notFound: 'Cannot find this. Try another word!',
@@ -449,7 +449,7 @@ export const messages = {
     },
     workbench: {
       title: 'The Workbench',
-      description: 'Plan your crafting strategies and expenses right here!',
+      description: 'Hey master crafter, are we buying, making, or gathering today? Plan your crafting strategies and expenses right here!',
       view: {
         analyzing: 'Fetching live data and market prices...',
         emptyTitle: 'No active planning',
@@ -604,8 +604,8 @@ export const messages = {
     },
     recommended: {
       title: 'うさぎのオススメ',
-      description: 'うさぎがまとめた便利なリストだよ。検索して仕込み台に置いたり、お気に入りに追加してね。',
-      searchPlaceholder: 'ノートを検索（多言語対応）...',
+      description: 'うさぎがまとめた便利なリストだよ。検索して仕込み台に置いたり、お気に入りに追加してね。（ヒント：スペース区切りで複数のキーワードを検索できます！）',
+      searchPlaceholder: 'キーワード検索 (スペース区切りで複数可)...',
       emptyTitle: '見つからないみたい',
       emptyDescription: '別のキーワードを試してね！'
     },
@@ -616,7 +616,7 @@ export const messages = {
       placeholderTitle: '例：レイド用装備、素材まとめ...',
       copyJson: '推奨形式としてコピー',
       itemsTitle: '仕込み台に置くアイテム',
-      itemsDescription: 'キーワードを入れてアイテムを探そう！',
+      itemsDescription: 'キーワードを入れてアイテムを探そう！（例：「白金」）',
       searchPlaceholder: 'アイテムを探す...',
       searching: 'うさぎが辞書を引いています...',
       notFound: '見つからないみたい...別の言葉を試してね',
@@ -630,7 +630,7 @@ export const messages = {
       title: '過去の記録をめくる',
       description: '過去の製作リストがここに記録されるよ。いつでも見返せるね。',
       autoDeleteWarning: '履歴は最大20件まで保存され、自動的に古いものから消えていくよ。大切にしたいノートは星マークを押して「お気に入り」に保存してね！',
-      emptyTitle: 'ノートはまだ真っ白だよ',
+      emptyTitle: 'ノートは還まだ真っ白だよ',
       emptyDescription: '「新しいノートを書く」から始めてみてね！',
       syncing: '思い出を探しています...',
       itemsCount: '入っているアイテム',
@@ -641,7 +641,7 @@ export const messages = {
     },
     workbench: {
       title: '仕込み台',
-      description: 'ここで制作の計画とコストをまとめよう！',
+      description: '職人さん、今日はマーケットで買う？それとも自分で作る？採集しちゃう？ここで制作の計画とコストをまとめよう！',
       view: {
         analyzing: '市場価格とデータを取得中...',
         emptyTitle: '現在、計画はありません',
@@ -700,7 +700,7 @@ export const messages = {
         craft: '制作するもの'
       },
       targetQty: '目標',
-      targetPrice: '参考単価',
+      targetPrice: '參考單價',
       gatherLocation: '採集ポイント',
       emptySection: 'このセクションには項目がありません'
     },
