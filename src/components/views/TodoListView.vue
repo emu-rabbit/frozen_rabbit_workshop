@@ -96,6 +96,17 @@ const toggleCheck = (sectionKey: string, id: number) => {
     const key = `${sectionKey}_${id}`;
     todoChecked[key] = !todoChecked[key];
 };
+
+const formatET = (spawns: number[] | undefined, duration: number | undefined) => {
+    if (!spawns || spawns.length === 0) return '';
+    const durHours = (duration || 120) / 60;
+    return spawns.map(start => {
+        const end = (start + durHours) % 24;
+        const startStr = start.toString().padStart(2, '0') + ':00';
+        const endStr = Math.floor(end).toString().padStart(2, '0') + ':00';
+        return `${startStr}~${endStr}`;
+    }).join(', ');
+};
 </script>
 
 <template>
@@ -222,17 +233,20 @@ const toggleCheck = (sectionKey: string, id: number) => {
 
                                             <!-- Gather: Info -->
                                             <template v-if="section.key === 'gather' && item.gathering">
-                                                <div class="flex flex-col items-end gap-2.5">
-                                                    <div class="flex flex-col items-end gap-0.5 text-slate-500">
-                                                        <span v-if="item.gathering.parentZoneName && item.gathering.parentZoneName !== item.gathering.zoneName" class="text-[17px] font-black text-slate-700 tracking-tight leading-none">
-                                                            {{ item.gathering.parentZoneName }}
-                                                        </span>
-                                                        <div class="flex items-center gap-1">
-                                                            <i class="pi pi-map-marker text-[10px] opacity-70"></i>
-                                                            <span class="text-[13px] font-bold truncate max-w-[180px] text-slate-400 leading-tight">{{ getLocalizedName(item.gathering.zoneName) }}</span>
+                                                <div class="flex flex-col items-end gap-2">
+                                                    <div class="flex flex-col items-end text-slate-500">
+                                                        <div class="flex items-center gap-1.5 text-slate-700">
+                                                            <i class="pi pi-map-marker text-xs opacity-70"></i>
+                                                            <span class="text-[17px] font-black tracking-tight leading-none">
+                                                                {{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}
+                                                            </span>
+                                                        </div>
+                                                        <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[11px] font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded border border-amber-100 shadow-sm">
+                                                            <i class="pi pi-clock text-[10px]"></i>
+                                                            <span>ET {{ formatET(item.gathering.spawns, item.gathering.duration) }}</span>
                                                         </div>
                                                     </div>
-                                                    <span class="text-sm font-black bg-amber-50 text-amber-600 px-4 py-1.5 rounded-full border border-amber-100 shadow-sm leading-none">
+                                                    <span class="text-sm font-black bg-amber-100/50 text-amber-700 px-4 py-1.5 rounded-full border border-amber-200/50 shadow-sm leading-none">
                                                         {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
                                                     </span>
                                                 </div>
