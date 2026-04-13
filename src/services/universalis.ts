@@ -126,25 +126,26 @@ export function setSelectedDC(dc: string) {
 // ─── Price Fetching ───────────────────────────────────────────────────────────
 
 function parseItemPrice(itemId: number, raw: any): ItemPrice {
-  const listings: MarketListing[] = (raw.listings || []).map((l: any) => ({
-    pricePerUnit: l.pricePerUnit,
-    quantity: l.quantity,
-    hq: l.hq,
+  const safeData = raw || {};
+  const listings: MarketListing[] = (safeData.listings || []).map((l: any) => ({
+    pricePerUnit: l.pricePerUnit ?? 0,
+    quantity: l.quantity ?? 0,
+    hq: !!l.hq,
     worldName: l.worldName,
     worldID: l.worldID
   })).sort((a: MarketListing, b: MarketListing) => a.pricePerUnit - b.pricePerUnit);
 
   return {
     itemId,
-    minPriceNQ: raw.minPriceNQ && raw.minPriceNQ > 0 ? raw.minPriceNQ : null,
-    minPriceHQ: raw.minPriceHQ && raw.minPriceHQ > 0 ? raw.minPriceHQ : null,
-    currentAveragePrice: raw.currentAveragePrice && raw.currentAveragePrice > 0 ? raw.currentAveragePrice : null,
-    currentAveragePriceNQ: raw.currentAveragePriceNQ && raw.currentAveragePriceNQ > 0 ? raw.currentAveragePriceNQ : null,
-    currentAveragePriceHQ: raw.currentAveragePriceHQ && raw.currentAveragePriceHQ > 0 ? raw.currentAveragePriceHQ : null,
+    minPriceNQ: (safeData.minPriceNQ && safeData.minPriceNQ > 0) ? safeData.minPriceNQ : null,
+    minPriceHQ: (safeData.minPriceHQ && safeData.minPriceHQ > 0) ? safeData.minPriceHQ : null,
+    currentAveragePrice: (safeData.currentAveragePrice && safeData.currentAveragePrice > 0) ? safeData.currentAveragePrice : null,
+    currentAveragePriceNQ: (safeData.currentAveragePriceNQ && safeData.currentAveragePriceNQ > 0) ? safeData.currentAveragePriceNQ : null,
+    currentAveragePriceHQ: (safeData.currentAveragePriceHQ && safeData.currentAveragePriceHQ > 0) ? safeData.currentAveragePriceHQ : null,
     listings,
-    lastUploadTime: raw.lastUploadTime ?? 0,
-    worldName: raw.worldName,
-    dcName: raw.dcName,
+    lastUploadTime: safeData.lastUploadTime ?? 0,
+    worldName: safeData.worldName,
+    dcName: safeData.dcName,
   };
 }
 
@@ -218,7 +219,20 @@ export async function fetchItemPrices(
         const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
         const resp = await fetch(url);
         
-        if (!resp.ok) throw new Error(`Universalis returned ${resp.status}`);
+        if (!resp.ok) {
+          // 404 is common for non-marketable items (like collectibles); treat as empty result instead of crash
+          if (resp.status === 404) {
+             console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
+             batch.forEach(id => {
+               const emptyPrice = parseItemPrice(id, null);
+               setCache(dc, emptyPrice);
+               result.set(id, emptyPrice);
+               resolvers[id](emptyPrice);
+             });
+             continue; // Move to next batch
+          }
+          throw new Error(`Universalis returned ${resp.status}`);
+        }
         
         const json = await resp.json();
         
@@ -231,14 +245,19 @@ export async function fetchItemPrices(
           const items: Record<string, any> = json.items ?? {};
           batch.forEach(id => {
             const raw = items[String(id)];
-            const price = parseItemPrice(id, raw || { lastUploadTime: 0, listings: [] });
+            // items map might omit unmarketable items even on a 200 response
+            const price = parseItemPrice(id, raw || null);
             setCache(dc, price);
             result.set(id, price);
             resolvers[id](price);
           });
         }
       } catch (err) {
-        batch.forEach(id => rejecters[id](err));
+        // If it was already resolved by the 404 logic, this catch might catch it again or throw
+        // To be safe, only reject if not already settled
+        batch.forEach(id => {
+          try { rejecters[id](err); } catch {}
+        });
         throw err;
       } finally {
         batch.forEach(id => inflightRequests.delete(cacheKey(dc, id)));
