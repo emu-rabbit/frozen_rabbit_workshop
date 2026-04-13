@@ -205,7 +205,15 @@ export const messages = {
           q: '關於網站現在的狀態',
           a: '網站現在在超先行測試運行中，很多東西還不是穩定狀態，但同時也在蒐集各方的意見，有Bug有任何意見歡迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告訴我唷'
         }
-      ]
+      ],
+    },
+    sponsorModal: {
+      title: '支持冷凍兔肉的工坊',
+      description: '感謝您的支持！由於支付平台（PayPal/Stripe）在台灣有區域轉帳限制，建議台灣玩家優先使用「台灣地區（綠界）」進行贊助，海外玩家則可使用「全球地區（Ko-fi）」。',
+      twProvider: '台灣地區 (綠界科技)',
+      twDesc: '支援超商代碼、ATM、國內信用卡，最適合台灣玩家支持。',
+      globalProvider: '全球地區 (Ko-fi / PayPal)',
+      globalDesc: '適合海外玩家，支援信用卡與 PayPal，且具備 Discord 自動身分組整合。'
     }
   },
   cn: {
@@ -414,7 +422,15 @@ export const messages = {
           q: '关于网站现在的状态',
           a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同時也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
         }
-      ]
+      ],
+    },
+    sponsorModal: {
+      title: '支持冷冻兔肉的工坊',
+      description: '感谢您的支持！由于部分支付平台在台湾存在區域限制，建议台湾玩家优先使用「台湾地区」，海外玩家建议使用「全球地区」。',
+      twProvider: '台湾地区 (绿界科技)',
+      twDesc: '支援超商、ATM 与本地信用卡。',
+      globalProvider: '全球地区 (Ko-fi / PayPal)',
+      globalDesc: '适合海外玩家，支援信用卡與 PayPal。'
     }
   },
   en: {
@@ -623,7 +639,15 @@ export const messages = {
           q: 'Current status of the website',
           a: 'The website is currently in an early alpha testing phase and many features are not yet stable. We are collecting feedback from all sources. If you encounter bugs or have suggestions, please let us know on <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>.'
         }
-      ]
+      ],
+    },
+    sponsorModal: {
+      title: 'Support Frozen Rabbit',
+      description: 'Thank you for your support! Please choose your preferred region to ensure a smooth donation process.',
+      twProvider: 'Taiwan (ECPay)',
+      twDesc: 'Best for supporters in Taiwan. Supports local cards and convenience stores.',
+      globalProvider: 'Global (Ko-fi / PayPal)',
+      globalDesc: 'Best for international supporters. Supports Discord integration.'
     }
   },
   ja: {
@@ -832,7 +856,15 @@ export const messages = {
           q: 'サイトの現在の状態について',
           a: 'このサイトは現在アルファテスト段階にあり、多くの機能が不安定な状態です。現在、皆様からのフィードバックを募集しています。バグ報告や改善の提案がありましたら、お気軽に <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> までお寄せください！'
         }
-      ]
+      ],
+    },
+    sponsorModal: {
+      title: '冷凍ラビットを支援する',
+      description: 'ご支援ありがとうございます！支払方法を選択してください。',
+      twProvider: '台湾地区 (ECPay)',
+      twDesc: '台湾の方向けの決済方法です。',
+      globalProvider: 'グローバル (Ko-fi / PayPal)',
+      globalDesc: '海外の方向けの決済方法です。'
     }
   }
 }

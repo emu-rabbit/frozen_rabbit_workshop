@@ -10,6 +10,7 @@ import {
 
 // Layout
 import Sidebar from './components/layout/Sidebar.vue'
+import SponsorModal from './components/modals/SponsorModal.vue'
 
 // Views
 import NewNoteView from './components/views/NewNoteView.vue'
@@ -37,6 +38,7 @@ watch(language, (newLang) => {
 const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
 const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
+const isSponsorModalOpen = ref(false)
 
 // Scroll to top when tab changes
 watch(currentTab, () => {
@@ -90,7 +92,7 @@ const handleLanguageUpdate = (val: string) => {
       class="fixed inset-y-0 left-0 w-72 bg-white z-[70] lg:relative lg:w-64 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
       :class="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
     >
-      <Sidebar v-model:currentTab="currentTab" class="w-full h-full" />
+      <Sidebar v-model:currentTab="currentTab" @open-sponsor="isSponsorModalOpen = true" class="w-full h-full" />
     </aside>
 
     <!-- Main Content -->
@@ -138,6 +140,9 @@ const handleLanguageUpdate = (val: string) => {
         @update:language="handleLanguageUpdate" 
       />
     </main>
+
+    <!-- Global Modals -->
+    <SponsorModal v-model:visible="isSponsorModalOpen" />
   </div>
 </template>
 

@@ -98,14 +98,13 @@ const activeTab = computed({
 
         <!-- External Links -->
         <div class="flex flex-col gap-2 px-1">
-          <a 
-            href="https://ko-fi.com/emu_rabbit2526" 
-            target="_blank"
+          <button 
+            @click="$emit('open-sponsor')"
             class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 hover:scale-[1.02] transition-all duration-300 shadow-sm"
           >
             <i class="pi pi-heart-fill text-xs text-rose-400 group-hover:scale-125 transition-transform"></i>
             <span class="text-[11px] font-black tracking-tight whitespace-nowrap">{{ t('nav.sponsor') }}</span>
-          </a>
+          </button>
 
           <a 
             href="https://github.com/emu-rabbit/frozen_rabbit_workshop" 
