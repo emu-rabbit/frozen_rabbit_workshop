@@ -3,9 +3,11 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import { useNotes } from '../../composables/useNotes'
 import logo from '../../assets/logo.png'
+import packageJson from '../../../package.json'
 
 const { t } = useI18n()
 const { notes, favoritesCount, recommendedCount } = useNotes()
+const version = packageJson.version
 
 const props = defineProps<{
   currentTab: string
@@ -128,7 +130,7 @@ const activeTab = computed({
       </div>
 
       <div class="text-[10px] text-center font-black text-slate-400 tracking-widest uppercase opacity-60">
-        v0.2.1-beta
+        v{{ version }}
       </div>
     </div>
   </aside>
