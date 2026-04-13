@@ -212,6 +212,10 @@ export const messages = {
           a: '本網站目前的時間成本僅用非常簡單的粗估方法，製作一個物品30秒，高難製作耗費一分鐘，採集則是5秒一個物品，倘若你有很好的想法，歡迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
         },
         {
+          q: '為何有些物品顯示英文名字而不是我設定的繁體中文',
+          a: '物品的翻譯名稱由廣大的社群維護及提供，有時候會缺少較新版本的物品的翻譯。本網站在遇到此類情況時，統一會改使用英文來顯示，確保網站可以正常運行'
+        },
+        {
           q: '為甚麼要把兔肉冷凍起來，可以烤來吃嗎？',
           a: '不可以'
         },
@@ -441,6 +445,10 @@ export const messages = {
         {
           q: '制作所需时间是如何计算的？',
           a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗費一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
+        },
+        {
+          q: '为何有些物品显示英文名字而不是我设定的简体中文',
+          a: '物品的翻译名称由广大社区维护及提供，有时候会缺少较新版本的物品的翻译。本網站在遇到此類情況時，統一會改使用英文來顯示，確保網站可以正常運行'
         },
         {
           q: '为什么要把兔肉冷冻起来，可以烤来吃吗？',
@@ -674,6 +682,10 @@ export const messages = {
           a: 'Currently, the estimated time uses a very simplified calculation: 30 seconds for regular crafting, 1 minute for high-difficulty crafting, and 5 seconds per item for gathering. If you have better ideas for calculation, feel free to open a <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>!'
         },
         {
+          q: 'Why do some items show English names instead of my selected language?',
+          a: 'Item translations are provided and maintained by the community. Sometimes translations for newly added items are missing. In such cases, the workshop defaults to English to ensure the application remains functional.'
+        },
+        {
           q: 'Why freeze the rabbit? Can I roast it instead?',
           a: 'No.'
         },
@@ -902,6 +914,10 @@ export const messages = {
         {
           q: '所要時間はどのように計算されていますか？',
           a: '現在の所要時間は非常に単純な概算に基づいています。通常の製作は1アイテム30秒、高難易度製作は1分、採集は1アイテムにつき5秒として計算しています。より良い計算方法のアイデアがあれば、ぜひ<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>で提案してください！'
+        },
+        {
+          q: 'なぜ一部のアイテム名が設定した言語ではなく英語で表示されるのですか？',
+          a: 'アイテムの翻訳名はコミュニティによって提供・維持されています。新しいアイテムの場合、翻訳がまだ用意されていないことがあります。その場合、システムは英語をデフォルトとして表示し、動作を継続させます。'
         },
         {
           q: 'どうしてうさぎを冷凍するのですか？焼いて食べてもいいですか？',
