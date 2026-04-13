@@ -12,7 +12,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:currentTab': [tab: string]
+  'update:currentTab': [tab: string],
+  'open-sponsor': []
 }>()
 
 const activeTab = computed({
