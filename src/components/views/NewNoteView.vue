@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { searchItems, type MockItem } from '../../services/dictionary'
 import { useDebounceFn } from '@vueuse/core'
@@ -36,6 +36,13 @@ const searchRows = ref<SearchRow[]>([{
   searching: false,
   searchedEmpty: false
 }])
+
+// Auto-fill note title when first item is selected
+watch(() => searchRows.value[0]?.selectedItem, (newVal) => {
+  if (newVal && typeof newVal === 'object' && newVal.name && !noteTitle.value) {
+    noteTitle.value = t('newNote.defaultTitle', { name: newVal.name })
+  }
+})
 
 const onSearch = async (event: any, index: number) => {
   const row = searchRows.value[index]

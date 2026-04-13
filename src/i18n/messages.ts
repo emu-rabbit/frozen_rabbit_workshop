@@ -48,7 +48,8 @@ export const messages = {
       addRow: '還需要準備其他東西？',
       rowHint: '* 必須確保上一列已經填入並選擇物品後，才能繼續新增。',
       save: '好，把這些放上備料台！',
-      addToFavorites: '立刻將此筆記加入我的收藏'
+      addToFavorites: '立刻將此筆記加入我的收藏',
+      defaultTitle: '{name}的筆記'
     },
     history: {
       title: '翻開舊紀錄',
@@ -265,7 +266,8 @@ export const messages = {
       addRow: '还需要准备其他东西？',
       rowHint: '* 必须确保上一列已经填入并选择物品后，才能继续新增。',
       save: '好，把这些放上备料台！',
-      addToFavorites: '立刻将此笔记加入我的收藏'
+      addToFavorites: '立刻将此笔记加入我的收藏',
+      defaultTitle: '{name}的笔记'
     },
     history: {
       title: '翻开旧纪录',
@@ -482,7 +484,8 @@ export const messages = {
       addRow: 'Need anything else?',
       rowHint: '* Fill out the previous row before adding another.',
       save: 'Toss these on the Workbench!',
-      addToFavorites: 'Add to favorites immediately'
+      addToFavorites: 'Add to favorites immediately',
+      defaultTitle: '{name}\'s Note'
     },
     history: {
       title: 'Dusty Records',
@@ -699,7 +702,8 @@ export const messages = {
       addRow: '他に欲しいものはある？',
       rowHint: '* 追加する前に今選んでいるアイテムを決めてね！',
       save: 'よし、これを仕込み台へ！',
-      addToFavorites: '同時にお気に入りに追加する'
+      addToFavorites: '同時にお気に入りに追加する',
+      defaultTitle: '{name}のノート'
     },
     history: {
       title: '過去の記録をめくる',
