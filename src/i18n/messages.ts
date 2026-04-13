@@ -12,7 +12,7 @@ export const messages = {
       faq: '常見問題',
       settings: '設定',
       github: 'GitHub 專案',
-      sponsor: '贊助我一顆馬卡龍吧！'
+      sponsor: '贊助冷凍庫電費'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
@@ -221,7 +221,7 @@ export const messages = {
       faq: '常见问题',
       settings: '设定',
       github: 'GitHub 项目',
-      sponsor: '赞助我一颗馬卡龍吧！'
+      sponsor: '赞助冷冻库电费'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
@@ -430,7 +430,7 @@ export const messages = {
       faq: 'FAQ',
       settings: 'Settings',
       github: 'GitHub Project',
-      sponsor: 'Sponsor me a Macaron!'
+      sponsor: 'Fuel for the freezer'
     },
     noteCard: {
       addFavorite: 'Add to Favorites',
@@ -639,7 +639,7 @@ export const messages = {
       faq: 'よくある<br />質問',
       settings: '設定',
       github: 'GitHub プロジェクト',
-      sponsor: 'マカロンを奢る（寄付）'
+      sponsor: '冷凍庫の電気代を支援'
     },
     noteCard: {
       addFavorite: 'お気に入りに追加',

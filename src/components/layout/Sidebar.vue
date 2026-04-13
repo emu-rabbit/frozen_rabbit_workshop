@@ -99,7 +99,7 @@ const activeTab = computed({
         <!-- External Links -->
         <div class="flex flex-col gap-2 px-1">
           <a 
-            href="#" 
+            href="https://ko-fi.com/emu_rabbit2526" 
             target="_blank"
             class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 hover:bg-rose-100 hover:scale-[1.02] transition-all duration-300 shadow-sm"
           >
