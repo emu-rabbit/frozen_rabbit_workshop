@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from './composables/useNotes'
 import { useSettings } from './composables/useSettings'
@@ -40,6 +40,35 @@ const currentTab = ref('new') // 'new' | 'editor' | 'history' | 'settings' | 'fa
 const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 const isSponsorModalOpen = ref(false)
+
+// URL Hash Sync
+const syncTabFromHash = () => {
+  const hash = window.location.hash.replace('#', '')
+  const validTabs = ['new', 'editor', 'history', 'settings', 'favorites', 'recommended', 'workbench', 'todo', 'faq']
+  if (hash && validTabs.includes(hash)) {
+    currentTab.value = hash
+  }
+}
+
+const handleHashChange = () => {
+  syncTabFromHash()
+}
+
+onMounted(() => {
+  syncTabFromHash()
+  window.addEventListener('hashchange', handleHashChange)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('hashchange', handleHashChange)
+})
+
+// Update hash when tab changes internally
+watch(currentTab, (newTab) => {
+  if (window.location.hash !== `#${newTab}`) {
+    window.location.hash = newTab
+  }
+})
 
 // Scroll to top when tab changes
 watch(currentTab, () => {

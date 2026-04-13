@@ -1,51 +1,29 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { searchItems, type MockItem } from '../../services/dictionary'
-import { useDebounceFn } from '@vueuse/core'
+import { searchItems } from '../../services/dictionary'
+import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
 
 const { t, locale } = useI18n()
+const { newNoteDraft, resetNewNoteDraft } = useDrafts()
 
 const emit = defineEmits<{
   'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
 }>()
 
-const noteTitle = ref('')
-const shouldFavorite = ref(false)
-
-interface SearchRow {
-  id: string
-  query: string
-  selectedItem: MockItem | null
-  quantity: number
-  suggestions: MockItem[]
-  searching: boolean
-  searchedEmpty: boolean
-}
-
-const searchRows = ref<SearchRow[]>([{
-  id: crypto.randomUUID(),
-  query: '',
-  quantity: 1,
-  selectedItem: null,
-  suggestions: [],
-  searching: false,
-  searchedEmpty: false
-}])
-
 // Auto-fill note title when first item is selected
-watch(() => searchRows.value[0]?.selectedItem, (newVal) => {
-  if (newVal && typeof newVal === 'object' && newVal.name && !noteTitle.value) {
-    noteTitle.value = t('newNote.defaultTitle', { name: newVal.name })
+watch(() => newNoteDraft.searchRows[0]?.selectedItem, (newVal) => {
+  if (newVal && typeof newVal === 'object' && newVal.name && !newNoteDraft.noteTitle) {
+    newNoteDraft.noteTitle = t('newNote.defaultTitle', { name: newVal.name })
   }
 })
 
 const onSearch = async (event: any, index: number) => {
-  const row = searchRows.value[index]
+  const row = newNoteDraft.searchRows[index]
   if (!row) return
   
   row.searching = true
@@ -64,11 +42,11 @@ const onSearch = async (event: any, index: number) => {
 }
 
 const addSearchRow = () => {
-  const lastRow = searchRows.value[searchRows.value.length - 1]
+  const lastRow = newNoteDraft.searchRows[newNoteDraft.searchRows.length - 1]
   if (lastRow && !lastRow.selectedItem) {
     return
   }
-  searchRows.value.push({
+  newNoteDraft.searchRows.push({
     id: crypto.randomUUID(),
     query: '',
     quantity: 1,
@@ -80,22 +58,22 @@ const addSearchRow = () => {
 }
 
 const removeSearchRow = (index: number) => {
-  searchRows.value.splice(index, 1)
-  if (searchRows.value.length === 0) {
+  newNoteDraft.searchRows.splice(index, 1)
+  if (newNoteDraft.searchRows.length === 0) {
     addSearchRow()
   }
 }
 
 const canAddRow = computed(() => {
-  if (searchRows.value.length === 0) return true;
-  const lastRow = searchRows.value[searchRows.value.length - 1]
+  if (newNoteDraft.searchRows.length === 0) return true;
+  const lastRow = newNoteDraft.searchRows[newNoteDraft.searchRows.length - 1]
   return !!lastRow.selectedItem
 })
 
 const handleExportJson = () => {
-  if (!noteTitle.value) return;
+  if (!newNoteDraft.noteTitle) return;
 
-  const validItems = searchRows.value
+  const validItems = newNoteDraft.searchRows
     .filter(row => row.selectedItem !== null)
     .map(row => ({
       id: row.selectedItem!.id,
@@ -104,39 +82,29 @@ const handleExportJson = () => {
 
   const exportData = {
     id: crypto.randomUUID(),
-    name: noteTitle.value,
+    name: newNoteDraft.noteTitle,
     items: validItems,
     createdAt: new Date().toISOString()
   }
   
   navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
-    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪贴板！' : '筆記 JSON 已匯出至剪貼簿！'))
+    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪貼板！' : '筆記 JSON 已匯出至剪貼簿！'))
     .catch(err => console.error('Export failed:', err))
 }
 
 const handleCreateNote = () => {
-  if (!noteTitle.value) return;
+  if (!newNoteDraft.noteTitle) return;
   
-  const validItems = searchRows.value
+  const validItems = newNoteDraft.searchRows
     .filter(row => row.selectedItem !== null)
     .map(row => ({
       id: row.selectedItem!.id,
       quantity: row.quantity
     }))
 
-  emit('create-note', noteTitle.value, validItems, shouldFavorite.value)
+  emit('create-note', newNoteDraft.noteTitle, validItems, newNoteDraft.shouldFavorite)
   
-  noteTitle.value = ''
-  shouldFavorite.value = false
-  searchRows.value = [{
-    id: crypto.randomUUID(),
-    query: '',
-    quantity: 1,
-    selectedItem: null,
-    suggestions: [],
-    searching: false,
-    searchedEmpty: false
-  }]
+  resetNewNoteDraft()
 }
 
 const handleTitlePaste = (event: ClipboardEvent) => {
@@ -166,7 +134,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
           <InputText 
             v-ffiv-clean
             id="item-name" 
-            v-model="noteTitle" 
+            v-model="newNoteDraft.noteTitle" 
             :placeholder="t('newNote.placeholderTitle')" 
             class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
             size="large"
@@ -181,7 +149,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
 
           <div class="flex flex-col gap-4">
             <div 
-              v-for="(row, index) in searchRows" 
+              v-for="(row, index) in newNoteDraft.searchRows" 
               :key="row.id"
               class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100"
             >
@@ -191,7 +159,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                   </div>
                   
                   <div class="sm:hidden flex-1">
-                    <button v-if="searchRows.length > 1" @click="removeSearchRow(index)" class="float-right text-slate-300 hover:text-red-400 p-1">
+                    <button v-if="newNoteDraft.searchRows.length > 1" @click="removeSearchRow(index)" class="float-right text-slate-300 hover:text-red-400 p-1">
                         <i class="pi pi-trash"></i>
                     </button>
                   </div>
@@ -268,7 +236,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
         <div class="mt-8 pt-6 border-t border-soft-green-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <label class="flex items-center gap-3 cursor-pointer group select-none">
               <div class="relative flex items-center justify-center">
-                <input type="checkbox" v-model="shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
+                <input type="checkbox" v-model="newNoteDraft.shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
                 <i class="pi pi-check absolute text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all duration-300 pointer-events-none text-xs font-bold"></i>
               </div>
               <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
@@ -277,7 +245,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
             <div class="flex items-center gap-3 w-full md:w-auto">
               <button 
                 @click="handleExportJson" 
-                :disabled="!noteTitle"
+                :disabled="!newNoteDraft.noteTitle"
                 class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
                 :title="t('newNote.copyJson')"
               >
@@ -287,7 +255,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                 </span>
               </button>
               
-              <button @click="handleCreateNote" :disabled="!noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
+              <button @click="handleCreateNote" :disabled="!newNoteDraft.noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
                 <i class="pi pi-save"></i> {{ t('newNote.save') }}
               </button>
             </div>

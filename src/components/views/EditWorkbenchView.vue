@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { searchItems, ensureDictionaryLoaded, getDictionaryItem, type MockItem } from '../../services/dictionary'
+import { searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
+import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
 
 import InputText from 'primevue/inputtext'
@@ -9,36 +10,23 @@ import AutoComplete from 'primevue/autocomplete'
 import Textarea from 'primevue/textarea'
 
 const { t, locale } = useI18n()
+const { editorDraft, resetEditorDraft } = useDrafts()
 
 const emit = defineEmits<{
   'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
 }>()
 
-// --- State ---
-const rawJson = ref('')
-const isEditing = ref(false)
-const noteTitle = ref('')
-const shouldFavorite = ref(false)
+// --- Local UI State ---
 const errorMessage = ref('')
-
-interface SearchRow {
-  id: string
-  query: string
-  selectedItem: MockItem | null
-  quantity: number
-  suggestions: MockItem[]
-  searching: boolean
-  searchedEmpty: boolean
-}
-
-const searchRows = ref<SearchRow[]>([])
+const isMergeDialogOpen = ref(false)
+const mergeRawJson = ref('')
 
 // --- Logic ---
 
 const handleLoadJson = async (append = false) => {
   try {
     errorMessage.value = ''
-    const data = JSON.parse(rawJson.value)
+    const data = JSON.parse(append ? editorDraft.rawJson : editorDraft.rawJson) // Using the global draft
     
     // Basic validation
     if (!data.items || !Array.isArray(data.items)) {
@@ -48,14 +36,14 @@ const handleLoadJson = async (append = false) => {
     await ensureDictionaryLoaded()
 
     if (!append) {
-      noteTitle.value = data.name || t('editor.defaultMergedName')
-      searchRows.value = []
+      editorDraft.noteTitle = data.name || t('editor.defaultMergedName')
+      editorDraft.searchRows = []
     } else {
       // Per user request: Change name to "Merged Unnamed Note" upon merge
-      noteTitle.value = t('editor.defaultMergedName')
+      editorDraft.noteTitle = t('editor.defaultMergedName')
     }
 
-    const existingRows = [...searchRows.value]
+    const existingRows = [...editorDraft.searchRows]
 
     for (const itemData of data.items) {
       const itemMetadata = getDictionaryItem(itemData.id)
@@ -78,9 +66,9 @@ const handleLoadJson = async (append = false) => {
       }
     }
 
-    searchRows.value = existingRows
-    isEditing.value = true
-    rawJson.value = '' // Clear textarea for next merge
+    editorDraft.searchRows = existingRows
+    editorDraft.isEditing = true
+    editorDraft.rawJson = '' // Clear textarea for next merge
   } catch (err) {
     console.error('JSON parse error:', err)
     errorMessage.value = t('editor.invalidJson')
@@ -88,7 +76,7 @@ const handleLoadJson = async (append = false) => {
 }
 
 const onSearch = async (event: any, index: number) => {
-  const row = searchRows.value[index]
+  const row = editorDraft.searchRows[index]
   if (!row) return
   row.searching = true
   row.searchedEmpty = false
@@ -102,7 +90,7 @@ const onSearch = async (event: any, index: number) => {
 }
 
 const addSearchRow = () => {
-  searchRows.value.push({
+  editorDraft.searchRows.push({
     id: crypto.randomUUID(),
     query: '',
     quantity: 1,
@@ -114,27 +102,27 @@ const addSearchRow = () => {
 }
 
 const removeSearchRow = (index: number) => {
-  searchRows.value.splice(index, 1)
-  if (searchRows.value.length === 0) {
-    isEditing.value = false // Back to import if everything is gone
+  editorDraft.searchRows.splice(index, 1)
+  if (editorDraft.searchRows.length === 0) {
+    editorDraft.isEditing = false // Back to import if everything is gone
   }
 }
 
 const canAddRow = computed(() => {
-  if (searchRows.value.length === 0) return true;
-  const lastRow = searchRows.value[searchRows.value.length - 1]
+  if (editorDraft.searchRows.length === 0) return true;
+  const lastRow = editorDraft.searchRows[editorDraft.searchRows.length - 1]
   return !!lastRow.selectedItem
 })
 
 const handleExportJson = () => {
-  if (!noteTitle.value) return;
-  const validItems = searchRows.value
+  if (!editorDraft.noteTitle) return;
+  const validItems = editorDraft.searchRows
     .filter(row => row.selectedItem !== null)
     .map(row => ({ id: row.selectedItem!.id, quantity: row.quantity }))
 
   const exportData = {
     id: crypto.randomUUID(),
-    name: noteTitle.value,
+    name: editorDraft.noteTitle,
     items: validItems,
     createdAt: new Date().toISOString()
   }
@@ -145,25 +133,18 @@ const handleExportJson = () => {
 }
 
 const handleCreateNote = () => {
-  if (!noteTitle.value) return;
-  const validItems = searchRows.value
+  if (!editorDraft.noteTitle) return;
+  const validItems = editorDraft.searchRows
     .filter(row => row.selectedItem !== null)
     .map(row => ({ id: row.selectedItem!.id, quantity: row.quantity }))
 
-  emit('create-note', noteTitle.value, validItems, shouldFavorite.value)
+  emit('create-note', editorDraft.noteTitle, validItems, editorDraft.shouldFavorite)
   
-  // Cleanup
-  noteTitle.value = ''
-  shouldFavorite.value = false
-  searchRows.value = []
-  isEditing.value = false
+  resetEditorDraft()
 }
 
-const isMergeDialogOpen = ref(false)
-const mergeRawJson = ref('')
-
 const confirmMerge = () => {
-    rawJson.value = mergeRawJson.value
+    editorDraft.rawJson = mergeRawJson.value
     handleLoadJson(true)
     isMergeDialogOpen.value = false
     mergeRawJson.value = ''
@@ -179,11 +160,11 @@ const confirmMerge = () => {
     </header>
 
     <!-- Initial Import State -->
-    <div v-if="!isEditing" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex flex-col gap-6">
+    <div v-if="!editorDraft.isEditing" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex flex-col gap-6">
         <div class="flex flex-col gap-3">
             <label class="font-bold text-soft-green-900 text-lg ml-1">{{ t('editor.importLabel') }}</label>
             <Textarea 
-                v-model="rawJson" 
+                v-model="editorDraft.rawJson" 
                 rows="10" 
                 :placeholder="t('editor.importPlaceholder')"
                 class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl font-mono text-sm p-4 bg-slate-50"
@@ -194,7 +175,7 @@ const confirmMerge = () => {
         </div>
         <button 
             @click="handleLoadJson(false)" 
-            :disabled="!rawJson.trim()"
+            :disabled="!editorDraft.rawJson.trim()"
             class="w-full justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 text-white py-4 rounded-xl font-bold shadow-md transition-all active:scale-[0.98] flex items-center gap-2 text-lg"
         >
             <i class="pi pi-download"></i> {{ t('editor.loadButton') }}
@@ -209,7 +190,7 @@ const confirmMerge = () => {
           <InputText 
             v-ffiv-clean
             id="editor-note-name" 
-            v-model="noteTitle" 
+            v-model="editorDraft.noteTitle" 
             :placeholder="t('newNote.placeholderTitle')" 
             class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
             size="large"
@@ -226,7 +207,7 @@ const confirmMerge = () => {
 
           <div class="flex flex-col gap-4">
             <div 
-              v-for="(row, index) in searchRows" 
+              v-for="(row, index) in editorDraft.searchRows" 
               :key="row.id"
               class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100"
             >
@@ -303,21 +284,21 @@ const confirmMerge = () => {
         <div class="mt-8 pt-6 border-t border-soft-green-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <label class="flex items-center gap-3 cursor-pointer group select-none">
               <div class="relative flex items-center justify-center">
-                <input type="checkbox" v-model="shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
+                <input type="checkbox" v-model="editorDraft.shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
                 <i class="pi pi-check absolute text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all duration-300 pointer-events-none text-xs font-bold"></i>
               </div>
               <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
             </label>
 
             <div class="flex items-center gap-3 w-full md:w-auto">
-              <button @click="handleExportJson" :disabled="!noteTitle" class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden" :title="t('newNote.copyJson')">
+              <button @click="handleExportJson" :disabled="!editorDraft.noteTitle" class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden" :title="t('newNote.copyJson')">
                 <i class="pi pi-copy text-xl"></i>
                 <span class="max-w-0 group-hover:max-w-[300px] opacity-0 group-hover:opacity-100 whitespace-nowrap transition-all duration-500 text-sm">
                   {{ t('newNote.copyJson') }}
                 </span>
               </button>
               
-              <button @click="handleCreateNote" :disabled="!noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
+              <button @click="handleCreateNote" :disabled="!editorDraft.noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
                 <i class="pi pi-save"></i> {{ t('newNote.save') }}
               </button>
             </div>
