@@ -702,8 +702,7 @@ export const messages = {
       faq: 'よくある<br />質問',
       settings: '設定',
       github: 'ソースコード (GitHub)',
-      editor: 'ノート工作台',
-      faq: 'よくある質問'
+      editor: 'ノート工作台'
     },
     noteCard: {
       addFavorite: 'お気に入りに追加',
