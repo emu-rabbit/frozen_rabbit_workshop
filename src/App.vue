@@ -14,6 +14,7 @@ import SponsorModal from './components/modals/SponsorModal.vue'
 
 // Views
 import NewNoteView from './components/views/NewNoteView.vue'
+import EditWorkbenchView from './components/views/EditWorkbenchView.vue'
 import HistoryView from './components/views/HistoryView.vue'
 import FavoritesView from './components/views/FavoritesView.vue'
 import RecommendedView from './components/views/RecommendedView.vue'
@@ -35,7 +36,7 @@ watch(language, (newLang) => {
 }, { immediate: true })
 
 // State for navigation
-const currentTab = ref('new') // 'new' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
+const currentTab = ref('new') // 'new' | 'editor' | 'history' | 'settings' | 'favorites' | 'recommended' | 'workbench' | 'todo'
 const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 const isSponsorModalOpen = ref(false)
@@ -102,6 +103,11 @@ const handleLanguageUpdate = (val: string) => {
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->
       <NewNoteView 
         v-if="currentTab === 'new'" 
+        @create-note="handleCreateNote" 
+      />
+
+      <EditWorkbenchView 
+        v-if="currentTab === 'editor'" 
         @create-note="handleCreateNote" 
       />
       

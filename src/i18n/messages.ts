@@ -7,12 +7,13 @@ export const messages = {
     nav: {
       newNote: '寫張新筆記',
       favorites: '收藏的小筆記',
-      recommended: '兔肉私心筆記',
-      history: '翻開舊紀錄',
-      faq: '常見問題',
-      settings: '設定',
-      github: 'GitHub 專案',
-      sponsor: '贊助冷凍庫電費'
+      recommended: '兔兔推薦',
+      history: '歷史製作清單',
+      settings: '工坊設置',
+      sponsor: '贊助冷凍庫電費',
+      github: '開源原始碼 (GitHub)',
+      editor: '筆記工作台',
+      faq: '常見問題'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
@@ -63,6 +64,17 @@ export const messages = {
       unknownItem: '未知的神祕物品',
       unknownDate: '神秘的時間點',
       openWorkbench: '放上備料台'
+    },
+    editor: {
+      title: '筆記工作台',
+      description: '在此你可以貼上既有的筆記 JSON 進行二次編輯或是合併多張筆記。',
+      importLabel: '請在此貼上筆記 JSON',
+      importPlaceholder: '貼上從本站複製的筆記 JSON 字串...',
+      loadButton: '載入資料並開始編輯',
+      mergeButton: '➕ 合併其他筆記 (JSON)',
+      invalidJson: 'JSON 格式錯誤，請確認是否為本站匯出的格式。',
+      emptyState: '目前沒有載入任何筆記',
+      defaultMergedName: '合併的未命名筆記'
     },
     workbench: {
       title: '備料台',
@@ -192,7 +204,7 @@ export const messages = {
         },
         {
           q: '為什麼預估的市場價格看起來不準確？',
-          a: '預估價格受多重因素影響：1. 市場資料並非即時同步，通常有數分鐘至數小時的延遲。 2. 系統會根據您在「設定」中選擇的「成本策略」（激進、平衡、保守）來過濾極端值（如使用 Q1 或中位數）。 3. 系統會自動比對市場與 NPC 售價並選取較低者，確保預估更貼近實際。此外，也請確認設定中的資料中心是否正確。'
+          a: '預估價格受多重因素影響：1. 市場資料並非即時同步，通常有數分鐘至數小時的延遲。 2. 系統會根據您在「設定」中選擇的「成本策略」（激進、平衡、保守）來過濾極端值（如使用 Q1 或中位数）。 3. 系統會自動比對市場與 NPC 售價並選取較低者，確保預估更貼近實際。此外，也請確認設定中的資料中心是否正確。'
         },
         {
           q: '製作所需時間是如何計算的？',
@@ -225,12 +237,13 @@ export const messages = {
     nav: {
       newNote: '写张新笔记',
       favorites: '收藏的小笔记',
-      recommended: '兔肉私心笔记',
-      history: '翻开舊紀錄',
-      faq: '常见问题',
-      settings: '设定',
-      github: 'GitHub 项目',
-      sponsor: '赞助冷冻库电费'
+      recommended: '兔兔推荐',
+      history: '历史制作清单',
+      settings: '工坊设置',
+      sponsor: '赞助冷凍庫电费',
+      github: '开源源代码 (GitHub)',
+      editor: '笔记工作台',
+      faq: '常见问题'
     },
     noteCard: {
       addFavorite: '加入我的收藏',
@@ -281,6 +294,17 @@ export const messages = {
       unknownItem: '未知的神秘物品',
       unknownDate: '神秘的时间点',
       openWorkbench: '放上备料台'
+    },
+    editor: {
+      title: '笔记工作台',
+      description: '在此你可以贴上既有的笔记 JSON 进行二次编辑或是合并多张笔记。',
+      importLabel: '请在此贴上笔记 JSON',
+      importPlaceholder: '贴上從本站复制的笔记 JSON 字符串...',
+      loadButton: '載入资料并开始编辑',
+      mergeButton: '➕ 合并其他笔记 (JSON)',
+      invalidJson: 'JSON 格式错误，请确认是否为本站导出的格式。',
+      emptyState: '目前没有載入任何笔记',
+      defaultMergedName: '合并的未命名笔记'
     },
     workbench: {
       title: '备料台',
@@ -442,13 +466,14 @@ export const messages = {
     },
     nav: {
       newNote: 'Write a New Note',
-      favorites: 'Favorite Notes',
+      favorites: 'Favorites',
       recommended: 'Rabbit\'s Picks',
-      history: 'Historical Records',
-      faq: 'FAQ',
+      history: 'History',
       settings: 'Settings',
-      github: 'GitHub Project',
-      sponsor: 'Fuel for the freezer'
+      sponsor: 'Sponsor Rabbit',
+      github: 'Source Code (GitHub)',
+      editor: 'Note Workbench',
+      faq: 'FAQ'
     },
     noteCard: {
       addFavorite: 'Add to Favorites',
@@ -499,6 +524,17 @@ export const messages = {
       unknownItem: 'Mystery Item',
       unknownDate: 'Mystery Date',
       openWorkbench: 'To Workbench'
+    },
+    editor: {
+      title: 'Note Workbench',
+      description: 'Paste existing note JSON here to edit or merge multiple notes.',
+      importLabel: 'Paste Note JSON',
+      importPlaceholder: 'Paste note JSON string copied from this site...',
+      loadButton: 'Load Data & Start Editing',
+      mergeButton: '➕ Merge Other Note (JSON)',
+      invalidJson: 'Invalid JSON format. Please check the content.',
+      emptyState: 'No note loaded yet',
+      defaultMergedName: 'Merged Unnamed Note'
     },
     workbench: {
       title: 'The Workbench',
@@ -665,8 +701,9 @@ export const messages = {
       history: '過去の記録<br />をめくる',
       faq: 'よくある<br />質問',
       settings: '設定',
-      github: 'GitHub プロジェクト',
-      sponsor: '冷凍庫の電気代を支援'
+      github: 'ソースコード (GitHub)',
+      editor: 'ノート工作台',
+      faq: 'よくある質問'
     },
     noteCard: {
       addFavorite: 'お気に入りに追加',
@@ -717,6 +754,17 @@ export const messages = {
       unknownItem: '謎のアイテム',
       unknownDate: '謎の時間',
       openWorkbench: '仕込み台へ'
+    },
+    editor: {
+      title: 'ノート工作台',
+      description: '既存のノートJSONを貼り付けて、編集や複数のノートの結合ができます。',
+      importLabel: 'ノートJSONを貼り付けてください',
+      importPlaceholder: 'このサイトからコピーしたノートJSON文字列を貼り付けてください...',
+      loadButton: 'データを読み込んで編集を開始',
+      mergeButton: '➕ 他のノートを結合 (JSON)',
+      invalidJson: 'JSON形式が正しくありません。内容を確認してください。',
+      emptyState: 'ノートが読み込まれていません',
+      defaultMergedName: '結合された無名のノート'
     },
     workbench: {
       title: '仕込み台',

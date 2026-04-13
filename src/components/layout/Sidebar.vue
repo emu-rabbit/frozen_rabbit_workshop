@@ -42,6 +42,15 @@ const activeTab = computed({
         <span v-html="t('nav.newNote')" class="leading-tight"></span>
       </button>
 
+      <button 
+        @click="activeTab = 'editor'"
+        class="flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 text-left font-bold"
+        :class="activeTab === 'editor' ? 'bg-soft-green-100 text-soft-green-800 shadow-sm' : 'text-slate-600 hover:bg-soft-green-50 hover:text-soft-green-700'"
+      >
+        <i class="pi pi-sliders-h shrink-0"></i>
+        <span v-html="t('nav.editor')" class="leading-tight"></span>
+      </button>
+
       <hr class="border-soft-green-100 my-2" />
 
       <button 
