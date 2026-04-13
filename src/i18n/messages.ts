@@ -186,11 +186,15 @@ export const messages = {
       description: '這裡整理了一些大家常遇到的疑問與工坊的運作機制',
       items: [
         {
-          q: '我使用了網站估算金錢成本，為什麼在遊戲裡的市場板看不到這個價格呢？',
-          a: '網站顯示的成本是透過拉取指定大區的市場快取資料，並針對你的目標數量進行「模擬購買」後計算出的預估值。這會因為你實際所在的伺服器、資料更新非即時、以及市場波動等因素導致價格偏差。另外也請多加留意「設定」區中的市場來源設定是否正確喔（預設為繁中服大區）。'
+          q: '這網站是做什麼用的？',
+          a: '本網站設計給 FFXIV 的巧匠玩家，提供批次準備管理功能。您可以同時展開多個配方，透過系統整合的市場價格、統計數據與 NPC 資訊，決定每一件素材該「購買」、「製作」或是「採集」，最後生成的清楚明瞭的待辦清單將大幅提升您的作業效率。'
         },
         {
-          q: '本網站的時間成本是如何估算的',
+          q: '為什麼預估的市場價格看起來不準確？',
+          a: '預估價格受多重因素影響：1. 市場資料並非即時同步，通常有數分鐘至數小時的延遲。 2. 系統會根據您在「設定」中選擇的「成本策略」（激進、平衡、保守）來過濾極端值（如使用 Q1 或中位數）。 3. 系統會自動比對市場與 NPC 售價並選取較低者，確保預估更貼近實際。此外，也請確認設定中的資料中心是否正確。'
+        },
+        {
+          q: '製作所需時間是如何計算的？',
           a: '本網站目前的時間成本僅用非常簡單的粗估方法，製作一個物品30秒，高難製作耗費一分鐘，採集則是5秒一個物品，倘若你有很好的想法，歡迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
         },
         {
@@ -391,11 +395,15 @@ export const messages = {
       description: '这里整理了一些大家常遇到的疑问与工坊的运作机制',
       items: [
         {
-          q: '我使用了网站估算金钱成本，为什么在游戏里的市场板看不到这个价格呢？',
-          a: '网站显示的成本是通过拉取指定大區的市场快取资料，并针对你的目标数量进行“模拟购买”后计算出的预估值。这会因为你实际所在的服务器、资料更新非即时、以及市场波动等因素导致价格偏差。另外也请多加留意“设定”区中的市场来源设定是否正确喔（预设为繁中服大区）。'
+          q: '这网站是做什么用的？',
+          a: '本网站设计给 FFXIV 的巧匠玩家，提供批次准备管理功能。您可以同时展开多个配方，通过系统整合的市场价格、统计数据与 NPC 信息，决定每一件素材该「购买」、「制作」或是「采集」，最后生成的清楚明了的待办清单将大幅提升您的作业效率。'
         },
         {
-          q: '本网站的時間成本是如何估算的',
+          q: '为什么预估的市场价格看起来不准确？',
+          a: '预估价格受多重因素影响：1. 市场数据并非实时同步，通常有数分钟至数小时的延迟。 2. 系统会根据您在「设置」中选择的「成本策略」（激进、平衡、保守）来过滤极端值（如使用 Q1 或中位数）。 3. 系统会自动比对市场与 NPC 售价并选取较低者，确保预估更贴近实际。此外，也请确认设置中的数据中心是否正确。'
+        },
+        {
+          q: '制作所需时间是如何计算的？',
           a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗费一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
         },
         {
@@ -404,7 +412,7 @@ export const messages = {
         },
         {
           q: '关于网站现在的状态',
-          a: '网站现在在超先行测试運行中，很多东西还不是稳定状态，但同時也在搜集各方的意見，有Bug有任何意見欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
+          a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同時也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
         }
       ]
     }
@@ -596,11 +604,15 @@ export const messages = {
       description: 'Frequently asked questions and how the workshop handles data.',
       items: [
         {
-          q: 'Why are the market costs estimated here different from what I see in-game?',
-          a: 'The costs displayed on the website are estimates calculated by simulating purchases using cached market data from your specified region. Because this data is not real-time, and due to server-specific pricing fluctuations and other market variables, actual prices may differ. Please ensure your "Region" and "Data Center" in Settings match your in-game location (default is Prosperous/TW server).'
+          q: 'What is this website for?',
+          a: 'This website is designed for FFXIV crafters to manage batch preparations for items. By providing integrated market prices, statistics, and NPC information, it helps you decide whether to buy, craft, or gather materials. Finally, it generates a comprehensive Todo list to streamline your workflow.'
         },
         {
-          q: 'How is the "Estimated Time" calculated?',
+          q: 'Why do the estimated market costs seem inaccurate?',
+          a: 'Estimated costs are influenced by several factors: 1. Market data is cached and not real-time (minutes to hours old). 2. The system filters prices based on your selected "Cost Strategy" (Aggressive, Balanced, Conservative) using statistical markers like Q1 or Median. 3. It automatically compares market prices against NPC vendor prices to show the lowest acquisition cost. Please also ensure your Data Center settings are correct.'
+        },
+        {
+          q: 'How is the estimated time calculated?',
           a: 'Currently, the estimated time uses a very simplified calculation: 30 seconds for regular crafting, 1 minute for high-difficulty crafting, and 5 seconds per item for gathering. If you have better ideas for calculation, feel free to open a <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>!'
         },
         {
@@ -801,8 +813,12 @@ export const messages = {
       description: '工坊の使い方や、よくある疑問についてまとめています。',
       items: [
         {
+          q: 'このサイトはどのような目的で使われますか？',
+          a: 'このサイトは FFXIV のクラフター向けに設計されており、製作したいアイテムを一括で準備・管理するためのツールです。市場価格、統計データ、NPC販売情報などを統合的に参照することで、「購入」「製作」「採集」のどれにするかを決定し、最終的に生成される分かりやすい代行リストによって作業効率を大幅に向上させることができます。'
+        },
+        {
           q: 'サイトで表示される市場コストがゲーム内と違うのはなぜですか？',
-          a: 'サイトのコストは、指定されたデータセンターのキャッシュデータを用いて「目標数分を購入した」と仮定して算出されたシミュレーション価格です。データはリアルタイムではなく、サーバーごとの物価変動やその他の要素により、実際のゲーム内価格とは異なる場合があります。また、「設定」でマーケットデータの取得先が正しいか（デフォルトは繁中鯖です）も確認してください。'
+          a: '見積もり価格はいくつかの要因に影響されます：1. 市場データはリアルタイムではなく数分〜数時間のキャッシュデータです。 2. システムは「設定」で選択された「コスト戦略」（積極的、標準、保守的）に基づき、Q1や中央値などの統計指標を使用して価格を算出しています。 3. 市場価格とNPC販売価格を自動的に比較し、より安価な方を採用しています。また、データセンターの設定が正しいかも確認してください。'
         },
         {
           q: '所要時間はどのように計算されていますか？',
