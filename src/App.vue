@@ -78,6 +78,14 @@ watch(currentTab, () => {
   }
 })
 
+// Handle data-loss fallback (e.g. page refresh while on workbench/todo)
+watch([currentTab, activeWorkbenchNote], ([newTab, activeNote]) => {
+  if ((newTab === 'workbench' || newTab === 'todo') && !activeNote) {
+    console.warn(`[App] Data lost for tab "${newTab}", redirecting to home.`);
+    currentTab.value = 'new'
+  }
+}, { immediate: true })
+
 const handleCreateNote = (title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean) => {
   addNote(title, items, shouldFavorite)
   // The newly added note is at the top of the list
