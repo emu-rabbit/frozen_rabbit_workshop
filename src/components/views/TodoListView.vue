@@ -108,10 +108,14 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
     }).join(', ');
 };
 
-const copyToClipboard = (text: string) => {
+const lastCopied = ref<string | null>(null);
+
+const copyToClipboard = (id: string, text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-        // Optional: Could add a toast notification here
-        console.log('Copied to clipboard:', text);
+        lastCopied.value = id;
+        setTimeout(() => {
+            if (lastCopied.value === id) lastCopied.value = null;
+        }, 2000);
     }).catch(err => {
         console.error('Could not copy text: ', err);
     });
@@ -218,14 +222,18 @@ const copyToClipboard = (text: string) => {
                                                 <img :src="item.icon" class="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform group-hover:scale-105" />
                                             </div>
                                             <div class="flex flex-col min-w-0">
-                                                <div class="flex items-center gap-2 group/name min-w-0">
+                                                <div class="flex items-center gap-2 min-w-0">
                                                     <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
                                                         {{ getLocalizedName(item.name) }}
                                                     </h4>
-                                                    <button @click.stop="copyToClipboard(getLocalizedName(item.name))" 
-                                                            class="opacity-0 group-hover/name:opacity-100 p-1.5 hover:bg-slate-100 rounded-lg transition-all text-slate-400 hover:text-soft-green-600 active:scale-90"
+                                                    <button @click.stop="copyToClipboard(`${section.key}_${item.id}`, getLocalizedName(item.name))" 
+                                                            class="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-slate-100 rounded-lg transition-all active:scale-90"
+                                                            :class="lastCopied === `${section.key}_${item.id}` ? 'text-soft-green-600' : 'text-slate-400 hover:text-soft-green-600'"
                                                             title="Copy Name">
-                                                        <i class="pi pi-copy text-xs md:text-sm"></i>
+                                                        <transition name="scale" mode="out-in">
+                                                            <i v-if="lastCopied === `${section.key}_${item.id}`" class="pi pi-check text-sm md:text-lg"></i>
+                                                            <i v-else class="pi pi-copy text-sm md:text-lg"></i>
+                                                        </transition>
                                                     </button>
                                                 </div>
                                                 
@@ -346,5 +354,14 @@ const copyToClipboard = (text: string) => {
 /* Checkbox animation */
 button:active {
     transform: scale(0.95);
+}
+
+/* Scale transition for Copy icons */
+.scale-enter-active, .scale-leave-active {
+  transition: all 0.2s ease;
+}
+.scale-enter-from, .scale-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
 }
 </style>
