@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getDictionaryItem } from '../../services/dictionary'
 import type { Note, LocalizedString } from '../../types/note'
 
 const { t, locale } = useI18n()
+
+const isCopied = ref(false)
 
 interface Props {
   note: Note | null
@@ -68,7 +70,10 @@ const handleExportJson = () => {
   }
   
   navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
-    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪贴板！' : '筆記 JSON 已匯出至剪貼簿！'))
+    .then(() => {
+        isCopied.value = true
+        setTimeout(() => isCopied.value = false, 2000)
+    })
     .catch(err => console.error('Export failed:', err))
 }
 </script>
@@ -164,7 +169,10 @@ const handleExportJson = () => {
             class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 text-slate-400 hover:text-soft-green-500 shrink-0"
             :title="t('noteCard.exportNote')"
           >
-            <i class="pi pi-copy text-lg md:text-xl"></i>
+            <transition name="scale" mode="out-in">
+              <i v-if="isCopied" class="pi pi-check text-lg md:text-xl text-soft-green-500"></i>
+              <i v-else class="pi pi-copy text-lg md:text-xl"></i>
+            </transition>
           </button>
 
           <button 

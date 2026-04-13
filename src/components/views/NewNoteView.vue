@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { searchItems } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
@@ -10,6 +10,8 @@ import AutoComplete from 'primevue/autocomplete'
 
 const { t, locale } = useI18n()
 const { newNoteDraft, resetNewNoteDraft } = useDrafts()
+
+const isCopied = ref(false)
 
 const emit = defineEmits<{
   'create-note': [title: string, items: { id: number, quantity: number }[], shouldFavorite: boolean]
@@ -88,7 +90,10 @@ const handleExportJson = () => {
   }
   
   navigator.clipboard.writeText(JSON.stringify(exportData, null, 2))
-    .then(() => alert(locale.value === 'cn' ? '笔记 JSON 已导出至剪貼板！' : '筆記 JSON 已匯出至剪貼簿！'))
+    .then(() => {
+        isCopied.value = true
+        setTimeout(() => isCopied.value = false, 2000)
+    })
     .catch(err => console.error('Export failed:', err))
 }
 
@@ -249,7 +254,10 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                 class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
                 :title="t('newNote.copyJson')"
               >
-                <i class="pi pi-copy text-xl"></i>
+                <transition name="scale" mode="out-in">
+                  <i v-if="isCopied" class="pi pi-check text-xl text-soft-green-600"></i>
+                  <i v-else class="pi pi-copy text-xl"></i>
+                </transition>
                 <span class="max-w-0 group-hover:max-w-[300px] opacity-0 group-hover:opacity-100 whitespace-nowrap transition-all duration-500 text-sm">
                   {{ t('newNote.copyJson') }}
                 </span>
