@@ -93,7 +93,13 @@ export const messages = {
           spawnTime: '出現時間',
           duration: '持續 {n} 小時',
           craftTitle: '製作配方需求',
-          yield: '單次產量'
+          yield: '單次產量',
+          vendorTitle: 'NPC 販售資訊',
+          vendorDesc: 'NPC 在售 單價 {price} Gil {location}',
+          mbTitle: '市場版販售資訊',
+          q1Price: '1/4 分位數',
+          medianPrice: '中位數',
+          noListings: '市場版上目前無上架物品'
         },
         summary: {
           budgetTitle: '物資籌備預算',
@@ -124,7 +130,7 @@ export const messages = {
         craft: '待製作物品'
       },
       targetQty: '目標',
-      targetPrice: '參考單價',
+      targetPrice: '最低售價',
       gatherLocation: '採集點',
       emptySection: '此區塊無項目'
     },
@@ -285,7 +291,13 @@ export const messages = {
           spawnTime: '出现时间',
           duration: '持续 {n} 小时',
           craftTitle: '制作配方需求',
-          yield: '单次产量'
+          yield: '单次产量',
+          vendorTitle: 'NPC 贩售信息',
+          vendorDesc: 'NPC 在售 单价 {price} Gil {location}',
+          mbTitle: '市场版贩售信息',
+          q1Price: '1/4 分位数',
+          medianPrice: '中位数',
+          noListings: '市场版上目前无上架物品'
         },
         summary: {
           budgetTitle: '物资筹备预算',
@@ -316,7 +328,7 @@ export const messages = {
         craft: '待制作物品'
       },
       targetQty: '目标',
-      targetPrice: '参考单价',
+      targetPrice: '最低售价',
       gatherLocation: '采集点',
       emptySection: '此区块无项目'
     },
@@ -477,7 +489,13 @@ export const messages = {
           spawnTime: 'Spawns',
           duration: 'Lasts {n}h',
           craftTitle: 'Crafting Recipe',
-          yield: 'Yield'
+          yield: 'Yield',
+          vendorTitle: 'NPC Vendor Info',
+          vendorDesc: 'Sold by NPC: {price} Gil in {location}',
+          mbTitle: 'Market Board Listings',
+          q1Price: '1/4 Percentile',
+          medianPrice: 'Median Price',
+          noListings: 'No active listings found on Market Board'
         },
         summary: {
           budgetTitle: 'Materials Budget',
@@ -508,7 +526,7 @@ export const messages = {
         craft: 'Items to Craft'
       },
       targetQty: 'Target',
-      targetPrice: 'Ref. Price',
+      targetPrice: 'Lowest Price',
       gatherLocation: 'Node',
       emptySection: 'No items in this section'
     },
@@ -669,7 +687,13 @@ export const messages = {
           spawnTime: '出現時間',
           duration: '{n} 時間持続',
           craftTitle: '製作レシピ',
-          yield: '製作数'
+          yield: '製作数',
+          vendorTitle: 'NPC販売情報',
+          vendorDesc: 'NPC販売: {price} Gil {location}',
+          mbTitle: 'マーケットボード販売情報',
+          q1Price: '第1四分位数',
+          medianPrice: '中央値',
+          noListings: '現在、マーケットボードに出品はありません'
         },
         summary: {
           budgetTitle: '素材準備費用',
@@ -700,7 +724,7 @@ export const messages = {
         craft: '制作するもの'
       },
       targetQty: '目標',
-      targetPrice: '參考單價',
+      targetPrice: '最低販売価格',
       gatherLocation: '採集ポイント',
       emptySection: 'このセクションには項目がありません'
     },

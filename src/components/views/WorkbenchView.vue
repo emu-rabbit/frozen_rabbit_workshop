@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import { useWorkbench } from '../../composables/useWorkbench'
+import { formatLastUpdate } from '../../services/universalis'
 
 const { t, locale } = useI18n()
 const { activeWorkbenchNote } = useNotes()
@@ -284,38 +285,155 @@ const formatTime = (seconds: number) => {
                 </div>
             </div>
 
-            <div v-show="expandedItems[id]" class="border-t border-slate-50 bg-slate-50/20 p-6">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div v-if="workbenchItems[id]?.gathering" class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">{{ t('workbench.view.details.gatherTitle') }}</span>
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded text-xs font-bold">{{ t(workbenchItems[id].gathering.jobName) }} Lv.{{ workbenchItems[id].gathering.level }}</span>
-                            <span v-if="workbenchItems[id].gathering.isLimited" class="px-2 py-0.5 bg-red-50 text-red-600 rounded text-xs font-bold flex items-center gap-1">
-                                <i class="pi pi-clock scale-75"></i> {{ t('workbench.view.details.limited') }}
-                            </span>
+            <div v-show="expandedItems[id]" class="border-t border-slate-50 bg-slate-50/20 p-4 md:p-8">
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- NPC VENDOR CARD (ORDERED FIRST) -->
+                    <div v-if="workbenchItems[id]?.vendorInfo" class="group/card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-500 flex items-center justify-center text-white shadow-lg shadow-slate-100">
+                                <i class="pi pi-shopping-bag scale-90"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] font-black text-slate-400 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.vendorTitle') }}</span>
+                                <span class="text-[14px] font-bold text-slate-700 truncate block">{{ workbenchItems[id].vendorInfo.npcName }}</span>
+                            </div>
                         </div>
-                        <div v-if="workbenchItems[id].gathering.parentZoneName && workbenchItems[id].gathering.parentZoneName !== workbenchItems[id].gathering.zoneName" class="text-[18px] font-black text-slate-800 tracking-tight mb-0.5">
-                            {{ workbenchItems[id].gathering.parentZoneName }}
-                        </div>
-                        <div class="text-[14px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                            <i class="pi pi-map-marker text-[10px] opacity-70"></i>
-                            {{ workbenchItems[id].gathering.zoneName || t('workbench.view.details.unknownZone') }}
-                            <span v-if="workbenchItems[id].gathering.x" class="text-slate-400 text-sm ml-1">({{ workbenchItems[id].gathering.x.toFixed(1) }}, {{ workbenchItems[id].gathering.y.toFixed(1) }})</span>
-                        </div>
-                        <div v-if="workbenchItems[id].gathering.spawns.length > 0" class="text-xs text-slate-500 font-bold">
-                            {{ t('workbench.view.details.spawnTime') }}: {{ workbenchItems[id].gathering.spawns.join(', ') }} ({{ t('workbench.view.details.duration', { n: workbenchItems[id].gathering.duration / 60 }) }})
+
+                        <div class="space-y-3">
+                            <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100/50 flex flex-wrap items-center justify-between gap-2">
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 leading-none">{{ t('todo.targetPrice') }}</span>
+                                    <span class="text-base md:text-lg font-black text-slate-700 font-mono tracking-tighter truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].vendorInfo.price) }} Gil</span>
+                                </div>
+                                <i class="pi pi-verified text-slate-300 text-xl opacity-50 shrink-0"></i>
+                            </div>
+
+                            <div class="flex items-start gap-2 bg-slate-50/50 rounded-xl px-3 py-3 border border-slate-100/30">
+                                <i class="pi pi-map-marker text-slate-400 text-xs mt-0.5"></i>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-xs font-bold text-slate-700 truncate mb-1">{{ workbenchItems[id].vendorInfo.zoneName }}</div>
+                                    <div v-if="workbenchItems[id].vendorInfo.coords" class="text-[11px] font-black text-slate-400 font-mono">
+                                        X: {{ workbenchItems[id].vendorInfo.coords.x.toFixed(1) }}, Y: {{ workbenchItems[id].vendorInfo.coords.y.toFixed(1) }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div v-if="workbenchItems[id]?.crafting" class="bg-white p-4 rounded-xl shadow-sm border border-slate-100">
-                        <span class="text-[13px] font-black text-slate-400 block mb-2 uppercase tracking-wider">{{ t('workbench.view.details.craftTitle') }}</span>
-                        <div class="mb-3">
-                            <span class="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded text-xs font-bold">{{ t(workbenchItems[id].crafting.jobName) }} Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}</span>
-                            <span class="text-slate-400 text-xs font-bold ml-2">{{ t('workbench.view.details.yield') }}: {{ workbenchItems[id].crafting.yields }}</span>
+
+                    <!-- MARKET BOARD STATS CARD -->
+                    <div class="group/card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-slate-500 flex items-center justify-center text-white shadow-lg shadow-slate-100">
+                                <i class="pi pi-chart-bar scale-90"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] font-black text-slate-400 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.mbTitle') }}</span>
+                                <span class="text-[14px] font-bold text-slate-700 truncate block">
+                                    {{ workbenchItems[id]?.marketStats?.worldName || t('settings.marketDC') }}
+                                </span>
+                            </div>
+                            <div v-if="workbenchItems[id]?.priceFetched" class="text-[10px] font-bold text-slate-300 italic uppercase">
+                                {{ formatLastUpdate(workbenchItems[id]) }}
+                            </div>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                             <div v-for="ing in workbenchItems[id].crafting.ingredients" :key="ing.id" class="flex items-center gap-1 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
-                                 <img :src="`https://xivapi.com/i/000000/000001.png`" class="w-4 h-4 opacity-50" /> <!-- ing icon is harder to get here without more lookups -->
-                                 <span class="text-[11px] font-bold text-slate-500">Item #{{ ing.id }} x{{ ing.amount }}</span>
+
+                        <div v-if="workbenchItems[id]?.marketStats?.minPrice" class="space-y-4">
+                            <div class="flex flex-col gap-1 p-4 bg-slate-50 rounded-2xl border border-slate-200/50">
+                                <div class="flex flex-wrap items-center justify-between gap-1">
+                                    <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">{{ t('todo.targetPrice') }} (Min)</span>
+                                    <span class="text-base md:text-lg font-black text-slate-700 font-mono tracking-tighter truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.minPrice) }} Gil</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 md:gap-3">
+                                <div class="flex flex-col p-2 md:p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 min-w-0">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase mb-1 truncate">{{ t('workbench.view.details.q1Price') }}</span>
+                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.q1Price) }}</span>
+                                </div>
+                                <div class="flex flex-col p-2 md:p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 min-w-0">
+                                    <span class="text-[9px] font-black text-slate-400 uppercase mb-1 truncate">{{ t('workbench.view.details.medianPrice') }}</span>
+                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.medianPrice) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else-if="!workbenchItems[id]?.priceFetched" class="flex flex-col items-center justify-center py-6 opacity-30">
+                            <i class="pi pi-spin pi-spinner text-2xl mb-2"></i>
+                            <span class="text-xs font-bold">{{ t('workbench.view.analyzing') }}</span>
+                        </div>
+                        <div v-else class="flex flex-col items-center justify-center py-6 text-slate-300">
+                            <i class="pi pi-info-circle text-2xl mb-2"></i>
+                            <span class="text-xs font-bold">{{ t('workbench.view.details.noListings') }}</span>
+                        </div>
+                    </div>
+
+                    <!-- GATHERING CARD -->
+                    <div v-if="workbenchItems[id]?.gathering" class="group/card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-white shadow-lg shadow-amber-100">
+                                <i class="pi pi-map scale-90"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] font-black text-slate-400 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.gatherTitle') }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[14px] font-bold text-slate-700 truncate">{{ workbenchItems[id].gathering.zoneName || t('workbench.view.details.unknownZone') }}</span>
+                                    <span v-if="workbenchItems[id].gathering.isLimited" class="px-1.5 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-black flex items-center gap-1 shrink-0">
+                                        <i class="pi pi-clock scale-75"></i> {{ t('workbench.view.details.limited') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div v-if="workbenchItems[id].gathering.parentZoneName && workbenchItems[id].gathering.parentZoneName !== workbenchItems[id].gathering.zoneName" class="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-2 border border-slate-100/50">
+                                <i class="pi pi-map-marker text-slate-400 text-xs"></i>
+                                <span class="text-xs font-bold text-slate-600 truncate">{{ workbenchItems[id].gathering.parentZoneName }}</span>
+                            </div>
+
+                            <div class="flex items-center justify-between text-xs px-1">
+                                <span class="text-slate-400 font-bold uppercase tracking-tighter">{{ t(workbenchItems[id].gathering.jobName) }} Lv.{{ workbenchItems[id].gathering.level }}{{ renderStars(workbenchItems[id].gathering.stars) }}</span>
+                                <span v-if="workbenchItems[id].gathering.x" class="text-soft-green-600 font-black font-mono">({{ workbenchItems[id].gathering.x.toFixed(1) }}, {{ workbenchItems[id].gathering.y.toFixed(1) }})</span>
+                            </div>
+
+                            <div v-if="workbenchItems[id].gathering.spawns.length > 0" class="bg-amber-50/50 rounded-xl p-3 border border-amber-100/30">
+                                <span class="text-[10px] font-black text-amber-600/70 block mb-1.5 uppercase tracking-widest">{{ t('workbench.view.details.spawnTime') }}</span>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span v-for="st in workbenchItems[id].gathering.spawns" :key="st" class="px-2 py-0.5 bg-white border border-amber-200 text-amber-700 rounded-md text-[11px] font-black shadow-sm">{{ st }}:00</span>
+                                </div>
+                                <div class="text-[10px] font-bold text-amber-600/60 mt-2 italic text-right">
+                                    {{ t('workbench.view.details.duration', { n: workbenchItems[id].gathering.duration / 60 }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CRAFTING CARD -->
+                    <div v-if="workbenchItems[id]?.crafting" class="group/card bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-indigo-500 flex items-center justify-center text-white shadow-lg shadow-indigo-100">
+                                <i class="pi pi-hammer scale-90"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] font-black text-slate-400 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.craftTitle') }}</span>
+                                <span class="text-[14px] font-bold text-slate-700 truncate block">
+                                    {{ t(workbenchItems[id].crafting.jobName) }} Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}
+                                </span>
+                            </div>
+                            <div class="flex flex-col items-end shrink-0">
+                                <span class="text-[10px] font-black text-slate-300 uppercase tracking-tighter">{{ t('workbench.view.details.yield') }}</span>
+                                <span class="text-sm font-black text-indigo-600">x{{ workbenchItems[id].crafting.yields }}</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 max-h-[160px] overflow-y-auto pr-1 custom-scrollbar">
+                             <div v-for="ing in workbenchItems[id].crafting.ingredients" :key="ing.id" class="flex items-center gap-3 bg-slate-50/50 p-2 rounded-xl border border-slate-100/50 hover:bg-slate-50 transition-colors">
+                                 <img :src="ing.icon" class="w-8 h-8 rounded-lg shadow-sm border border-white" />
+                                 <div class="flex-1 min-w-0">
+                                     <div class="text-[12px] font-bold text-slate-700 truncate leading-tight">{{ getLocalizedName(ing.name) }}</div>
+                                     <div class="text-[10px] font-bold text-slate-400 mt-0.5">ID: #{{ ing.id }}</div>
+                                 </div>
+                                 <div class="text-sm font-black text-slate-500 bg-white px-2 py-0.5 rounded-lg border border-slate-200">
+                                     x{{ ing.amount }}
+                                 </div>
                              </div>
                         </div>
                     </div>
@@ -404,4 +522,19 @@ const formatTime = (seconds: number) => {
 
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 input[type=number] { -moz-appearance: textfield; }
+
+/* Custom Scrollbar for Ingredient Lists */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1;
+}
 </style>

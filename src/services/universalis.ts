@@ -39,6 +39,8 @@ export interface MarketListing {
   pricePerUnit: number;
   quantity: number;
   hq: boolean;
+  worldName?: string;
+  worldID?: number;
 }
 
 // ─── Cache ────────────────────────────────────────────────────────────────────
@@ -127,7 +129,9 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
   const listings: MarketListing[] = (raw.listings || []).map((l: any) => ({
     pricePerUnit: l.pricePerUnit,
     quantity: l.quantity,
-    hq: l.hq
+    hq: l.hq,
+    worldName: l.worldName,
+    worldID: l.worldID
   })).sort((a: MarketListing, b: MarketListing) => a.pricePerUnit - b.pricePerUnit);
 
   return {

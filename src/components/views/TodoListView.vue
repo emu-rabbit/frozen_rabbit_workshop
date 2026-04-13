@@ -107,6 +107,15 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
         return `${startStr}~${endStr}`;
     }).join(', ');
 };
+
+const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+        // Optional: Could add a toast notification here
+        console.log('Copied to clipboard:', text);
+    }).catch(err => {
+        console.error('Could not copy text: ', err);
+    });
+};
 </script>
 
 <template>
@@ -209,9 +218,16 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
                                                 <img :src="item.icon" class="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform group-hover:scale-105" />
                                             </div>
                                             <div class="flex flex-col min-w-0">
-                                                <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight mb-1" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
-                                                    {{ getLocalizedName(item.name) }}
-                                                </h4>
+                                                <div class="flex items-center gap-2 group/name min-w-0">
+                                                    <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
+                                                        {{ getLocalizedName(item.name) }}
+                                                    </h4>
+                                                    <button @click.stop="copyToClipboard(getLocalizedName(item.name))" 
+                                                            class="opacity-0 group-hover/name:opacity-100 p-1.5 hover:bg-slate-100 rounded-lg transition-all text-slate-400 hover:text-soft-green-600 active:scale-90"
+                                                            title="Copy Name">
+                                                        <i class="pi pi-copy text-xs md:text-sm"></i>
+                                                    </button>
+                                                </div>
                                                 
                                                 <!-- Compact Metadata for Mobile -->
                                                 <div class="flex flex-wrap items-center gap-2">

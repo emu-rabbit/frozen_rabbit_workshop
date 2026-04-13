@@ -12,6 +12,8 @@ import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateSimulatedPrice } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
+import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
+import type { VendorInfo } from '../services/vendor';
 import { useI18n } from 'vue-i18n';
 
 export interface CraftingInfo {
@@ -20,7 +22,7 @@ export interface CraftingInfo {
   level: number;
   stars: number;
   yields: number;
-  ingredients: { id: number; amount: number }[];
+  ingredients: { id: number; amount: number; name: any; icon: string }[];
 }
 
 export interface WorkbenchItem {
@@ -31,9 +33,17 @@ export interface WorkbenchItem {
   canGather: boolean;
   marketPrice: number | null;
   priceFetched: boolean;
+  lastUploadTime?: number;
   listings?: MarketListing[];
   crafting: CraftingInfo | null;
   gathering: any | null; // GatheringInfo from gathering.ts
+  vendorInfo: VendorInfo | null;
+  marketStats?: {
+    minPrice: number | null;
+    q1Price: number | null;
+    medianPrice: number | null;
+    worldName: string | null;
+  };
 }
 
 export interface ItemDecision {
@@ -112,6 +122,7 @@ const refreshItemsData = async (ids: number[]) => {
 
     const recipe = globalRecipesCache.value?.find(r => r.result === id);
     const gather = getGatheringInfo(id);
+    const vendor = getBestVendor(id);
 
     const crafting: CraftingInfo | null = recipe ? {
       job: recipe.job,
@@ -119,10 +130,15 @@ const refreshItemsData = async (ids: number[]) => {
       level: recipe.lvl,
       stars: recipe.stars || 0,
       yields: recipe.yields || 1,
-      ingredients: (Array.isArray(recipe.ingredients) ? recipe.ingredients : []).map((ing: any) => ({
-        id: ing.id,
-        amount: ing.amount
-      }))
+      ingredients: (Array.isArray(recipe.ingredients) ? recipe.ingredients : []).map((ing: any) => {
+        const ingInfo = getDictionaryItem(ing.id) ?? getRawItemData(ing.id);
+        return {
+          id: ing.id,
+          amount: ing.amount,
+          name: ingInfo.name, // LocalizedString or string
+          icon: ingInfo.icon
+        };
+      })
     } : null;
 
     const itemInfo = getDictionaryItem(id) ?? getRawItemData(id);
@@ -136,7 +152,8 @@ const refreshItemsData = async (ids: number[]) => {
       marketPrice: null,
       priceFetched: false,
       crafting,
-      gathering: gather
+      gathering: gather,
+      vendorInfo: vendor
     };
   }
 };
@@ -168,6 +185,20 @@ const fetchPrices = async (ids: number[]) => {
       );
       
       item.priceFetched = true;
+      item.lastUploadTime = priceData?.lastUploadTime ?? 0;
+
+      // Calculate Market Stats for the detail drawer
+      if (item.listings && item.listings.length > 0) {
+          const len = item.listings.length;
+          item.marketStats = {
+              minPrice: item.listings[0].pricePerUnit,
+              worldName: item.listings[0].worldName || null,
+              q1Price: item.listings[Math.floor((len - 1) * 0.25)].pricePerUnit,
+              medianPrice: item.listings[Math.floor((len - 1) * 0.5)].pricePerUnit,
+          };
+      } else {
+          item.marketStats = { minPrice: null, q1Price: null, medianPrice: null, worldName: null };
+      }
     }
   });
 };
@@ -400,7 +431,8 @@ export function useWorkbench() {
     try {
       await Promise.all([
         ensureDictionaryLoaded(),
-        ensureGatheringDataLoaded()
+        ensureGatheringDataLoaded(),
+        ensureVendorDataLoaded()
       ]);
 
       if (isNewNote) {
