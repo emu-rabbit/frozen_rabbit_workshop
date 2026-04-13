@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { searchItems, type MockItem } from '../../services/dictionary'
 import { useDebounceFn } from '@vueuse/core'
+import { vFfivClean } from '../../utils/inputUtils'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
@@ -130,6 +131,18 @@ const handleCreateNote = () => {
     searchedEmpty: false
   }]
 }
+
+const handleTitlePaste = (event: ClipboardEvent) => {
+  // Now handled by directive
+};
+
+const handleSearchRowPaste = (event: ClipboardEvent, index: number) => {
+  // Now handled by directive
+};
+
+const handleLiveInput = (event: Event, sync: (val: string) => void) => {
+  // Now handled by directive
+};
 </script>
 
 <template>
@@ -144,6 +157,7 @@ const handleCreateNote = () => {
         <div class="flex flex-col gap-2">
           <label for="item-name" class="font-bold text-soft-green-900 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
           <InputText 
+            v-ffiv-clean
             id="item-name" 
             v-model="noteTitle" 
             :placeholder="t('newNote.placeholderTitle')" 
@@ -178,6 +192,7 @@ const handleCreateNote = () => {
 
               <div class="flex-1 min-w-0">
                   <AutoComplete 
+                    v-ffiv-clean
                     v-model="row.selectedItem" 
                     :suggestions="row.suggestions" 
                     @complete="onSearch($event, index)"
@@ -188,7 +203,9 @@ const handleCreateNote = () => {
                     :placeholder="t('newNote.searchPlaceholder')" 
                     class="w-full"
                     :pt="{
-                      input: { class: 'w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3' }
+                      input: { 
+                        class: 'w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3'
+                      }
                     }"
                   >
                     <template #option="slotProps">

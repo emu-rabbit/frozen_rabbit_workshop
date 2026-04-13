@@ -8,6 +8,7 @@ import Paginator from 'primevue/paginator'
 import { isDictionaryLoading } from '../../services/dictionary'
 import type { LocalizedString } from '../../types/note'
 import { useDebounceFn } from '@vueuse/core'
+import { vFfivClean } from '../../utils/inputUtils'
 
 const { t } = useI18n()
 const { recommendedNotes, toggleFavorite, isFavorite } = useNotes()
@@ -61,6 +62,14 @@ const onSearchValueUpdate = (val: string | undefined) => {
   searchQuery.value = val || ''
   onSearchInput()
 }
+
+const handleSearchPaste = (event: ClipboardEvent) => {
+  // Now handled by directive
+};
+
+const handleSearchInput = (event: Event) => {
+  // Now handled by directive
+};
 </script>
 
 <template>
@@ -75,6 +84,7 @@ const onSearchValueUpdate = (val: string | undefined) => {
       <span class="relative block">
         <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
         <InputText 
+          v-ffiv-clean
           :modelValue="searchQuery"
           @update:modelValue="onSearchValueUpdate"
           :placeholder="t('recommended.searchPlaceholder')" 
