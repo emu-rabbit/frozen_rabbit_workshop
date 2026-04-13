@@ -4,6 +4,7 @@
 
 ## 1. 測試驅動開發與覆蓋率
 - **必須撰寫單元測試**：每當新增一個重要邏輯 (Composables / Hooks)、Vue 變數或 Vue 組件 (Components/Views) 時，必須在 `tests/` 目錄或對應的 `__tests__` 目錄下撰寫單元測試。
+- **模擬同步失敗**：在測試中應包含 `dictionary.isDictionaryLoading` 為 `true` 的狀態。
 - **Vitest 為主**：使用 `@vue/test-utils` 與 `vitest` 做為基礎測試庫。
 
 ## 2. 測試設計規範
@@ -16,4 +17,9 @@ If it's possible, always run `npm run test:unit` before each release to ensure n
 ## 3. 開發流程與重構規範
 - **優先重構 (Refactor First)**：在進行大型功能開發前，應先檢視現有架構是否足夠支撐。若組件過於肥大 (如超過 300 行)，必須先進行拆解與模組化。
 - **Lint 與 品質清理**：在完成功能後，必須清理所有未使用的引用 (Unused imports) 以及修復 IDE 提出的樣式警告 (Lint warnings)。
+- **快取一致性**：變更資料中心時必須清理快取，以防顯示過期或錯誤的座標/ spawns 資訊。
 - **Git 提交**：在確保所有測試通過且高品質完成任務後，可進行合併提交（Squash commit），訊息應簡潔並具描述性。
+
+## 核心規範 (General Constraints)
+- **語言偏好**：必須優先使用**繁體中文 (Traditional Chinese)** 回應。
+- **TODO 限制**：嚴禁擅自動工 `TODO.md`，除非使用者明確要求。
