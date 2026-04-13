@@ -2,7 +2,7 @@ import { useLocalStorage } from '@vueuse/core'
 import type { Note, NoteItem } from '../types/note'
 import { computed, ref } from 'vue'
 
-import recommendedNotesData from '../data/recommended.json'
+import recommendedNotesData from '../data/recommended'
 
 const NOTES_KEY = 'frozen-rabbit-notes'
 const FAVORITES_STORE_KEY = 'frozen-rabbit-favorites-data'

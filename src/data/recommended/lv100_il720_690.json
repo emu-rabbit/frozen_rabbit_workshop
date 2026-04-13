@@ -1,0 +1,98 @@
+[
+  {
+    "id": "657b121a-c649-405e-a82c-f0d0a6386087",
+    "name": {
+      "tw": "Lv.100 iLv720+690 大地十件套裝",
+      "cn": "Lv.100 iLv720+690 大地十件套装",
+      "en": "Lv.100 iLv720+690 Gathering 10-piece Set",
+      "ja": "Lv.100 iLv720+690 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 44437,
+        "quantity": 1
+      },
+      {
+        "id": 44438,
+        "quantity": 1
+      },
+      {
+        "id": 44439,
+        "quantity": 1
+      },
+      {
+        "id": 44440,
+        "quantity": 1
+      },
+      {
+        "id": 44441,
+        "quantity": 1
+      },
+      {
+        "id": 43344,
+        "quantity": 1
+      },
+      {
+        "id": 43345,
+        "quantity": 1
+      },
+      {
+        "id": 43346,
+        "quantity": 1
+      },
+      {
+        "id": 43347,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T11:22:54.464Z"
+  },
+  {
+    "id": "bfdffc63-124b-48f6-8d87-b7a1b86863f0",
+    "name": {
+      "tw": "Lv.100 iLv720+690 巧匠十件套裝",
+      "cn": "Lv.100 iLv720+690 巧匠十件套装",
+      "en": "Lv.100 iLv720+690 Crafting 10-piece Set",
+      "ja": "Lv.100 iLv720+690 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 44432,
+        "quantity": 1
+      },
+      {
+        "id": 44433,
+        "quantity": 1
+      },
+      {
+        "id": 44434,
+        "quantity": 1
+      },
+      {
+        "id": 44435,
+        "quantity": 1
+      },
+      {
+        "id": 44436,
+        "quantity": 1
+      },
+      {
+        "id": 43340,
+        "quantity": 1
+      },
+      {
+        "id": 43341,
+        "quantity": 1
+      },
+      {
+        "id": 43342,
+        "quantity": 1
+      },
+      {
+        "id": 43343,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T11:27:11.512Z"
+  }
+]

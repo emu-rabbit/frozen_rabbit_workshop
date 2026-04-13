@@ -1,0 +1,98 @@
+[
+  {
+    "id": "d42e169f-be6e-4bd4-a913-52dd06c13d1a",
+    "name": {
+      "tw": "Lv.80 iLv490 大地十件套裝",
+      "cn": "Lv.80 iLv490 大地十件套装",
+      "en": "Lv.80 iLv490 Gathering 10-piece Set",
+      "ja": "Lv.80 iLv490 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 30466,
+        "quantity": 1
+      },
+      {
+        "id": 30467,
+        "quantity": 1
+      },
+      {
+        "id": 30468,
+        "quantity": 1
+      },
+      {
+        "id": 30469,
+        "quantity": 1
+      },
+      {
+        "id": 30470,
+        "quantity": 1
+      },
+      {
+        "id": 30477,
+        "quantity": 1
+      },
+      {
+        "id": 30478,
+        "quantity": 1
+      },
+      {
+        "id": 30479,
+        "quantity": 1
+      },
+      {
+        "id": 30480,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T09:57:01.384Z"
+  },
+  {
+    "id": "0555c461-e57a-46db-858f-81affbdd38c1",
+    "name": {
+      "tw": "Lv.80 iLv490 巧匠十件套裝",
+      "cn": "Lv.80 iLv490 巧匠十件套装",
+      "en": "Lv.80 iLv490 Crafting 10-piece Set",
+      "ja": "Lv.80 iLv490 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 30461,
+        "quantity": 1
+      },
+      {
+        "id": 30462,
+        "quantity": 1
+      },
+      {
+        "id": 30463,
+        "quantity": 1
+      },
+      {
+        "id": 30464,
+        "quantity": 1
+      },
+      {
+        "id": 30465,
+        "quantity": 1
+      },
+      {
+        "id": 30472,
+        "quantity": 1
+      },
+      {
+        "id": 30473,
+        "quantity": 1
+      },
+      {
+        "id": 30474,
+        "quantity": 1
+      },
+      {
+        "id": 30475,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T10:00:01.543Z"
+  }
+]

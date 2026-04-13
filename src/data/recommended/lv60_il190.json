@@ -1,0 +1,98 @@
+[
+  {
+    "id": "d4d0a248-0f34-408a-abd2-92a27b5cd6be",
+    "name": {
+      "tw": "Lv.60 iLv190 大地十件套裝",
+      "cn": "Lv.60 iLv190 大地十件套装",
+      "en": "Lv.60 iLv190 Gathering 10-piece Set",
+      "ja": "Lv.60 iLv190 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 15505,
+        "quantity": 1
+      },
+      {
+        "id": 15506,
+        "quantity": 1
+      },
+      {
+        "id": 15507,
+        "quantity": 1
+      },
+      {
+        "id": 15508,
+        "quantity": 1
+      },
+      {
+        "id": 15509,
+        "quantity": 1
+      },
+      {
+        "id": 15526,
+        "quantity": 1
+      },
+      {
+        "id": 15525,
+        "quantity": 1
+      },
+      {
+        "id": 15527,
+        "quantity": 1
+      },
+      {
+        "id": 15528,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T09:17:47.173Z"
+  },
+  {
+    "id": "dc299dc7-5f76-43c0-b42d-ffa236b649ac",
+    "name": {
+      "tw": "Lv.60 iLv190 巧匠十件套裝",
+      "cn": "Lv.60 iLv190 巧匠十件套装",
+      "en": "Lv.60 iLv190 Crafting 10-piece Set",
+      "ja": "Lv.60 iLv190 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 15515,
+        "quantity": 1
+      },
+      {
+        "id": 15516,
+        "quantity": 1
+      },
+      {
+        "id": 15517,
+        "quantity": 1
+      },
+      {
+        "id": 15518,
+        "quantity": 1
+      },
+      {
+        "id": 15519,
+        "quantity": 1
+      },
+      {
+        "id": 15531,
+        "quantity": 1
+      },
+      {
+        "id": 15530,
+        "quantity": 1
+      },
+      {
+        "id": 15532,
+        "quantity": 1
+      },
+      {
+        "id": 15533,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-12T09:20:05.719Z"
+  }
+]

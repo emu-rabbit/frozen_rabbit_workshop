@@ -1,0 +1,338 @@
+[
+  {
+    "id": "13e2dedf-9436-4864-bf4b-1405554e95be",
+    "name": {
+      "tw": "Lv.50 iLv110 禦敵十件套裝",
+      "cn": "Lv.50 iLv110 御敌十件套装",
+      "en": "Lv.50 iLv110 Fending 10-piece Set",
+      "ja": "Lv.50 iLv110 タンク10点セット"
+    },
+    "items": [
+      {
+        "id": 9026,
+        "quantity": 1
+      },
+      {
+        "id": 9027,
+        "quantity": 1
+      },
+      {
+        "id": 9028,
+        "quantity": 1
+      },
+      {
+        "id": 9029,
+        "quantity": 1
+      },
+      {
+        "id": 9030,
+        "quantity": 1
+      },
+      {
+        "id": 9033,
+        "quantity": 1
+      },
+      {
+        "id": 9034,
+        "quantity": 1
+      },
+      {
+        "id": 9032,
+        "quantity": 1
+      },
+      {
+        "id": 9035,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T10:55:54.268Z"
+  },
+  {
+    "id": "ed0d5ade-b37c-4835-8aad-27fe07fad188",
+    "name": {
+      "tw": "Lv.50 iLv110 制敵十件套裝",
+      "cn": "Lv.50 iLv110 制敌十件套装",
+      "en": "Lv.50 iLv110 Maiming 10-piece Set",
+      "ja": "Lv.50 iLv110 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 9036,
+        "quantity": 1
+      },
+      {
+        "id": 9037,
+        "quantity": 1
+      },
+      {
+        "id": 9038,
+        "quantity": 1
+      },
+      {
+        "id": 9039,
+        "quantity": 1
+      },
+      {
+        "id": 9040,
+        "quantity": 1
+      },
+      {
+        "id": 9049,
+        "quantity": 1
+      },
+      {
+        "id": 9050,
+        "quantity": 1
+      },
+      {
+        "id": 9048,
+        "quantity": 1
+      },
+      {
+        "id": 9051,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:00:01.154Z"
+  },
+  {
+    "id": "a1900b33-5794-4eb2-b910-a70417ae21d8",
+    "name": {
+      "tw": "Lv.50 iLv110 強襲十件套裝",
+      "cn": "Lv.50 iLv110 强袭十件套装",
+      "en": "Lv.50 iLv110 Striking 10-piece Set",
+      "ja": "Lv.50 iLv110 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 9042,
+        "quantity": 1
+      },
+      {
+        "id": 9043,
+        "quantity": 1
+      },
+      {
+        "id": 9044,
+        "quantity": 1
+      },
+      {
+        "id": 9045,
+        "quantity": 1
+      },
+      {
+        "id": 9046,
+        "quantity": 1
+      },
+      {
+        "id": 9049,
+        "quantity": 1
+      },
+      {
+        "id": 9050,
+        "quantity": 1
+      },
+      {
+        "id": 9048,
+        "quantity": 1
+      },
+      {
+        "id": 9051,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:03:53.272Z"
+  },
+  {
+    "id": "cef2187a-3479-4652-a1e8-7c0c8a9b77a5",
+    "name": {
+      "tw": "Lv.50 iLv110 游擊十件套裝",
+      "cn": "Lv.50 iLv110 游击十件套装",
+      "en": "Lv.50 iLv110 Scouting 10-piece Set",
+      "ja": "Lv.50 iLv110 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 9485,
+        "quantity": 1
+      },
+      {
+        "id": 9486,
+        "quantity": 1
+      },
+      {
+        "id": 9487,
+        "quantity": 1
+      },
+      {
+        "id": 9488,
+        "quantity": 1
+      },
+      {
+        "id": 9489,
+        "quantity": 1
+      },
+      {
+        "id": 9059,
+        "quantity": 1
+      },
+      {
+        "id": 9060,
+        "quantity": 1
+      },
+      {
+        "id": 9058,
+        "quantity": 1
+      },
+      {
+        "id": 9061,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:07:03.661Z"
+  },
+  {
+    "id": "78c94edd-c30a-4bf3-9ed5-1bbe55c703fe",
+    "name": {
+      "tw": "Lv.50 iLv110 精準十件套裝",
+      "cn": "Lv.50 iLv110 精准十件套装",
+      "en": "Lv.50 iLv110 Aiming 10-piece Set",
+      "ja": "Lv.50 iLv110 レンジ10点セット"
+    },
+    "items": [
+      {
+        "id": 9052,
+        "quantity": 1
+      },
+      {
+        "id": 9053,
+        "quantity": 1
+      },
+      {
+        "id": 9054,
+        "quantity": 1
+      },
+      {
+        "id": 9055,
+        "quantity": 1
+      },
+      {
+        "id": 9056,
+        "quantity": 1
+      },
+      {
+        "id": 9059,
+        "quantity": 1
+      },
+      {
+        "id": 9060,
+        "quantity": 1
+      },
+      {
+        "id": 9058,
+        "quantity": 1
+      },
+      {
+        "id": 9061,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:09:45.814Z"
+  },
+  {
+    "id": "2f695578-f0a2-4598-a379-e3b4279fb74c",
+    "name": {
+      "tw": "Lv.50 iLv110 詠咒十件套裝",
+      "cn": "Lv.50 iLv110 咏咒十件套装",
+      "en": "Lv.50 iLv110 Casting 10-piece Set",
+      "ja": "Lv.50 iLv110 キャス10点セット"
+    },
+    "items": [
+      {
+        "id": 9072,
+        "quantity": 1
+      },
+      {
+        "id": 9073,
+        "quantity": 1
+      },
+      {
+        "id": 9074,
+        "quantity": 1
+      },
+      {
+        "id": 9075,
+        "quantity": 1
+      },
+      {
+        "id": 9076,
+        "quantity": 1
+      },
+      {
+        "id": 9079,
+        "quantity": 1
+      },
+      {
+        "id": 9080,
+        "quantity": 1
+      },
+      {
+        "id": 9078,
+        "quantity": 1
+      },
+      {
+        "id": 9081,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:12:55.648Z"
+  },
+  {
+    "id": "32c71686-a518-49dd-91d4-982ca279bebc",
+    "name": {
+      "tw": "Lv.50 iLv110 治癒十件套裝",
+      "cn": "Lv.50 iLv110 治愈十件套装",
+      "en": "Lv.50 iLv110 Healing 10-piece Set",
+      "ja": "Lv.50 iLv110 ヒラ10点セット"
+    },
+    "items": [
+      {
+        "id": 9062,
+        "quantity": 1
+      },
+      {
+        "id": 9063,
+        "quantity": 1
+      },
+      {
+        "id": 9064,
+        "quantity": 1
+      },
+      {
+        "id": 9065,
+        "quantity": 1
+      },
+      {
+        "id": 9066,
+        "quantity": 1
+      },
+      {
+        "id": 9069,
+        "quantity": 1
+      },
+      {
+        "id": 9070,
+        "quantity": 1
+      },
+      {
+        "id": 9068,
+        "quantity": 1
+      },
+      {
+        "id": 9071,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-09T11:16:06.322Z"
+  }
+]
