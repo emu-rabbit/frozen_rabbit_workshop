@@ -26,6 +26,12 @@ let loadPromise: Promise<void> | null = null;
  * 確保 NPC 販售資料已載入
  */
 export async function ensureVendorDataLoaded(): Promise<void> {
+  // 必須確保子依賴地名與地圖快取隨時更新（特別是語言切換後）
+  await Promise.all([
+    ensurePlacesLoaded(),
+    ensureMapsLoaded()
+  ]);
+
   if (shopsCache !== null && npcsCache !== null && twNpcsCache !== null) return;
   if (loadPromise) return loadPromise;
 

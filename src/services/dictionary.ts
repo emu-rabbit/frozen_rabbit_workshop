@@ -67,6 +67,7 @@ export function setDictionaryLanguage(lang: string) {
     currentLanguage = lang;
     globalDictionaryCache.value = null; 
     globalPlacesCache = null;
+    placesLoadPromise = null;
   }
 }
 

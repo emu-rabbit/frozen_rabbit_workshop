@@ -44,6 +44,12 @@ const GATHER_JOB_NAMES: Record<number, string> = {
  * 確保採集資料已載入
  */
 export async function ensureGatheringDataLoaded(): Promise<void> {
+  // 必須確保子依賴地名與地圖快取隨時更新（特別是語言切換後）
+  await Promise.all([
+    ensurePlacesLoaded(),
+    ensureMapsLoaded()
+  ]);
+
   if (gatheringItemsCache !== null && nodesCache !== null) return;
   if (loadPromise) return loadPromise;
 
