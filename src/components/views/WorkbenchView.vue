@@ -348,11 +348,11 @@ const formatTime = (seconds: number) => {
                             <div class="grid grid-cols-2 gap-2 md:gap-3">
                                 <div class="flex flex-col p-2 md:p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 min-w-0">
                                     <span class="text-[9px] font-black text-slate-400 uppercase mb-1 truncate">{{ t('workbench.view.details.q1Price') }}</span>
-                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.q1Price) }}</span>
+                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.q1Price ?? 0) }}</span>
                                 </div>
                                 <div class="flex flex-col p-2 md:p-2.5 bg-slate-50/80 rounded-xl border border-slate-100 min-w-0">
                                     <span class="text-[9px] font-black text-slate-400 uppercase mb-1 truncate">{{ t('workbench.view.details.medianPrice') }}</span>
-                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.medianPrice) }}</span>
+                                    <span class="text-[11px] md:text-[13px] font-black text-slate-600 font-mono truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.medianPrice ?? 0) }}</span>
                                 </div>
                             </div>
                         </div>

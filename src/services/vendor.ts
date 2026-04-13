@@ -1,4 +1,4 @@
-import { ensurePlacesLoaded, getPlaceName } from './dictionary';
+import { ensurePlacesLoaded, getPlaceName, getCurrentLanguage, getMapData, ensureMapsLoaded } from './dictionary';
 
 const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
 const SHOPS_URL = `${BASE_URL_STAGING}/shops.json`;
@@ -38,6 +38,7 @@ export async function ensureVendorDataLoaded(): Promise<void> {
         fetch(NPCS_URL),
         fetch(TW_NPCS_URL),
         ensurePlacesLoaded(), // 需要地名快取
+        ensureMapsLoaded(),   // 需要地圖快取，用於 Map ID 轉 PlaceName ID
       ]);
 
       if (!shopsRes.ok || !npcsRes.ok || !twNpcsRes.ok) {
@@ -59,11 +60,9 @@ export async function ensureVendorDataLoaded(): Promise<void> {
       shopsCache.forEach((shop: any) => {
         if (!shop.trades || !Array.isArray(shop.trades)) return;
 
-        // 獲取該商店對應的 NPC 列表
         const npcIds = Array.isArray(shop.npcs) ? shop.npcs : (shop.npcId ? [shop.npcId] : []);
         if (npcIds.length === 0) return;
 
-        // 一個商店可能有多個 NPC，我們先抓第一個有位置資訊的或是第一個
         let bestNpcId = npcIds[0];
         let bestNpcData = npcsCache![bestNpcId];
 
@@ -79,20 +78,12 @@ export async function ensureVendorDataLoaded(): Promise<void> {
         const zoneId = bestNpcData?.position?.zoneid;
         const coords = bestNpcData?.position ? { x: bestNpcData.position.x, y: bestNpcData.position.y } : undefined;
         
-        // 解析 NPC 名稱
-        const twName = twNpcsCache![bestNpcId]?.tw;
-        const enName = bestNpcData?.en;
-        const npcName = twName || enName || `NPC #${bestNpcId}`;
-        const zoneName = zoneId ? getPlaceName(zoneId) : 'Unknown Zone';
-
         shop.trades.forEach((trade: any) => {
-          // 尋找 Gil (ID: 1) 貨幣
           const gilCurrency = trade.currencies?.find((c: any) => c.id === 1);
           if (!gilCurrency) return;
 
           const price = gilCurrency.amount;
 
-          // 這個交易提供的所有物品
           trade.items?.forEach((item: any) => {
             const itemId = item.id;
             if (!itemId) return;
@@ -102,9 +93,9 @@ export async function ensureVendorDataLoaded(): Promise<void> {
             itemToVendorsMap[itemId].push({
               price,
               npcId: Number(bestNpcId),
-              npcName,
+              npcName: '', // Will be resolved dynamically
               zoneId: zoneId || 0,
-              zoneName,
+              zoneName: '', // Will be resolved dynamically
               coords
             });
           });
@@ -132,11 +123,37 @@ export async function ensureVendorDataLoaded(): Promise<void> {
 }
 
 /**
+ * 動態解析 NPC 名稱
+ */
+function getNpcName(npcId: number): string {
+  const lang = getCurrentLanguage();
+  if (lang === 'tw') {
+    return twNpcsCache?.[npcId]?.tw || npcsCache?.[npcId]?.en || `NPC #${npcId}`;
+  }
+  
+  const entry = npcsCache?.[npcId];
+  if (!entry) return `NPC #${npcId}`;
+  
+  const l = lang === 'cn' || lang === 'zh' ? 'zh' : lang; // We don't have zh in npcs.json? snippet didn't show it
+  // Actually, standard npcs.json usually has en, ja, fr, de.
+  return entry[l] || entry['en'] || `NPC #${npcId}`;
+}
+
+/**
  * 獲取物品最划算的 NPC 販售資訊
  */
 export function getBestVendor(itemId: number): VendorInfo | null {
   const vendors = itemToVendorsMap[itemId];
   if (!vendors || vendors.length === 0) return null;
-  // 由於已排序，第一個即為最低價
-  return vendors[0];
+  const best = { ...vendors[0] };
+  
+  // 動態填入語言名稱
+  best.npcName = getNpcName(best.npcId);
+  
+  // npc 的 zoneId 其實是 Map ID，需要先過一次 maps.json 轉為 PlaceName ID
+  const mapData = getMapData(best.zoneId);
+  const effectivePlaceId = mapData?.placename_id || best.zoneId;
+  best.zoneName = effectivePlaceId ? getPlaceName(effectivePlaceId) : 'Unknown Zone';
+  
+  return best;
 }

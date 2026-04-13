@@ -264,9 +264,10 @@ export function clearPriceCache() {
 /**
  * Returns a human-readable "last updated X min ago" string for an item.
  */
-export function formatLastUpdate(price: ItemPrice): string {
-  if (!price.lastUploadTime) return '—';
-  const diffMs = Date.now() - price.lastUploadTime;
+export function formatLastUpdate(data: { lastUploadTime?: number }): string {
+  if (!data.lastUploadTime) return '—';
+  const now = Date.now();
+  const diffMs = now - data.lastUploadTime;
   const diffMin = Math.floor(diffMs / 60_000);
   if (diffMin < 1) return '剛剛';
   if (diffMin < 60) return `${diffMin} 分鐘前`;

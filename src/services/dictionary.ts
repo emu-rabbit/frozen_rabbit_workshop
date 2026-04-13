@@ -1,4 +1,4 @@
-import { shallowRef, ref } from 'vue';
+import { shallowRef, ref, reactive } from 'vue';
 
 const BASE_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json';
 // The tw/ locale directory lives on the `staging` branch
@@ -18,8 +18,9 @@ const ENGLISH_URL = `${BASE_URL}/items.json`;
 const MAPS_URL = `${BASE_URL}/maps.json`;
 
 // tw-places.json: Provides Traditional Chinese zone/map names for gathering nodes.
-// Key: zoneid (string) → { tw: "繁中地名" }
 const TW_PLACES_URL = `${BASE_URL_STAGING}/tw/tw-places.json`;
+// places.json: Provides multi-language zone names (en, ja, de, fr)
+const GLOBAL_PLACES_URL = `${BASE_URL}/places.json`;
 
 export interface Recipe {
     id: number;
@@ -65,7 +66,12 @@ export function setDictionaryLanguage(lang: string) {
   if (currentLanguage !== lang) {
     currentLanguage = lang;
     globalDictionaryCache.value = null; 
+    globalPlacesCache = null;
   }
+}
+
+export function getCurrentLanguage() {
+  return currentLanguage;
 }
 
 async function generateFallbackItemData() {
@@ -236,25 +242,38 @@ export async function searchItems(query: string): Promise<MockItem[]> {
  * Used to display Traditional Chinese zone names for gathering nodes.
  */
 export async function ensurePlacesLoaded(): Promise<void> {
+  const isTW = currentLanguage === 'tw';
   if (globalPlacesCache !== null) return;
   if (placesLoadPromise) return placesLoadPromise;
 
-  placesLoadPromise = fetch(TW_PLACES_URL)
-    .then(r => {
-      if (!r.ok) throw new Error(`tw-places.json fetch failed: ${r.status}`);
-      return r.json();
-    })
-    .then(data => {
-      globalPlacesCache = data;
-      console.log('[Dictionary] tw-places.json loaded.');
-    })
-    .catch(err => {
-      console.warn('[Dictionary] Could not load tw-places.json:', err);
-      globalPlacesCache = {}; // fallback to empty so we don't keep retrying
-    })
-    .finally(() => {
+  placesLoadPromise = (async () => {
+    try {
+      if (isTW) {
+        // TW 模式同步抓取兩份，確保有完整 fallback
+        const [twRes, globalRes] = await Promise.all([
+          fetch(TW_PLACES_URL),
+          fetch(GLOBAL_PLACES_URL)
+        ]);
+        
+        const globalData = globalRes.ok ? await globalRes.json() : {};
+        const twData = twRes.ok ? await twRes.json() : {};
+        
+        // 合併：TW 蓋過 Global
+        globalPlacesCache = { ...globalData, ...twData };
+        console.log('[Dictionary] Places data merged (TW + Global fallback).');
+      } else {
+        const res = await fetch(GLOBAL_PLACES_URL);
+        if (!res.ok) throw new Error(`Global places fail: ${res.status}`);
+        globalPlacesCache = await res.json();
+        console.log('[Dictionary] Global places data loaded.');
+      }
+    } catch (err) {
+      console.warn('[Dictionary] Failed to load places:', err);
+      globalPlacesCache = {};
+    } finally {
       placesLoadPromise = null;
-    });
+    }
+  })();
 
   return placesLoadPromise;
 }
@@ -266,8 +285,16 @@ export async function ensurePlacesLoaded(): Promise<void> {
  * @param enFallback - English name to display if TW is unavailable
  */
 export function getPlaceName(zoneId: number, enFallback?: string): string {
-  const entry = globalPlacesCache?.[zoneId.toString()];
-  return entry?.tw || enFallback || `Zone #${zoneId}`;
+  const entry = globalPlacesCache?.[zoneId.toString()] as any;
+  if (!entry) return enFallback || `Zone #${zoneId}`;
+  
+  if (currentLanguage === 'tw') {
+    return entry.tw || enFallback || `Zone #${zoneId}`;
+  }
+  
+  // Global places.json uses en, ja, de, fr
+  const lang = currentLanguage === 'cn' || currentLanguage === 'zh' ? 'zh' : currentLanguage;
+  return entry[lang] || entry['en'] || enFallback || `Zone #${zoneId}`;
 }
 
 /**
