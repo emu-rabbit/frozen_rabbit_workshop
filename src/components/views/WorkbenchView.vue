@@ -122,7 +122,7 @@ const setDecisionRaw = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', v
 
 const handleReset = () => {
     expandedItems.value = {}
-    initialize()
+    initialize(true)
 }
 
 const expandedItems = ref<Record<number, boolean>>({})

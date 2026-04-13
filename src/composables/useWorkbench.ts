@@ -458,14 +458,14 @@ const generateTodoSections = computed(() => {
 // --- Composable Function ---
 export function useWorkbench() {
   const { activeWorkbenchNote } = useNotes();
+  const { locale } = useI18n();
 
   /**
    * 初始化備料台狀況
    */
-  const initialize = async () => {
+  const initialize = async (force: boolean = false) => {
     if (!activeWorkbenchNote.value) return;
     
-    const { locale } = useI18n();
     const currentDC = selectedDC.value;
     const currentLocale = locale.value;
     
@@ -473,8 +473,8 @@ export function useWorkbench() {
     const isNewDC = currentDC !== lastDC.value;
     const isNewLocale = currentLocale !== lastLocale.value;
 
-    // 如果都不變，且已有資料，則跳過初始化
-    if (!isNewNote && !isNewDC && !isNewLocale && Object.keys(workbenchItems.value).length > 0) {
+    // 如果都不變，且已有資料，則跳過初始化 (除非是強制的 reset)
+    if (!force && !isNewNote && !isNewDC && !isNewLocale && Object.keys(workbenchItems.value).length > 0) {
         return;
     }
 
@@ -486,9 +486,11 @@ export function useWorkbench() {
         ensureVendorDataLoaded()
       ]);
 
-      if (isNewNote) {
-          // 情況 A：切換新筆記 -> 全量重設決策與緩存
-          console.log(`[Workbench] Initializing new note: ${activeWorkbenchNote.value.id}`);
+      if (isNewNote || force) {
+          // 情況 A：切換新筆記或強制重設 -> 全量重設決策與緩存
+          if (force) console.log(`[Workbench] Forced reset for note: ${activeWorkbenchNote.value.id}`);
+          else console.log(`[Workbench] Initializing new note: ${activeWorkbenchNote.value.id}`);
+          
           Object.keys(decisions).forEach(k => delete decisions[k]);
           Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
           Object.keys(todoOrder).forEach(k => delete todoOrder[k]);
@@ -516,8 +518,8 @@ export function useWorkbench() {
       const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
       await refreshItemsData(rootIds);
 
-      // 3. 初始分配根節點決策 (僅在切換新筆記時需要在此執行)
-      if (isNewNote) {
+      // 3. 初始分配根節點決策 (僅在切換新筆記或是強制重設時需要在此執行)
+      if (isNewNote || force) {
           activeWorkbenchNote.value.items.forEach(item => {
             initSingleItemDecision(item.id, item.quantity, true);
           });
