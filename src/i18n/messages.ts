@@ -7,8 +7,8 @@ export const messages = {
     nav: {
       newNote: '寫張新筆記',
       favorites: '收藏的小筆記',
-      recommended: '兔兔推薦',
-      history: '歷史製作清單',
+      recommended: '兔肉私心筆記',
+      history: '翻開舊筆記',
       settings: '工坊設置',
       sponsor: '贊助冷凍庫電費',
       github: '開源原始碼 (GitHub)',
@@ -238,8 +238,8 @@ export const messages = {
     nav: {
       newNote: '写张新笔记',
       favorites: '收藏的小笔记',
-      recommended: '兔兔推荐',
-      history: '历史制作清单',
+      recommended: '兔肉私心笔记',
+      history: '翻开旧笔记',
       settings: '工坊设置',
       sponsor: '赞助冷凍庫电费',
       github: '开源源代码 (GitHub)',
@@ -440,7 +440,7 @@ export const messages = {
         },
         {
           q: '制作所需时间是如何计算的？',
-          a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗费一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
+          a: '本网站目前的时间成本仅用非常简单的粗估方法，制作一个物品30秒，高难制作耗費一分钟，采集则是5秒一个物品，倘若你有很好的想法，欢迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>提供想法'
         },
         {
           q: '为什么要把兔肉冷冻起来，可以烤来吃吗？',
@@ -468,9 +468,9 @@ export const messages = {
     },
     nav: {
       newNote: 'Write a New Note',
-      favorites: 'Favorites',
-      recommended: 'Rabbit\'s Picks',
-      history: 'History',
+      favorites: 'Favorite Notes',
+      recommended: 'Rabbit\'s<br />Recommended',
+      history: 'Open Past<br />Notes',
       settings: 'Settings',
       sponsor: 'Sponsor Rabbit',
       github: 'Source Code (GitHub)',
@@ -700,8 +700,8 @@ export const messages = {
     nav: {
       newNote: '新しいノートを書く',
       favorites: 'お気に入り<br />ノート',
-      recommended: 'うさぎの<br />オススメ',
-      history: '過去の記録<br />をめくる',
+      recommended: 'うさぎの<br />オススメノート',
+      history: '旧ノートを<br />めくる',
       faq: 'よくある<br />質問',
       settings: '設定',
       github: 'ソースコード (GitHub)',
