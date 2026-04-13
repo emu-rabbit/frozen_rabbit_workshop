@@ -1,0 +1,338 @@
+[
+    {
+        "id": "b6117006-2b46-4ed3-9bfa-5ee2d260ae25",
+        "name": {
+            "tw": "Lv.50 iLv115 禦敵十件套裝",
+            "cn": "Lv.50 iLv115 御敌十件套装",
+            "en": "Lv.50 iLv115 Fending10-piece Set",
+            "ja": "Lv.50 iLv115 タンク10点セット"
+        },
+        "items": [
+            {
+                "id": 10670,
+                "quantity": 1
+            },
+            {
+                "id": 10677,
+                "quantity": 1
+            },
+            {
+                "id": 10684,
+                "quantity": 1
+            },
+            {
+                "id": 10698,
+                "quantity": 1
+            },
+            {
+                "id": 10705,
+                "quantity": 1
+            },
+            {
+                "id": 10976,
+                "quantity": 1
+            },
+            {
+                "id": 10964,
+                "quantity": 1
+            },
+            {
+                "id": 10970,
+                "quantity": 1
+            },
+            {
+                "id": 10982,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:24:08.970Z"
+    },
+    {
+        "id": "835dd7c5-a63e-4638-9ac2-dff681c7b179",
+        "name": {
+            "tw": "Lv.50 iLv115 制敵十件套裝",
+            "cn": "Lv.50 iLv115 制敌十件套装",
+            "en": "Lv.50 iLv115 Maiming10-piece Set",
+            "ja": "Lv.50 iLv115 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 10712,
+                "quantity": 1
+            },
+            {
+                "id": 10719,
+                "quantity": 1
+            },
+            {
+                "id": 10726,
+                "quantity": 1
+            },
+            {
+                "id": 10740,
+                "quantity": 1
+            },
+            {
+                "id": 10747,
+                "quantity": 1
+            },
+            {
+                "id": 11000,
+                "quantity": 1
+            },
+            {
+                "id": 10988,
+                "quantity": 1
+            },
+            {
+                "id": 10994,
+                "quantity": 1
+            },
+            {
+                "id": 11006,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:26:47.216Z"
+    },
+    {
+        "id": "0ec3036e-e4a9-4928-96b8-20ce847d879d",
+        "name": {
+            "tw": "Lv.50 iLv115 強襲十件套裝",
+            "cn": "Lv.50 iLv115 强袭十件套装",
+            "en": "Lv.50 iLv115 Striking10-piece Set",
+            "ja": "Lv.50 iLv115 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 10754,
+                "quantity": 1
+            },
+            {
+                "id": 10761,
+                "quantity": 1
+            },
+            {
+                "id": 10768,
+                "quantity": 1
+            },
+            {
+                "id": 10782,
+                "quantity": 1
+            },
+            {
+                "id": 10789,
+                "quantity": 1
+            },
+            {
+                "id": 11000,
+                "quantity": 1
+            },
+            {
+                "id": 10988,
+                "quantity": 1
+            },
+            {
+                "id": 10994,
+                "quantity": 1
+            },
+            {
+                "id": 11006,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:30:34.874Z"
+    },
+    {
+        "id": "6c9431de-ae12-46bc-89c2-e7473efad560",
+        "name": {
+            "tw": "Lv.50 iLv115 游擊十件套裝",
+            "cn": "Lv.50 iLv115 游击十件套装",
+            "en": "Lv.50 iLv115 Scouting10-piece Set",
+            "ja": "Lv.50 iLv115 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 10838,
+                "quantity": 1
+            },
+            {
+                "id": 10845,
+                "quantity": 1
+            },
+            {
+                "id": 10852,
+                "quantity": 1
+            },
+            {
+                "id": 10866,
+                "quantity": 1
+            },
+            {
+                "id": 10873,
+                "quantity": 1
+            },
+            {
+                "id": 11024,
+                "quantity": 1
+            },
+            {
+                "id": 11012,
+                "quantity": 1
+            },
+            {
+                "id": 11018,
+                "quantity": 1
+            },
+            {
+                "id": 11030,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:33:54.094Z"
+    },
+    {
+        "id": "da95c846-5bc0-4877-86c1-7f36fbbdea2a",
+        "name": {
+            "tw": "Lv.50 iLv115 精準十件套裝",
+            "cn": "Lv.50 iLv115 精准十件套装",
+            "en": "Lv.50 iLv115 Aiming10-piece Set",
+            "ja": "Lv.50 iLv115 レンジ10点セット"
+        },
+        "items": [
+            {
+                "id": 10796,
+                "quantity": 1
+            },
+            {
+                "id": 10803,
+                "quantity": 1
+            },
+            {
+                "id": 10810,
+                "quantity": 1
+            },
+            {
+                "id": 10824,
+                "quantity": 1
+            },
+            {
+                "id": 10831,
+                "quantity": 1
+            },
+            {
+                "id": 11024,
+                "quantity": 1
+            },
+            {
+                "id": 11012,
+                "quantity": 1
+            },
+            {
+                "id": 11018,
+                "quantity": 1
+            },
+            {
+                "id": 11030,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:36:14.706Z"
+    },
+    {
+        "id": "e46d2222-4b7e-440a-966f-9b76a7755560",
+        "name": {
+            "tw": "Lv.50 iLv115 詠咒十件套裝",
+            "cn": "Lv.50 iLv115 咏咒十件套装",
+            "en": "Lv.50 iLv115 Casting10-piece Set",
+            "ja": "Lv.50 iLv115 キャス10点セット"
+        },
+        "items": [
+            {
+                "id": 10922,
+                "quantity": 1
+            },
+            {
+                "id": 10929,
+                "quantity": 1
+            },
+            {
+                "id": 10936,
+                "quantity": 1
+            },
+            {
+                "id": 10950,
+                "quantity": 1
+            },
+            {
+                "id": 10957,
+                "quantity": 1
+            },
+            {
+                "id": 11072,
+                "quantity": 1
+            },
+            {
+                "id": 11060,
+                "quantity": 1
+            },
+            {
+                "id": 11066,
+                "quantity": 1
+            },
+            {
+                "id": 11078,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:38:41.525Z"
+    },
+    {
+        "id": "a0af97da-afa2-4017-92b8-c566887ec15d",
+        "name": {
+            "tw": "Lv.50 iLv115 治癒十件套裝",
+            "cn": "Lv.50 iLv115 治愈十件套装",
+            "en": "Lv.50 iLv115 Healing10-piece Set",
+            "ja": "Lv.50 iLv115 ヒラ10点セット"
+        },
+        "items": [
+            {
+                "id": 10880,
+                "quantity": 1
+            },
+            {
+                "id": 10887,
+                "quantity": 1
+            },
+            {
+                "id": 10894,
+                "quantity": 1
+            },
+            {
+                "id": 10908,
+                "quantity": 1
+            },
+            {
+                "id": 10915,
+                "quantity": 1
+            },
+            {
+                "id": 11048,
+                "quantity": 1
+            },
+            {
+                "id": 11036,
+                "quantity": 1
+            },
+            {
+                "id": 11042,
+                "quantity": 1
+            },
+            {
+                "id": 11054,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:41:03.830Z"
+    }
+]

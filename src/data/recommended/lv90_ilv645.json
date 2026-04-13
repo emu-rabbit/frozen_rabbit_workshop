@@ -1,0 +1,338 @@
+[
+    {
+        "id": "212961e4-a0ba-45db-949b-cea6c539ef80",
+        "name": {
+            "tw": "Lv.90 iLv645 禦敵十件套裝",
+            "cn": "Lv.90 iLv645 御敌十件套装",
+            "en": "Lv.90 iLv645 Fending10-piece Set",
+            "ja": "Lv.90 iLv645 タンク10点セット"
+        },
+        "items": [
+            {
+                "id": 41858,
+                "quantity": 1
+            },
+            {
+                "id": 41859,
+                "quantity": 1
+            },
+            {
+                "id": 41860,
+                "quantity": 1
+            },
+            {
+                "id": 41861,
+                "quantity": 1
+            },
+            {
+                "id": 41862,
+                "quantity": 1
+            },
+            {
+                "id": 41893,
+                "quantity": 1
+            },
+            {
+                "id": 41898,
+                "quantity": 1
+            },
+            {
+                "id": 41903,
+                "quantity": 1
+            },
+            {
+                "id": 41908,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:04:46.748Z"
+    },
+    {
+        "id": "78f837bb-55ec-4abb-8714-fa068ce098e6",
+        "name": {
+            "tw": "Lv.90 iLv645 制敵十件套裝",
+            "cn": "Lv.90 iLv645 制敌十件套装",
+            "en": "Lv.90 iLv645 Maiming10-piece Set",
+            "ja": "Lv.90 iLv645 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 41863,
+                "quantity": 1
+            },
+            {
+                "id": 41864,
+                "quantity": 1
+            },
+            {
+                "id": 41865,
+                "quantity": 1
+            },
+            {
+                "id": 41866,
+                "quantity": 1
+            },
+            {
+                "id": 41867,
+                "quantity": 1
+            },
+            {
+                "id": 41894,
+                "quantity": 1
+            },
+            {
+                "id": 41899,
+                "quantity": 1
+            },
+            {
+                "id": 41904,
+                "quantity": 1
+            },
+            {
+                "id": 41909,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:06:57.413Z"
+    },
+    {
+        "id": "c5e19a23-dd80-459d-a609-3925855be73a",
+        "name": {
+            "tw": "Lv.90 iLv645 強襲十件套裝",
+            "cn": "Lv.90 iLv645 强袭十件套装",
+            "en": "Lv.90 iLv645 Striking10-piece Set",
+            "ja": "Lv.90 iLv645 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 41868,
+                "quantity": 1
+            },
+            {
+                "id": 41869,
+                "quantity": 1
+            },
+            {
+                "id": 41870,
+                "quantity": 1
+            },
+            {
+                "id": 41871,
+                "quantity": 1
+            },
+            {
+                "id": 41872,
+                "quantity": 1
+            },
+            {
+                "id": 41894,
+                "quantity": 1
+            },
+            {
+                "id": 41899,
+                "quantity": 1
+            },
+            {
+                "id": 41904,
+                "quantity": 1
+            },
+            {
+                "id": 41909,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:11:27.159Z"
+    },
+    {
+        "id": "1df2a8a8-32f1-4c9e-aff7-3e98883aae6a",
+        "name": {
+            "tw": "Lv.90 iLv645 游擊十件套裝",
+            "cn": "Lv.90 iLv645 游击十件套装",
+            "en": "Lv.90 iLv645 Scouting10-piece Set",
+            "ja": "Lv.90 iLv645 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 41878,
+                "quantity": 1
+            },
+            {
+                "id": 41879,
+                "quantity": 1
+            },
+            {
+                "id": 41880,
+                "quantity": 1
+            },
+            {
+                "id": 41881,
+                "quantity": 1
+            },
+            {
+                "id": 41882,
+                "quantity": 1
+            },
+            {
+                "id": 41895,
+                "quantity": 1
+            },
+            {
+                "id": 41900,
+                "quantity": 1
+            },
+            {
+                "id": 41905,
+                "quantity": 1
+            },
+            {
+                "id": 41910,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:13:50.564Z"
+    },
+    {
+        "id": "3f1e151c-a012-4fdf-b37f-3035bd8eac48",
+        "name": {
+            "tw": "Lv.90 iLv645 精準十件套裝",
+            "cn": "Lv.90 iLv645 精准十件套装",
+            "en": "Lv.90 iLv645 Aiming10-piece Set",
+            "ja": "Lv.90 iLv645 レンジ10点セット"
+        },
+        "items": [
+            {
+                "id": 41873,
+                "quantity": 1
+            },
+            {
+                "id": 41874,
+                "quantity": 1
+            },
+            {
+                "id": 41875,
+                "quantity": 1
+            },
+            {
+                "id": 41876,
+                "quantity": 1
+            },
+            {
+                "id": 41877,
+                "quantity": 1
+            },
+            {
+                "id": 41895,
+                "quantity": 1
+            },
+            {
+                "id": 41900,
+                "quantity": 1
+            },
+            {
+                "id": 41905,
+                "quantity": 1
+            },
+            {
+                "id": 41910,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:15:38.993Z"
+    },
+    {
+        "id": "572c3ee7-7b2f-4e35-8621-fa454a8e750b",
+        "name": {
+            "tw": "Lv.90 iLv645 詠咒十件套裝",
+            "cn": "Lv.90 iLv645 咏咒十件套装",
+            "en": "Lv.90 iLv645 Casting10-piece Set",
+            "ja": "Lv.90 iLv645 キャス10点セット"
+        },
+        "items": [
+            {
+                "id": 41888,
+                "quantity": 1
+            },
+            {
+                "id": 41889,
+                "quantity": 1
+            },
+            {
+                "id": 41890,
+                "quantity": 1
+            },
+            {
+                "id": 41891,
+                "quantity": 1
+            },
+            {
+                "id": 41892,
+                "quantity": 1
+            },
+            {
+                "id": 41897,
+                "quantity": 1
+            },
+            {
+                "id": 41902,
+                "quantity": 1
+            },
+            {
+                "id": 41907,
+                "quantity": 1
+            },
+            {
+                "id": 41912,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:17:19.836Z"
+    },
+    {
+        "id": "4245da1b-8284-43eb-8803-7411943f6184",
+        "name": {
+            "tw": "Lv.90 iLv645 治癒十件套裝",
+            "cn": "Lv.90 iLv645 治愈十件套装",
+            "en": "Lv.90 iLv645 Healing10-piece Set",
+            "ja": "Lv.90 iLv645 ヒラ10点セット"
+        },
+        "items": [
+            {
+                "id": 41883,
+                "quantity": 1
+            },
+            {
+                "id": 41884,
+                "quantity": 1
+            },
+            {
+                "id": 41885,
+                "quantity": 1
+            },
+            {
+                "id": 41886,
+                "quantity": 1
+            },
+            {
+                "id": 41887,
+                "quantity": 1
+            },
+            {
+                "id": 41896,
+                "quantity": 1
+            },
+            {
+                "id": 41901,
+                "quantity": 1
+            },
+            {
+                "id": 41906,
+                "quantity": 1
+            },
+            {
+                "id": 41911,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T03:18:55.376Z"
+    }
+]

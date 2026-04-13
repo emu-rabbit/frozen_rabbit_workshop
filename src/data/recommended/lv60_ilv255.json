@@ -1,0 +1,338 @@
+[
+    {
+        "id": "c839f24e-2a0b-4c15-8421-e6f4e5845a2b",
+        "name": {
+            "tw": "Lv.60 iLv255 禦敵十件套裝",
+            "cn": "Lv.60 iLv255 御敌十件套装",
+            "en": "Lv.60 iLv255 Fending10-piece Set",
+            "ja": "Lv.60 iLv255 タンク10点セット"
+        },
+        "items": [
+            {
+                "id": 18049,
+                "quantity": 1
+            },
+            {
+                "id": 18050,
+                "quantity": 1
+            },
+            {
+                "id": 18051,
+                "quantity": 1
+            },
+            {
+                "id": 18052,
+                "quantity": 1
+            },
+            {
+                "id": 18053,
+                "quantity": 1
+            },
+            {
+                "id": 18091,
+                "quantity": 1
+            },
+            {
+                "id": 18096,
+                "quantity": 1
+            },
+            {
+                "id": 18101,
+                "quantity": 1
+            },
+            {
+                "id": 18106,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:48:03.542Z"
+    },
+    {
+        "id": "219be8bc-9823-4fc1-97ff-9f5f83aa687a",
+        "name": {
+            "tw": "Lv.60 iLv255 制敵十件套裝",
+            "cn": "Lv.60 iLv255 制敌十件套装",
+            "en": "Lv.60 iLv255 Maiming10-piece Set",
+            "ja": "Lv.60 iLv255 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 18055,
+                "quantity": 1
+            },
+            {
+                "id": 18056,
+                "quantity": 1
+            },
+            {
+                "id": 18057,
+                "quantity": 1
+            },
+            {
+                "id": 18058,
+                "quantity": 1
+            },
+            {
+                "id": 18059,
+                "quantity": 1
+            },
+            {
+                "id": 18092,
+                "quantity": 1
+            },
+            {
+                "id": 18097,
+                "quantity": 1
+            },
+            {
+                "id": 18102,
+                "quantity": 1
+            },
+            {
+                "id": 18107,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:50:34.490Z"
+    },
+    {
+        "id": "92f1d66a-67ef-4bf8-92d0-e9d86181d415",
+        "name": {
+            "tw": "Lv.60 iLv255 強襲十件套裝",
+            "cn": "Lv.60 iLv255 强袭十件套装",
+            "en": "Lv.60 iLv255 Striking10-piece Set",
+            "ja": "Lv.60 iLv255 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 18061,
+                "quantity": 1
+            },
+            {
+                "id": 18062,
+                "quantity": 1
+            },
+            {
+                "id": 18063,
+                "quantity": 1
+            },
+            {
+                "id": 18064,
+                "quantity": 1
+            },
+            {
+                "id": 18065,
+                "quantity": 1
+            },
+            {
+                "id": 18092,
+                "quantity": 1
+            },
+            {
+                "id": 18097,
+                "quantity": 1
+            },
+            {
+                "id": 18102,
+                "quantity": 1
+            },
+            {
+                "id": 18107,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:53:17.760Z"
+    },
+    {
+        "id": "682b70ac-2649-4ffd-8cb1-2b1722c7c41e",
+        "name": {
+            "tw": "Lv.60 iLv255 游擊十件套裝",
+            "cn": "Lv.60 iLv255 游击十件套装",
+            "en": "Lv.60 iLv255 Scouting10-piece Set",
+            "ja": "Lv.60 iLv255 メレー10点セット"
+        },
+        "items": [
+            {
+                "id": 18073,
+                "quantity": 1
+            },
+            {
+                "id": 18074,
+                "quantity": 1
+            },
+            {
+                "id": 18075,
+                "quantity": 1
+            },
+            {
+                "id": 18076,
+                "quantity": 1
+            },
+            {
+                "id": 18077,
+                "quantity": 1
+            },
+            {
+                "id": 18093,
+                "quantity": 1
+            },
+            {
+                "id": 18098,
+                "quantity": 1
+            },
+            {
+                "id": 18103,
+                "quantity": 1
+            },
+            {
+                "id": 18108,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:56:22.766Z"
+    },
+    {
+        "id": "197ab9d2-eddc-4c9e-8d65-413f55f4b75c",
+        "name": {
+            "tw": "Lv.60 iLv255 精準十件套裝",
+            "cn": "Lv.60 iLv255 精准十件套装",
+            "en": "Lv.60 iLv255 Aiming10-piece Set",
+            "ja": "Lv.60 iLv255 レンジ10点セット"
+        },
+        "items": [
+            {
+                "id": 18067,
+                "quantity": 1
+            },
+            {
+                "id": 18068,
+                "quantity": 1
+            },
+            {
+                "id": 18069,
+                "quantity": 1
+            },
+            {
+                "id": 18070,
+                "quantity": 1
+            },
+            {
+                "id": 18071,
+                "quantity": 1
+            },
+            {
+                "id": 18093,
+                "quantity": 1
+            },
+            {
+                "id": 18098,
+                "quantity": 1
+            },
+            {
+                "id": 18103,
+                "quantity": 1
+            },
+            {
+                "id": 18108,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T01:59:52.616Z"
+    },
+    {
+        "id": "8a3fc5b7-9f0f-43f3-a8f6-e501702bdf8b",
+        "name": {
+            "tw": "Lv.60 iLv255 詠咒十件套裝",
+            "cn": "Lv.60 iLv255 咏咒十件套装",
+            "en": "Lv.60 iLv255 Casting10-piece Set",
+            "ja": "Lv.60 iLv255 キャス10点セット"
+        },
+        "items": [
+            {
+                "id": 18085,
+                "quantity": 1
+            },
+            {
+                "id": 19613,
+                "quantity": 1
+            },
+            {
+                "id": 18087,
+                "quantity": 1
+            },
+            {
+                "id": 18088,
+                "quantity": 1
+            },
+            {
+                "id": 18089,
+                "quantity": 1
+            },
+            {
+                "id": 18095,
+                "quantity": 1
+            },
+            {
+                "id": 18100,
+                "quantity": 1
+            },
+            {
+                "id": 18105,
+                "quantity": 1
+            },
+            {
+                "id": 18110,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T02:02:57.064Z"
+    },
+    {
+        "id": "78963a3a-2963-4524-b539-f28163cb35b1",
+        "name": {
+            "tw": "Lv.60 iLv255 治癒十件套裝",
+            "cn": "Lv.60 iLv255 治愈十件套装",
+            "en": "Lv.60 iLv255 Healing10-piece Set",
+            "ja": "Lv.60 iLv255 ヒラ10点セット"
+        },
+        "items": [
+            {
+                "id": 18079,
+                "quantity": 1
+            },
+            {
+                "id": 18080,
+                "quantity": 1
+            },
+            {
+                "id": 18081,
+                "quantity": 1
+            },
+            {
+                "id": 18082,
+                "quantity": 1
+            },
+            {
+                "id": 18083,
+                "quantity": 1
+            },
+            {
+                "id": 18094,
+                "quantity": 1
+            },
+            {
+                "id": 18099,
+                "quantity": 1
+            },
+            {
+                "id": 18104,
+                "quantity": 1
+            },
+            {
+                "id": 18109,
+                "quantity": 2
+            }
+        ],
+        "createdAt": "2026-04-13T02:05:13.755Z"
+    }
+]
