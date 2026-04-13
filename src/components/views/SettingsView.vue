@@ -7,7 +7,7 @@ import { useSettings } from '../../composables/useSettings'
 import { dataCenters, ensureDataCentersLoaded, setSelectedDC } from '../../services/universalis'
 
 const { t } = useI18n()
-const { language, debugMode, marketRegion, marketDC } = useSettings()
+const { language, debugMode, marketRegion, marketDC, marketCostStrategy } = useSettings()
 
 defineProps<{
   language: string
@@ -23,6 +23,12 @@ const langOptions = [
   { label: 'English', value: 'en' },
   { label: '日本語', value: 'ja' }
 ]
+
+const strategyOptions = computed(() => [
+  { label: t('settings.marketStrategyAggressive'), value: 'aggressive' },
+  { label: t('settings.marketStrategyBalanced'), value: 'balanced' },
+  { label: t('settings.marketStrategyConservative'), value: 'conservative' }
+])
 
 // Market Settings Logic
 const dcLoading = ref(false)
@@ -153,9 +159,28 @@ watch(marketDC, (newVal) => {
                 </div>
               </div>
 
-              <div class="bg-soft-green-50 p-4 rounded-xl border border-soft-green-100 flex gap-3">
-                <i class="pi pi-info-circle text-soft-green-600 mt-0.5"></i>
-                <p class="text-sm text-soft-green-800 leading-relaxed">{{ t('settings.marketDesc') }}</p>
+              <div class="bg-soft-green-50 p-4 rounded-xl border border-soft-green-100 flex flex-col gap-3">
+                <div class="flex gap-3">
+                  <i class="pi pi-info-circle text-soft-green-600 mt-0.5"></i>
+                  <p class="text-sm text-soft-green-800 leading-relaxed">{{ t('settings.marketDesc') }}</p>
+                </div>
+              </div>
+
+              <!-- Market Strategy Selector -->
+              <div class="flex flex-col gap-4 pt-2 border-t border-slate-100">
+                <div class="flex flex-col gap-1">
+                  <span class="text-sm font-bold text-soft-green-900">{{ t('settings.marketStrategyTitle') }}</span>
+                  <p class="text-xs text-slate-500 leading-relaxed">{{ t('settings.marketStrategyDesc') }}</p>
+                </div>
+                <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
+                  <SelectButton 
+                    v-model="marketCostStrategy" 
+                    :options="strategyOptions" 
+                    optionLabel="label" 
+                    optionValue="value" 
+                    class="settings-lang-toggle whitespace-nowrap min-w-max" 
+                  />
+                </div>
               </div>
           </div>
       </div>

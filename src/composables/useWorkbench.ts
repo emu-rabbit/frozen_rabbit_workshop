@@ -15,6 +15,7 @@ import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gatheri
 import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
 import { useI18n } from 'vue-i18n';
+import { useSettings } from './useSettings';
 
 export interface CraftingInfo {
   job: number;
@@ -44,6 +45,13 @@ export interface WorkbenchItem {
     medianPrice: number | null;
     worldName: string | null;
   };
+  purchaseInfo?: PurchaseInfo;
+}
+
+export interface PurchaseInfo {
+  type: 'market' | 'vendor';
+  vendor?: VendorInfo | null;
+  worldName?: string | null;
 }
 
 export interface ItemDecision {
@@ -60,6 +68,7 @@ export interface TodoItem {
   name: any;
   icon: string;
   marketPrice: number | null;
+  purchaseInfo?: PurchaseInfo;
   gathering?: any;
   crafting?: any;
 }
@@ -158,6 +167,43 @@ const refreshItemsData = async (ids: number[]) => {
   }
 };
 
+const { marketCostStrategy } = useSettings();
+
+/**
+ * 根據策略計算單一項目的有效價格
+ */
+const updateItemEffectivePrice = (item: WorkbenchItem) => {
+    if (!item.priceFetched) return;
+    
+    let baseMarketPrice: number | null = null;
+    const stats = item.marketStats;
+    
+    if (stats) {
+        if (marketCostStrategy.value === 'aggressive') {
+            baseMarketPrice = stats.minPrice;
+        } else if (marketCostStrategy.value === 'balanced') {
+            baseMarketPrice = stats.q1Price;
+        } else if (marketCostStrategy.value === 'conservative') {
+            baseMarketPrice = stats.medianPrice;
+        }
+    }
+
+    const npcPrice = item.vendorInfo?.price ?? Infinity;
+    
+    // 取兩者最低
+    const finalPrice = Math.min(baseMarketPrice ?? Infinity, npcPrice);
+    item.marketPrice = finalPrice === Infinity ? null : finalPrice;
+
+    // 判斷採購來源 (均等時 NPC 優先)
+    if (npcPrice !== Infinity && (baseMarketPrice === null || npcPrice <= baseMarketPrice)) {
+        item.purchaseInfo = { type: 'vendor', vendor: item.vendorInfo };
+    } else if (baseMarketPrice !== null) {
+        item.purchaseInfo = { type: 'market', worldName: stats?.worldName };
+    } else {
+        item.purchaseInfo = undefined;
+    }
+};
+
 /**
  * 批次獲取價格
  */
@@ -177,15 +223,8 @@ const fetchPrices = async (ids: number[]) => {
       const priceData = prices.get(id);
       item.listings = priceData?.listings || [];
       
-      const demand = totalDemands.value[id] || 0;
-      item.marketPrice = calculateSimulatedPrice(
-        item.listings,
-        demand,
-        priceData?.currentAveragePrice ?? null
-      );
-      
-      item.priceFetched = true;
       item.lastUploadTime = priceData?.lastUploadTime ?? 0;
+      item.priceFetched = true;
 
       // Calculate Market Stats for the detail drawer
       if (item.listings && item.listings.length > 0) {
@@ -199,9 +238,19 @@ const fetchPrices = async (ids: number[]) => {
       } else {
           item.marketStats = { minPrice: null, q1Price: null, medianPrice: null, worldName: null };
       }
+
+      // 根據策略更新有效價格
+      updateItemEffectivePrice(item);
     }
   });
 };
+
+// 監聽策略變更，即時更新所有價格
+watch(marketCostStrategy, () => {
+    Object.values(workbenchItems.value).forEach(item => {
+        updateItemEffectivePrice(item);
+    });
+});
 
 /**
  * 計算目前所有產生的需求 (BFS)
@@ -347,7 +396,9 @@ const generateTodoSections = computed(() => {
     if (d.buy > 0) {
       sections.buy.push({
         sectionKey: 'buy', id, quantity: d.buy,
-        name: item.name, icon: item.icon, marketPrice: item.marketPrice
+        name: item.name, icon: item.icon, 
+        marketPrice: item.marketPrice,
+        purchaseInfo: item.purchaseInfo
       });
     }
 

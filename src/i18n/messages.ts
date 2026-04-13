@@ -131,6 +131,8 @@ export const messages = {
       },
       targetQty: '目標',
       targetPrice: '最低售價',
+      buySourceMarket: '市場版：{world}',
+      buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
       gatherLocation: '採集點',
       emptySection: '此區塊無項目'
     },
@@ -152,6 +154,11 @@ export const messages = {
         ja: '日本語 (Japanese)'
       },
       marketTitle: '市場資料設定',
+      marketStrategyTitle: '市場版成本策略',
+      marketStrategyDesc: '設定備料台預估成本時所採用的市場數據基準，系統會同時自動與 NPC 售價進行比對並顯示最低取得成本。',
+      marketStrategyAggressive: '激進 (市場最低價)',
+      marketStrategyBalanced: '平衡 (市場 1/4 位數)',
+      marketStrategyConservative: '保守 (市場中位數)',
       marketRegion: '市場地區',
       marketDC: '資料中心',
       marketDesc: '設定你要從哪一個資料中心獲取市場價格資料。',
@@ -329,6 +336,8 @@ export const messages = {
       },
       targetQty: '目标',
       targetPrice: '最低售价',
+      buySourceMarket: '市场版：{world}',
+      buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
       gatherLocation: '采集点',
       emptySection: '此区块无项目'
     },
@@ -350,6 +359,11 @@ export const messages = {
         ja: '日本語 (Japanese)'
       },
       marketTitle: '市场资料设定',
+      marketStrategyTitle: '市场版成本策略',
+      marketStrategyDesc: '设定备料台预估成本时所采用的市场数据基准，系统会同时自动与 NPC 售价进行比对并显示最低取得成本。',
+      marketStrategyAggressive: '激进 (市场最低价)',
+      marketStrategyBalanced: '平衡 (市场 1/4 位数)',
+      marketStrategyConservative: '保守 (市场中位数)',
       marketRegion: '市场地区',
       marketDC: '资料中心',
       marketDesc: '设定你要从哪一个数据中心获取市场价格数据。',
@@ -527,6 +541,8 @@ export const messages = {
       },
       targetQty: 'Target',
       targetPrice: 'Lowest Price',
+      buySourceMarket: 'Market: {world}',
+      buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
       gatherLocation: 'Node',
       emptySection: 'No items in this section'
     },
@@ -562,6 +578,11 @@ export const messages = {
         '한국': 'KT (Korea)',
         '繁中服': 'TW Server'
       },
+      marketStrategyTitle: 'Market Cost Strategy',
+      marketStrategyDesc: 'Select the market data benchmark used for cost estimation. We also automatically compare this with NPC prices to show the lowest possible cost.',
+      marketStrategyAggressive: 'Aggressive (Min Price)',
+      marketStrategyBalanced: 'Balanced (Q1 Price)',
+      marketStrategyConservative: 'Conservative (Median Price)',
       about: {
         title: 'About & Credits',
         description: 'Data sources and technical support behind the workshop',
@@ -725,6 +746,8 @@ export const messages = {
       },
       targetQty: '目標',
       targetPrice: '最低販売価格',
+      buySourceMarket: 'マケボ: {world}',
+      buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
       gatherLocation: '採集ポイント',
       emptySection: 'このセクションには項目がありません'
     },
@@ -760,6 +783,11 @@ export const messages = {
         '한국': '韓国鯖',
         '繁中服': '繁中鯖'
       },
+      marketStrategyTitle: 'マーケットコスト戦略',
+      marketStrategyDesc: 'コスト見積もりに使用する市場データの基準を選択します。NPCの販売価格とも自動的に比較し、最も安い取得コストを表示します。',
+      marketStrategyAggressive: '積極的 (最安値)',
+      marketStrategyBalanced: '標準 (第1四分位数)',
+      marketStrategyConservative: '保守的 (中央値)',
       about: {
         title: 'このサイトについて',
         description: '工房を支えるデータソースと技術支援',

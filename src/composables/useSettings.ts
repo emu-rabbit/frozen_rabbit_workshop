@@ -7,11 +7,13 @@ export function useSettings() {
   const debugMode = useLocalStorage<boolean>('frozen-rabbit-debug-mode', false)
   const marketRegion = useLocalStorage<string>('frozen-rabbit-market-region', '繁中服')
   const marketDC = useLocalStorage<string>('frozen-rabbit-market-dc', '陸行鳥')
+  const marketCostStrategy = useLocalStorage<'aggressive' | 'balanced' | 'conservative'>('frozen-rabbit-market-strategy', 'balanced')
 
   return {
     language,
     debugMode,
     marketRegion,
-    marketDC
+    marketDC,
+    marketCostStrategy
   }
 }

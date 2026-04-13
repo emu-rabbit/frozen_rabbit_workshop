@@ -246,11 +246,30 @@ const copyToClipboard = (id: string, text: string) => {
                                                         <!-- Mobile Only Metadata -->
                                                         <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500">
                                                             <template v-if="section.key === 'buy'">
-                                                                <span class="text-orange-600 font-black">{{ formatMoney(item.marketPrice) }}</span>
+                                                                <div class="flex flex-col gap-0.5">
+                                                                    <span class="text-orange-600 font-black">{{ formatMoney(item.marketPrice) }}</span>
+                                                                    <div v-if="item.purchaseInfo" class="flex items-center gap-1 text-[10px] text-slate-400 font-bold">
+                                                                        <i class="pi" :class="item.purchaseInfo.type === 'vendor' ? 'pi-map-marker' : 'pi-shopping-cart'"></i>
+                                                                        <span v-if="item.purchaseInfo.type === 'vendor'" class="truncate max-w-[120px]">
+                                                                            {{ t('todo.buySourceVendor', { 
+                                                                                name: item.purchaseInfo.vendor?.npcName, 
+                                                                                zone: item.purchaseInfo.vendor?.zoneName,
+                                                                                x: item.purchaseInfo.vendor?.coords?.x?.toFixed(1) || '??',
+                                                                                y: item.purchaseInfo.vendor?.coords?.y?.toFixed(1) || '??'
+                                                                            }) }}
+                                                                        </span>
+                                                                        <span v-else class="truncate max-w-[120px]">
+                                                                            {{ t('todo.buySourceMarket', { world: item.purchaseInfo.worldName || '??' }) }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                             </template>
                                                             <template v-if="section.key === 'gather' && item.gathering">
                                                                 <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
-                                                                <span class="text-[9px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}</span>
+                                                                <span class="text-[9px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
+                                                            </template>
+                                                            <template v-if="section.key === 'craft' && item.crafting">
+                                                                <span class="text-[9px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">{{ t(item.crafting.jobName).substring(0, 2) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</span>
                                                             </template>
                                                         </div>
                                                     </template>
@@ -263,7 +282,22 @@ const copyToClipboard = (id: string, text: string) => {
                                             <!-- Buy: Price -->
                                             <template v-if="section.key === 'buy'">
                                                 <span class="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
-                                                <span class="text-2xl md:text-3xl font-black text-orange-600 font-mono tracking-tight leading-none shrink-0">{{ formatMoney(item.marketPrice) }}</span>
+                                                <span class="text-2xl md:text-3xl font-black text-orange-600 font-mono tracking-tight leading-none shrink-0 mb-1">{{ formatMoney(item.marketPrice) }}</span>
+                                                
+                                                <div v-if="item.purchaseInfo" class="flex items-center gap-1.5 text-xs text-slate-500 font-bold">
+                                                    <i class="pi" :class="item.purchaseInfo.type === 'vendor' ? 'pi-map-marker text-indigo-500' : 'pi-shopping-cart text-sky-500'"></i>
+                                                    <span v-if="item.purchaseInfo.type === 'vendor'">
+                                                        {{ t('todo.buySourceVendor', { 
+                                                            name: item.purchaseInfo.vendor?.npcName, 
+                                                            zone: item.purchaseInfo.vendor?.zoneName,
+                                                            x: item.purchaseInfo.vendor?.coords?.x?.toFixed(1) || '??',
+                                                            y: item.purchaseInfo.vendor?.coords?.y?.toFixed(1) || '??'
+                                                        }) }}
+                                                    </span>
+                                                    <span v-else>
+                                                        {{ t('todo.buySourceMarket', { world: item.purchaseInfo.worldName || t('workbench.view.source.buy') }) }}
+                                                    </span>
+                                                </div>
                                             </template>
 
                                             <!-- Gather: Info -->
@@ -291,7 +325,7 @@ const copyToClipboard = (id: string, text: string) => {
                                             <template v-if="section.key === 'craft' && item.crafting">
                                                 <div class="flex flex-col items-end">
                                                      <span class="text-[10px] md:text-sm font-black bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100 shadow-sm leading-none whitespace-nowrap">
-                                                        {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}
+                                                        {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}
                                                     </span>
                                                 </div>
                                             </template>
