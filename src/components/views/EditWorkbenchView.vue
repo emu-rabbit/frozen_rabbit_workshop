@@ -185,6 +185,13 @@ const confirmMerge = () => {
     <!-- Editing State -->
     <div v-else class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8">
       <div class="flex flex-col gap-8">
+        <div class="flex items-center justify-between">
+            <h3 class="font-bold text-soft-green-800 text-xl">{{ t('editor.title') }} ({{ t('nav.editor') }})</h3>
+            <button @click="resetEditorDraft()" class="text-sm font-medium text-slate-400 hover:text-red-500 transition-colors flex items-center gap-1">
+                <i class="pi pi-undo"></i> {{ t('editor.backToImport') }}
+            </button>
+        </div>
+
         <div class="flex flex-col gap-2">
           <label for="editor-note-name" class="font-bold text-soft-green-900 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
           <InputText 

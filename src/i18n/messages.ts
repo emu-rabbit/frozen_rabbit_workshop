@@ -74,7 +74,8 @@ export const messages = {
       mergeButton: '➕ 合併其他筆記 (JSON)',
       invalidJson: 'JSON 格式錯誤，請確認是否為本站匯出的格式。',
       emptyState: '目前沒有載入任何筆記',
-      defaultMergedName: '合併的未命名筆記'
+      defaultMergedName: '合併的未命名筆記',
+      backToImport: '返回重新匯入'
     },
     workbench: {
       title: '備料台',
@@ -304,7 +305,8 @@ export const messages = {
       mergeButton: '➕ 合并其他笔记 (JSON)',
       invalidJson: 'JSON 格式错误，请确认是否为本站导出的格式。',
       emptyState: '目前没有載入任何笔记',
-      defaultMergedName: '合并的未命名笔记'
+      defaultMergedName: '合并的未命名笔记',
+      backToImport: '返回重新导入'
     },
     workbench: {
       title: '备料台',
@@ -534,7 +536,8 @@ export const messages = {
       mergeButton: '➕ Merge Other Note (JSON)',
       invalidJson: 'Invalid JSON format. Please check the content.',
       emptyState: 'No note loaded yet',
-      defaultMergedName: 'Merged Unnamed Note'
+      defaultMergedName: 'Merged Unnamed Note',
+      backToImport: 'Back to Import'
     },
     workbench: {
       title: 'The Workbench',
@@ -763,7 +766,8 @@ export const messages = {
       mergeButton: '➕ 他のノートを結合 (JSON)',
       invalidJson: 'JSON形式が正しくありません。内容を確認してください。',
       emptyState: 'ノートが読み込まれていません',
-      defaultMergedName: '結合された無名のノート'
+      defaultMergedName: '結合された無名のノート',
+      backToImport: 'インポートに戻る'
     },
     workbench: {
       title: '仕込み台',
