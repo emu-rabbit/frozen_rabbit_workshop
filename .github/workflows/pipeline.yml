@@ -12,67 +12,66 @@ permissions:
   id-token: write
 
 jobs:
-  # 1. 測試階段：包含單元測試與 E2E 測試
-  test:
-    name: Run Tests
+  # 整合階段：安裝、建置、單元測試、E2E 測試
+  build-and-test:
+    name: Build and Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.50.1-noble
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
           cache: 'npm'
+          
+      - name: Cache node modules
+        uses: actions/cache@v5
+        id: nm-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          
       - name: Install dependencies
+        if: steps.nm-cache.outputs.cache-hit != 'true'
         run: npm ci
+        
       - name: Run Unit Tests
         run: npm run test:unit
-      - name: Get Playwright version
-        id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")" >> $GITHUB_ENV
-      - name: Cache Playwright browsers
-        uses: actions/cache@v5
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
-      - name: Install Playwright Browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
-      - name: Install Playwright System Dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps
+        
+      - name: Build
+        run: npm run build
+        
       - name: Run E2E Tests
         run: npx playwright test
-      - uses: actions/upload-artifact@v7
+        
+      - name: Upload Pages Artifact
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+          
+      - name: Upload Playwright Report
+        uses: actions/upload-artifact@v7
         if: ${{ failure() }}
         with:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
 
-  # 2. 部署階段：測試通過且位於 main/master 分支才執行
+  # 部署階段：僅在測試通過且為 push 時執行
   deploy:
-    name: Build and Deploy
-    needs: test
+    name: Deploy to Pages
+    needs: build-and-test
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
