@@ -227,12 +227,12 @@ const copyToClipboard = (id: string, text: string) => {
                                                         {{ getLocalizedName(item.name) }}
                                                     </h4>
                                                     <button @click.stop="copyToClipboard(`${section.key}_${item.id}`, getLocalizedName(item.name))" 
-                                                            class="opacity-40 group-hover:opacity-100 p-2 md:p-3 bg-slate-50/50 hover:bg-soft-green-50 border border-slate-100 hover:border-soft-green-200 rounded-xl transition-all active:scale-90 shadow-sm ml-auto sm:ml-0"
-                                                            :class="lastCopied === `${section.key}_${item.id}` ? 'text-soft-green-600 border-soft-green-200 bg-soft-green-50 opacity-100' : 'text-slate-400 hover:text-soft-green-600'"
+                                                            class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 transition-all active:scale-95 ml-auto sm:ml-0"
+                                                            :class="lastCopied === `${section.key}_${item.id}` ? 'text-soft-green-600' : 'text-slate-300'"
                                                             title="Copy Name">
                                                         <transition name="scale" mode="out-in">
-                                                            <i v-if="lastCopied === `${section.key}_${item.id}`" class="pi pi-check text-xl md:text-2xl"></i>
-                                                            <i v-else class="pi pi-copy text-xl md:text-2xl"></i>
+                                                            <i v-if="lastCopied === `${section.key}_${item.id}`" class="pi pi-check text-2xl md:text-3xl"></i>
+                                                            <i v-else class="pi pi-copy text-2xl md:text-3xl"></i>
                                                         </transition>
                                                     </button>
                                                 </div>
