@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from './composables/useNotes'
 import { useSettings } from './composables/useSettings'
@@ -7,22 +7,23 @@ import {
   ensureDictionaryLoaded, 
   setDictionaryLanguage,
 } from './services/dictionary'
+import { loadLocaleMessages } from './i18n'
 
 // Layout
 import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 
-// Views
-import NewNoteView from './components/views/NewNoteView.vue'
-import EditWorkbenchView from './components/views/EditWorkbenchView.vue'
-import HistoryView from './components/views/HistoryView.vue'
-import FavoritesView from './components/views/FavoritesView.vue'
-import RecommendedView from './components/views/RecommendedView.vue'
-import WorkbenchView from './components/views/WorkbenchView.vue'
-import SettingsView from './components/views/SettingsView.vue'
-import TodoListView from './components/views/TodoListView.vue'
-import FaqView from './components/views/FaqView.vue'
+// Views (Code Splitting)
+const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
+const EditWorkbenchView = defineAsyncComponent(() => import('./components/views/EditWorkbenchView.vue'))
+const HistoryView = defineAsyncComponent(() => import('./components/views/HistoryView.vue'))
+const FavoritesView = defineAsyncComponent(() => import('./components/views/FavoritesView.vue'))
+const RecommendedView = defineAsyncComponent(() => import('./components/views/RecommendedView.vue'))
+const WorkbenchView = defineAsyncComponent(() => import('./components/views/WorkbenchView.vue'))
+const SettingsView = defineAsyncComponent(() => import('./components/views/SettingsView.vue'))
+const TodoListView = defineAsyncComponent(() => import('./components/views/TodoListView.vue'))
+const FaqView = defineAsyncComponent(() => import('./components/views/FaqView.vue'))
 import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
@@ -30,7 +31,8 @@ const { language, initialized } = useSettings()
 const { addNote, activeWorkbenchNote, notes } = useNotes()
 
 // Sync i18n locale and dictionary language with settings
-watch(language, (newLang) => {
+watch(language, async (newLang) => {
+  await loadLocaleMessages(newLang)
   locale.value = newLang
   setDictionaryLanguage(newLang)
   ensureDictionaryLoaded()

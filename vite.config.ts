@@ -5,6 +5,17 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/frozen_rabbit_workshop/',
   plugins: [vue()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+        }
+      }
+    }
+  },
   test: {
     environment: 'jsdom',
     globals: true,
