@@ -18,12 +18,11 @@ import lv80_ilv515 from './lv80_ilv515.json';
 import lv90_ilv620 from './lv90_ilv620.json';
 import lv90_ilv640 from './lv90_ilv640.json';
 import lv90_ilv645 from './lv90_ilv645.json';
+import lv100_ilv740 from './lv100_ilv740.json';
+import lv100_ilv750 from './lv100_ilv750.json';
+import lv100_ilv770 from './lv100_ilv770.json';
 
 const allRecommendedNotes: Note[] = [
-  ...(lv100_ilv690 as Note[]),
-  ...(lv100_ilv710 as Note[]),
-  ...(lv100_ilv720 as Note[]),
-  ...(lv100_ilv720_690 as Note[]),
   ...(lv50_ilv110 as Note[]),
   ...(lv50_ilv115 as Note[]),
   ...(lv60_ilv190 as Note[]),
@@ -38,6 +37,13 @@ const allRecommendedNotes: Note[] = [
   ...(lv90_ilv620 as Note[]),
   ...(lv90_ilv640 as Note[]),
   ...(lv90_ilv645 as Note[]),
+  ...(lv100_ilv690 as Note[]),
+  ...(lv100_ilv710 as Note[]),
+  ...(lv100_ilv720 as Note[]),
+  ...(lv100_ilv720_690 as Note[]),
+  ...(lv100_ilv740 as Note[]),
+  ...(lv100_ilv750 as Note[]),
+  ...(lv100_ilv770 as Note[]),
 ];
 
 export default allRecommendedNotes;

@@ -1,0 +1,338 @@
+[
+  {
+    "id": "9eb6d51b-0388-4333-ae15-b52c57cd735c",
+    "name": {
+      "tw": "Lv.100 iLv740 禦敵十件套裝",
+      "cn": "Lv.100 iLv740 御敌十件套装",
+      "en": "Lv.100 iLv740 Fending 10-piece Set",
+      "ja": "Lv.100 iLv740 タンク10点セット"
+    },
+    "items": [
+      {
+        "id": 46032,
+        "quantity": 1
+      },
+      {
+        "id": 46033,
+        "quantity": 1
+      },
+      {
+        "id": 46034,
+        "quantity": 1
+      },
+      {
+        "id": 46035,
+        "quantity": 1
+      },
+      {
+        "id": 46036,
+        "quantity": 1
+      },
+      {
+        "id": 46067,
+        "quantity": 1
+      },
+      {
+        "id": 46072,
+        "quantity": 1
+      },
+      {
+        "id": 46077,
+        "quantity": 1
+      },
+      {
+        "id": 46082,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T01:39:09.947Z"
+  },
+  {
+    "id": "b53bb772-7e48-4e63-8c17-32013e987f7c",
+    "name": {
+      "tw": "Lv.100 iLv740 制敵十件套裝",
+      "cn": "Lv.100 iLv740 制敌十件套装",
+      "en": "Lv.100 iLv740 Maiming 10-piece Set",
+      "ja": "Lv.100 iLv740 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 46037,
+        "quantity": 1
+      },
+      {
+        "id": 46038,
+        "quantity": 1
+      },
+      {
+        "id": 46039,
+        "quantity": 1
+      },
+      {
+        "id": 46040,
+        "quantity": 1
+      },
+      {
+        "id": 46041,
+        "quantity": 1
+      },
+      {
+        "id": 46068,
+        "quantity": 1
+      },
+      {
+        "id": 46073,
+        "quantity": 1
+      },
+      {
+        "id": 46078,
+        "quantity": 1
+      },
+      {
+        "id": 46083,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T01:41:41.138Z"
+  },
+  {
+    "id": "02d74034-d340-4ed2-95ae-b80a410254ab",
+    "name": {
+      "tw": "Lv.100 iLv740 強襲十件套裝",
+      "cn": "Lv.100 iLv740 强袭十件套装",
+      "en": "Lv.100 iLv740 Striking 10-piece Set",
+      "ja": "Lv.100 iLv740 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 46042,
+        "quantity": 1
+      },
+      {
+        "id": 46043,
+        "quantity": 1
+      },
+      {
+        "id": 46044,
+        "quantity": 1
+      },
+      {
+        "id": 46045,
+        "quantity": 1
+      },
+      {
+        "id": 46046,
+        "quantity": 1
+      },
+      {
+        "id": 46068,
+        "quantity": 1
+      },
+      {
+        "id": 46073,
+        "quantity": 1
+      },
+      {
+        "id": 46078,
+        "quantity": 1
+      },
+      {
+        "id": 46083,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T01:43:54.768Z"
+  },
+  {
+    "id": "1e676585-258a-4b08-9ba8-c04e86bd4599",
+    "name": {
+      "tw": "Lv.100 iLv740 游擊十件套裝",
+      "cn": "Lv.100 iLv740 游击十件套装",
+      "en": "Lv.100 iLv740 Scouting 10-piece Set",
+      "ja": "Lv.100 iLv740 メレー10点セット"
+    },
+    "items": [
+      {
+        "id": 46052,
+        "quantity": 1
+      },
+      {
+        "id": 46053,
+        "quantity": 1
+      },
+      {
+        "id": 46054,
+        "quantity": 1
+      },
+      {
+        "id": 46055,
+        "quantity": 1
+      },
+      {
+        "id": 46056,
+        "quantity": 1
+      },
+      {
+        "id": 46069,
+        "quantity": 1
+      },
+      {
+        "id": 46074,
+        "quantity": 1
+      },
+      {
+        "id": 46079,
+        "quantity": 1
+      },
+      {
+        "id": 46084,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T01:51:40.342Z"
+  },
+  {
+    "id": "9df49797-0a31-43d1-b6af-d622ba758d59",
+    "name": {
+      "tw": "Lv.100 iLv740 精準十件套裝",
+      "cn": "Lv.100 iLv740 精准十件套装",
+      "en": "Lv.100 iLv740 Aiming 10-piece Set",
+      "ja": "Lv.100 iLv740 レンジ10点セット"
+    },
+    "items": [
+      {
+        "id": 46047,
+        "quantity": 1
+      },
+      {
+        "id": 46048,
+        "quantity": 1
+      },
+      {
+        "id": 46049,
+        "quantity": 1
+      },
+      {
+        "id": 46050,
+        "quantity": 1
+      },
+      {
+        "id": 46051,
+        "quantity": 1
+      },
+      {
+        "id": 46069,
+        "quantity": 1
+      },
+      {
+        "id": 46074,
+        "quantity": 1
+      },
+      {
+        "id": 46079,
+        "quantity": 1
+      },
+      {
+        "id": 46084,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T02:03:36.983Z"
+  },
+  {
+    "id": "b47abf3e-9c56-46d7-a6b5-bc271bdefd9a",
+    "name": {
+      "tw": "Lv.100 iLv740 詠咒十件套裝",
+      "cn": "Lv.100 iLv740 咏咒十件套装",
+      "en": "Lv.100 iLv740 Casting 10-piece Set",
+      "ja": "Lv.100 iLv740 キャス10点セット"
+    },
+    "items": [
+      {
+        "id": 46062,
+        "quantity": 1
+      },
+      {
+        "id": 46063,
+        "quantity": 1
+      },
+      {
+        "id": 46064,
+        "quantity": 1
+      },
+      {
+        "id": 46065,
+        "quantity": 1
+      },
+      {
+        "id": 46066,
+        "quantity": 1
+      },
+      {
+        "id": 46071,
+        "quantity": 1
+      },
+      {
+        "id": 46076,
+        "quantity": 1
+      },
+      {
+        "id": 46081,
+        "quantity": 1
+      },
+      {
+        "id": 46086,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T02:05:35.717Z"
+  },
+  {
+    "id": "026d3dce-fdf2-45fc-9ce1-19431fbbfdd3",
+    "name": {
+      "tw": "Lv.100 iLv740 治癒十件套裝",
+      "cn": "Lv.100 iLv740 治愈十件套装",
+      "en": "Lv.100 iLv740 Healing 10-piece Set",
+      "ja": "Lv.100 iLv740 ヒラ10点セット"
+    },
+    "items": [
+      {
+        "id": 46057,
+        "quantity": 1
+      },
+      {
+        "id": 46058,
+        "quantity": 1
+      },
+      {
+        "id": 46059,
+        "quantity": 1
+      },
+      {
+        "id": 46060,
+        "quantity": 1
+      },
+      {
+        "id": 46061,
+        "quantity": 1
+      },
+      {
+        "id": 46070,
+        "quantity": 1
+      },
+      {
+        "id": 46075,
+        "quantity": 1
+      },
+      {
+        "id": 46080,
+        "quantity": 1
+      },
+      {
+        "id": 46085,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T02:23:25.190Z"
+  }
+]

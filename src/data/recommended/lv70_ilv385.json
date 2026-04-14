@@ -1,338 +1,338 @@
 [
-    {
-        "id": "62be46ba-7d0c-4ed8-af39-71a25a4877b8",
-        "name": {
-            "tw": "Lv.70 iLv385 禦敵十件套裝",
-            "cn": "Lv.70 iLv385 御敌十件套装",
-            "en": "Lv.70 iLv385 Fending10-piece Set",
-            "ja": "Lv.70 iLv385 タンク10点セット"
-        },
-        "items": [
-            {
-                "id": 25646,
-                "quantity": 1
-            },
-            {
-                "id": 25647,
-                "quantity": 1
-            },
-            {
-                "id": 25648,
-                "quantity": 1
-            },
-            {
-                "id": 25649,
-                "quantity": 1
-            },
-            {
-                "id": 25650,
-                "quantity": 1
-            },
-            {
-                "id": 25688,
-                "quantity": 1
-            },
-            {
-                "id": 25693,
-                "quantity": 1
-            },
-            {
-                "id": 25698,
-                "quantity": 1
-            },
-            {
-                "id": 25703,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:11:03.444Z"
+  {
+    "id": "62be46ba-7d0c-4ed8-af39-71a25a4877b8",
+    "name": {
+      "tw": "Lv.70 iLv385 禦敵十件套裝",
+      "cn": "Lv.70 iLv385 御敌十件套装",
+      "en": "Lv.70 iLv385 Fending 10-piece Set",
+      "ja": "Lv.70 iLv385 タンク10点セット"
     },
-    {
-        "id": "be1bdb1c-3c40-4492-8835-c6bf18ec0932",
-        "name": {
-            "tw": "Lv.70 iLv385 制敵十件套裝",
-            "cn": "Lv.70 iLv385 制敌十件套装",
-            "en": "Lv.70 iLv385 Maiming10-piece Set",
-            "ja": "Lv.70 iLv385 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 25652,
-                "quantity": 1
-            },
-            {
-                "id": 25653,
-                "quantity": 1
-            },
-            {
-                "id": 25654,
-                "quantity": 1
-            },
-            {
-                "id": 25655,
-                "quantity": 1
-            },
-            {
-                "id": 25656,
-                "quantity": 1
-            },
-            {
-                "id": 25689,
-                "quantity": 1
-            },
-            {
-                "id": 25694,
-                "quantity": 1
-            },
-            {
-                "id": 25699,
-                "quantity": 1
-            },
-            {
-                "id": 25704,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:14:29.748Z"
+    "items": [
+      {
+        "id": 25646,
+        "quantity": 1
+      },
+      {
+        "id": 25647,
+        "quantity": 1
+      },
+      {
+        "id": 25648,
+        "quantity": 1
+      },
+      {
+        "id": 25649,
+        "quantity": 1
+      },
+      {
+        "id": 25650,
+        "quantity": 1
+      },
+      {
+        "id": 25688,
+        "quantity": 1
+      },
+      {
+        "id": 25693,
+        "quantity": 1
+      },
+      {
+        "id": 25698,
+        "quantity": 1
+      },
+      {
+        "id": 25703,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:11:03.444Z"
+  },
+  {
+    "id": "be1bdb1c-3c40-4492-8835-c6bf18ec0932",
+    "name": {
+      "tw": "Lv.70 iLv385 制敵十件套裝",
+      "cn": "Lv.70 iLv385 制敌十件套装",
+      "en": "Lv.70 iLv385 Maiming 10-piece Set",
+      "ja": "Lv.70 iLv385 メレー10点セット"
     },
-    {
-        "id": "79dea802-7ae5-43de-b36e-e81b08a53b03",
-        "name": {
-            "tw": "Lv.70 iLv385 強襲十件套裝",
-            "cn": "Lv.70 iLv385 强袭十件套装",
-            "en": "Lv.70 iLv385 Striking10-piece Set",
-            "ja": "Lv.70 iLv385 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 25658,
-                "quantity": 1
-            },
-            {
-                "id": 25659,
-                "quantity": 1
-            },
-            {
-                "id": 25660,
-                "quantity": 1
-            },
-            {
-                "id": 25661,
-                "quantity": 1
-            },
-            {
-                "id": 25662,
-                "quantity": 1
-            },
-            {
-                "id": 25689,
-                "quantity": 1
-            },
-            {
-                "id": 25694,
-                "quantity": 1
-            },
-            {
-                "id": 25699,
-                "quantity": 1
-            },
-            {
-                "id": 25704,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:18:03.396Z"
+    "items": [
+      {
+        "id": 25652,
+        "quantity": 1
+      },
+      {
+        "id": 25653,
+        "quantity": 1
+      },
+      {
+        "id": 25654,
+        "quantity": 1
+      },
+      {
+        "id": 25655,
+        "quantity": 1
+      },
+      {
+        "id": 25656,
+        "quantity": 1
+      },
+      {
+        "id": 25689,
+        "quantity": 1
+      },
+      {
+        "id": 25694,
+        "quantity": 1
+      },
+      {
+        "id": 25699,
+        "quantity": 1
+      },
+      {
+        "id": 25704,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:14:29.748Z"
+  },
+  {
+    "id": "79dea802-7ae5-43de-b36e-e81b08a53b03",
+    "name": {
+      "tw": "Lv.70 iLv385 強襲十件套裝",
+      "cn": "Lv.70 iLv385 强袭十件套装",
+      "en": "Lv.70 iLv385 Striking 10-piece Set",
+      "ja": "Lv.70 iLv385 メレー10点セット"
     },
-    {
-        "id": "dd576c2c-eaf4-44bb-93eb-93ef55f86dce",
-        "name": {
-            "tw": "Lv.70 iLv385 游擊十件套裝",
-            "cn": "Lv.70 iLv385 游击十件套装",
-            "en": "Lv.70 iLv385 Scouting10-piece Set",
-            "ja": "Lv.70 iLv385 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 25670,
-                "quantity": 1
-            },
-            {
-                "id": 25671,
-                "quantity": 1
-            },
-            {
-                "id": 25672,
-                "quantity": 1
-            },
-            {
-                "id": 25673,
-                "quantity": 1
-            },
-            {
-                "id": 25674,
-                "quantity": 1
-            },
-            {
-                "id": 25690,
-                "quantity": 1
-            },
-            {
-                "id": 25695,
-                "quantity": 1
-            },
-            {
-                "id": 25700,
-                "quantity": 1
-            },
-            {
-                "id": 25705,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:21:12.024Z"
+    "items": [
+      {
+        "id": 25658,
+        "quantity": 1
+      },
+      {
+        "id": 25659,
+        "quantity": 1
+      },
+      {
+        "id": 25660,
+        "quantity": 1
+      },
+      {
+        "id": 25661,
+        "quantity": 1
+      },
+      {
+        "id": 25662,
+        "quantity": 1
+      },
+      {
+        "id": 25689,
+        "quantity": 1
+      },
+      {
+        "id": 25694,
+        "quantity": 1
+      },
+      {
+        "id": 25699,
+        "quantity": 1
+      },
+      {
+        "id": 25704,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:18:03.396Z"
+  },
+  {
+    "id": "dd576c2c-eaf4-44bb-93eb-93ef55f86dce",
+    "name": {
+      "tw": "Lv.70 iLv385 游擊十件套裝",
+      "cn": "Lv.70 iLv385 游击十件套装",
+      "en": "Lv.70 iLv385 Scouting 10-piece Set",
+      "ja": "Lv.70 iLv385 メレー10点セット"
     },
-    {
-        "id": "03e3cad4-b12e-4432-8973-f2e1bd30f732",
-        "name": {
-            "tw": "Lv.70 iLv385 精準十件套裝",
-            "cn": "Lv.70 iLv385 精准十件套装",
-            "en": "Lv.70 iLv385 Aiming10-piece Set",
-            "ja": "Lv.70 iLv385 レンジ10点セット"
-        },
-        "items": [
-            {
-                "id": 25664,
-                "quantity": 1
-            },
-            {
-                "id": 25665,
-                "quantity": 1
-            },
-            {
-                "id": 25666,
-                "quantity": 1
-            },
-            {
-                "id": 25667,
-                "quantity": 1
-            },
-            {
-                "id": 25668,
-                "quantity": 1
-            },
-            {
-                "id": 25690,
-                "quantity": 1
-            },
-            {
-                "id": 25695,
-                "quantity": 1
-            },
-            {
-                "id": 25700,
-                "quantity": 1
-            },
-            {
-                "id": 25705,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:23:20.129Z"
+    "items": [
+      {
+        "id": 25670,
+        "quantity": 1
+      },
+      {
+        "id": 25671,
+        "quantity": 1
+      },
+      {
+        "id": 25672,
+        "quantity": 1
+      },
+      {
+        "id": 25673,
+        "quantity": 1
+      },
+      {
+        "id": 25674,
+        "quantity": 1
+      },
+      {
+        "id": 25690,
+        "quantity": 1
+      },
+      {
+        "id": 25695,
+        "quantity": 1
+      },
+      {
+        "id": 25700,
+        "quantity": 1
+      },
+      {
+        "id": 25705,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:21:12.024Z"
+  },
+  {
+    "id": "03e3cad4-b12e-4432-8973-f2e1bd30f732",
+    "name": {
+      "tw": "Lv.70 iLv385 精準十件套裝",
+      "cn": "Lv.70 iLv385 精准十件套装",
+      "en": "Lv.70 iLv385 Aiming 10-piece Set",
+      "ja": "Lv.70 iLv385 レンジ10点セット"
     },
-    {
-        "id": "7530a08b-6073-476b-80f0-e1527331cfc7",
-        "name": {
-            "tw": "Lv.70 iLv385 詠咒十件套裝",
-            "cn": "Lv.70 iLv385 咏咒十件套装",
-            "en": "Lv.70 iLv385 Casting10-piece Set",
-            "ja": "Lv.70 iLv385 キャス10点セット"
-        },
-        "items": [
-            {
-                "id": 25682,
-                "quantity": 1
-            },
-            {
-                "id": 25683,
-                "quantity": 1
-            },
-            {
-                "id": 25684,
-                "quantity": 1
-            },
-            {
-                "id": 25685,
-                "quantity": 1
-            },
-            {
-                "id": 25686,
-                "quantity": 1
-            },
-            {
-                "id": 25692,
-                "quantity": 1
-            },
-            {
-                "id": 25697,
-                "quantity": 1
-            },
-            {
-                "id": 25702,
-                "quantity": 1
-            },
-            {
-                "id": 25707,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:26:13.707Z"
+    "items": [
+      {
+        "id": 25664,
+        "quantity": 1
+      },
+      {
+        "id": 25665,
+        "quantity": 1
+      },
+      {
+        "id": 25666,
+        "quantity": 1
+      },
+      {
+        "id": 25667,
+        "quantity": 1
+      },
+      {
+        "id": 25668,
+        "quantity": 1
+      },
+      {
+        "id": 25690,
+        "quantity": 1
+      },
+      {
+        "id": 25695,
+        "quantity": 1
+      },
+      {
+        "id": 25700,
+        "quantity": 1
+      },
+      {
+        "id": 25705,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:23:20.129Z"
+  },
+  {
+    "id": "7530a08b-6073-476b-80f0-e1527331cfc7",
+    "name": {
+      "tw": "Lv.70 iLv385 詠咒十件套裝",
+      "cn": "Lv.70 iLv385 咏咒十件套装",
+      "en": "Lv.70 iLv385 Casting 10-piece Set",
+      "ja": "Lv.70 iLv385 キャス10点セット"
     },
-    {
-        "id": "e65639d9-ccb9-407b-9043-0ed2308bdf58",
-        "name": {
-            "tw": "Lv.70 iLv385 治癒十件套裝",
-            "cn": "Lv.70 iLv385 治愈十件套装",
-            "en": "Lv.70 iLv385 Healing10-piece Set",
-            "ja": "Lv.70 iLv385 ヒラ10点セット"
-        },
-        "items": [
-            {
-                "id": 25676,
-                "quantity": 1
-            },
-            {
-                "id": 25677,
-                "quantity": 1
-            },
-            {
-                "id": 25678,
-                "quantity": 1
-            },
-            {
-                "id": 25679,
-                "quantity": 1
-            },
-            {
-                "id": 25680,
-                "quantity": 1
-            },
-            {
-                "id": 25691,
-                "quantity": 1
-            },
-            {
-                "id": 25696,
-                "quantity": 1
-            },
-            {
-                "id": 25701,
-                "quantity": 1
-            },
-            {
-                "id": 25706,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:28:18.088Z"
-    }
+    "items": [
+      {
+        "id": 25682,
+        "quantity": 1
+      },
+      {
+        "id": 25683,
+        "quantity": 1
+      },
+      {
+        "id": 25684,
+        "quantity": 1
+      },
+      {
+        "id": 25685,
+        "quantity": 1
+      },
+      {
+        "id": 25686,
+        "quantity": 1
+      },
+      {
+        "id": 25692,
+        "quantity": 1
+      },
+      {
+        "id": 25697,
+        "quantity": 1
+      },
+      {
+        "id": 25702,
+        "quantity": 1
+      },
+      {
+        "id": 25707,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:26:13.707Z"
+  },
+  {
+    "id": "e65639d9-ccb9-407b-9043-0ed2308bdf58",
+    "name": {
+      "tw": "Lv.70 iLv385 治癒十件套裝",
+      "cn": "Lv.70 iLv385 治愈十件套装",
+      "en": "Lv.70 iLv385 Healing 10-piece Set",
+      "ja": "Lv.70 iLv385 ヒラ10点セット"
+    },
+    "items": [
+      {
+        "id": 25676,
+        "quantity": 1
+      },
+      {
+        "id": 25677,
+        "quantity": 1
+      },
+      {
+        "id": 25678,
+        "quantity": 1
+      },
+      {
+        "id": 25679,
+        "quantity": 1
+      },
+      {
+        "id": 25680,
+        "quantity": 1
+      },
+      {
+        "id": 25691,
+        "quantity": 1
+      },
+      {
+        "id": 25696,
+        "quantity": 1
+      },
+      {
+        "id": 25701,
+        "quantity": 1
+      },
+      {
+        "id": 25706,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:28:18.088Z"
+  }
 ]

@@ -1,338 +1,338 @@
 [
-    {
-        "id": "24830234-577b-426e-a820-0ab339864dd8",
-        "name": {
-            "tw": "Lv.80 iLv515 禦敵十件套裝",
-            "cn": "Lv.80 iLv515 御敌十件套装",
-            "en": "Lv.80 iLv515 Fending10-piece Set",
-            "ja": "Lv.80 iLv515 タンク10点セット"
-        },
-        "items": [
-            {
-                "id": 34100,
-                "quantity": 1
-            },
-            {
-                "id": 34101,
-                "quantity": 1
-            },
-            {
-                "id": 34102,
-                "quantity": 1
-            },
-            {
-                "id": 34103,
-                "quantity": 1
-            },
-            {
-                "id": 34104,
-                "quantity": 1
-            },
-            {
-                "id": 34135,
-                "quantity": 1
-            },
-            {
-                "id": 34140,
-                "quantity": 1
-            },
-            {
-                "id": 34145,
-                "quantity": 1
-            },
-            {
-                "id": 34150,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:32:57.756Z"
+  {
+    "id": "24830234-577b-426e-a820-0ab339864dd8",
+    "name": {
+      "tw": "Lv.80 iLv515 禦敵十件套裝",
+      "cn": "Lv.80 iLv515 御敌十件套装",
+      "en": "Lv.80 iLv515 Fending 10-piece Set",
+      "ja": "Lv.80 iLv515 タンク10点セット"
     },
-    {
-        "id": "815aaeae-230d-4fb1-bc9b-0eff0b528852",
-        "name": {
-            "tw": "Lv.80 iLv515 制敵十件套裝",
-            "cn": "Lv.80 iLv515 制敌十件套装",
-            "en": "Lv.80 iLv515 Maiming10-piece Set",
-            "ja": "Lv.80 iLv515 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 34105,
-                "quantity": 1
-            },
-            {
-                "id": 34106,
-                "quantity": 1
-            },
-            {
-                "id": 34107,
-                "quantity": 1
-            },
-            {
-                "id": 34108,
-                "quantity": 1
-            },
-            {
-                "id": 34109,
-                "quantity": 1
-            },
-            {
-                "id": 34136,
-                "quantity": 1
-            },
-            {
-                "id": 34141,
-                "quantity": 1
-            },
-            {
-                "id": 34146,
-                "quantity": 1
-            },
-            {
-                "id": 34151,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:35:56.965Z"
+    "items": [
+      {
+        "id": 34100,
+        "quantity": 1
+      },
+      {
+        "id": 34101,
+        "quantity": 1
+      },
+      {
+        "id": 34102,
+        "quantity": 1
+      },
+      {
+        "id": 34103,
+        "quantity": 1
+      },
+      {
+        "id": 34104,
+        "quantity": 1
+      },
+      {
+        "id": 34135,
+        "quantity": 1
+      },
+      {
+        "id": 34140,
+        "quantity": 1
+      },
+      {
+        "id": 34145,
+        "quantity": 1
+      },
+      {
+        "id": 34150,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:32:57.756Z"
+  },
+  {
+    "id": "815aaeae-230d-4fb1-bc9b-0eff0b528852",
+    "name": {
+      "tw": "Lv.80 iLv515 制敵十件套裝",
+      "cn": "Lv.80 iLv515 制敌十件套装",
+      "en": "Lv.80 iLv515 Maiming 10-piece Set",
+      "ja": "Lv.80 iLv515 メレー10点セット"
     },
-    {
-        "id": "63c1182d-52f1-48fc-bf98-1ac2ca9623f8",
-        "name": {
-            "tw": "Lv.80 iLv515 強襲十件套裝",
-            "cn": "Lv.80 iLv515 强袭十件套装",
-            "en": "Lv.80 iLv515 Striking10-piece Set",
-            "ja": "Lv.80 iLv515 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 34110,
-                "quantity": 1
-            },
-            {
-                "id": 34111,
-                "quantity": 1
-            },
-            {
-                "id": 34112,
-                "quantity": 1
-            },
-            {
-                "id": 34113,
-                "quantity": 1
-            },
-            {
-                "id": 34114,
-                "quantity": 1
-            },
-            {
-                "id": 34136,
-                "quantity": 1
-            },
-            {
-                "id": 34141,
-                "quantity": 1
-            },
-            {
-                "id": 34146,
-                "quantity": 1
-            },
-            {
-                "id": 34151,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:38:17.324Z"
+    "items": [
+      {
+        "id": 34105,
+        "quantity": 1
+      },
+      {
+        "id": 34106,
+        "quantity": 1
+      },
+      {
+        "id": 34107,
+        "quantity": 1
+      },
+      {
+        "id": 34108,
+        "quantity": 1
+      },
+      {
+        "id": 34109,
+        "quantity": 1
+      },
+      {
+        "id": 34136,
+        "quantity": 1
+      },
+      {
+        "id": 34141,
+        "quantity": 1
+      },
+      {
+        "id": 34146,
+        "quantity": 1
+      },
+      {
+        "id": 34151,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:35:56.965Z"
+  },
+  {
+    "id": "63c1182d-52f1-48fc-bf98-1ac2ca9623f8",
+    "name": {
+      "tw": "Lv.80 iLv515 強襲十件套裝",
+      "cn": "Lv.80 iLv515 强袭十件套装",
+      "en": "Lv.80 iLv515 Striking 10-piece Set",
+      "ja": "Lv.80 iLv515 メレー10点セット"
     },
-    {
-        "id": "a414068d-cc98-4522-8126-017eb0c8df86",
-        "name": {
-            "tw": "Lv.80 iLv515 游擊十件套裝",
-            "cn": "Lv.80 iLv515 游击十件套装",
-            "en": "Lv.80 iLv515 Scouting10-piece Set",
-            "ja": "Lv.80 iLv515 メレー10点セット"
-        },
-        "items": [
-            {
-                "id": 34120,
-                "quantity": 1
-            },
-            {
-                "id": 34121,
-                "quantity": 1
-            },
-            {
-                "id": 34122,
-                "quantity": 1
-            },
-            {
-                "id": 34123,
-                "quantity": 1
-            },
-            {
-                "id": 34124,
-                "quantity": 1
-            },
-            {
-                "id": 34137,
-                "quantity": 1
-            },
-            {
-                "id": 34142,
-                "quantity": 1
-            },
-            {
-                "id": 34147,
-                "quantity": 1
-            },
-            {
-                "id": 34152,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:40:35.858Z"
+    "items": [
+      {
+        "id": 34110,
+        "quantity": 1
+      },
+      {
+        "id": 34111,
+        "quantity": 1
+      },
+      {
+        "id": 34112,
+        "quantity": 1
+      },
+      {
+        "id": 34113,
+        "quantity": 1
+      },
+      {
+        "id": 34114,
+        "quantity": 1
+      },
+      {
+        "id": 34136,
+        "quantity": 1
+      },
+      {
+        "id": 34141,
+        "quantity": 1
+      },
+      {
+        "id": 34146,
+        "quantity": 1
+      },
+      {
+        "id": 34151,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:38:17.324Z"
+  },
+  {
+    "id": "a414068d-cc98-4522-8126-017eb0c8df86",
+    "name": {
+      "tw": "Lv.80 iLv515 游擊十件套裝",
+      "cn": "Lv.80 iLv515 游击十件套装",
+      "en": "Lv.80 iLv515 Scouting 10-piece Set",
+      "ja": "Lv.80 iLv515 メレー10点セット"
     },
-    {
-        "id": "bd69966e-435a-4eef-b7ae-2ee9e2625aff",
-        "name": {
-            "tw": "Lv.80 iLv515 精準十件套裝",
-            "cn": "Lv.80 iLv515 精准十件套装",
-            "en": "Lv.80 iLv515 Aiming10-piece Set",
-            "ja": "Lv.80 iLv515 レンジ10点セット"
-        },
-        "items": [
-            {
-                "id": 34115,
-                "quantity": 1
-            },
-            {
-                "id": 34116,
-                "quantity": 1
-            },
-            {
-                "id": 34117,
-                "quantity": 1
-            },
-            {
-                "id": 34118,
-                "quantity": 1
-            },
-            {
-                "id": 34119,
-                "quantity": 1
-            },
-            {
-                "id": 34137,
-                "quantity": 1
-            },
-            {
-                "id": 34142,
-                "quantity": 1
-            },
-            {
-                "id": 34147,
-                "quantity": 1
-            },
-            {
-                "id": 34152,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:47:35.428Z"
+    "items": [
+      {
+        "id": 34120,
+        "quantity": 1
+      },
+      {
+        "id": 34121,
+        "quantity": 1
+      },
+      {
+        "id": 34122,
+        "quantity": 1
+      },
+      {
+        "id": 34123,
+        "quantity": 1
+      },
+      {
+        "id": 34124,
+        "quantity": 1
+      },
+      {
+        "id": 34137,
+        "quantity": 1
+      },
+      {
+        "id": 34142,
+        "quantity": 1
+      },
+      {
+        "id": 34147,
+        "quantity": 1
+      },
+      {
+        "id": 34152,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:40:35.858Z"
+  },
+  {
+    "id": "bd69966e-435a-4eef-b7ae-2ee9e2625aff",
+    "name": {
+      "tw": "Lv.80 iLv515 精準十件套裝",
+      "cn": "Lv.80 iLv515 精准十件套装",
+      "en": "Lv.80 iLv515 Aiming 10-piece Set",
+      "ja": "Lv.80 iLv515 レンジ10点セット"
     },
-    {
-        "id": "585708ba-1177-4b88-8c14-2e943b1a8a39",
-        "name": {
-            "tw": "Lv.80 iLv515 詠咒十件套裝",
-            "cn": "Lv.80 iLv515 咏咒十件套装",
-            "en": "Lv.80 iLv515 Casting10-piece Set",
-            "ja": "Lv.80 iLv515 キャス10点セット"
-        },
-        "items": [
-            {
-                "id": 34130,
-                "quantity": 1
-            },
-            {
-                "id": 34131,
-                "quantity": 1
-            },
-            {
-                "id": 34132,
-                "quantity": 1
-            },
-            {
-                "id": 34133,
-                "quantity": 1
-            },
-            {
-                "id": 34134,
-                "quantity": 1
-            },
-            {
-                "id": 34139,
-                "quantity": 1
-            },
-            {
-                "id": 34144,
-                "quantity": 1
-            },
-            {
-                "id": 34149,
-                "quantity": 1
-            },
-            {
-                "id": 34154,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:45:23.455Z"
+    "items": [
+      {
+        "id": 34115,
+        "quantity": 1
+      },
+      {
+        "id": 34116,
+        "quantity": 1
+      },
+      {
+        "id": 34117,
+        "quantity": 1
+      },
+      {
+        "id": 34118,
+        "quantity": 1
+      },
+      {
+        "id": 34119,
+        "quantity": 1
+      },
+      {
+        "id": 34137,
+        "quantity": 1
+      },
+      {
+        "id": 34142,
+        "quantity": 1
+      },
+      {
+        "id": 34147,
+        "quantity": 1
+      },
+      {
+        "id": 34152,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:47:35.428Z"
+  },
+  {
+    "id": "585708ba-1177-4b88-8c14-2e943b1a8a39",
+    "name": {
+      "tw": "Lv.80 iLv515 詠咒十件套裝",
+      "cn": "Lv.80 iLv515 咏咒十件套装",
+      "en": "Lv.80 iLv515 Casting 10-piece Set",
+      "ja": "Lv.80 iLv515 キャス10点セット"
     },
-    {
-        "id": "310db29e-70d0-4361-a669-f3d64544f35d",
-        "name": {
-            "tw": "Lv.80 iLv515 治癒十件套裝",
-            "cn": "Lv.80 iLv515 治愈十件套装",
-            "en": "Lv.80 iLv515 Healing10-piece Set",
-            "ja": "Lv.80 iLv515 ヒラ10点セット"
-        },
-        "items": [
-            {
-                "id": 34125,
-                "quantity": 1
-            },
-            {
-                "id": 34126,
-                "quantity": 1
-            },
-            {
-                "id": 34127,
-                "quantity": 1
-            },
-            {
-                "id": 34128,
-                "quantity": 1
-            },
-            {
-                "id": 34129,
-                "quantity": 1
-            },
-            {
-                "id": 34138,
-                "quantity": 1
-            },
-            {
-                "id": 34143,
-                "quantity": 1
-            },
-            {
-                "id": 34148,
-                "quantity": 1
-            },
-            {
-                "id": 34153,
-                "quantity": 2
-            }
-        ],
-        "createdAt": "2026-04-13T02:49:48.723Z"
-    }
+    "items": [
+      {
+        "id": 34130,
+        "quantity": 1
+      },
+      {
+        "id": 34131,
+        "quantity": 1
+      },
+      {
+        "id": 34132,
+        "quantity": 1
+      },
+      {
+        "id": 34133,
+        "quantity": 1
+      },
+      {
+        "id": 34134,
+        "quantity": 1
+      },
+      {
+        "id": 34139,
+        "quantity": 1
+      },
+      {
+        "id": 34144,
+        "quantity": 1
+      },
+      {
+        "id": 34149,
+        "quantity": 1
+      },
+      {
+        "id": 34154,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:45:23.455Z"
+  },
+  {
+    "id": "310db29e-70d0-4361-a669-f3d64544f35d",
+    "name": {
+      "tw": "Lv.80 iLv515 治癒十件套裝",
+      "cn": "Lv.80 iLv515 治愈十件套装",
+      "en": "Lv.80 iLv515 Healing 10-piece Set",
+      "ja": "Lv.80 iLv515 ヒラ10点セット"
+    },
+    "items": [
+      {
+        "id": 34125,
+        "quantity": 1
+      },
+      {
+        "id": 34126,
+        "quantity": 1
+      },
+      {
+        "id": 34127,
+        "quantity": 1
+      },
+      {
+        "id": 34128,
+        "quantity": 1
+      },
+      {
+        "id": 34129,
+        "quantity": 1
+      },
+      {
+        "id": 34138,
+        "quantity": 1
+      },
+      {
+        "id": 34143,
+        "quantity": 1
+      },
+      {
+        "id": 34148,
+        "quantity": 1
+      },
+      {
+        "id": 34153,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-13T02:49:48.723Z"
+  }
 ]
