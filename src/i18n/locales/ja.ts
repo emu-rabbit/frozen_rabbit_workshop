@@ -7,11 +7,11 @@ export default {
     newNote: '新しいノートを書く',
     favorites: 'お気に入り<br />ノート',
     recommended: 'うさぎの<br />オススメノート',
-    history: '舊ノートを<br />めくる',
-    faq: 'よくある<br />質問',
+    history: '過去のノート',
+    faq: 'よくある質問',
     settings: '設定',
     github: 'ソースコード (GitHub)',
-    editor: 'ノート工作台'
+    editor: '制作作業台'
   },
   noteCard: {
     addFavorite: 'お気に入りに追加',
@@ -23,11 +23,11 @@ export default {
     title: 'お気に入りノート',
     description: 'よく使う制作リストをここで管理しよう。',
     emptyTitle: 'お気に入りはまだないよ',
-    emptyDescription: '「過去の紀錄」で星マークを押して追加してね！'
+    emptyDescription: '「過去の記録」で星マークを押して追加してね！'
   },
   recommended: {
     title: 'うさぎのオススメ',
-    description: 'うさぎがまとめた便利なリストです。スペース区切りで条件を串聯（同時指定）できます。',
+    description: 'うさぎがまとめた便利なリストです。スペース区切りで複数のキーワードを組み合わせて検索できます。',
     searchPlaceholder: '検索...',
     emptyTitle: '見つからないみたい',
     emptyDescription: '別のキーワードを試してね！'
@@ -54,7 +54,7 @@ export default {
     title: '過去の記録をめくる',
     description: '過去の製作リストがここに記録されるよ。いつでも見返せるね。',
     autoDeleteWarning: '履歴は最大20件まで保存され、自動的に古いものから消えていくよ。大切にしたいノートは星マークを押して「お気に入り」に保存してね！',
-    emptyTitle: 'ノートは還まだ真っ白だよ',
+    emptyTitle: 'ノートはまだ真っ白だよ',
     emptyDescription: '「新しいノートを書く」から始めてみてね！',
     syncing: '思い出を探しています...',
     itemsCount: '入っているアイテム',
@@ -150,7 +150,7 @@ export default {
   },
   jobs: {
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
-    lwr: '革細工師', wvr: '裁縫師', alc: '錬金術士', cul: '調理師',
+    lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
     min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集'
   },
   settings: {
@@ -195,7 +195,7 @@ export default {
   },
   faq: {
     title: 'よくある質問',
-    description: '工坊の使い方や、よくある疑問についてまとめています。',
+    description: '工房の使い方や、よくある疑問についてまとめています。',
     items: [
       {
         q: 'このサイトはどのような目的で使われますか？',

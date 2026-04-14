@@ -52,9 +52,9 @@ export default {
     defaultTitle: '{name}的笔记'
   },
   history: {
-    title: '翻开旧纪录',
-    description: '这里记录了你所有的历史制作清单，方便随时翻閱',
-    autoDeleteWarning: '最多保留 20 筆歷史紀錄，超過時最舊的一筆將會被自動刪除。想要永久保留的筆記，請記得按下星號將它加入「收藏的小筆記」中喔！',
+    title: '翻开旧记录',
+    description: '这里记录了你所有的历史制作清单，方便随时翻阅',
+    autoDeleteWarning: '最多保留 20 条历史记录，超过时最旧的一条将会被自动删除。想要永久保留的笔记，请记得按下星号将它加入“收藏的小笔记”中喔！',
     emptyTitle: '笔记本目前是空白的喔',
     emptyDescription: '去“写张新笔记”开始你的第一步吧！',
     syncing: '回忆读取中...',
@@ -68,19 +68,19 @@ export default {
     title: '笔记工作台',
     description: '在此你可以贴上既有的笔记 JSON 进行二次编辑或是合并多张笔记。',
     importLabel: '请在此贴上笔记 JSON',
-    importPlaceholder: '贴上從本站复制的笔记 JSON 字符串...',
-    loadButton: '載入资料并开始编辑',
+    importPlaceholder: '贴上从本站复制的笔记 JSON 字符串...',
+    loadButton: '载入数据并开始编辑',
     mergeButton: '➕ 合并其他笔记 (JSON)',
     invalidJson: 'JSON 格式错误，请确认是否为本站导出的格式。',
-    emptyState: '目前没有載入任何笔记',
+    emptyState: '目前没有载入任何笔记',
     defaultMergedName: '合并的未命名笔记',
     backToImport: '返回重新导入'
   },
   workbench: {
     title: '备料台',
-    description: '巧匠大大今天要买要做还是要自己采呢？在这里制定你的制作计画与开销总结吧！',
+    description: '能工巧匠大大今天要买要做还是要自己采呢？在这里制定你的制作计划与开销总结吧！',
     view: {
-      analyzing: '正在载入真实资料与市场价格...',
+      analyzing: '正在载入真实数据与市场价格...',
       emptyTitle: '目前没有备料计划',
       emptyDescription: '去「写张新笔记」開始你的第一步吧！',
       prepping: '正在备料',
@@ -109,10 +109,10 @@ export default {
         yield: '单次产量',
         vendorTitle: 'NPC 贩售信息',
         vendorDesc: 'NPC 在售 单价 {price} Gil {location}',
-        mbTitle: '市场版贩售信息',
+        mbTitle: '市场板信息',
         q1Price: '1/4 分位数',
         medianPrice: '中位数',
-        noListings: '市场版上目前无上架物品'
+        noListings: '市场板上目前无上架物品'
       },
       summary: {
         budgetTitle: '物资筹备预算',
@@ -150,9 +150,9 @@ export default {
     emptySection: '此区块无项目'
   },
   jobs: {
-    crp: '木工师', bsm: '锻铁師', arm: '铸甲师', gsm: '雕金师',
-    lwr: '制革师', wvr: '裁缝师', alc: '炼金术士', cul: '烹调师',
-    min: '采矿工', btn: '园艺工', fsh: '钓鱼人', gather: '采集'
+    crp: '木工匠', bsm: '锻铁匠', arm: '铸甲匠', gsm: '雕金匠',
+    lwr: '制革匠', wvr: '裁缝匠', alc: '炼金术士', cul: '烹调师',
+    min: '采矿工', btn: '园艺工', fsh: '捕鱼人', gather: '采集'
   },
   settings: {
     title: '工坊设定',
@@ -166,15 +166,15 @@ export default {
       en: 'English',
       ja: '日本語 (Japanese)'
     },
-    marketTitle: '市场资料设定',
-    marketStrategyTitle: '市场版成本策略',
-    marketStrategyDesc: '设定备料台预估成本时所采用的市场数据基准，系统会同时自动与 NPC 售价进行比对并显示最低取得成本。',
-    marketStrategyAggressive: '激进 (市场最低价)',
-    marketStrategyBalanced: '平衡 (市场 1/4 位数)',
+    marketTitle: '市场数据设置',
+    marketStrategyTitle: '市场成本策略',
+    marketStrategyDesc: '设置备料台预估成本时所采用的市场数据基准，系统会同时自动与 NPC 售价进行比对并显示最低取得成本。',
+    marketStrategyAggressive: '激進 (市场最低价)',
+    marketStrategyBalanced: '平衡 (市场 1/4 分位数)',
     marketStrategyConservative: '保守 (市场中位数)',
     marketRegion: '市场地区',
-    marketDC: '资料中心',
-    marketDesc: '设定你要从哪一个数据中心获取市场价格数据。',
+    marketDC: '数据中心',
+    marketDesc: '设置你要从哪一个数据中心获取市场价格数据。',
     regions: {
       China: '中国',
       Japan: '日本',
@@ -184,13 +184,13 @@ export default {
       'NA-Cloud-DC': '北美云端',
       '中国': '中国服',
       '한국': '韩国服',
-      '繁中服': '繁中服'
+      '繁中服': '國際繁中'
     },
     about: {
-      title: '关于与致謝',
-      description: '工坊背后的资料与技术支持',
-      universalis: 'Universalis - 全球 FFXIV 市场资料缓存',
-      teamcraft: 'Teamcraft - 物品、配方与采集资料来源',
+      title: '关于与致谢',
+      description: '工坊背后的数据与技术支持',
+      universalis: 'Universalis - 全球 FFXIV 市场数据缓存',
+      teamcraft: 'Teamcraft - 物品、配方与采集数据来源',
       xivapi: 'XIVAPI - 提供游戏内图标与物品 API 支持'
     }
   },
@@ -220,17 +220,17 @@ export default {
       },
       {
         q: '关于网站现在的状态',
-        a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同時也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
+        a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同时也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
       }
     ],
   },
   sponsorModal: {
     title: '支持冷冻兔肉的工坊',
-    description: '感谢您的支持！由于部分支付平台在台湾存在區域限制，建议台湾玩家优先使用「台湾地区」，海外玩家建议使用「全球地区」。',
+    description: '感谢您的支持！由于部分支付平台在台湾存在区域限制，建议台湾玩家优先使用「台湾地区」，海外玩家建议使用「全球地区」。',
     twProvider: '台湾地区 (绿界科技)',
-    twDesc: '支援超商、ATM 与本地信用卡。',
+    twDesc: '支持超商、ATM 与本地信用卡。',
     globalProvider: '全球地区 (Ko-fi / PayPal)',
-    globalDesc: '适合海外玩家，支援信用卡與 PayPal。'
+    globalDesc: '适合海外玩家，支持信用卡与 PayPal。'
   },
   welcomeModal: {
     title: '欢迎来到工坊',
