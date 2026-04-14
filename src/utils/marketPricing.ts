@@ -19,6 +19,32 @@ export function filterListingsByIQR(listings: MarketListing[]): MarketListing[] 
 }
 
 /**
+ * Calculate basic market statistics for a set of listings.
+ * - minPrice: Lowest price found
+ * - q1Price: 25th percentile
+ * - medianPrice: 50th percentile (median)
+ */
+export function calculateMarketStats(listings: MarketListing[]): { 
+    minPrice: number | null; 
+    q1Price: number | null; 
+    medianPrice: number | null;
+    worldName: string | null;
+} {
+    if (!listings || listings.length === 0) {
+        return { minPrice: null, q1Price: null, medianPrice: null, worldName: null };
+    }
+
+    const len = listings.length;
+    // Note: Assuming listings are already sorted by price ASC from UniversalService
+    return {
+        minPrice: listings[0].pricePerUnit,
+        worldName: listings[0].worldName || null,
+        q1Price: listings[Math.floor((len - 1) * 0.25)].pricePerUnit,
+        medianPrice: listings[Math.floor((len - 1) * 0.5)].pricePerUnit,
+    };
+}
+
+/**
  * Calculate the simulated purchase price weighted by the required quantity.
  * @param listings Sorted market listings (by price ascending)
  * @param demandAmount Quantity needed
@@ -26,10 +52,10 @@ export function filterListingsByIQR(listings: MarketListing[]): MarketListing[] 
  */
 export function calculateSimulatedPrice(
   listings: MarketListing[],
-  demandAmount: number,
-  fallbackPrice: number | null
+  demandAmount: number = 1,
+  fallbackPrice: number | null = null
 ): number | null {
-  if (listings.length === 0) return fallbackPrice;
+  if (!listings || listings.length === 0) return fallbackPrice;
 
   // We always filter outliers first to ensure the simulation isn't skewed by 1,000,000 gil listings
   const filteredListings = filterListingsByIQR(listings);
@@ -52,7 +78,6 @@ export function calculateSimulatedPrice(
   }
 
   // If there's still demand but no listings left, use the average of the filtered set for the remainder
-  // (Alternatively, use the last known price which is more conservative)
   if (remaining > 0) {
     const lastPrice = filteredListings[filteredListings.length - 1].pricePerUnit;
     totalCost += remaining * lastPrice;

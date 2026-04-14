@@ -10,7 +10,7 @@ import {
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
-import { calculateSimulatedPrice } from '../utils/marketPricing';
+import { calculateSimulatedPrice, calculateMarketStats } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
 import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
@@ -227,17 +227,7 @@ const fetchPrices = async (ids: number[]) => {
       item.priceFetched = true;
 
       // Calculate Market Stats for the detail drawer
-      if (item.listings && item.listings.length > 0) {
-          const len = item.listings.length;
-          item.marketStats = {
-              minPrice: item.listings[0].pricePerUnit,
-              worldName: item.listings[0].worldName || null,
-              q1Price: item.listings[Math.floor((len - 1) * 0.25)].pricePerUnit,
-              medianPrice: item.listings[Math.floor((len - 1) * 0.5)].pricePerUnit,
-          };
-      } else {
-          item.marketStats = { minPrice: null, q1Price: null, medianPrice: null, worldName: null };
-      }
+      item.marketStats = calculateMarketStats(item.listings || []);
 
       // 根據策略更新有效價格
       updateItemEffectivePrice(item);
