@@ -11,6 +11,7 @@ import {
 // Layout
 import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
+import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 
 // Views
 import NewNoteView from './components/views/NewNoteView.vue'
@@ -25,7 +26,7 @@ import FaqView from './components/views/FaqView.vue'
 import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
-const { language } = useSettings()
+const { language, initialized } = useSettings()
 const { addNote, activeWorkbenchNote, notes } = useNotes()
 
 // Sync i18n locale and dictionary language with settings
@@ -40,6 +41,7 @@ const currentTab = ref('new') // 'new' | 'editor' | 'history' | 'settings' | 'fa
 const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 const isSponsorModalOpen = ref(false)
+const isLanguageModalOpen = ref(!initialized.value)
 
 // URL Hash Sync
 const syncTabFromHash = () => {
@@ -103,6 +105,12 @@ const handleOpenWorkbench = (note: any) => {
 
 const handleLanguageUpdate = (val: string) => {
   if (val) language.value = val as any
+}
+
+const handleLanguageSelect = (lang: string) => {
+  language.value = lang as any
+  initialized.value = true
+  isLanguageModalOpen.value = false
 }
 </script>
 
@@ -186,6 +194,10 @@ const handleLanguageUpdate = (val: string) => {
 
     <!-- Global Modals -->
     <SponsorModal v-model:visible="isSponsorModalOpen" />
+    <LanguageSelectModal 
+      v-model:visible="isLanguageModalOpen" 
+      @select="handleLanguageSelect"
+    />
   </div>
 </template>
 

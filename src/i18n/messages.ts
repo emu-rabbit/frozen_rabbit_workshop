@@ -232,6 +232,12 @@ export const messages = {
       twDesc: '支援超商代碼、ATM、國內信用卡，最適合台灣玩家支持。',
       globalProvider: '全球地區 (Ko-fi / PayPal)',
       globalDesc: '適合海外玩家，支援信用卡與 PayPal，且具備 Discord 自動身分組整合。'
+    },
+    welcomeModal: {
+      title: '歡迎來到工坊',
+      subtitle: '在你開始之前，請先選擇你偏好的語言',
+      description: '這將會調整整個工坊的介面語言。你之後隨時可以在「工坊設定」中更改。',
+      confirm: '就用這個語言開始吧！'
     }
   },
   cn: {
@@ -467,6 +473,12 @@ export const messages = {
       twDesc: '支援超商、ATM 与本地信用卡。',
       globalProvider: '全球地区 (Ko-fi / PayPal)',
       globalDesc: '适合海外玩家，支援信用卡與 PayPal。'
+    },
+    welcomeModal: {
+      title: '欢迎来到工坊',
+      subtitle: '在你开始之前，请先选择你偏好的语言',
+      description: '这将会调整整个工坊的界面语言。你之后随时可以在「工坊设置」中更改。',
+      confirm: '就用这个语言开始吧！'
     }
   },
   en: {
@@ -702,6 +714,12 @@ export const messages = {
       twDesc: 'Best for supporters in Taiwan. Supports local cards and convenience stores.',
       globalProvider: 'Global (Ko-fi / PayPal)',
       globalDesc: 'Best for international supporters. Supports Discord integration.'
+    },
+    welcomeModal: {
+      title: 'Welcome to the Workshop',
+      subtitle: 'Please select your preferred language before we begin',
+      description: 'This will adjust the entire workshop interface. You can change this anytime in "Workshop Settings".',
+      confirm: 'Start with this language!'
     }
   },
   ja: {
@@ -936,6 +954,12 @@ export const messages = {
       twDesc: '台湾の方向けの決済方法です。',
       globalProvider: 'グローバル (Ko-fi / PayPal)',
       globalDesc: '海外の方向けの決済方法です。'
+    },
+    welcomeModal: {
+      title: '工房へようこそ',
+      subtitle: 'はじめる前に、ご希望の言語を選択してください',
+      description: 'これにより、工房全体のインターフェース言語が調整されます。この設定はいつでも「工房の設定」から変更できます。',
+      confirm: 'この言語で開始する！'
     }
   }
 }
