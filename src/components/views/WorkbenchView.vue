@@ -450,7 +450,7 @@ const formatTime = (seconds: number) => {
     </div>
 
     <!-- Summary Sticky Footer -->
-    <div v-if="activeWorkbenchNote && activeItemIds.length > 0" class="fixed bottom-0 left-0 right-0 lg:left-64 bg-white/95 backdrop-blur-md border-t border-soft-green-100 shadow-[0_-10px_40px_-20px_rgba(0,0,0,0.1)] p-4 md:py-5 md:px-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-6 z-40">
+    <div v-if="activeWorkbenchNote && activeItemIds.length > 0" class="fixed bottom-0 left-0 right-0 lg:left-72 bg-white/95 backdrop-blur-md border-t border-soft-green-100 shadow-[0_-10px_40px_-20px_rgba(0,0,0,0.1)] p-4 md:py-5 md:px-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 md:gap-6 z-40">
         <div class="flex items-center md:items-center gap-4 md:gap-8 text-left overflow-x-auto no-scrollbar md:overflow-visible pb-2 md:pb-0">
             <div class="flex flex-col shrink-0">
                 <div class="flex items-center gap-1.5 mb-0.5">
