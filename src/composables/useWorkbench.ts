@@ -10,7 +10,7 @@ import {
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
-import { calculateSimulatedPrice, calculateMarketStats } from '../utils/marketPricing';
+import { calculateMarketStats } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
 import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
@@ -619,14 +619,7 @@ export function useWorkbench() {
       const item = workbenchItems.value[id];
       const newTotal = newDemands[id] || 0;
 
-      // 1. 動態更新市場價格與獲取預估
-      if (item && item.listings && item.listings.length > 0) {
-        item.marketPrice = calculateSimulatedPrice(
-          item.listings,
-          newTotal,
-          item.marketPrice
-        );
-      }
+      // 1. 動態更新市場價格與獲取預估 (已移除模擬購買，現由 updateItemEffectivePrice 統一處理)
 
       // 2. 智慧補位邏輯：如果使用者將此材料全量投入單一來源，則自動跟隨需求變動
       const d = decisions[idStr];

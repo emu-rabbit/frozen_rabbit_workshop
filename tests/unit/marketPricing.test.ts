@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { calculateMarketStats, calculateSimulatedPrice } from '../../src/utils/marketPricing';
+import { calculateMarketStats } from '../../src/utils/marketPricing';
 import type { MarketListing } from '../../src/services/universalis';
 
 const mockListings: MarketListing[] = [
@@ -39,14 +39,6 @@ describe('Market Pricing Utility', () => {
             expect(stats.minPrice).toBe(777);
             expect(stats.medianPrice).toBe(777);
             expect(stats.q1Price).toBe(777);
-        });
-    });
-
-    describe('calculateSimulatedPrice', () => {
-        it('should calculate simple weighted average', () => {
-            const price = calculateSimulatedPrice(mockListings, 2);
-            // 100 * 1 + 200 * 1 = 300 / 2 = 150
-            expect(price).toBe(150);
         });
     });
 });

@@ -143,7 +143,7 @@ export default {
       craft: 'Items to Craft'
     },
     targetQty: 'Target',
-    targetPrice: 'Lowest Price',
+    targetPrice: 'Reference Price',
     buySourceMarket: 'Market: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
     gatherLocation: 'Node',

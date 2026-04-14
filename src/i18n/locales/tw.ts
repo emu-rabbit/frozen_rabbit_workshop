@@ -143,7 +143,7 @@ export default {
       craft: '待製作物品'
     },
     targetQty: '目標',
-    targetPrice: '最低售價',
+    targetPrice: '參考單價',
     buySourceMarket: '市場版：{world}',
     buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
     gatherLocation: '採集點',

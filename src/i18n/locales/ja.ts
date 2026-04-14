@@ -143,7 +143,7 @@ export default {
       craft: '制作するもの'
     },
     targetQty: '目標',
-    targetPrice: '最低販売価格',
+    targetPrice: '参考単価',
     buySourceMarket: 'マケボ: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
     gatherLocation: '採集ポイント',
