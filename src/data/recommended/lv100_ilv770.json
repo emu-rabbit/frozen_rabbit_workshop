@@ -1,11 +1,59 @@
 [
   {
-    "id": "9c32d23c-4664-4cf1-bc58-b381c921ce30",
+    "id": "8f5f5e39-fe35-4898-b33f-a2761b217383",
     "name": {
       "tw": "Lv.100 iLv770 禦敵十件套裝",
       "cn": "Lv.100 iLv770 御敌十件套装",
       "en": "Lv.100 iLv770 Fending 10-piece Set",
       "ja": "Lv.100 iLv770 タンク10点セット"
+    },
+    "items": [
+      {
+        "id": 49271,
+        "quantity": 1
+      },
+      {
+        "id": 49272,
+        "quantity": 1
+      },
+      {
+        "id": 49273,
+        "quantity": 1
+      },
+      {
+        "id": 49274,
+        "quantity": 1
+      },
+      {
+        "id": 49275,
+        "quantity": 1
+      },
+      {
+        "id": 49306,
+        "quantity": 1
+      },
+      {
+        "id": 49311,
+        "quantity": 1
+      },
+      {
+        "id": 49316,
+        "quantity": 1
+      },
+      {
+        "id": 49321,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-04-14T02:27:31.121Z"
+  },
+  {
+    "id": "9c32d23c-4664-4cf1-bc58-b381c921ce30",
+    "name": {
+      "tw": "Lv.100 iLv770 制敵十件套裝",
+      "cn": "Lv.100 iLv770 制敌十件套装",
+      "en": "Lv.100 iLv770 Maiming 10-piece Set",
+      "ja": "Lv.100 iLv770 メレー10点セット"
     },
     "items": [
       {
