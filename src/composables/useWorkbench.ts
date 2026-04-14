@@ -425,10 +425,56 @@ const generateTodoSections = computed(() => {
       return indexB - indexA;
   });
 
+  sections.buy.sort((a, b) => {
+      const infoA = a.purchaseInfo;
+      const infoB = b.purchaseInfo;
+      if (!infoA && !infoB) return 0;
+      if (!infoA) return 1;
+      if (!infoB) return -1;
+
+      // 1. Group by Type (Market vs Vendor)
+      if (infoA.type !== infoB.type) {
+          return infoA.type === 'market' ? -1 : 1;
+      }
+
+      // 2a. Within Market: group by worldName
+      if (infoA.type === 'market') {
+          return (infoA.worldName || '').localeCompare(infoB.worldName || '');
+      }
+
+      // 2b. Within Vendor: group by Zone then NPC Name
+      const zoneA = infoA.vendor?.zoneName || '';
+      const zoneB = infoB.vendor?.zoneName || '';
+      if (zoneA !== zoneB) return zoneA.localeCompare(zoneB);
+
+      const npcA = infoA.vendor?.npcName || '';
+      const npcB = infoB.vendor?.npcName || '';
+      return npcA.localeCompare(npcB);
+  });
+
   sections.gather.sort((a, b) => {
-      const zoneA = a.gathering?.zoneName?.en || '';
-      const zoneB = b.gathering?.zoneName?.en || '';
-      return zoneA.localeCompare(zoneB);
+      const gA = a.gathering;
+      const gB = b.gathering;
+      if (!gA && !gB) return 0;
+      if (!gA) return 1;
+      if (!gB) return -1;
+
+      // 1. Group by Region -> Parent Zone -> Zone
+      const regA = gA.regionName || '';
+      const regB = gB.regionName || '';
+      if (regA !== regB) return regA.localeCompare(regB);
+
+      const pZoneA = gA.parentZoneName || '';
+      const pZoneB = gB.parentZoneName || '';
+      if (pZoneA !== pZoneB) return pZoneA.localeCompare(pZoneB);
+
+      const zoneA = gA.zoneName || '';
+      const zoneB = gB.zoneName || '';
+      if (zoneA !== zoneB) return zoneA.localeCompare(zoneB);
+
+      // 2. Sub-sort by Job and Level
+      if (gA.jobName !== gB.jobName) return gA.jobName.localeCompare(gB.jobName);
+      return (gB.level || 0) - (gA.level || 0);
   });
 
   const result: TodoSection[] = [
