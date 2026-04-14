@@ -10,6 +10,7 @@ export default {
     history: '過去のノート',
     faq: 'よくある質問',
     settings: '設定',
+    sponsor: '電気代を支援する',
     github: 'ソースコード (GitHub)',
     editor: '制作作業台'
   },

@@ -137,7 +137,7 @@ const handleLanguageSelect = (lang: string) => {
     ></div>
 
     <aside 
-      class="fixed inset-y-0 left-0 w-72 bg-white z-[70] lg:relative lg:w-64 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
+      class="fixed inset-y-0 left-0 w-80 bg-white z-[70] lg:relative lg:w-80 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
       :class="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <Sidebar v-model:currentTab="currentTab" @open-sponsor="isSponsorModalOpen = true" class="w-full h-full" />

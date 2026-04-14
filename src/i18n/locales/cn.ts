@@ -9,7 +9,7 @@ export default {
     recommended: '兔肉私心笔记',
     history: '翻开旧笔记',
     settings: '工坊设置',
-    sponsor: '赞助冷凍庫电费',
+    sponsor: '赞助冷冻库电费',
     github: '开源源代码 (GitHub)',
     editor: '笔记工作台',
     faq: '常见问题'
