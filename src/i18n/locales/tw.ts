@@ -150,9 +150,9 @@ export default {
     emptySection: '此區塊無項目'
   },
   jobs: {
-    crp: '木工師', bsm: '鍛造師', arm: '鑄甲師', gsm: '金工師',
-    lwr: '製革師', wvr: '裁縫師', alc: '鍊金術師', cul: '烹調師',
-    min: '採礦師', btn: '園藝師', fsh: '漁師', gather: '採集'
+    crp: '木工師', bsm: '鍛造師', arm: '甲冑師', gsm: '金工師',
+    lwr: '皮革師', wvr: '裁縫師', alc: '鍊金術師', cul: '烹調師',
+    min: '採掘師', btn: '園藝師', fsh: '漁師', gather: '採集'
   },
   settings: {
     title: '工坊設定',
