@@ -158,6 +158,7 @@ export default {
     title: 'Workshop Settings',
     description: 'Adjust the workshop language to your liking',
     language: 'Language',
+    languageDesc: 'Display language for the website. English will be shown if translations are missing.',
     debugMode: 'Debug Mode',
     debugModeDesc: 'Enable to copy recommended JSON format when creating new notes',
     langOptions: {
@@ -169,7 +170,7 @@ export default {
     marketTitle: 'Market Data Source',
     marketRegion: 'Region',
     marketDC: 'Data Center',
-    marketDesc: 'Select the data center you wish to fetch market price data from.',
+    marketDesc: 'Select the region and data center you wish to fetch market price data from.',
     regions: {
       China: 'China',
       Japan: 'Japan',

@@ -101,6 +101,9 @@ watch(marketDC, (newVal) => {
                 <i class="pi pi-language text-xl"></i>
                 <label class="font-bold text-lg">{{ t('settings.language') }}</label>
               </div>
+
+              <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.languageDesc') }}</p>
+
               <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
                   <SelectButton 
                     :modelValue="language" 
@@ -117,70 +120,72 @@ watch(marketDC, (newVal) => {
 
       <!-- Market Data Settings -->
       <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
-          <div class="flex flex-col gap-6">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3 text-soft-green-900">
-                  <i class="pi pi-database text-xl"></i>
-                  <label class="font-bold text-base md:text-lg">{{ t('settings.marketTitle') }}</label>
-                </div>
-                <div v-if="dcLoading" class="flex items-center gap-2 text-slate-400 text-[10px] md:text-xs">
-                  <i class="pi pi-spinner pi-spin"></i>
-                  <span>Syncing...</span>
-                </div>
+          <div class="flex flex-col gap-8">
+              <!-- Sub-section 1: Market Data Source -->
+              <div class="flex flex-col gap-4">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3 text-soft-green-900">
+                      <i class="pi pi-database text-xl"></i>
+                      <label class="font-bold text-lg">{{ t('settings.marketTitle') }}</label>
+                    </div>
+                    <div v-if="dcLoading" class="flex items-center gap-2 text-slate-400 text-[10px] md:text-xs">
+                      <i class="pi pi-spinner pi-spin"></i>
+                      <span>Syncing...</span>
+                    </div>
+                  </div>
+
+                  <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.marketDesc') }}</p>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Region Selector -->
+                    <div class="flex flex-col gap-2">
+                      <Dropdown 
+                        v-model="marketRegion" 
+                        :options="regionOptions" 
+                        optionLabel="label" 
+                        optionValue="value"
+                        :loading="dcLoading"
+                        :disabled="dcLoading"
+                        class="w-full !border-soft-green-100 !rounded-xl"
+                      />
+                    </div>
+
+                    <!-- DC Selector -->
+                    <div class="flex flex-col gap-2">
+                      <Dropdown 
+                        v-model="marketDC" 
+                        :options="filteredDCs" 
+                        optionLabel="label" 
+                        optionValue="value"
+                        :loading="dcLoading"
+                        :disabled="dcLoading"
+                        class="w-full !border-soft-green-100 !rounded-xl"
+                      />
+                    </div>
+                  </div>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Region Selector -->
-                <div class="flex flex-col gap-2">
-                  <span class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{{ t('settings.marketRegion') }}</span>
-                  <Dropdown 
-                    v-model="marketRegion" 
-                    :options="regionOptions" 
-                    optionLabel="label" 
-                    optionValue="value"
-                    :loading="dcLoading"
-                    :disabled="dcLoading"
-                    class="w-full !border-soft-green-100 !rounded-xl"
-                  />
-                </div>
+              <!-- Separator -->
+              <div class="border-t border-slate-100 -mx-5 md:-mx-8"></div>
 
-                <!-- DC Selector -->
-                <div class="flex flex-col gap-2">
-                  <span class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{{ t('settings.marketDC') }}</span>
-                  <Dropdown 
-                    v-model="marketDC" 
-                    :options="filteredDCs" 
-                    optionLabel="label" 
-                    optionValue="value"
-                    :loading="dcLoading"
-                    :disabled="dcLoading"
-                    class="w-full !border-soft-green-100 !rounded-xl"
-                  />
-                </div>
-              </div>
-
-              <div class="bg-soft-green-50 p-4 rounded-xl border border-soft-green-100 flex flex-col gap-3">
-                <div class="flex gap-3">
-                  <i class="pi pi-info-circle text-soft-green-600 mt-0.5"></i>
-                  <p class="text-sm text-soft-green-800 leading-relaxed">{{ t('settings.marketDesc') }}</p>
-                </div>
-              </div>
-
-              <!-- Market Strategy Selector -->
-              <div class="flex flex-col gap-4 pt-2 border-t border-slate-100">
-                <div class="flex flex-col gap-1">
-                  <span class="text-sm font-bold text-soft-green-900">{{ t('settings.marketStrategyTitle') }}</span>
-                  <p class="text-xs text-slate-500 leading-relaxed">{{ t('settings.marketStrategyDesc') }}</p>
-                </div>
-                <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
-                  <SelectButton 
-                    v-model="marketCostStrategy" 
-                    :options="strategyOptions" 
-                    optionLabel="label" 
-                    optionValue="value" 
-                    class="settings-lang-toggle whitespace-nowrap min-w-max" 
-                  />
-                </div>
+              <!-- Sub-section 2: Market Strategy Selection -->
+              <div class="flex flex-col gap-4">
+                  <div class="flex items-center gap-3 text-soft-green-900">
+                    <i class="pi pi-chart-line text-xl"></i>
+                    <label class="font-bold text-lg">{{ t('settings.marketStrategyTitle') }}</label>
+                  </div>
+                  
+                  <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.marketStrategyDesc') }}</p>
+                  
+                  <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
+                    <SelectButton 
+                      v-model="marketCostStrategy" 
+                      :options="strategyOptions" 
+                      optionLabel="label" 
+                      optionValue="value" 
+                      class="settings-lang-toggle whitespace-nowrap min-w-max" 
+                    />
+                  </div>
               </div>
           </div>
       </div>

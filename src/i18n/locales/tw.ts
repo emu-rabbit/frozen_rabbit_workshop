@@ -158,6 +158,7 @@ export default {
     title: '工坊設定',
     description: '調整工坊的各項偏好設定',
     language: '語言版本',
+    languageDesc: '本網站的顯示語言，缺乏翻譯的情況下將顯示英文',
     debugMode: '除錯模式',
     debugModeDesc: '開啟後可於創建新筆記時複製站長推薦 JSON 格式',
     langOptions: {
@@ -174,7 +175,7 @@ export default {
     marketStrategyConservative: '保守 (市場中位數)',
     marketRegion: '市場地區',
     marketDC: '資料中心',
-    marketDesc: '設定你要從哪一個資料中心獲取市場價格資料。',
+    marketDesc: '設定你要從哪一個市場地區及資料中心獲取價格資料。',
     regions: {
       China: '中國',
       Japan: '日本',

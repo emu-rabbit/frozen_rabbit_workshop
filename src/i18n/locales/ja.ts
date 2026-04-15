@@ -158,6 +158,7 @@ export default {
     title: '工房の設定',
     description: '工房の言葉を調整してね',
     language: '言語',
+    languageDesc: 'ウェブサイトの表示言語です。翻訳がない場合は英語で表示されます。',
     debugMode: 'デバッグモード',
     debugModeDesc: 'オンにすると新しくノートを書く時に推奨 JSON 形式をコピーできます',
     langOptions: {
@@ -169,7 +170,7 @@ export default {
     marketTitle: 'マーケットデータ設定',
     marketRegion: 'リージョン',
     marketDC: 'データセンター',
-    marketDesc: 'マーケット価格を取得するデータセンターを設定します。',
+    marketDesc: 'マーケット価格を取得するリージョンとデータセンターを設定します。',
     regions: {
       China: '中国',
       Japan: '日本',
