@@ -50,7 +50,7 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
     
     <footer class="mt-12 pt-8 border-t border-soft-green-100 text-center">
       <p class="text-sm text-slate-400">
-        {{ t('faq.footer') }}
+        {{ t('faq.footer', { email: 'mausu2526@gmail.com' }) }}
       </p>
     </footer>
   </div>

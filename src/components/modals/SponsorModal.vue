@@ -55,7 +55,7 @@ const ecPayUrl = '#'
                 {{ t('sponsorModal.title') }}
               </h2>
               <p class="text-sm text-soft-green-700 leading-relaxed opacity-80">
-                {{ t('sponsorModal.description') }}
+                {{ t('sponsorModal.description', { email: 'mausu2526@gmail.com' }) }}
               </p>
             </div>
             
