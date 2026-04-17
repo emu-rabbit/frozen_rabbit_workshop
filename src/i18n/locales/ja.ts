@@ -224,11 +224,11 @@ export default {
         a: 'このサイトは現在アルファテスト段階にあり、多くの機能が不安定な状態です。現在、皆様からのフィードバックを募集しています。バグ報告や改善の提案がありましたら、お気軽に <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> までお寄せください！'
       }
     ],
-    footer: '他に質問がありますか？GitHubでの報告、またはメールでお問い合わせください：mausu2526@gmail.com'
+    footer: '他に質問がありますか？GitHubでの報告、またはメールでお問い合わせください：mausu2526{'@'}gmail.com'
   },
   sponsorModal: {
     title: '冷凍ラビットを支援する',
-    description: 'ご支援ありがとうございます！支払方法を選択してください。お問い合わせ：mausu2526@gmail.com',
+    description: 'ご支援ありがとうございます！支払方法を選択してください。お問い合わせ：mausu2526{'@'}gmail.com',
     twProvider: '台灣地區 (ECPay)',
     twDesc: '台灣の方向けの決済方法です。',
     globalProvider: 'グローバル (Ko-fi / PayPal)',
