@@ -49,8 +49,7 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
     </div>
     
     <footer class="mt-12 pt-8 border-t border-soft-green-100 text-center">
-      <p class="text-sm text-slate-400">
-        還有其他疑問嗎？歡迎透過 GitHub 回報或聯繫站長！
+      <p class="text-sm text-slate-400" v-html="t('faq.footer')">
       </p>
     </footer>
   </div>

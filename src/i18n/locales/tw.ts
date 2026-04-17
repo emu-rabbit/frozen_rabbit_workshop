@@ -224,10 +224,11 @@ export default {
         a: '網站現在在超先行測試運行中，很多東西還不是穩定狀態，但同時也在蒐集各方的意見，有Bug有任何意見歡迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告訴我唷'
       }
     ],
+    footer: '還有其他疑問嗎？歡迎透過 GitHub 回報或來信聯繫：<a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>'
   },
   sponsorModal: {
     title: '支持冷凍兔肉的工坊',
-    description: '感謝您的支持！由於支付平台（PayPal/Stripe）在台灣有區域轉帳限制，建議台灣玩家優先使用「台灣地區（綠界）」進行贊助，海外玩家則可使用「全球地區（Ko-fi）」。',
+    description: '感謝您的支持！由於支付平台（PayPal/Stripe）在台灣有區域轉帳限制，建議台灣玩家優先使用「台灣地區（綠界）」進行贊助，海外玩家則可使用「全球地區（Ko-fi）」。如有任何問題，請聯繫：<a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>',
     twProvider: '台灣地區 (綠界科技)',
     twDesc: '支援超商代碼、ATM、國內信用卡，最適合台灣玩家支持。',
     globalProvider: '全球地區 (Ko-fi / PayPal)',
