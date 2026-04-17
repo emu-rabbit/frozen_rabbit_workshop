@@ -224,11 +224,11 @@ export default {
         a: 'The website is currently in an early alpha testing phase and many features are not yet stable. We are collecting feedback from all sources. If you encounter bugs or have suggestions, please let us know on <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>.'
       }
     ],
-    footer: 'Have more questions? Feel free to report on GitHub or email: <a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>'
+    footer: 'Have more questions? Feel free to report on GitHub or email: mausu2526@gmail.com'
   },
   sponsorModal: {
     title: 'Support Frozen Rabbit',
-    description: 'Thank you for your support! Please choose your preferred region to ensure a smooth donation process. Contact: <a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>',
+    description: 'Thank you for your support! Please choose your preferred region to ensure a smooth donation process. Contact: mausu2526@gmail.com',
     twProvider: 'Taiwan (ECPay)',
     twDesc: 'Best for supporters in Taiwan. Supports local cards and convenience stores.',
     globalProvider: 'Global (Ko-fi / PayPal)',

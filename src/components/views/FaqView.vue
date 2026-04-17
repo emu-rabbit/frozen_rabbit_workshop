@@ -49,7 +49,8 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
     </div>
     
     <footer class="mt-12 pt-8 border-t border-soft-green-100 text-center">
-      <p class="text-sm text-slate-400" v-html="t('faq.footer')">
+      <p class="text-sm text-slate-400">
+        {{ t('faq.footer') }}
       </p>
     </footer>
   </div>

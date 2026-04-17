@@ -54,7 +54,8 @@ const ecPayUrl = '#'
               <h2 class="text-2xl font-black text-soft-green-900 leading-tight mb-4">
                 {{ t('sponsorModal.title') }}
               </h2>
-              <p class="text-sm text-soft-green-700 leading-relaxed opacity-80" v-html="t('sponsorModal.description')">
+              <p class="text-sm text-soft-green-700 leading-relaxed opacity-80">
+                {{ t('sponsorModal.description') }}
               </p>
             </div>
             

@@ -224,11 +224,11 @@ export default {
         a: '网站现在在超先行测试运行中，很多东西还不是稳定状态，但同时也在搜集各方的意见，有Bug有任何意见欢迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告诉我唷'
       }
     ],
-    footer: '还有其他疑问吗？欢迎通过 GitHub 回报或来信联系：<a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>'
+    footer: '还有其他疑问吗？欢迎通过 GitHub 回报或来信联系：mausu2526@gmail.com'
   },
   sponsorModal: {
     title: '支持冷冻兔肉的工坊',
-    description: '感謝您的支持！由於部分支付平台在台灣存在區域限制，建議台灣玩家優先使用「台灣地區」，海外玩家建議使用「全球地區」。如有任何問題，請聯繫：<a href="mailto:mausu2526@gmail.com" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">mausu2526@gmail.com</a>',
+    description: '感謝您的支持！由於部分支付平台在台灣存在區域限制，建議台灣玩家優先使用「台灣地區」，海外玩家建議使用「全球地區」。如有任何問題，請聯繫：mausu2526@gmail.com',
     twProvider: '台湾地区 (绿界科技)',
     twDesc: '支持超商、ATM 与本地信用卡。',
     globalProvider: '全球地区 (Ko-fi / PayPal)',
