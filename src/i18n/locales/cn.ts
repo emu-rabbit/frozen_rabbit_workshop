@@ -97,7 +97,9 @@ export default {
         excess: '多出 {n} 个',
         mismatch: '目前的数量分配与目标对不上哦，请检查一下各个项目的数字是否正确！',
         nonePrice: '无上架',
-        priceSuffix: '/ 个'
+        priceSuffix: '/ 个',
+        priceErrorTitle: '连接不稳定：市场价格更新失败',
+        priceErrorDesc: '目前与 Universalis 服务器的连接不够稳定或发生错误。您仍然可以继续使用工作台进行设置，只是暂时无法看到最新的预估花费。系统会在您下次操作时再次尝试获取。'
       },
       details: {
         gatherTitle: '采集地点与详情',

@@ -97,7 +97,9 @@ export default {
         excess: '多出 {n} 個',
         mismatch: '目前的數量分配與目標對不上喔，請檢查一下各個項目的數字是否正確！',
         nonePrice: '無上架',
-        priceSuffix: '/ 個'
+        priceSuffix: '/ 個',
+        priceErrorTitle: '連線不穩定：市集價格更新失敗',
+        priceErrorDesc: '目前與 Universalis 伺服器的連線不夠穩定或發生錯誤。您仍然可以繼續使用工作台進行設定，只是暫時無法看見最新的預估花費。系統會在您下次操作時再次嘗試抓取。'
       },
       details: {
         gatherTitle: '採集地點與詳情',

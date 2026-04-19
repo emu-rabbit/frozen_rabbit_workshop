@@ -97,7 +97,9 @@ export default {
         excess: '{n} 個多い',
         mismatch: '数量の配分が目標と合っていないようです。各項目の数字を見直してみてくださいね。',
         nonePrice: '出品なし',
-        priceSuffix: '/ 個'
+        priceSuffix: '/ 個',
+        priceErrorTitle: '接続が不安定：市場価格の更新に失敗しました',
+        priceErrorDesc: '現在、Universalisサーバーとの接続が不安定またはエラーが発生しています。引き続き仕込み台で分配することはできますが、最新の見積もりコストは一時的に表示されません。次回の操作時に再取得を試みます。'
       },
       details: {
         gatherTitle: '採集場所と詳細',

@@ -14,6 +14,9 @@ import { ref, readonly } from 'vue';
 const UNIVERSALIS_BASE = 'https://universalis.app/api/v2';
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
+/** DEBUG: 暫時用來模擬 Universalis API 掛掉時的情境。設置為 true 即可觸發假性 CORS 網路阻擋錯誤。 */
+export const DEBUG_SIMULATE_API_ERROR = false;
+
 /** All available data centers fetched from Universalis. */
 export interface DataCenter {
   name: string;
@@ -186,10 +189,15 @@ export async function fetchItemPrices(
 
   // Handle items that are already being fetched by another call
   if (awaitingInflight.length > 0) {
-    const prices = await Promise.all(awaitingInflight.map(a => a.promise));
-    awaitingInflight.forEach((a, index) => {
-      result.set(a.id, prices[index]);
-    });
+    try {
+      const prices = await Promise.all(awaitingInflight.map(a => a.promise));
+      awaitingInflight.forEach((a, index) => {
+        result.set(a.id, prices[index]);
+      });
+    } catch (err) {
+      console.error('[Universalis] Inflight price fetch failed:', err);
+      // Let it fail gracefully; the primary fetch loop will also fail gracefully and we don't crash.
+    }
   }
 
   if (!toFetch.length) return result;
@@ -201,11 +209,11 @@ export async function fetchItemPrices(
     const BATCH_SIZE = 100;
     for (let i = 0; i < toFetch.length; i += BATCH_SIZE) {
       const batch = toFetch.slice(i, i + BATCH_SIZE);
-      
+
       // Create deferred promises for this batch to track in inflightRequests
       const resolvers: Record<number, (val: ItemPrice) => void> = {};
       const rejecters: Record<number, (reason: any) => void> = {};
-      
+
       batch.forEach(id => {
         const promise = new Promise<ItemPrice>((resolve, reject) => {
           resolvers[id] = resolve;
@@ -215,27 +223,31 @@ export async function fetchItemPrices(
       });
 
       try {
+        if (DEBUG_SIMULATE_API_ERROR) {
+          throw new TypeError('Failed to fetch (Simulated CORS blocked)');
+        }
+
         const encodedDC = encodeURIComponent(dc);
         const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
         const resp = await fetch(url);
-        
+
         if (!resp.ok) {
           // 404 is common for non-marketable items (like collectibles); treat as empty result instead of crash
           if (resp.status === 404) {
-             console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
-             batch.forEach(id => {
-               const emptyPrice = parseItemPrice(id, null);
-               setCache(dc, emptyPrice);
-               result.set(id, emptyPrice);
-               resolvers[id](emptyPrice);
-             });
-             continue; // Move to next batch
+            console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
+            batch.forEach(id => {
+              const emptyPrice = parseItemPrice(id, null);
+              setCache(dc, emptyPrice);
+              result.set(id, emptyPrice);
+              resolvers[id](emptyPrice);
+            });
+            continue; // Move to next batch
           }
           throw new Error(`Universalis returned ${resp.status}`);
         }
-        
+
         const json = await resp.json();
-        
+
         if (batch.length === 1) {
           const price = parseItemPrice(batch[0], json);
           setCache(dc, price);
@@ -256,7 +268,7 @@ export async function fetchItemPrices(
         // If it was already resolved by the 404 logic, this catch might catch it again or throw
         // To be safe, only reject if not already settled
         batch.forEach(id => {
-          try { rejecters[id](err); } catch {}
+          try { rejecters[id](err); } catch { }
         });
         throw err;
       } finally {

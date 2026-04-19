@@ -97,7 +97,9 @@ export default {
         excess: '{n} in excess',
         mismatch: "The numbers don't seem to add up! Please double-check your quantity allocation.",
         nonePrice: 'No Listing',
-        priceSuffix: '/ ea'
+        priceSuffix: '/ ea',
+        priceErrorTitle: 'Connection Unstable: Market Price Update Failed',
+        priceErrorDesc: 'The connection to the Universalis server is currently unstable or encountered an error. You can still use the workbench to set up your craft, but estimated costs will be temporarily unavailable. The system will try to fetch them again on your next action.'
       },
       details: {
         gatherTitle: 'Gathering Details',

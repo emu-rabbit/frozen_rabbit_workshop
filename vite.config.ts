@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/frozen_rabbit_workshop/',
   plugins: [vue()],
+  server: {
+    port: 3000,
+  },
   build: {
     rollupOptions: {
       output: {

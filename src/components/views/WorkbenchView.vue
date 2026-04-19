@@ -3,7 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import { useWorkbench } from '../../composables/useWorkbench'
-import { formatLastUpdate } from '../../services/universalis'
+import { formatLastUpdate, isPriceError } from '../../services/universalis'
 
 const { t, locale } = useI18n()
 const { activeWorkbenchNote } = useNotes()
@@ -175,6 +175,18 @@ const formatTime = (seconds: number) => {
       </div>
 
       <div v-else class="flex flex-col gap-6 pb-96">
+        <transition name="fade">
+            <div v-if="isPriceError" class="bg-red-50/80 border border-red-100 rounded-2xl px-5 py-4 flex items-start gap-4 text-red-600 shadow-sm">
+                <i class="pi pi-wifi text-2xl mt-0.5"></i>
+                <div>
+                    <h4 class="font-black text-[15px] mb-1">{{ t('workbench.view.status.priceErrorTitle') }}</h4>
+                    <p class="text-[13px] font-bold opacity-80 leading-relaxed">
+                        {{ t('workbench.view.status.priceErrorDesc') }}
+                    </p>
+                </div>
+            </div>
+        </transition>
+
         <TransitionGroup name="list">
           <div 
             v-for="id in activeItemIds" 
