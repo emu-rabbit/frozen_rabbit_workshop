@@ -213,6 +213,10 @@ export default {
         a: 'Estimated costs are influenced by several factors: 1. Market data is cached and not real-time (minutes to hours old). 2. The system filters prices based on your selected "Cost Strategy" (Aggressive, Balanced, Conservative) using statistical markers like Q1 or Median. 3. It automatically compares market prices against NPC vendor prices to show the lowest acquisition cost. Please also ensure your Data Center settings are correct.'
       },
       {
+        q: 'Why is the market price of some finished products significantly higher than the cost indicated on the website?',
+        a: 'This website provides an "estimation of production cost" to help you understand the resources required for an item, but this is not the same as its actual market retail price. Market prices are influenced by many factors beyond material costs, including supply and demand, the crafter\'s time and effort, preparation for high-difficulty recipes, Materia melds, NQ risks, and inventory holding costs. Conversely, if supply far exceeds demand, market prices may fall below cost. Please treat the costs shown here as reference information rather than the sole factor in market pricing.'
+      },
+      {
         q: 'How is the estimated time calculated?',
         a: 'Currently, the estimated time uses a very simplified calculation: 30 seconds for regular crafting, 1 minute for high-difficulty crafting, and 5 seconds per item for gathering. If you have better ideas for calculation, feel free to open a <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>!'
       },
