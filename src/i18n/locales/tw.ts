@@ -137,6 +137,8 @@ export default {
   todo: {
     title: '代辦清單',
     backToWorkbench: '返回備料台',
+    export: '匯出 / 下載清單',
+    exportSuffix: '的代辦清單',
     progress: '已完成 {n}/{total} 項',
     section: {
       other: '庫存 / 其他來源',
@@ -235,6 +237,13 @@ export default {
     twDesc: '支援超商代碼、ATM、國內信用卡，最適合台灣玩家支持。',
     globalProvider: '全球地區 (Ko-fi / PayPal)',
     globalDesc: '適合海外玩家，支援信用卡與 PayPal，且具備 Discord 自動身分組整合。'
+  },
+  exportModal: {
+    title: '匯出 / 下載代辦清單',
+    description: '您可以將目前的代辦清單匯出成一個單獨的離線 HTML 檔案。此檔案可以直接雙擊由瀏覽器開啟，也可以在不同裝置間傳遞。更棒的是，它仍然支援拖拉互換順序的功能！',
+    includeMarket: '一併匯出市場價格與來源位置資訊',
+    includeMarketDesc: '匯出的紀錄為定格的市場價格，若您很多天後才使用，價格可能會失準。',
+    confirm: '確認下載 HTML'
   },
   welcomeModal: {
     title: '歡迎來到工坊',

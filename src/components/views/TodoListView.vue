@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
 import { useWorkbench } from '../../composables/useWorkbench';
 import { useNotes } from '../../composables/useNotes';
+import ExportTodoModal from '../modals/ExportTodoModal.vue';
+import { generateTodoExportHtml, type ExportContext } from '../../services/exportHtml';
 
 const { t, locale } = useI18n();
 const { activeWorkbenchNote } = useNotes();
@@ -15,6 +17,8 @@ const {
 } = useWorkbench();
 
 const emit = defineEmits(['back']);
+
+const showExportModal = ref(false);
 
 // Local storage for draggable items to avoid direct computed mutation
 const sectionItems = ref<Record<string, any[]>>({});
@@ -119,6 +123,44 @@ const copyToClipboard = (id: string, text: string) => {
     }).catch(err => {
         console.error('Could not copy text: ', err);
     });
+};
+
+const handleExportHtml = (includeMarket: boolean) => {
+    const ctx: ExportContext = {
+        translations: {
+            title: t('todo.title'),
+            progress: t('todo.progress', { n: '{n}', total: '{total}' }),
+            sectionOther: t('todo.section.other'),
+            sectionBuy: t('todo.section.buy'),
+            sectionGather: t('todo.section.gather'),
+            sectionCraft: t('todo.section.craft'),
+            targetPrice: t('todo.targetPrice'),
+            buySourceVendor: t('todo.buySourceVendor', { name: '{name}', zone: '{zone}', x: '{x}', y: '{y}' }),
+            buySourceMarket: t('todo.buySourceMarket', { world: '{world}' })
+        },
+        includeMarket,
+        formatMoney,
+        getLocalizedName,
+        getJobName: (name: string) => t(name),
+        renderStars
+    };
+
+    const htmlString = generateTodoExportHtml(generateTodoSections.value, ctx);
+    
+    const blob = new Blob([htmlString], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    const baseName = activeWorkbenchNote.value?.name 
+        ? getLocalizedName(activeWorkbenchNote.value.name) 
+        : t('todo.title');
+    const safeName = baseName.replace(/[\/\\?%*:|"<>]/g, '-');
+    a.download = `${safeName}${t('todo.exportSuffix')}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 };
 </script>
 
@@ -351,6 +393,14 @@ const copyToClipboard = (id: string, text: string) => {
                     </div>
                 </div>
             </div>
+            
+            <button v-if="generateTodoSections.length > 0"
+                    @click="showExportModal = true"
+                    class="fixed bottom-6 right-6 md:bottom-10 md:right-10 w-14 h-14 md:w-16 md:h-16 bg-soft-green-500 hover:bg-soft-green-600 text-white rounded-full shadow-[0_8px_30px_rgb(82,168,144,0.4)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group z-50">
+                <i class="pi pi-download text-xl md:text-2xl group-hover:-translate-y-1 transition-transform"></i>
+            </button>
+            
+            <ExportTodoModal v-model:visible="showExportModal" @export="handleExportHtml" />
         </div>
     </div>
 </template>

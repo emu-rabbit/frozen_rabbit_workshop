@@ -137,6 +137,8 @@ export default {
   todo: {
     title: 'やることリスト',
     backToWorkbench: '仕込み台に戻る',
+    export: 'エクスポート',
+    exportSuffix: 'のToDoリスト',
     progress: '{n}/{total} 完了',
     section: {
       other: '在庫・その他',
@@ -233,8 +235,15 @@ export default {
     description: 'ご支援ありがとうございます！支払方法を選択してください。お問い合わせ：{email}',
     twProvider: '台灣地區 (ECPay)',
     twDesc: '台灣の方向けの決済方法です。',
-    globalProvider: 'グローバル (Ko-fi / PayPal)',
-    globalDesc: '海外の方向けの決済方法です。'
+    globalProvider: '全世界 (Ko-fi / PayPal)',
+    globalDesc: '海外のプレイヤーに最適です。'
+  },
+  exportModal: {
+    title: 'ToDoリストのエクスポート',
+    description: '現在のToDoリストをオフラインHTMLファイルとしてエクスポートできます。このファイルはブラウザで開いて進捗を確認でき、項目の並べ替えもサポートしています。',
+    includeMarket: 'マーケット価格と場所情報を含める',
+    includeMarketDesc: '価格情報は時間経過により古くなる可能性があります。',
+    confirm: 'HTMLをダウンロード'
   },
   welcomeModal: {
     title: '工房へようこそ',

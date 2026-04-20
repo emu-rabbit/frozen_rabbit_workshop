@@ -137,6 +137,8 @@ export default {
   todo: {
     title: 'Todo List',
     backToWorkbench: 'Back to Workbench',
+    export: 'Export / Download',
+    exportSuffix: ' - Todo List',
     progress: '{n}/{total} Completed',
     section: {
       other: 'Stock & Other Sources',
@@ -235,6 +237,13 @@ export default {
     twDesc: 'Best for supporters in Taiwan. Supports local cards and convenience stores.',
     globalProvider: 'Global (Ko-fi / PayPal)',
     globalDesc: 'Best for international supporters. Supports Discord integration.'
+  },
+  exportModal: {
+    title: 'Export Todo List',
+    description: 'You can export the current Todo List as an offline HTML file. You can open this file in any browser to check your crafting progress, and even drag and drop to rearrange items.',
+    includeMarket: 'Include market prices and locations',
+    includeMarketDesc: 'Prices may become outdated over time.',
+    confirm: 'Download HTML'
   },
   welcomeModal: {
     title: 'Welcome to the Workshop',
