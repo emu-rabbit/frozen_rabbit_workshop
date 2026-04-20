@@ -9,7 +9,9 @@ export interface ExportContext {
     targetPrice: string;
     buySourceVendor: string;
     buySourceMarket: string;
+    exportOfflineNote: string;
   };
+  pageTitle: string;
   includeMarket: boolean;
   formatMoney: (val: number | null) => string;
   getLocalizedName: (name: any) => string;
@@ -157,7 +159,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${ctx.translations.title}</title>
+    <title>${ctx.pageTitle}</title>
     <link rel="icon" type="image/png" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/logo.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/primeicons/primeicons.css" rel="stylesheet">
@@ -189,8 +191,8 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
     <div class="px-4 py-6 md:p-6 max-w-6xl w-full mx-auto">
         <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 p-4">
            <div>
-               <h2 class="text-2xl md:text-3xl font-black text-soft-green-950">${ctx.translations.title}</h2>
-               <p class="text-slate-500 font-bold text-sm mt-1 mb-2">Exported offline list. Modifications here will not sync back to the website.</p>
+               <h2 class="text-2xl md:text-3xl font-black text-soft-green-950">${ctx.pageTitle}</h2>
+               <p class="text-slate-500 font-bold text-sm mt-1 mb-2">${ctx.translations.exportOfflineNote}</p>
            </div>
            
            <div class="bg-white/70 backdrop-blur-md px-5 py-3 md:px-6 md:py-4 rounded-xl border border-soft-green-100 shadow-lg flex items-center min-w-[300px]">

@@ -126,7 +126,7 @@ export default {
       },
       button: {
         reset: '重設',
-        generateList: '生成代辦清單'
+        generateList: '生成待辦清單'
       },
       tooltip: {
         budget: '預算依據當前伺服器依照市場最低價格做模擬買入計算，且價格來源經過快取，實際真實價格需要看當下真正的市場價格而定',
@@ -135,10 +135,11 @@ export default {
     }
   },
   todo: {
-    title: '代辦清單',
+    title: '待辦清單',
     backToWorkbench: '返回備料台',
     export: '匯出 / 下載清單',
-    exportSuffix: '的代辦清單',
+    exportSuffix: '的待辦清單',
+    exportOfflineNote: '此清單為匯出的離線版本。在這裡進行的操作（如勾選項目）將不會回傳同步至工坊網站中。',
     progress: '已完成 {n}/{total} 項',
     section: {
       other: '庫存 / 其他來源',
@@ -239,8 +240,8 @@ export default {
     globalDesc: '適合海外玩家，支援信用卡與 PayPal，且具備 Discord 自動身分組整合。'
   },
   exportModal: {
-    title: '匯出 / 下載代辦清單',
-    description: '您可以將目前的代辦清單匯出成一個單獨的離線 HTML 檔案。此檔案可以直接雙擊由瀏覽器開啟，也可以在不同裝置間傳遞。更棒的是，它仍然支援拖拉互換順序的功能！',
+    title: '匯出 / 下載待辦清單',
+    description: '您可以將目前的待辦清單匯出成一個單獨的離線 HTML 檔案。此檔案可以直接雙擊由瀏覽器開啟，也可以在不同裝置間傳遞。更棒的是，它仍然支援拖拉互換順序的功能！',
     includeMarket: '一併匯出市場價格與來源位置資訊',
     includeMarketDesc: '匯出的紀錄為定格的市場價格，若您很多天後才使用，價格可能會失準。',
     confirm: '確認下載 HTML'

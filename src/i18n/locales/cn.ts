@@ -138,7 +138,8 @@ export default {
     title: '待办清单',
     backToWorkbench: '返回备料台',
     export: '导出 / 下载清单',
-    exportSuffix: '的代办清单',
+    exportSuffix: '的待办清单',
+    exportOfflineNote: '此清单为导出的离线版本。在这里进行的操作（如勾选项目）将不会回传同步至工坊网站中。',
     progress: '已完成 {n}/{total} 项',
     section: {
       other: '库存 / 其他来源',
@@ -239,8 +240,8 @@ export default {
     globalDesc: '适合海外玩家，支援信用卡与 PayPal，且具备 Discord 自动身分组整合。'
   },
   exportModal: {
-    title: '导出 / 下载代办清单',
-    description: '您可以将目前的代办清单导出成一个单独的离线 HTML 档案。此档案可以直接双击由浏览器开启，也可以在不同装置间传递。更棒的是，它仍然支援拖拉互换顺序的功能！',
+    title: '导出 / 下载待办清单',
+    description: '您可以将目前的待办清单导出成一个单独的离线 HTML 档案。此档案可以直接双击由浏览器开启，也可以在不同装置间传递。更棒的是，它仍然支援拖拉互换顺序的功能！',
     includeMarket: '一并导出市场价格与来源位置资讯',
     includeMarketDesc: '导出的纪录为定格的市场价格，若您很多天后才使用，价格可能会失准。',
     confirm: '确认下载 HTML'

@@ -136,8 +136,10 @@ const handleExportHtml = (includeMarket: boolean) => {
             sectionCraft: t('todo.section.craft'),
             targetPrice: t('todo.targetPrice'),
             buySourceVendor: t('todo.buySourceVendor', { name: '{name}', zone: '{zone}', x: '{x}', y: '{y}' }),
-            buySourceMarket: t('todo.buySourceMarket', { world: '{world}' })
+            buySourceMarket: t('todo.buySourceMarket', { world: '{world}' }),
+            exportOfflineNote: t('todo.exportOfflineNote')
         },
+        pageTitle: `${activeWorkbenchNote.value?.name ? getLocalizedName(activeWorkbenchNote.value.name) : t('todo.title')}${t('todo.exportSuffix')}`,
         includeMarket,
         formatMoney,
         getLocalizedName,

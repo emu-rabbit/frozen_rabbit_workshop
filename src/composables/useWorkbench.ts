@@ -361,7 +361,7 @@ const activeItemIds = computed(() => {
 });
 
 /**
- * 生成代辦清單結構資料
+ * 生成待辦清單結構資料
  */
 const generateTodoSections = computed(() => {
   const sections: Record<string, TodoItem[]> = {
@@ -579,7 +579,7 @@ export function useWorkbench() {
   };
 
   /**
-   * 監聽決策變化，重設代辦清單勾選狀態
+   * 監聽決策變化，重設待辦清單勾選狀態
    */
   watch(decisions, () => {
     // 僅在有真正內容時才清除，避免初始化時誤觸

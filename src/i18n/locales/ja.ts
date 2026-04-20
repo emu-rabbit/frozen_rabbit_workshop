@@ -139,6 +139,7 @@ export default {
     backToWorkbench: '仕込み台に戻る',
     export: 'エクスポート',
     exportSuffix: 'のToDoリスト',
+    exportOfflineNote: 'このリストはエクスポートされたオフライン版です。ここで行った操作はウェブサイトには同期されません。',
     progress: '{n}/{total} 完了',
     section: {
       other: '在庫・その他',

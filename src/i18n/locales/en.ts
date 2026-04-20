@@ -139,6 +139,7 @@ export default {
     backToWorkbench: 'Back to Workbench',
     export: 'Export / Download',
     exportSuffix: ' - Todo List',
+    exportOfflineNote: 'Exported offline list. Modifications here will not sync back to the website.',
     progress: '{n}/{total} Completed',
     section: {
       other: 'Stock & Other Sources',
