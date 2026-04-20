@@ -110,10 +110,17 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                     <img src="${item.icon}" class="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white shadow-sm border border-slate-100" />
                 </div>
                 <div class="flex flex-col min-w-0">
-                    <h4 class="item-title font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight text-slate-900">
-                        ${ctx.getLocalizedName(item.name).replace(/"/g, '&quot;').replace(/'/g, '&#39;')}
-                    </h4>
-                    <div class="flex flex-wrap items-center gap-2 mt-1">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <h4 class="item-title font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight text-slate-900">
+                            ${ctx.getLocalizedName(item.name).replace(/"/g, '&quot;').replace(/'/g, '&#39;')}
+                        </h4>
+                        <button onclick="copyToClipboard(this, '${ctx.getLocalizedName(item.name).replace(/'/g, "\\'").replace(/"/g, '&quot;')}')" 
+                                class="copy-btn opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-soft-green-600 transition-all active:scale-95 flex items-center justify-center shrink-0"
+                                title="Copy Name">
+                            <i class="pi pi-copy text-sm md:text-base"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2 mt-1">
                       <span class="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60 shrink-0">#${item.id}</span>
                     </div>
                 </div>
@@ -233,6 +240,20 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         function toggleCheck(el) {
             el.classList.toggle('checked-card');
             updateProgress();
+        }
+
+        function copyToClipboard(btn, text) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(text).then(() => {
+                const icon = btn.querySelector('i');
+                const originalClass = icon.className;
+                icon.className = 'pi pi-check text-soft-green-600 text-sm md:text-base';
+                setTimeout(() => {
+                    icon.className = originalClass;
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
