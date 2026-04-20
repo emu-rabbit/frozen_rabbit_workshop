@@ -19,3 +19,9 @@ app.use(PrimeVue, {
 })
 
 app.mount('#app')
+
+// Handle Vite dynamic import errors (e.g. after a new deployment)
+window.addEventListener('vite:preloadError', (event) => {
+    console.warn('Vite preload error detected. Reloading page...');
+    window.location.reload();
+});

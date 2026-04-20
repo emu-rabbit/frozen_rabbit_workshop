@@ -102,14 +102,22 @@ export async function ensureDataCentersLoaded(): Promise<DataCenter[]> {
   if (_dataCenters.value.length > 0) return _dataCenters.value;
   if (_dcFetchPromise) return _dcFetchPromise;
 
-  _dcFetchPromise = fetch(`${UNIVERSALIS_BASE}/data-centers`)
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+  _dcFetchPromise = fetch(`${UNIVERSALIS_BASE}/data-centers`, { signal: controller.signal })
     .then(r => {
+      clearTimeout(timeoutId);
       if (!r.ok) throw new Error('Failed to fetch data centers');
       return r.json() as Promise<DataCenter[]>;
     })
     .then(list => {
       _dataCenters.value = list;
       return list;
+    })
+    .catch(err => {
+      clearTimeout(timeoutId);
+      throw err;
     })
     .finally(() => {
       _dcFetchPromise = null;
@@ -229,7 +237,16 @@ export async function fetchItemPrices(
 
         const encodedDC = encodeURIComponent(dc);
         const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
-        const resp = await fetch(url);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        let resp: Response;
+        try {
+          resp = await fetch(url, { signal: controller.signal });
+        } finally {
+          clearTimeout(timeoutId);
+        }
 
         if (!resp.ok) {
           // 404 is common for non-marketable items (like collectibles); treat as empty result instead of crash
