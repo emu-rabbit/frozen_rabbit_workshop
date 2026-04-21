@@ -84,6 +84,9 @@ export default {
       emptyTitle: '目前沒有備料計畫',
       emptyDescription: '去「寫張新筆記」開始你的第一步吧！',
       prepping: '正在備料',
+      retrying: '連線似乎稍慢，兔兔正在努力獲取最新市價...',
+      retryHint: '您可以隨時跳過，工作台仍可正常使用與修改喔！',
+      cancelRetry: '略過查詢，直接開始備料',
       source: {
         buy: '購買',
         craft: '製作',

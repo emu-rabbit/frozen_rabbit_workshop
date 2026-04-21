@@ -3,7 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import { useWorkbench } from '../../composables/useWorkbench'
-import { formatLastUpdate, isPriceError } from '../../services/universalis'
+import { formatLastUpdate, isPriceError, isRetrying, abortPriceFetch } from '../../services/universalis'
 
 const { t, locale } = useI18n()
 const { activeWorkbenchNote } = useNotes()
@@ -169,9 +169,39 @@ const formatTime = (seconds: number) => {
         </div>
       </header>
 
-      <div v-if="isLoading" class="py-20 text-center">
+      <div v-if="isLoading" class="py-20 flex flex-col items-center justify-center text-center px-4">
           <i class="pi pi-spin pi-spinner text-4xl text-soft-green-500 mb-4"></i>
-          <p class="text-slate-400 font-bold">{{ t('workbench.view.analyzing') }}</p>
+          <p class="text-slate-400 font-bold mb-4">{{ t('workbench.view.analyzing') }}</p>
+          
+          <transition name="fade">
+              <div v-if="isRetrying" class="relative group mt-6">
+                  <!-- Glassmorphic Banner - Darker & Sharper -->
+                  <div class="bg-white/80 backdrop-blur-xl border-2 border-soft-green-200/50 rounded-[2.5rem] p-8 flex flex-col items-center gap-5 shadow-[0_30px_60px_-15px_rgba(20,50,30,0.1)] ring-1 ring-white max-w-md mx-auto overflow-hidden">
+                      <!-- Decorative Background Glow -->
+                      <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-soft-green-300/20 blur-3xl rounded-full pointer-events-none"></div>
+                      
+                      <div class="flex flex-col items-center gap-2">
+                          <div class="flex items-center gap-3 text-soft-green-800">
+                              <i class="pi pi-sync text-xl animate-spin" style="animation-duration: 3s"></i>
+                              <h4 class="text-base font-black tracking-tight">
+                                  {{ t('workbench.view.retrying') }}
+                              </h4>
+                          </div>
+                          <p class="text-[12px] font-bold text-slate-400 mt-1">
+                              {{ t('workbench.view.retryHint') }}
+                          </p>
+                      </div>
+
+                      <button 
+                        @click="abortPriceFetch" 
+                        class="group/btn relative px-8 py-3.5 bg-gradient-to-br from-soft-green-500 to-soft-green-600 hover:from-soft-green-600 hover:to-soft-green-700 text-white rounded-2xl text-[13px] font-black transition-all duration-300 shadow-[0_10px_25px_-5px_rgba(34,197,94,0.4)] hover:shadow-[0_15px_30px_-5px_rgba(34,197,94,0.5)] hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 cursor-pointer"
+                      >
+                          <i class="pi pi-forward text-base"></i>
+                          {{ t('workbench.view.cancelRetry') }}
+                      </button>
+                  </div>
+              </div>
+          </transition>
       </div>
 
       <div v-else class="flex flex-col gap-6 pb-96">

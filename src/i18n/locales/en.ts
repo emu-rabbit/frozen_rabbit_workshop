@@ -84,6 +84,9 @@ export default {
       emptyTitle: 'No active planning',
       emptyDescription: 'Go to "Write a New Note" to start your journey!',
       prepping: 'In Prep',
+      retrying: 'Connection is a bit slow, still trying to fetch prices...',
+      retryHint: 'You can skip this at any time; the workbench is still fully functional!',
+      cancelRetry: 'Skip & Start Prepping',
       source: {
         buy: 'Market',
         craft: 'Craft',

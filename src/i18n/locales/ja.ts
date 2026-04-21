@@ -84,6 +84,9 @@ export default {
       emptyTitle: '現在、計画はありません',
       emptyDescription: '「新しいノートを書く」から始めてね！',
       prepping: '準備中',
+      retrying: '少し時間がかかっているようです。最新価格を取得しています...',
+      retryHint: 'いつでもスキップできます。仕込み台はそのまま使用可能です！',
+      cancelRetry: 'スキップして仕込みを始める',
       source: {
         buy: '購入',
         craft: '製作',

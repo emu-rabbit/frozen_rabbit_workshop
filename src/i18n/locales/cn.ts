@@ -84,6 +84,9 @@ export default {
       emptyTitle: '目前没有备料计划',
       emptyDescription: '去「写张新笔记」開始你的第一步吧！',
       prepping: '正在备料',
+      retrying: '连线似乎稍慢，兔兔正在努力获取最新市价...',
+      retryHint: '您可以随时跳過，工作台仍可正常运行与修改喔！',
+      cancelRetry: '略過查询，直接开始备料',
       source: {
         buy: '购买',
         craft: '制作',

@@ -87,11 +87,22 @@ const { marketDC } = useSettings()
 const _dataCenters = ref<DataCenter[]>([]);
 const _isFetchingPrices = ref(false);
 const _isPriceError = ref(false);
+const _isRetrying = ref(false);
 
 export const dataCenters = readonly(_dataCenters);
 export const selectedDC = readonly(marketDC);
 export const isFetchingPrices = readonly(_isFetchingPrices);
 export const isPriceError = readonly(_isPriceError);
+export const isRetrying = readonly(_isRetrying);
+
+const activeAbortControllers = new Set<AbortController>();
+
+export function abortPriceFetch() {
+  for (const ac of activeAbortControllers) {
+    ac.abort('UserCancelled');
+  }
+  activeAbortControllers.clear();
+}
 
 // ─── Data Center Management ───────────────────────────────────────────────────
 
@@ -195,14 +206,16 @@ export async function fetchItemPrices(
     toFetch.push(id);
   }
 
-  // Handle items that are already being fetched by another call
   if (awaitingInflight.length > 0) {
     try {
       const prices = await Promise.all(awaitingInflight.map(a => a.promise));
       awaitingInflight.forEach((a, index) => {
         result.set(a.id, prices[index]);
       });
-    } catch (err) {
+    } catch (err: any) {
+      if (err?.message === 'UserCancelled') {
+        throw err;
+      }
       console.error('[Universalis] Inflight price fetch failed:', err);
       // Let it fail gracefully; the primary fetch loop will also fail gracefully and we don't crash.
     }
@@ -212,6 +225,10 @@ export async function fetchItemPrices(
 
   _isFetchingPrices.value = true;
   _isPriceError.value = false;
+  _isRetrying.value = false;
+
+  const localAbortController = new AbortController();
+  activeAbortControllers.add(localAbortController);
 
   try {
     const BATCH_SIZE = 100;
@@ -231,72 +248,116 @@ export async function fetchItemPrices(
       });
 
       try {
-        if (DEBUG_SIMULATE_API_ERROR) {
-          throw new TypeError('Failed to fetch (Simulated CORS blocked)');
-        }
+        let attempt = 0;
+        const delays = [2000, 4000, 8000];
 
-        const encodedDC = encodeURIComponent(dc);
-        const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-        let resp: Response;
-        try {
-          resp = await fetch(url, { signal: controller.signal });
-        } finally {
-          clearTimeout(timeoutId);
-        }
-
-        if (!resp.ok) {
-          // 404 is common for non-marketable items (like collectibles); treat as empty result instead of crash
-          if (resp.status === 404) {
-            console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
-            batch.forEach(id => {
-              const emptyPrice = parseItemPrice(id, null);
-              setCache(dc, emptyPrice);
-              result.set(id, emptyPrice);
-              resolvers[id](emptyPrice);
-            });
-            continue; // Move to next batch
+        while (true) {
+          if (localAbortController.signal.aborted) {
+            const abortErr = new Error('UserCancelled');
+            batch.forEach(id => { try { rejecters[id](abortErr); } catch { } });
+            throw abortErr;
           }
-          throw new Error(`Universalis returned ${resp.status}`);
-        }
 
-        const json = await resp.json();
+          try {
+            if (DEBUG_SIMULATE_API_ERROR) {
+              throw new TypeError('Failed to fetch (Simulated CORS blocked)');
+            }
 
-        if (batch.length === 1) {
-          const price = parseItemPrice(batch[0], json);
-          setCache(dc, price);
-          result.set(batch[0], price);
-          resolvers[batch[0]](price);
-        } else {
-          const items: Record<string, any> = json.items ?? {};
-          batch.forEach(id => {
-            const raw = items[String(id)];
-            // items map might omit unmarketable items even on a 200 response
-            const price = parseItemPrice(id, raw || null);
-            setCache(dc, price);
-            result.set(id, price);
-            resolvers[id](price);
-          });
+            const encodedDC = encodeURIComponent(dc);
+            const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
+
+            const timeoutController = new AbortController();
+            const timeoutId = setTimeout(() => timeoutController.abort(), 5000); // 5 seconds
+
+            // Link the global abort controller with the timeout controller
+            const abortHandler = () => timeoutController.abort('UserCancelled');
+            localAbortController.signal.addEventListener('abort', abortHandler);
+
+            let resp: Response;
+            try {
+              resp = await fetch(url, { signal: timeoutController.signal });
+            } finally {
+              clearTimeout(timeoutId);
+              localAbortController.signal.removeEventListener('abort', abortHandler);
+            }
+
+            if (!resp.ok) {
+              // 404 is common for non-marketable items (like collectibles); treat as empty result instead of crash
+              if (resp.status === 404) {
+                console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
+                batch.forEach(id => {
+                  const emptyPrice = parseItemPrice(id, null);
+                  setCache(dc, emptyPrice);
+                  result.set(id, emptyPrice);
+                  resolvers[id](emptyPrice);
+                });
+                break; // Break retry loop
+              }
+              throw new Error(`Universalis returned ${resp.status}`);
+            }
+
+            const json = await resp.json();
+
+            if (batch.length === 1) {
+              const price = parseItemPrice(batch[0], json);
+              setCache(dc, price);
+              result.set(batch[0], price);
+              resolvers[batch[0]](price);
+            } else {
+              const items: Record<string, any> = json.items ?? {};
+              batch.forEach(id => {
+                const raw = items[String(id)];
+                // items map might omit unmarketable items even on a 200 response
+                const price = parseItemPrice(id, raw || null);
+                setCache(dc, price);
+                result.set(id, price);
+                resolvers[id](price);
+              });
+            }
+            break; // Break retry loop on success
+          } catch (err: any) {
+            if (err === 'UserCancelled' || err?.message === 'UserCancelled' || localAbortController.signal.aborted) {
+              const abortErr = new Error('UserCancelled');
+              batch.forEach(id => { try { rejecters[id](abortErr); } catch { } });
+              throw abortErr;
+            }
+
+            if (attempt >= 3) {
+              batch.forEach(id => { try { rejecters[id](err); } catch { } });
+              throw err;
+            }
+
+            _isRetrying.value = true;
+            console.warn(`[Universalis] API fetch failed, retrying in ${delays[attempt]}ms (attempt ${attempt + 1}/3)...`, err);
+
+            await new Promise<void>((resolve, reject) => {
+              const timer = setTimeout(resolve, delays[attempt]);
+              const onAbort = () => {
+                clearTimeout(timer);
+                reject(new Error('UserCancelled'));
+              };
+              if (localAbortController.signal.aborted) return onAbort();
+              localAbortController.signal.addEventListener('abort', onAbort, { once: true });
+            });
+
+            attempt++;
+          }
         }
-      } catch (err) {
-        // If it was already resolved by the 404 logic, this catch might catch it again or throw
-        // To be safe, only reject if not already settled
-        batch.forEach(id => {
-          try { rejecters[id](err); } catch { }
-        });
-        throw err;
       } finally {
         batch.forEach(id => inflightRequests.delete(cacheKey(dc, id)));
       }
     }
-  } catch (err) {
-    console.error('[Universalis] Price fetch failed:', err);
-    _isPriceError.value = true;
+  } catch (err: any) {
+    if (err?.message !== 'UserCancelled') {
+      console.error('[Universalis] Price fetch failed:', err);
+      _isPriceError.value = true;
+    } else {
+      console.log('[Universalis] Price fetch aborted by user.');
+    }
   } finally {
     _isFetchingPrices.value = false;
+    _isRetrying.value = false;
+    activeAbortControllers.delete(localAbortController);
   }
 
   return result;
