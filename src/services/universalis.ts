@@ -206,6 +206,7 @@ export async function fetchItemPrices(
     toFetch.push(id);
   }
 
+
   if (awaitingInflight.length > 0) {
     try {
       const prices = await Promise.all(awaitingInflight.map(a => a.promise));
@@ -213,11 +214,15 @@ export async function fetchItemPrices(
         result.set(a.id, prices[index]);
       });
     } catch (err: any) {
-      if (err?.message === 'UserCancelled') {
-        throw err;
+      // Inflight requests were rejected (e.g. by another call being aborted).
+      // This is expected during cancellation - treat it as a soft failure and continue.
+      // If toFetch is empty, we'll return a partial result below.
+      console.warn('[Universalis] Inflight request failed or was cancelled:', err?.message);
+      if (!toFetch.length) {
+        // All items were inflight and they got cancelled - mark as error and bail out gracefully
+        _isPriceError.value = true;
+        return result;
       }
-      console.error('[Universalis] Inflight price fetch failed:', err);
-      // Let it fail gracefully; the primary fetch loop will also fail gracefully and we don't crash.
     }
   }
 

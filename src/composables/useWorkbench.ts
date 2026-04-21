@@ -570,7 +570,12 @@ export function useWorkbench() {
       await refreshItemsData(activeItemIds.value);
       
       // 5. 發起價格抓取 (fetchPrices 內部已有版本校驗)
-      await fetchPrices(activeItemIds.value);
+      try {
+        await fetchPrices(activeItemIds.value);
+      } catch (err) {
+        // fetchPrices should never throw, but guard just in case
+        console.warn('[Workbench] fetchPrices error (init):', err);
+      }
     } catch (err) {
       console.error('[Workbench] Initialization failed:', err);
     } finally {
@@ -606,7 +611,11 @@ export function useWorkbench() {
     
     const missingPriceIds = newIds.filter(id => !workbenchItems.value[id]?.priceFetched);
     if (missingPriceIds.length > 0) {
-      await fetchPrices(missingPriceIds);
+      try {
+        await fetchPrices(missingPriceIds);
+      } catch (err) {
+        console.warn('[Workbench] fetchPrices error (watch):', err);
+      }
     }
   }, { immediate: true, deep: true });
 
