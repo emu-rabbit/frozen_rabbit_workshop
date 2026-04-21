@@ -350,10 +350,10 @@ export async function fetchItemPrices(
   } catch (err: any) {
     if (err?.message !== 'UserCancelled') {
       console.error('[Universalis] Price fetch failed:', err);
-      _isPriceError.value = true;
     } else {
       console.log('[Universalis] Price fetch aborted by user.');
     }
+    _isPriceError.value = true;
   } finally {
     _isFetchingPrices.value = false;
     _isRetrying.value = false;

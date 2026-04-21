@@ -238,7 +238,7 @@ const formatTime = (seconds: number) => {
                         <div class="flex flex-wrap gap-1.5 mt-1">
                             <!-- Price Badge -->
                             <span class="text-[12px] md:text-[14px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50">
-                                {{ formatMoney(workbenchItems[id]?.marketPrice) }}
+                                {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 text-indigo-600 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100">
