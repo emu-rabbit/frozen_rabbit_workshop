@@ -4,10 +4,12 @@ import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
 import { useWorkbench } from '../../composables/useWorkbench';
 import { useNotes } from '../../composables/useNotes';
+import { useSettings } from '../../composables/useSettings';
 import ExportTodoModal from '../modals/ExportTodoModal.vue';
 import { generateTodoExportHtml, type ExportContext } from '../../services/exportHtml';
 
 const { t, locale } = useI18n();
+const { isDarkMode } = useSettings();
 const { activeWorkbenchNote } = useNotes();
 const { 
   generateTodoSections, 
@@ -88,11 +90,11 @@ const onDragEnd = (sectionKey: string) => {
 
 const getSectionConfig = (key: string) => {
     switch(key) {
-        case 'other': return { color: 'emerald', icon: 'pi-box', bg: 'bg-emerald-50', border: 'border-emerald-100', text: 'text-emerald-600' };
-        case 'buy': return { color: 'slate', icon: 'pi-shopping-cart', bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-600' };
-        case 'gather': return { color: 'amber', icon: 'pi-map-marker', bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-600' };
-        case 'craft': return { color: 'indigo', icon: 'pi-hammer', bg: 'bg-indigo-50', border: 'border-indigo-100', text: 'text-indigo-600' };
-        default: return { color: 'slate', icon: 'pi-list', bg: 'bg-slate-50', border: 'border-slate-100', text: 'text-slate-600' };
+        case 'other': return { color: 'emerald', icon: 'pi-box', bg: 'bg-emerald-50 dark:bg-emerald-950/20', border: 'border-emerald-100 dark:border-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' };
+        case 'buy': return { color: 'slate', icon: 'pi-shopping-cart', bg: 'bg-slate-50 dark:bg-slate-800/40', border: 'border-slate-200 dark:border-slate-700/50', text: 'text-slate-600 dark:text-slate-400' };
+        case 'gather': return { color: 'amber', icon: 'pi-map-marker', bg: 'bg-amber-50 dark:bg-amber-950/20', border: 'border-amber-100 dark:border-amber-900/30', text: 'text-amber-600 dark:text-amber-400' };
+        case 'craft': return { color: 'indigo', icon: 'pi-hammer', bg: 'bg-indigo-50 dark:bg-indigo-950/20', border: 'border-indigo-100 dark:border-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' };
+        default: return { color: 'slate', icon: 'pi-list', bg: 'bg-slate-50 dark:bg-slate-800/40', border: 'border-slate-100 dark:border-slate-800', text: 'text-slate-600 dark:text-slate-400' };
     }
 };
 
@@ -141,6 +143,7 @@ const handleExportHtml = (includeMarket: boolean) => {
         },
         pageTitle: `${activeWorkbenchNote.value?.name ? getLocalizedName(activeWorkbenchNote.value.name) : t('todo.title')}${t('todo.exportSuffix')}`,
         includeMarket,
+        isDarkMode: isDarkMode.value,
         formatMoney,
         getLocalizedName,
         getJobName: (name: string) => t(name),
@@ -167,18 +170,18 @@ const handleExportHtml = (includeMarket: boolean) => {
 </script>
 
 <template>
-    <div class="todo-view min-h-screen bg-soft-green-50/50">
+    <div class="todo-view min-h-screen bg-soft-green-50/50 dark:bg-slate-950">
         <div class="px-4 py-6 md:p-6 max-w-6xl w-full mx-auto pb-32">
             <!-- Header (Synced style with WorkbenchView) -->
             <header class="mb-8 md:mb-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div class="flex items-center gap-3 md:gap-5">
                     <button @click="emit('back')" 
-                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white border border-soft-green-100 flex items-center justify-center hover:bg-soft-green-50 transition-all shadow-sm active:scale-95 group">
-                        <i class="pi pi-arrow-left text-soft-green-600 group-hover:-translate-x-0.5 transition-transform"></i>
+                            class="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white dark:bg-slate-900 border border-soft-green-100 dark:border-slate-800 flex items-center justify-center hover:bg-soft-green-50 dark:hover:bg-slate-800 transition-all shadow-sm active:scale-95 group">
+                        <i class="pi pi-arrow-left text-soft-green-600 dark:text-soft-green-400 group-hover:-translate-x-0.5 transition-transform"></i>
                     </button>
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-black text-soft-green-950 mb-0.5 md:mb-1 drop-shadow-sm">{{ t('todo.title') }}</h2>
-                        <div v-if="activeWorkbenchNote" class="flex items-center gap-2 text-slate-500 font-bold text-[11px] md:text-sm opacity-80">
+                        <h2 class="text-2xl md:text-3xl font-black text-soft-green-950 dark:text-soft-green-500 mb-0.5 md:mb-1 drop-shadow-sm">{{ t('todo.title') }}</h2>
+                        <div v-if="activeWorkbenchNote" class="flex items-center gap-2 text-slate-500 dark:text-slate-400 font-bold text-[11px] md:text-sm opacity-80">
                             <i class="pi pi-book text-[10px] md:text-xs"></i>
                             <span class="truncate max-w-[150px] md:max-w-none">{{ getLocalizedName(activeWorkbenchNote.name) }}</span>
                         </div>
@@ -186,19 +189,19 @@ const handleExportHtml = (includeMarket: boolean) => {
                 </div>
 
                 <!-- Progress Tracker (Matches Workbench Summary Card style) -->
-                <div class="bg-white/70 backdrop-blur-md px-5 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl border border-soft-green-100 shadow-lg flex items-center gap-4 md:gap-6 min-w-0 md:min-w-[340px]">
+                <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md px-5 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl border border-soft-green-100 dark:border-slate-800 shadow-lg flex items-center gap-4 md:gap-6 min-w-0 md:min-w-[340px]">
                     <div class="flex flex-col flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-1 md:mb-1.5 gap-2 md:gap-4">
-                            <span class="text-[11px] md:text-[13px] font-black text-soft-green-500 uppercase tracking-widest truncate">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
-                            <span class="text-xl md:text-2xl font-black text-soft-green-900 font-mono tracking-tighter shrink-0">{{ Math.round(progress.percent) }}%</span>
+                            <span class="text-[11px] md:text-[13px] font-black text-soft-green-600 dark:text-soft-green-500 uppercase tracking-widest truncate">{{ t('todo.progress', { n: progress.completed, total: progress.total }) }}</span>
+                            <span class="text-xl md:text-2xl font-black text-soft-green-900 dark:text-soft-green-400 font-mono tracking-tighter shrink-0">{{ Math.round(progress.percent) }}%</span>
                         </div>
-                        <div class="h-2 md:h-2.5 w-full bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                            <div class="h-full bg-gradient-to-r from-soft-green-400 to-soft-green-600 transition-all duration-700 ease-out shadow-sm" :style="{ width: `${progress.percent}%` }"></div>
+                        <div class="h-2 md:h-2.5 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden shadow-inner">
+                            <div class="h-full bg-gradient-to-r from-soft-green-500 to-soft-green-700 transition-all duration-700 ease-out shadow-sm" :style="{ width: `${progress.percent}%` }"></div>
                         </div>
                     </div>
-                    <div class="h-8 md:h-10 w-px bg-soft-green-100 shrink-0 hidden xs:block"></div>
+                    <div class="h-8 md:h-10 w-px bg-soft-green-100 dark:bg-slate-800 shrink-0 hidden xs:block"></div>
                     <div class="hidden xs:flex -space-x-2 shrink-0">
-                        <img v-for="item in activeWorkbenchNote?.items.slice(0, 3)" :key="item.id" :src="workbenchItems[item.id]?.icon" class="w-8 h-8 md:w-10 md:h-10 rounded-lg border-2 border-white shadow-sm ring-1 ring-soft-green-50" />
+                        <img v-for="item in activeWorkbenchNote?.items.slice(0, 3)" :key="item.id" :src="workbenchItems[item.id]?.icon" class="w-8 h-8 md:w-10 md:h-10 rounded-lg border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-soft-green-50 dark:ring-slate-700" />
                     </div>
                 </div>
             </header>
@@ -217,11 +220,11 @@ const handleExportHtml = (includeMarket: boolean) => {
                                     <h3 class="text-xl md:text-2xl font-black tracking-tight leading-none mb-1" :class="getSectionConfig(section.key).text">
                                         {{ t(`todo.section.${section.key}`) }}
                                     </h3>
-                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] opacity-70">
+                                    <p class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] opacity-70">
                                         {{ sectionItems[section.key].length }} {{ sectionItems[section.key].length > 1 ? 'Items' : 'Item' }}
                                     </p>
                                 </div>
-                                <div class="h-px flex-1 bg-gradient-to-r from-slate-200 to-transparent ml-2 md:ml-4"></div>
+                                <div class="h-px flex-1 bg-gradient-to-r from-slate-200 dark:from-slate-800 to-transparent ml-2 md:ml-4"></div>
                             </div>
 
                             <draggable 
@@ -234,17 +237,17 @@ const handleExportHtml = (includeMarket: boolean) => {
                                 animation="300"
                             >
                                 <template #item="{ element: item }">
-                                    <div class="group relative bg-white/90 backdrop-blur-md rounded-2xl border-2 transition-all duration-400 flex items-center p-3 md:p-4 gap-3 md:gap-6 cursor-pointer select-none"
+                                    <div class="group relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-2xl border-2 transition-all duration-400 flex items-center p-3 md:p-4 gap-3 md:gap-6 cursor-pointer select-none"
                                          @click="toggleCheck(section.key, item.id)"
                                          :class="[
                                              todoChecked[`${section.key}_${item.id}`] 
-                                                ? 'border-slate-100 opacity-60 grayscale-[0.3]' 
-                                                : 'border-white shadow-soft hover:shadow-2xl hover:border-soft-green-200 hover:-translate-y-1'
+                                                ? 'border-slate-100 dark:border-slate-900/50 opacity-60 grayscale-[0.3]' 
+                                                : 'border-white dark:border-slate-800/50 shadow-soft hover:shadow-xl hover:border-soft-green-200 dark:hover:border-soft-green-900/50 hover:-translate-y-1'
                                          ]">
                                         
                                         <!-- LEFT: Status & Drag -->
                                         <div class="flex items-center gap-1.5 md:gap-3">
-                                            <div class="drag-handle cursor-grab active:cursor-grabbing text-slate-200 hover:text-soft-green-400 p-1 md:p-2 transition-colors hidden sm:block"
+                                            <div class="drag-handle cursor-grab active:cursor-grabbing text-slate-200 dark:text-slate-700 hover:text-soft-green-400 transition-colors hidden sm:block"
                                                  @click.stop>
                                                 <i class="pi pi-ellipsis-v text-sm"></i>
                                                 <i class="pi pi-ellipsis-v text-sm -ml-1"></i>
@@ -253,8 +256,8 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl border-2 flex items-center justify-center transition-all duration-700 shadow-sm"
                                                  :class="[
                                                      todoChecked[`${section.key}_${item.id}`]
-                                                        ? 'bg-soft-green-500 border-soft-green-500 ring-4 ring-soft-green-50'
-                                                        : 'border-slate-300 hover:border-soft-green-300 bg-white'
+                                                        ? 'bg-soft-green-500 border-soft-green-500 ring-4 ring-soft-green-50 dark:ring-soft-green-900/20'
+                                                        : 'border-slate-300 dark:border-slate-700 hover:border-soft-green-300 dark:hover:border-soft-green-700 bg-white dark:bg-slate-800'
                                                  ]">
                                                 <i v-if="todoChecked[`${section.key}_${item.id}`]" class="pi pi-check text-white text-sm md:text-base font-black"></i>
                                             </div>
@@ -267,12 +270,12 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             </div>
                                             <div class="flex flex-col min-w-0">
                                                 <div class="flex items-center gap-2 min-w-0">
-                                                    <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 line-through' : 'text-slate-900'">
+                                                    <h4 class="font-black text-base md:text-xl lg:text-2xl truncate leading-tight tracking-tight" :class="todoChecked[`${section.key}_${item.id}`] ? 'text-slate-400 dark:text-slate-600 line-through' : 'text-slate-900 dark:text-slate-100'">
                                                         {{ getLocalizedName(item.name) }}
                                                     </h4>
                                                     <button @click.stop="copyToClipboard(`${section.key}_${item.id}`, getLocalizedName(item.name))" 
-                                                            class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 transition-all active:scale-95 ml-auto sm:ml-0"
-                                                            :class="lastCopied === `${section.key}_${item.id}` ? 'text-soft-green-600' : 'text-slate-300'"
+                                                            class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 dark:hover:text-soft-green-400 transition-all active:scale-95 ml-auto sm:ml-0"
+                                                            :class="lastCopied === `${section.key}_${item.id}` ? 'text-soft-green-600' : 'text-slate-300 dark:text-slate-600'"
                                                             title="Copy Name">
                                                         <transition name="scale" mode="out-in">
                                                             <i v-if="lastCopied === `${section.key}_${item.id}`" class="pi pi-check text-2xl md:text-3xl"></i>
@@ -283,16 +286,16 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                 
                                                 <!-- Compact Metadata for Mobile -->
                                                 <div class="flex flex-wrap items-center gap-2">
-                                                    <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[9px] md:text-[10px] font-black bg-soft-green-100 text-soft-green-600 px-1.5 py-0.5 rounded-full uppercase tracking-tighter shrink-0">Done</span>
+                                                    <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[9px] md:text-[10px] font-black bg-soft-green-100 dark:bg-soft-green-950/40 text-soft-green-600 dark:text-soft-green-400 px-1.5 py-0.5 rounded-full uppercase tracking-tighter shrink-0">Done</span>
                                                     <template v-else>
-                                                        <span class="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest opacity-60 shrink-0">#{{ item.id }}</span>
+                                                        <span class="text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 shrink-0">#{{ item.id }}</span>
                                                         
                                                         <!-- Mobile Only Metadata -->
-                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500">
+                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400">
                                                             <template v-if="section.key === 'buy'">
                                                                 <div class="flex flex-col gap-0.5">
-                                                                    <span class="text-orange-600 font-black">{{ formatMoney(item.marketPrice) }}</span>
-                                                                    <div v-if="item.purchaseInfo" class="flex items-center gap-1 text-[10px] text-slate-400 font-bold">
+                                                                    <span class="text-orange-600 dark:text-orange-400 font-black">{{ formatMoney(item.marketPrice) }}</span>
+                                                                    <div v-if="item.purchaseInfo" class="flex items-center gap-1 text-[10px] text-slate-400 dark:text-slate-500 font-bold">
                                                                         <i class="pi" :class="item.purchaseInfo.type === 'vendor' ? 'pi-map-marker' : 'pi-shopping-cart'"></i>
                                                                         <span v-if="item.purchaseInfo.type === 'vendor'" class="truncate max-w-[120px]">
                                                                             {{ t('todo.buySourceVendor', { 
@@ -310,10 +313,10 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                             </template>
                                                             <template v-if="section.key === 'gather' && item.gathering">
                                                                 <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
-                                                                <span class="text-[9px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
+                                                                <span class="text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
                                                             </template>
                                                             <template v-if="section.key === 'craft' && item.crafting">
-                                                                <span class="text-[9px] text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">{{ t(item.crafting.jobName).substring(0, 2) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</span>
+                                                                <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ t(item.crafting.jobName).substring(0, 2) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</span>
                                                             </template>
                                                         </div>
                                                     </template>
@@ -322,14 +325,14 @@ const handleExportHtml = (includeMarket: boolean) => {
                                         </div>
 
                                         <!-- INFO: Metadata column (Visible on md+ screens) -->
-                                        <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 min-w-0 md:min-w-[220px]">
+                                        <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
                                             <!-- Buy: Price -->
                                             <template v-if="section.key === 'buy'">
-                                                <span class="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
-                                                <span class="text-2xl md:text-3xl font-black text-orange-600 font-mono tracking-tight leading-none shrink-0 mb-1">{{ formatMoney(item.marketPrice) }}</span>
+                                                <span class="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>
+                                                <span class="text-2xl md:text-3xl font-black text-orange-600 dark:text-orange-400 font-mono tracking-tight leading-none shrink-0 mb-1">{{ formatMoney(item.marketPrice) }}</span>
                                                 
-                                                <div v-if="item.purchaseInfo" class="flex items-center gap-1.5 text-xs text-slate-500 font-bold">
-                                                    <i class="pi" :class="item.purchaseInfo.type === 'vendor' ? 'pi-map-marker text-indigo-500' : 'pi-shopping-cart text-sky-500'"></i>
+                                                <div v-if="item.purchaseInfo" class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-bold">
+                                                    <i class="pi" :class="item.purchaseInfo.type === 'vendor' ? 'pi-map-marker text-indigo-500 dark:text-indigo-400' : 'pi-shopping-cart text-sky-500 dark:text-sky-400'"></i>
                                                     <span v-if="item.purchaseInfo.type === 'vendor'">
                                                         {{ t('todo.buySourceVendor', { 
                                                             name: item.purchaseInfo.vendor?.npcName, 
@@ -347,19 +350,19 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             <!-- Gather: Info -->
                                             <template v-if="section.key === 'gather' && item.gathering">
                                                 <div class="flex flex-col items-end gap-1.5 md:gap-2">
-                                                    <div class="flex flex-col items-end text-slate-500">
-                                                        <div class="flex items-center gap-1 text-slate-700">
+                                                    <div class="flex flex-col items-end text-slate-500 dark:text-slate-400">
+                                                        <div class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
                                                             <i class="pi pi-map-marker text-[10px] md:text-xs opacity-70"></i>
                                                             <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
                                                                 {{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}
                                                             </span>
                                                         </div>
-                                                        <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[9px] md:text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-100 shadow-sm">
+                                                        <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[9px] md:text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40 shadow-sm">
                                                             <i class="pi pi-clock text-[9px]"></i>
                                                             <span>ET {{ formatET(item.gathering.spawns, item.gathering.duration) }}</span>
                                                         </div>
                                                     </div>
-                                                    <span class="text-[10px] md:text-sm font-black bg-amber-50 text-amber-700 px-3 py-1 rounded-full border border-amber-100 shadow-sm leading-none whitespace-nowrap">
+                                                    <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 shadow-sm leading-none whitespace-nowrap">
                                                         {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
                                                     </span>
                                                 </div>
@@ -368,7 +371,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             <!-- Craft: Info -->
                                             <template v-if="section.key === 'craft' && item.crafting">
                                                 <div class="flex flex-col items-end">
-                                                     <span class="text-[10px] md:text-sm font-black bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full border border-indigo-100 shadow-sm leading-none whitespace-nowrap">
+                                                     <span class="text-[10px] md:text-sm font-black bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40 shadow-sm leading-none whitespace-nowrap">
                                                         {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}
                                                     </span>
                                                 </div>
@@ -376,10 +379,10 @@ const handleExportHtml = (includeMarket: boolean) => {
                                         </div>
 
                                         <!-- GOAL: Quantitative display -->
-                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 rounded-xl px-4 py-3 md:px-6 md:py-4 min-w-[70px] md:min-w-[110px] border border-slate-200/50 shadow-inner group-hover:bg-soft-green-100/50 transition-all duration-300">
+                                        <div class="flex flex-col items-center justify-center bg-slate-100/50 dark:bg-slate-800/30 rounded-xl px-4 py-3 md:px-6 md:py-4 min-w-[70px] md:min-w-[110px] border border-slate-200/50 dark:border-slate-700/30 shadow-inner group-hover:bg-soft-green-100/50 dark:group-hover:bg-soft-green-900/20 transition-all duration-300">
                                             <div class="flex items-baseline gap-0.5 md:gap-1">
-                                                <span class="text-xs md:text-base font-black text-slate-400 leading-none">x</span>
-                                                <span class="text-2xl md:text-4xl font-black text-soft-green-950 leading-none drop-shadow-sm">{{ item.quantity }}</span>
+                                                <span class="text-xs md:text-base font-black text-slate-400 dark:text-slate-600 leading-none">x</span>
+                                                <span class="text-2xl md:text-4xl font-black text-soft-green-950 dark:text-soft-green-400 leading-none drop-shadow-sm">{{ item.quantity }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -390,8 +393,8 @@ const handleExportHtml = (includeMarket: boolean) => {
                     
                     <!-- Empty State -->
                     <div v-if="generateTodoSections.length === 0" class="py-32 flex flex-col items-center justify-center text-center opacity-40">
-                        <i class="pi pi-inbox text-6xl mb-4 text-soft-green-200"></i>
-                        <h3 class="font-black text-2xl text-soft-green-900">{{ t('todo.emptySection') }}</h3>
+                        <i class="pi pi-inbox text-6xl mb-4 text-soft-green-200 dark:text-slate-800"></i>
+                        <h3 class="font-black text-2xl text-soft-green-900 dark:text-soft-green-500">{{ t('todo.emptySection') }}</h3>
                     </div>
                 </div>
             </div>
@@ -412,8 +415,12 @@ const handleExportHtml = (includeMarket: boolean) => {
     touch-action: none;
 }
 .ghost-item {
-    background: #f1f5f9 !important;
     border: 2px dashed #92c5b2 !important;
+}
+.dark .ghost-item {
+    border: 2px dashed #3e8f7a !important;
+}
+.ghost-item {
     border-radius: 1rem !important;
     opacity: 0.4;
     transform: scale(0.98);

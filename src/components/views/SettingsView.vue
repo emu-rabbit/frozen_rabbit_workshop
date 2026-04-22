@@ -7,7 +7,7 @@ import { useSettings } from '../../composables/useSettings'
 import { dataCenters, ensureDataCentersLoaded, setSelectedDC } from '../../services/universalis'
 
 const { t } = useI18n()
-const { language, debugMode, marketRegion, marketDC, marketCostStrategy } = useSettings()
+const { language, debugMode, marketRegion, marketDC, marketCostStrategy, isDarkMode } = useSettings()
 
 defineProps<{
   language: string
@@ -89,20 +89,51 @@ watch(marketDC, (newVal) => {
 <template>
   <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('settings.title') }}</h2>
-      <p class="text-slate-500 text-sm">{{ t('settings.description') }}</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 dark:text-soft-green-400 mb-2">{{ t('settings.title') }}</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">{{ t('settings.description') }}</p>
     </header>
 
     <div class="flex flex-col gap-6">
-      <!-- Language Settings -->
-      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
+      <!-- Appearance Settings -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
           <div class="flex flex-col gap-4">
-              <div class="flex items-center gap-3 text-soft-green-900 mb-1">
+              <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400 mb-1">
+                <i class="pi pi-palette text-xl"></i>
+                <label class="font-bold text-lg">{{ t('settings.appearanceTitle') }}</label>
+              </div>
+
+              <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.appearanceDesc') }}</p>
+
+              <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+                  <div class="flex flex-col">
+                      <span class="font-bold text-slate-700 dark:text-slate-200">{{ t('settings.darkMode') }}</span>
+                      <span class="text-xs text-slate-500 dark:text-slate-400">{{ t('settings.darkModeDesc') }}</span>
+                  </div>
+                  <button 
+                    @click="isDarkMode = !isDarkMode" 
+                    class="w-14 h-8 rounded-full transition-all duration-300 relative"
+                    :class="isDarkMode ? 'bg-soft-green-500' : 'bg-slate-300 dark:bg-slate-700'"
+                  >
+                    <div 
+                        class="absolute top-1 w-6 h-6 rounded-full bg-white shadow-sm transition-all duration-300 flex items-center justify-center overflow-hidden"
+                        :class="isDarkMode ? 'left-7' : 'left-1'"
+                    >
+                        <i :class="isDarkMode ? 'pi pi-moon text-soft-green-600' : 'pi pi-sun text-amber-500'" class="text-[10px]"></i>
+                    </div>
+                  </button>
+              </div>
+          </div>
+      </div>
+
+      <!-- Language Settings -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
+          <div class="flex flex-col gap-4">
+              <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400 mb-1">
                 <i class="pi pi-language text-xl"></i>
                 <label class="font-bold text-lg">{{ t('settings.language') }}</label>
               </div>
 
-              <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.languageDesc') }}</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.languageDesc') }}</p>
 
               <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
                   <SelectButton 
@@ -112,19 +143,19 @@ watch(marketDC, (newVal) => {
                     optionLabel="label" 
                     optionValue="value" 
                     aria-labelledby="basic" 
-                    class="settings-lang-toggle whitespace-nowrap min-w-max" 
+                    class="settings-lang-toggle whitespace-nowrap min-w-max"
                   />
               </div>
           </div>
       </div>
 
       <!-- Market Data Settings -->
-      <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
+      <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
           <div class="flex flex-col gap-8">
               <!-- Sub-section 1: Market Data Source -->
               <div class="flex flex-col gap-4">
                   <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 text-soft-green-900">
+                    <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
                       <i class="pi pi-database text-xl"></i>
                       <label class="font-bold text-lg">{{ t('settings.marketTitle') }}</label>
                     </div>
@@ -134,7 +165,7 @@ watch(marketDC, (newVal) => {
                     </div>
                   </div>
 
-                  <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.marketDesc') }}</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.marketDesc') }}</p>
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Region Selector -->
@@ -146,7 +177,14 @@ watch(marketDC, (newVal) => {
                         optionValue="value"
                         :loading="dcLoading"
                         :disabled="dcLoading"
-                        class="w-full !border-soft-green-100 !rounded-xl"
+                        class="w-full !border-emerald-100 dark:!border-slate-800 !rounded-xl"
+                        :pt="{
+                          root: { class: 'dark:bg-slate-950 dark:border-slate-800' },
+                          input: { class: 'dark:text-slate-300' },
+                          trigger: { class: 'dark:text-slate-500' },
+                          panel: { class: 'dark:bg-slate-950 dark:border-slate-800 dark:text-slate-300' },
+                          item: { class: 'dark:text-slate-300 dark:hover:bg-slate-800' }
+                        }"
                       />
                     </div>
 
@@ -159,23 +197,30 @@ watch(marketDC, (newVal) => {
                         optionValue="value"
                         :loading="dcLoading"
                         :disabled="dcLoading"
-                        class="w-full !border-soft-green-100 !rounded-xl"
+                        class="w-full !border-emerald-100 dark:!border-slate-800 !rounded-xl"
+                        :pt="{
+                          root: { class: 'dark:bg-slate-950 dark:border-slate-800' },
+                          input: { class: 'dark:text-slate-300' },
+                          trigger: { class: 'dark:text-slate-500' },
+                          panel: { class: 'dark:bg-slate-950 dark:border-slate-800 dark:text-slate-300' },
+                          item: { class: 'dark:text-slate-300 dark:hover:bg-slate-800' }
+                        }"
                       />
                     </div>
                   </div>
               </div>
 
               <!-- Separator -->
-              <div class="border-t border-slate-100 -mx-5 md:-mx-8"></div>
+              <div class="border-t border-slate-100 dark:border-slate-800 -mx-5 md:-mx-8"></div>
 
               <!-- Sub-section 2: Market Strategy Selection -->
               <div class="flex flex-col gap-4">
-                  <div class="flex items-center gap-3 text-soft-green-900">
+                  <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
                     <i class="pi pi-chart-line text-xl"></i>
                     <label class="font-bold text-lg">{{ t('settings.marketStrategyTitle') }}</label>
                   </div>
                   
-                  <p class="text-sm text-slate-500 leading-relaxed -mt-3 px-1">{{ t('settings.marketStrategyDesc') }}</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.marketStrategyDesc') }}</p>
                   
                   <div class="overflow-x-auto no-scrollbar -mx-1 px-1">
                     <SelectButton 
@@ -183,7 +228,7 @@ watch(marketDC, (newVal) => {
                       :options="strategyOptions" 
                       optionLabel="label" 
                       optionValue="value" 
-                      class="settings-lang-toggle whitespace-nowrap min-w-max" 
+                      class="settings-lang-toggle whitespace-nowrap min-w-max"
                     />
                   </div>
               </div>
@@ -191,43 +236,43 @@ watch(marketDC, (newVal) => {
       </div>
 
       <!-- Debug Mode Settings (Temporarily Hidden) -->
-        <div v-if="false" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 hover:shadow-md transition-shadow">
+        <div v-if="false" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 hover:shadow-md transition-shadow">
           <!-- ... existing debug toggle ... -->
         </div>
 
         <!-- About & Credits Section -->
-        <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8 hover:shadow-md transition-shadow">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
             <div class="flex flex-col gap-6">
-                <div class="flex items-center gap-3 text-soft-green-900">
+                <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
                   <i class="pi pi-info-circle text-xl"></i>
                   <label class="font-bold text-lg">{{ t('settings.about.title') }}</label>
                 </div>
                 
-                <p class="text-slate-500 text-sm -mt-3 leading-relaxed">{{ t('settings.about.description') }}</p>
+                <p class="text-slate-500 dark:text-slate-400 text-sm -mt-3 leading-relaxed">{{ t('settings.about.description') }}</p>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 mt-2">
-                  <a href="https://universalis.app" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                  <a href="https://universalis.app" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800/50 hover:border-soft-green-200 dark:hover:border-soft-green-900 hover:shadow-sm transition-all group">
                     <div class="flex flex-col gap-0.5 min-w-0">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">Universalis</span>
-                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.universalis') }}</span>
+                      <span class="font-black text-slate-700 dark:text-slate-200 text-sm tracking-tight group-hover:text-soft-green-700 dark:group-hover:text-soft-green-400 truncate">Universalis</span>
+                      <span class="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{{ t('settings.about.universalis') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
 
-                  <a href="https://ffxivteamcraft.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                  <a href="https://ffxivteamcraft.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800/50 hover:border-soft-green-200 dark:hover:border-soft-green-900 hover:shadow-sm transition-all group">
                     <div class="flex flex-col gap-0.5 min-w-0">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">Teamcraft</span>
-                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.teamcraft') }}</span>
+                      <span class="font-black text-slate-700 dark:text-slate-200 text-sm tracking-tight group-hover:text-soft-green-700 dark:group-hover:text-soft-green-400 truncate">Teamcraft</span>
+                      <span class="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{{ t('settings.about.teamcraft') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
 
-                  <a href="https://xivapi.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:bg-white hover:border-soft-green-200 hover:shadow-sm transition-all group">
+                  <a href="https://xivapi.com" target="_blank" class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800/50 hover:border-soft-green-200 dark:hover:border-soft-green-900 hover:shadow-sm transition-all group">
                     <div class="flex flex-col gap-0.5 min-w-0">
-                      <span class="font-black text-slate-700 text-sm tracking-tight group-hover:text-soft-green-700 truncate">XIVAPI</span>
-                      <span class="text-[10px] text-slate-400 font-medium truncate">{{ t('settings.about.xivapi') }}</span>
+                      <span class="font-black text-slate-700 dark:text-slate-200 text-sm tracking-tight group-hover:text-soft-green-700 dark:group-hover:text-soft-green-400 truncate">XIVAPI</span>
+                      <span class="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">{{ t('settings.about.xivapi') }}</span>
                     </div>
-                    <i class="pi pi-external-link text-[10px] text-slate-300 group-hover:text-soft-green-500 shrink-0"></i>
+                    <i class="pi pi-external-link text-[10px] text-slate-300 dark:text-slate-600 group-hover:text-soft-green-500 shrink-0"></i>
                   </a>
                 </div>
             </div>

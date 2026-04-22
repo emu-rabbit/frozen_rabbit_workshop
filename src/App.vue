@@ -27,8 +27,17 @@ const FaqView = defineAsyncComponent(() => import('./components/views/FaqView.vu
 import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
-const { language, initialized } = useSettings()
+const { language, initialized, isDarkMode } = useSettings()
 const { addNote, activeWorkbenchNote, notes } = useNotes()
+
+// Sync Dark Mode
+watch(isDarkMode, (newVal) => {
+  if (newVal) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}, { immediate: true })
 
 // Sync i18n locale and dictionary language with settings
 watch(language, async (newLang) => {
@@ -117,14 +126,14 @@ const handleLanguageSelect = (lang: string) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen bg-soft-green-50 overflow-hidden text-slate-800 font-sans relative">
+  <div class="flex h-screen w-screen bg-soft-green-50 dark:bg-slate-950 overflow-hidden text-slate-800 dark:text-slate-100 font-sans relative">
     <!-- Mobile Header -->
-    <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-soft-green-100 flex items-center justify-between px-6 z-50">
+    <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-soft-green-100 dark:border-slate-800/50 flex items-center justify-between px-6 z-50">
       <div class="flex items-center gap-2">
         <img :src="logo" class="w-8 h-8 rounded-lg shadow-sm" alt="Logo" />
-        <span class="font-bold text-soft-green-800 tracking-tight">{{ t('app.title') }}</span>
+        <span class="font-bold text-soft-green-800 dark:text-soft-green-500 tracking-tight">{{ t('app.title') }}</span>
       </div>
-      <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="w-10 h-10 rounded-xl bg-soft-green-50 text-soft-green-600 flex items-center justify-center border border-soft-green-100 active:scale-95 transition-all">
+      <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="w-10 h-10 rounded-xl bg-soft-green-50 dark:bg-slate-800 text-soft-green-600 dark:text-soft-green-400 flex items-center justify-center border border-soft-green-100 dark:border-slate-700 active:scale-95 transition-all">
         <i class="pi" :class="isMobileMenuOpen ? 'pi-times' : 'pi-bars'"></i>
       </button>
     </header>
@@ -137,7 +146,7 @@ const handleLanguageSelect = (lang: string) => {
     ></div>
 
     <aside 
-      class="fixed inset-y-0 left-0 w-80 bg-white z-[70] lg:relative lg:w-72 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
+      class="fixed inset-y-0 left-0 w-80 bg-white dark:bg-slate-900 z-[70] lg:relative lg:w-72 lg:z-0 lg:translate-x-0 transition-transform duration-300 ease-out flex shadow-2xl lg:shadow-none"
       :class="isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <Sidebar v-model:currentTab="currentTab" @open-sponsor="isSponsorModalOpen = true" class="w-full h-full" />
@@ -145,7 +154,7 @@ const handleLanguageSelect = (lang: string) => {
 
     <!-- Main Content -->
     <main ref="mainContainer" class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
-      <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 dark:bg-soft-green-900/20 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->
       <NewNoteView 
@@ -220,14 +229,8 @@ main {
   scrollbar-gutter: stable;
 }
 
-/* Custom styles for SelectButton to match theme */
+/* Specific for settings lang toggle */
 .settings-lang-toggle.p-selectbutton .p-button {
-  @apply bg-white border-soft-green-100 text-slate-500 py-3 px-4 transition-all duration-300;
-}
-.settings-lang-toggle.p-selectbutton .p-button.p-highlight {
-  @apply bg-soft-green-100 border-soft-green-200 text-soft-green-800 font-bold shadow-inner;
-}
-.settings-lang-toggle.p-selectbutton .p-button.p-highlight::before {
-  @apply bg-soft-green-400;
+  @apply py-3 px-4 transition-all duration-300 !important;
 }
 </style>

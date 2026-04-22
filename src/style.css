@@ -4,8 +4,20 @@
 
 @layer base {
   body {
-    @apply bg-soft-green-50 text-slate-800 antialiased font-sans m-0 p-0 h-screen w-screen overflow-hidden;
+    @apply bg-soft-green-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 antialiased font-sans m-0 p-0 h-screen w-screen overflow-hidden;
     scrollbar-gutter: stable;
+  }
+
+  /* Global Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 dark:bg-slate-800 rounded-full border-4 border-transparent bg-clip-padding hover:bg-slate-400 dark:hover:bg-slate-700 transition-colors;
   }
   
   /* Remove arrows from number inputs */
@@ -17,6 +29,68 @@
   input[type="number"] {
     -moz-appearance: textfield; /* Firefox */
   }
+}
+
+/*
+ * PrimeVue Fine-Tuning for Dark Mode
+ * 
+ * PrimeVue v4 with Aura preset now has darkModeSelector: '.dark' enabled in main.ts.
+ * PrimeVue will automatically use its built-in dark mode CSS variables when .dark is present.
+ * 
+ * The styles below are ADDITIONAL tweaks to align PrimeVue's dark palette
+ * with the app's "Sleek Midnight" design system (slate-950 backgrounds, soft-green accents).
+ */
+
+/* Override PrimeVue dark backgrounds to be even deeper */
+html.dark .p-autocomplete-panel,
+html.dark .p-select-overlay,
+html.dark .p-dropdown-panel {
+  background-color: #0f172a !important;
+  border-color: #1e293b !important;
+}
+
+html.dark .p-autocomplete-option,
+html.dark .p-select-option,
+html.dark .p-dropdown-item {
+  color: #cbd5e1 !important;
+  background-color: #0f172a !important;
+}
+
+html.dark .p-autocomplete-option:hover,
+html.dark .p-autocomplete-option.p-focus,
+html.dark .p-select-option:hover,
+html.dark .p-select-option.p-focus,
+html.dark .p-dropdown-item:hover,
+html.dark .p-dropdown-item.p-focus {
+  background-color: #1e293b !important;
+  color: #52a890 !important;
+}
+
+html.dark .p-autocomplete-option.p-selected,
+html.dark .p-select-option.p-selected,
+html.dark .p-dropdown-item.p-highlight {
+  background-color: rgba(45, 106, 90, 0.4) !important;
+  color: #52a890 !important;
+}
+
+/* Scrollbar for PrimeVue Panels */
+html.dark .p-autocomplete-panel::-webkit-scrollbar,
+html.dark .p-select-overlay::-webkit-scrollbar,
+html.dark .p-dropdown-panel::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+html.dark .p-autocomplete-panel::-webkit-scrollbar-track,
+html.dark .p-select-overlay::-webkit-scrollbar-track,
+html.dark .p-dropdown-panel::-webkit-scrollbar-track {
+  background: #020617 !important;
+}
+
+html.dark .p-autocomplete-panel::-webkit-scrollbar-thumb,
+html.dark .p-select-overlay::-webkit-scrollbar-thumb,
+html.dark .p-dropdown-panel::-webkit-scrollbar-thumb {
+  background: #334155 !important;
+  border-radius: 10px !important;
 }
 
 /* Global scale transition for Copy icons */

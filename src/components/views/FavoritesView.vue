@@ -27,17 +27,17 @@ const favoritesList = computed({
 <template>
   <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
-      <div class="flex items-center gap-3 mb-2 text-soft-green-800">
+      <div class="flex items-center gap-3 mb-2 text-soft-green-800 dark:text-soft-green-400">
         <i class="pi pi-star-fill text-xl md:text-2xl"></i>
         <h2 class="text-2xl md:text-3xl font-bold">{{ t('favorites.title') }}</h2>
       </div>
-      <p class="text-slate-500 text-sm">{{ t('favorites.description') }}</p>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">{{ t('favorites.description') }}</p>
     </header>
     
-    <div v-if="favoritesList.length === 0" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex items-center justify-center flex-col min-h-[300px]">
-      <i class="pi pi-star text-5xl text-soft-green-200 mb-4"></i>
-      <p class="text-soft-green-600 font-medium">{{ t('favorites.emptyTitle') }}</p>
-      <p class="text-slate-400 text-sm mt-1">{{ t('favorites.emptyDescription') }}</p>
+    <div v-if="favoritesList.length === 0" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 flex items-center justify-center flex-col min-h-[300px]">
+      <i class="pi pi-star text-5xl text-soft-green-200 dark:text-slate-800 mb-4"></i>
+      <p class="text-soft-green-600 dark:text-soft-green-500 font-medium">{{ t('favorites.emptyTitle') }}</p>
+      <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">{{ t('favorites.emptyDescription') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-4">

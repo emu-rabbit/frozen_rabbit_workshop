@@ -43,25 +43,25 @@ const confirmSelection = () => {
       ></div>
 
       <!-- Modal Container -->
-      <div class="relative w-full max-w-3xl bg-white rounded-[2rem] shadow-2xl overflow-hidden transform transition-all border border-soft-green-100 flex flex-col md:flex-row">
+      <div class="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl overflow-hidden transform transition-all border border-soft-green-100 dark:border-slate-800 flex flex-col md:flex-row">
         
         <!-- Decoration / Brand Side -->
-        <div class="md:w-5/12 bg-soft-green-50 p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-soft-green-100 relative overflow-hidden">
-          <div class="absolute top-0 left-0 w-32 h-32 bg-lime-green-100 rounded-full -translate-x-12 -translate-y-12 opacity-50 blur-2xl"></div>
-          <div class="absolute bottom-0 right-0 w-32 h-32 bg-soft-green-200 rounded-full translate-x-12 translate-y-12 opacity-50 blur-2xl"></div>
+        <div class="md:w-5/12 bg-soft-green-50 dark:bg-slate-950 p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 md:border-r border-soft-green-100 dark:border-slate-800 relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-32 h-32 bg-lime-green-100 dark:bg-lime-green-900/20 rounded-full -translate-x-12 -translate-y-12 opacity-50 blur-2xl"></div>
+          <div class="absolute bottom-0 right-0 w-32 h-32 bg-soft-green-200 dark:bg-soft-green-900/20 rounded-full translate-x-12 translate-y-12 opacity-50 blur-2xl"></div>
           
           <img :src="logo" class="w-24 h-24 rounded-3xl shadow-lg mb-8 relative z-10 transform hover:rotate-6 transition-transform duration-500" alt="Logo" />
           
-          <h2 class="text-3xl font-black text-soft-green-900 mb-2 relative z-10">
+          <h2 class="text-3xl font-black text-soft-green-900 dark:text-soft-green-400 mb-2 relative z-10">
             {{ t('welcomeModal.title') }}
           </h2>
-          <p class="text-soft-green-600 font-medium relative z-10 opacity-80">
+          <p class="text-soft-green-600 dark:text-soft-green-500 font-medium relative z-10 opacity-80">
             {{ t('welcomeModal.subtitle') }}
           </p>
           
           <div class="mt-12 hidden md:block">
              <div class="flex -space-x-2">
-                <div v-for="l in languages" :key="l.code" class="w-10 h-10 rounded-full bg-white border-2 border-soft-green-100 flex items-center justify-center text-lg shadow-sm">
+                <div v-for="l in languages" :key="l.code" class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-soft-green-100 dark:border-slate-700 flex items-center justify-center text-lg shadow-sm">
                   {{ l.icon }}
                 </div>
              </div>
@@ -70,7 +70,7 @@ const confirmSelection = () => {
 
         <!-- Selection Side -->
         <div class="md:w-7/12 p-8 md:p-12 flex flex-col">
-          <p class="text-slate-500 text-sm mb-8 leading-relaxed">
+          <p class="text-slate-500 dark:text-slate-400 text-sm mb-8 leading-relaxed">
             {{ t('welcomeModal.description') }}
           </p>
 
@@ -81,17 +81,17 @@ const confirmSelection = () => {
               @click="handleSelect(lang.code)"
               class="group relative flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300"
               :class="selectedLang === lang.code 
-                ? 'border-soft-green-400 bg-soft-green-50 ring-4 ring-soft-green-400/10' 
-                : 'border-slate-100 hover:border-soft-green-200 hover:bg-slate-50'"
+                ? 'border-soft-green-400 dark:border-soft-green-600 bg-soft-green-50 dark:bg-soft-green-900/20 ring-4 ring-soft-green-400/10' 
+                : 'border-slate-100 dark:border-slate-800 hover:border-soft-green-200 dark:hover:border-soft-green-700 hover:bg-slate-50 dark:hover:bg-slate-800'"
             >
-              <div class="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-2xl shadow-sm transform group-hover:scale-110 transition-transform">
+              <div class="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 flex items-center justify-center text-2xl shadow-sm transform group-hover:scale-110 transition-transform">
                 {{ lang.icon }}
               </div>
               <div class="text-left">
-                <div class="font-bold text-slate-800" :class="selectedLang === lang.code ? 'text-soft-green-900' : ''">
+                <div class="font-bold text-slate-800 dark:text-slate-200" :class="selectedLang === lang.code ? 'text-soft-green-900 dark:text-soft-green-300' : ''">
                   {{ lang.name }}
                 </div>
-                <div class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                <div class="text-[10px] text-slate-400 dark:text-slate-500 font-medium uppercase tracking-wider">
                   {{ lang.label }}
                 </div>
               </div>
@@ -107,10 +107,10 @@ const confirmSelection = () => {
           <button 
             @click="confirmSelection"
             :disabled="!selectedLang"
-            class="w-full py-4 rounded-2xl font-black text-lg shadow-xl shadow-soft-green-200/50 transition-all duration-300 transform active:scale-[0.98]"
+            class="w-full py-4 rounded-2xl font-black text-lg shadow-xl shadow-soft-green-200/50 dark:shadow-none transition-all duration-300 transform active:scale-[0.98]"
             :class="selectedLang 
-              ? 'bg-soft-green-500 text-white hover:bg-soft-green-600 hover:-translate-y-0.5' 
-              : 'bg-slate-100 text-slate-400 cursor-not-allowed'"
+              ? 'bg-soft-green-500 dark:bg-soft-green-600 text-white hover:bg-soft-green-600 dark:hover:bg-soft-green-700 hover:-translate-y-0.5' 
+              : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'"
           >
             {{ t('welcomeModal.confirm') }}
           </button>

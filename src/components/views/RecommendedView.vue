@@ -75,11 +75,11 @@ const handleSearchInput = (event: Event) => {
 <template>
   <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6">
-      <div class="flex items-center gap-3 mb-2 text-soft-green-800">
+      <div class="flex items-center gap-3 mb-2 text-soft-green-800 dark:text-soft-green-400">
         <i class="pi pi-thumbs-up-fill text-xl md:text-2xl"></i>
         <h2 class="text-2xl md:text-3xl font-bold">{{ t('recommended.title') }}</h2>
       </div>
-      <p class="text-slate-500 text-sm mb-4 md:mb-6">{{ t('recommended.description') }}</p>
+      <p class="text-slate-500 dark:text-slate-400 text-sm mb-4 md:mb-6">{{ t('recommended.description') }}</p>
 
       <span class="relative block">
         <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -88,17 +88,17 @@ const handleSearchInput = (event: Event) => {
           :modelValue="searchQuery"
           @update:modelValue="onSearchValueUpdate"
           :placeholder="t('recommended.searchPlaceholder')" 
-          class="w-full !pl-11 !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl bg-white shadow-sm"
+          class="w-full !pl-11 !border-soft-green-200 dark:!border-slate-800 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl bg-white dark:bg-slate-900 shadow-sm dark:text-slate-100"
           size="large"
         />
         <i v-if="searchQuery" @click="onSearchValueUpdate('')" class="pi pi-times absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 cursor-pointer p-2 -mr-2"></i>
       </span>
     </header>
 
-    <div v-if="filteredNotes.length === 0" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex items-center justify-center flex-col min-h-[300px]">
-      <i class="pi pi-search text-5xl text-soft-green-200 mb-4"></i>
-      <p class="text-soft-green-600 font-medium">{{ t('recommended.emptyTitle') }}</p>
-      <p class="text-slate-400 text-sm mt-1">{{ t('recommended.emptyDescription') }}</p>
+    <div v-if="filteredNotes.length === 0" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 flex items-center justify-center flex-col min-h-[300px]">
+      <i class="pi pi-search text-5xl text-soft-green-200 dark:text-slate-800 mb-4"></i>
+      <p class="text-soft-green-600 dark:text-soft-green-500 font-medium">{{ t('recommended.emptyTitle') }}</p>
+      <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">{{ t('recommended.emptyDescription') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-4">

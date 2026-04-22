@@ -16,20 +16,20 @@ const { notes, toggleFavorite, isFavorite } = useNotes()
 <template>
   <div class="px-4 py-6 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
-      <h2 class="text-xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('history.title') }}</h2>
-      <p class="text-slate-500 text-sm mb-3 md:mb-4">{{ t('history.description') }}</p>
+      <h2 class="text-xl md:text-3xl font-bold text-soft-green-800 dark:text-soft-green-400 mb-2">{{ t('history.title') }}</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm mb-3 md:mb-4">{{ t('history.description') }}</p>
       
       <!-- Auto delete warning -->
-      <div v-if="notes.length > 0" class="bg-orange-50 border border-orange-100 rounded-lg p-3 flex items-start gap-3 mt-4 text-orange-600 text-sm">
+      <div v-if="notes.length > 0" class="bg-orange-50 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/30 rounded-lg p-3 flex items-start gap-3 mt-4 text-orange-600 dark:text-orange-400 text-sm">
         <i class="pi pi-info-circle mt-0.5"></i>
         <span>{{ t('history.autoDeleteWarning') }}</span>
       </div>
     </header>
     
-    <div v-if="notes.length === 0" class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-8 flex items-center justify-center flex-col min-h-[300px]">
-      <i class="pi pi-inbox text-5xl text-soft-green-200 mb-4"></i>
-      <p class="text-soft-green-600 font-medium">{{ t('history.emptyTitle') }}</p>
-      <p class="text-slate-400 text-sm mt-1">{{ t('history.emptyDescription') }}</p>
+    <div v-if="notes.length === 0" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 flex items-center justify-center flex-col min-h-[300px]">
+      <i class="pi pi-inbox text-5xl text-soft-green-200 dark:text-slate-800 mb-4"></i>
+      <p class="text-soft-green-600 dark:text-soft-green-500 font-medium">{{ t('history.emptyTitle') }}</p>
+      <p class="text-slate-400 dark:text-slate-500 text-sm mt-1">{{ t('history.emptyDescription') }}</p>
     </div>
 
     <div v-else class="flex flex-col gap-4">

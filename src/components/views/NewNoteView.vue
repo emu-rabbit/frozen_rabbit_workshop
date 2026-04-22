@@ -128,38 +128,38 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
 <template>
   <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('newNote.title') }}</h2>
-      <p class="text-slate-500 text-sm">{{ t('newNote.description') }}</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 dark:text-soft-green-400 mb-2">{{ t('newNote.title') }}</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">{{ t('newNote.description') }}</p>
     </header>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-soft-green-100 p-5 md:p-8">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8">
       <div class="flex flex-col gap-8">
         <div class="flex flex-col gap-2">
-          <label for="item-name" class="font-bold text-soft-green-900 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
+          <label for="item-name" class="font-bold text-soft-green-900 dark:text-soft-green-400 text-lg ml-1">{{ t('newNote.labelTitle') }} <span class="text-red-400">*</span></label>
           <InputText 
             v-ffiv-clean
             id="item-name" 
             v-model="newNoteDraft.noteTitle" 
             :placeholder="t('newNote.placeholderTitle')" 
-            class="w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
+            class="w-full !border-soft-green-200 dark:!border-slate-700 !bg-white dark:!bg-slate-800 !text-slate-900 dark:!text-slate-100 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl"
             size="large"
           />
         </div>
         
         <div class="flex flex-col gap-4 mt-2">
           <div class="ml-1">
-            <h3 class="font-bold text-soft-green-900 text-lg">{{ t('newNote.itemsTitle') }}</h3>
-            <p class="text-sm text-slate-500">{{ t('newNote.itemsDescription') }}</p>
+            <h3 class="font-bold text-soft-green-900 dark:text-soft-green-400 text-lg">{{ t('newNote.itemsTitle') }}</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">{{ t('newNote.itemsDescription') }}</p>
           </div>
 
           <div class="flex flex-col gap-4">
             <div 
               v-for="(row, index) in newNoteDraft.searchRows" 
               :key="row.id"
-              class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100"
+              class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
             >
               <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 flex items-center justify-center bg-soft-green-100 text-soft-green-600 rounded-lg shrink-0 font-bold">
+                  <div class="w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold">
                     {{ index + 1 }}
                   </div>
                   
@@ -184,15 +184,27 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                     class="w-full"
                     :pt="{
                       input: { 
-                        class: 'w-full !border-soft-green-200 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3'
+                        class: 'w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3 placeholder:dark:text-slate-600'
+                      },
+                      panel: {
+                        class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
+                      },
+                      list: {
+                        class: 'dark:!bg-slate-900'
+                      },
+                      item: {
+                        class: 'dark:!text-slate-300 dark:hover:!bg-slate-800'
+                      },
+                      emptyMessage: {
+                        class: 'dark:!bg-slate-900 dark:!text-slate-400'
                       }
                     }"
                   >
                     <template #option="slotProps">
                         <div class="flex items-center gap-3 w-full">
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
-                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 bg-slate-100 rounded-sm" v-else></div>
-                            <div class="flex-1 truncate text-sm">{{ slotProps.option.name }}</div>
+                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
+                            <div class="flex-1 truncate text-sm dark:text-slate-300">{{ slotProps.option.name }}</div>
                         </div>
                     </template>
                     <template #empty>
@@ -206,19 +218,19 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                     </template>
                   </AutoComplete>
 
-                  <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 bg-soft-green-100 border border-soft-green-200 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans">
+                  <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 dark:text-soft-green-300 bg-soft-green-50 dark:bg-soft-green-900/30 border border-soft-green-100 dark:border-soft-green-800/50 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans shadow-sm">
                     <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
-                    <span class="truncate font-medium">ID: {{ row.selectedItem.id }}</span>
+                    <span class="truncate font-bold tracking-tight">ID: {{ row.selectedItem.id }}</span>
                   </div>
               </div>
 
               <div class="flex items-center justify-between sm:justify-start gap-2">
-                  <div class="flex items-center gap-1 bg-white border border-slate-200 rounded-lg p-0.5 shadow-sm shrink-0">
-                    <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
+                  <div class="flex items-center gap-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
+                    <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
                       <i class="pi pi-minus text-sm"></i>
                     </button>
-                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent" />
-                    <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-md transition-colors">
+                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent dark:text-slate-200" />
+                    <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-colors">
                       <i class="pi pi-plus text-sm"></i>
                     </button>
                   </div>
@@ -231,27 +243,27 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
           </div>
 
           <div>
-            <button @click="addSearchRow" :disabled="!canAddRow" class="flex items-center gap-2 px-4 py-2 mt-2 border-2 border-dashed rounded-xl transition-all duration-300 font-medium text-sm" :class="canAddRow ? 'border-soft-green-300 text-soft-green-600 hover:bg-soft-green-50 hover:border-soft-green-400' : 'border-slate-200 text-slate-400 cursor-not-allowed bg-slate-50/50'">
+            <button @click="addSearchRow" :disabled="!canAddRow" class="flex items-center gap-2 px-4 py-2 mt-2 border-2 border-dashed rounded-xl transition-all duration-300 font-medium text-sm" :class="canAddRow ? 'border-soft-green-300 dark:border-soft-green-900 text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-soft-green-900/20 hover:border-soft-green-400 dark:hover:border-soft-green-700' : 'border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed bg-slate-50/50 dark:bg-slate-800/30'">
               <i class="pi pi-plus"></i> {{ t('newNote.addRow') }}
             </button>
             <p v-if="!canAddRow" class="text-xs text-orange-400 mt-2 ml-1">{{ t('newNote.rowHint') }}</p>
           </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-soft-green-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="mt-8 pt-6 border-t border-soft-green-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <label class="flex items-center gap-3 cursor-pointer group select-none">
               <div class="relative flex items-center justify-center">
-                <input type="checkbox" v-model="newNoteDraft.shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
+                <input type="checkbox" v-model="newNoteDraft.shouldFavorite" class="peer appearance-none w-6 h-6 border-2 border-soft-green-200 dark:border-slate-700 rounded-lg checked:bg-soft-green-500 checked:border-soft-green-500 transition-all duration-300" />
                 <i class="pi pi-check absolute text-white opacity-0 peer-checked:opacity-100 scale-50 peer-checked:scale-100 transition-all duration-300 pointer-events-none text-xs font-bold"></i>
               </div>
-              <span class="text-slate-600 font-medium group-hover:text-soft-green-700 transition-colors">{{ t('newNote.addToFavorites') }}</span>
+              <span class="text-slate-600 dark:text-slate-400 font-medium group-hover:text-soft-green-700 dark:group-hover:text-soft-green-400 transition-colors">{{ t('newNote.addToFavorites') }}</span>
             </label>
 
             <div class="flex items-center gap-3 w-full md:w-auto">
               <button 
                 @click="handleExportJson" 
                 :disabled="!newNoteDraft.noteTitle"
-                class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 border-2 border-soft-green-100 hover:border-soft-green-200 hover:bg-soft-green-50 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
+                class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 dark:text-soft-green-400 border-2 border-soft-green-100 dark:border-slate-800 hover:border-soft-green-200 dark:hover:border-soft-green-900 hover:bg-soft-green-50 dark:hover:bg-soft-green-900/20 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden"
                 :title="t('newNote.copyJson')"
               >
                 <transition name="scale" mode="out-in">
@@ -263,7 +275,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                 </span>
               </button>
               
-              <button @click="handleCreateNote" :disabled="!newNoteDraft.noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
+              <button @click="handleCreateNote" :disabled="!newNoteDraft.noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 hover:bg-soft-green-600 dark:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 disabled:cursor-not-allowed text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md dark:shadow-none transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
                 <i class="pi pi-save"></i> {{ t('newNote.save') }}
               </button>
             </div>

@@ -15,31 +15,31 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
 <template>
   <div class="px-4 py-8 md:p-8 max-w-3xl w-full mx-auto pb-24">
     <header class="mb-6 md:mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 mb-2">{{ t('nav.faq') }}</h2>
-      <p class="text-slate-500 text-sm">{{ t('settings.description') }}</p>
+      <h2 class="text-2xl md:text-3xl font-bold text-soft-green-800 dark:text-soft-green-400 mb-2">{{ t('nav.faq') }}</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">{{ t('settings.description') }}</p>
     </header>
 
     <div class="flex flex-col gap-6">
       <div 
         v-for="(item, index) in faqItems" 
         :key="index"
-        class="bg-white rounded-2xl shadow-sm border border-soft-green-100 overflow-hidden hover:shadow-md transition-all duration-300"
+        class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 overflow-hidden hover:shadow-md transition-all duration-300"
       >
         <div class="p-6">
           <div class="flex gap-4">
-            <div class="w-10 h-10 rounded-xl bg-soft-green-100 text-soft-green-600 flex items-center justify-center shrink-0 font-bold text-lg">
+            <div class="w-10 h-10 rounded-xl bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 flex items-center justify-center shrink-0 font-bold text-lg">
               Q
             </div>
             <div class="flex-1">
-              <h3 class="text-lg font-bold text-soft-green-900 leading-tight mb-4">
+              <h3 class="text-lg font-bold text-soft-green-900 dark:text-soft-green-300 leading-tight mb-4">
                 {{ item.q }}
               </h3>
               
-              <div class="flex gap-4 pt-4 border-t border-soft-green-50">
-                <div class="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 flex items-center justify-center shrink-0 font-bold text-lg">
+              <div class="flex gap-4 pt-4 border-t border-soft-green-50 dark:border-slate-800">
+                <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center justify-center shrink-0 font-bold text-lg">
                   A
                 </div>
-                <div class="flex-1 text-slate-600 leading-relaxed py-1" v-html="item.a">
+                <div class="flex-1 text-slate-600 dark:text-slate-400 leading-relaxed py-1" v-html="item.a">
                 </div>
               </div>
             </div>
@@ -48,8 +48,8 @@ const faqItems = computed(() => tm('faq.items') as FaqItem[])
       </div>
     </div>
     
-    <footer class="mt-12 pt-8 border-t border-soft-green-100 text-center">
-      <p class="text-sm text-slate-400">
+    <footer class="mt-12 pt-8 border-t border-soft-green-100 dark:border-slate-800 text-center">
+      <p class="text-sm text-slate-400 dark:text-slate-500">
         {{ t('faq.footer', { email: 'mausu2526@gmail.com' }) }}
       </p>
     </footer>

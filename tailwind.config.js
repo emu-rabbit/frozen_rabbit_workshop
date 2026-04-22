@@ -4,21 +4,22 @@ export default {
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         'soft-green': {
-          DEFAULT: '#81c784',
-          50: '#e8f5e9',
-          100: '#c8e6c9',
-          200: '#a5d6a7',
-          300: '#81c784',
-          400: '#66bb6a',
-          500: '#4caf50',
-          600: '#43a047',
-          700: '#388e3c',
-          800: '#2e7d32',
-          900: '#1b5e20',
+          50: '#f2fdf7', 
+          100: '#e1f9ee', 
+          200: '#c5f2dd', 
+          300: '#92c5b2', 
+          400: '#75bfa9', 
+          500: '#52a890', 
+          600: '#3e8f7a', 
+          700: '#388e3c', 
+          800: '#2e7d32', 
+          900: '#2d6a5a', 
+          950: '#1b4137'
         },
         'lime-green': {
           DEFAULT: '#dce775',

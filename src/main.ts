@@ -11,9 +11,9 @@ const app = createApp(App)
 app.use(i18n)
 app.use(PrimeVue, {
     theme: {
-        preset: Aura, // We use Aura as a light base but will override colors with Tailwind classes later or use PrimeVue preset
+        preset: Aura,
         options: {
-            darkModeSelector: false || 'none',
+            darkModeSelector: '.dark',
         }
     }
 })

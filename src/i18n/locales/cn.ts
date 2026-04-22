@@ -165,6 +165,10 @@ export default {
   settings: {
     title: '工坊设定',
     description: '调整工坊的各项偏好设定',
+    appearanceTitle: '外观设置',
+    appearanceDesc: '调整工坊的视觉风格',
+    darkMode: '深色模式',
+    darkModeDesc: '开启深色模式，适合在昏暗环境下使用',
     language: '语言版本',
     languageDesc: '本网站的显示语言，缺乏翻译的情况下将显示英文',
     debugMode: '调试模式',

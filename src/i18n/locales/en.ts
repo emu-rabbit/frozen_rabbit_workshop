@@ -165,6 +165,10 @@ export default {
   settings: {
     title: 'Workshop Settings',
     description: 'Adjust the workshop language to your liking',
+    appearanceTitle: 'Appearance',
+    appearanceDesc: 'Customize the visual style of the application',
+    darkMode: 'Dark Mode',
+    darkModeDesc: 'Switch to a dark theme for a better night-time experience',
     language: 'Language',
     languageDesc: 'Display language for the website. English will be shown if translations are missing.',
     debugMode: 'Debug Mode',

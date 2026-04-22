@@ -165,6 +165,10 @@ export default {
   settings: {
     title: '工房の設定',
     description: '工房の言葉を調整してね',
+    appearanceTitle: '外観設定',
+    appearanceDesc: 'アプリケーションの視覚的なスタイルをカスタマイズします',
+    darkMode: 'ダークモード',
+    darkModeDesc: '暗い場所での使用に適したダークテーマに切り替えます',
     language: '言語',
     languageDesc: 'ウェブサイトの表示言語です。翻訳がない場合は英語で表示されます。',
     debugMode: 'デバッグモード',
