@@ -117,7 +117,9 @@ export default {
         yield: '製作数',
         vendorTitle: 'NPC販売情報',
         vendorDesc: 'NPC販売: {price} Gil {location}',
+        vendorPrice: '販売価格',
         mbTitle: 'マーケットボード販売情報',
+        mbMinPrice: '最低出品価格',
         q1Price: '第1四分位数',
         medianPrice: '中央値',
         noListings: '現在、マーケットボードに出品はありません'

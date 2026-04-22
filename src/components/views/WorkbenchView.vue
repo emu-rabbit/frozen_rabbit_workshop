@@ -344,7 +344,7 @@ const formatTime = (seconds: number) => {
                         <div class="space-y-3">
                             <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-100/50 dark:border-slate-700/50 flex flex-wrap items-center justify-between gap-2">
                                 <div class="flex flex-col min-w-0">
-                                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1 leading-none">{{ t('todo.targetPrice') }}</span>
+                                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1 leading-none">{{ t('workbench.view.details.vendorPrice') }}</span>
                                     <span class="text-base md:text-lg font-black text-slate-700 dark:text-slate-200 font-mono tracking-tighter truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].vendorInfo.price) }} Gil</span>
                                 </div>
                                 <i class="pi pi-verified text-slate-300 dark:text-slate-600 text-xl opacity-50 shrink-0"></i>
@@ -382,7 +382,7 @@ const formatTime = (seconds: number) => {
                         <div v-if="workbenchItems[id]?.marketStats?.minPrice" class="space-y-4">
                             <div class="flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200/50 dark:border-slate-700/50">
                                 <div class="flex flex-wrap items-center justify-between gap-1">
-                                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ t('todo.targetPrice') }} (Min)</span>
+                                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{{ t('workbench.view.details.mbMinPrice') }}</span>
                                     <span class="text-base md:text-lg font-black text-slate-700 dark:text-slate-200 font-mono tracking-tighter truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].marketStats.minPrice) }} Gil</span>
                                 </div>
                             </div>

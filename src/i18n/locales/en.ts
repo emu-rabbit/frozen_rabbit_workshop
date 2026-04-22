@@ -117,7 +117,9 @@ export default {
         yield: 'Yield',
         vendorTitle: 'NPC Vendor Info',
         vendorDesc: 'Sold by NPC: {price} Gil in {location}',
+        vendorPrice: 'Vendor Price',
         mbTitle: 'Market Board Listings',
+        mbMinPrice: 'Lowest Listed Price',
         q1Price: '1/4 Percentile',
         medianPrice: 'Median Price',
         noListings: 'No active listings found on Market Board'

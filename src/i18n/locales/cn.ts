@@ -117,7 +117,9 @@ export default {
         yield: '单次产量',
         vendorTitle: 'NPC 贩售信息',
         vendorDesc: 'NPC 在售 单价 {price} Gil {location}',
+        vendorPrice: '贩售价格',
         mbTitle: '市场板信息',
+        mbMinPrice: '架上最低价',
         q1Price: '1/4 分位数',
         medianPrice: '中位数',
         noListings: '市场板上目前无上架物品'
