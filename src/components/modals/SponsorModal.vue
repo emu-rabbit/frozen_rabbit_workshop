@@ -22,7 +22,7 @@ const handleSponsor = (url: string) => {
 
 const koFiUrl = 'https://ko-fi.com/emu_rabbit2526'
 // ECPay URL will be provided by user later, placeholder for now
-const ecPayUrl = '#'
+const ecPayUrl = 'https://p.ecpay.com.tw/683FE99'
 </script>
 
 <template>
