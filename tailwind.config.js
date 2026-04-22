@@ -9,7 +9,7 @@ export default {
     extend: {
       colors: {
         'soft-green': {
-          50: '#f2fdf7', 
+          50: '#e8f5e9', 
           100: '#e1f9ee', 
           200: '#c5f2dd', 
           300: '#92c5b2', 
