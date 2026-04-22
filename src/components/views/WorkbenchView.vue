@@ -273,7 +273,7 @@ const formatTime = (seconds: number) => {
                         <!-- CRAFT -->
                         <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200" 
                              :class="[!workbenchItems[id]?.canCraft ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 ring-2 ring-indigo-50 dark:ring-indigo-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
-                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-400 dark:text-indigo-600'">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'">
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
@@ -286,7 +286,7 @@ const formatTime = (seconds: number) => {
                         <!-- GATHER -->
                         <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
                              :class="[!workbenchItems[id]?.canGather ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 ring-2 ring-amber-50 dark:ring-amber-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
-                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-amber-500 dark:text-amber-700'">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'">
                                {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
@@ -299,7 +299,7 @@ const formatTime = (seconds: number) => {
                         <!-- OTHER -->
                         <div class="p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
                              :class="decisions[String(id)]?.other > 0 ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 ring-2 ring-emerald-50 dark:ring-emerald-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'">
-                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-500 dark:text-emerald-700'">{{ t('workbench.view.source.other') }}</span>
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.other > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'">{{ t('workbench.view.source.other') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
                                <button @click="updateDecision(id, 'other', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-emerald-400 dark:hover:border-emerald-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].other" @blur="setDecisionRaw(id, 'other', decisions[String(id)].other)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
