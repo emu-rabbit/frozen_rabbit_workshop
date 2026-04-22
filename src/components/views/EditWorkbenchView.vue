@@ -348,7 +348,7 @@ const confirmMerge = () => {
                 </button>
             </div>
             <div class="p-6 flex flex-col gap-4">
-                <p class="text-sm text-slate-500 dark:text-slate-400">粘貼您想要合併進來的筆記 JSON，相同物品的數量將會自動相加。</p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">{{ t('editor.mergeDescription') }}</p>
                 <Textarea 
                     v-model="mergeRawJson" 
                     rows="8" 
@@ -357,8 +357,8 @@ const confirmMerge = () => {
                 />
             </div>
             <div class="px-6 py-4 bg-slate-50 dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
-                <button @click="isMergeDialogOpen = false" class="px-4 py-2 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">取消</button>
-                <button @click="confirmMerge" :disabled="!mergeRawJson.trim()" class="px-6 py-2 rounded-lg font-bold bg-soft-green-500 dark:bg-soft-green-600 text-white hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 transition-all">確認合併</button>
+                <button @click="isMergeDialogOpen = false" class="px-4 py-2 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 transition-all">{{ t('editor.mergeCancel') }}</button>
+                <button @click="confirmMerge" :disabled="!mergeRawJson.trim()" class="px-6 py-2 rounded-lg font-bold bg-soft-green-500 dark:bg-soft-green-600 text-white hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 transition-all">{{ t('editor.mergeConfirm') }}</button>
             </div>
         </div>
     </div>

@@ -112,9 +112,9 @@ const activeTab = computed({
         <div class="flex flex-col gap-2 px-1">
           <button 
             @click="$emit('open-sponsor')"
-            class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/20 border border-rose-100 dark:border-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/30 hover:scale-[1.02] transition-all duration-300 shadow-sm"
+            class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-950/60 dark:hover:border-rose-800/70 hover:scale-[1.02] transition-all duration-300 shadow-sm"
           >
-            <i class="pi pi-heart-fill text-xs text-rose-400 dark:text-rose-500 group-hover:scale-125 transition-transform"></i>
+            <i class="pi pi-heart-fill text-xs text-rose-400 dark:text-rose-500 group-hover:text-rose-400 group-hover:scale-125 transition-all"></i>
             <span class="text-[11px] font-black tracking-tight whitespace-nowrap">{{ t('nav.sponsor') }}</span>
           </button>
 
