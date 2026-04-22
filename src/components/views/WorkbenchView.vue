@@ -272,7 +272,7 @@ const formatTime = (seconds: number) => {
 
                         <!-- CRAFT -->
                         <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200" 
-                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 ring-2 ring-indigo-50 dark:ring-indigo-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
+                             :class="[!workbenchItems[id]?.canCraft ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.craft > 0 ? 'bg-indigo-50 dark:bg-indigo-950/40 border-indigo-300 dark:border-indigo-800 ring-2 ring-indigo-50 dark:ring-indigo-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
                            <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.craft > 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-indigo-400 dark:text-indigo-600'">
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
@@ -285,7 +285,7 @@ const formatTime = (seconds: number) => {
 
                         <!-- GATHER -->
                         <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
-                             :class="[!workbenchItems[id]?.canGather ? 'opacity-30 grayscale pointer-events-none' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 ring-2 ring-amber-50 dark:ring-amber-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
+                             :class="[!workbenchItems[id]?.canGather ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 ring-2 ring-amber-50 dark:ring-amber-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
                            <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-amber-500 dark:text-amber-700'">
                                {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
                            </span>
