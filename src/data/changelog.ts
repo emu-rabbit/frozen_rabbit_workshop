@@ -8,6 +8,24 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.1',
+    date: '2026-04-24',
+    changes: [
+      {
+        tw: '現在待辦清單中已被使用者標記為完成的素材不會出現在複製的巨集指令中了',
+        cn: '现在待办清单中已被用户标记为完成的素材不会出现在复制的宏指令中了',
+        en: 'Items marked as completed in the Todo list are now excluded from the copied alarm macro',
+        ja: 'やることリストで完了としてマークされたアイテムは、コピーされたアラームマクロから除外されるようになりました'
+      },
+      {
+        tw: '確保了匯出的待辦清單 HTML 中也具備相同的複製鬧鐘巨集功能',
+        cn: '确保了导出的待办清单 HTML 中也具备相同的复制闹钟宏功能',
+        en: 'Added the same one-click copy alarm macro feature to the exported Todo list HTML',
+        ja: '書き出されたやることリストのHTMLにも同様のアラームマクロコピー機能を追加しました'
+      }
+    ]
+  },
+  {
     version: '1.0.0',
     date: '2026-04-24',
     changes: [
