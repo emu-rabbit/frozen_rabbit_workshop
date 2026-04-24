@@ -28,7 +28,7 @@ export default {
   },
   recommended: {
     title: '兔肉私心筆記',
-    description: '這些是站長整理出來實用的清單。可以用空白鍵串聯檢索條件。',
+    description: '這些是站長整理出來實用的清單。可以用空白鍵串聯檢索條件。如果筆記缺少你想要的武器或物品，歡迎前往筆記工作台修改筆記。',
     searchPlaceholder: '搜尋...',
     emptyTitle: '找不到相符的筆記',
     emptyDescription: '換個關鍵字試試看吧！'
@@ -222,6 +222,10 @@ export default {
       {
         q: '這網站是做什麼用的？',
         a: '本網站設計給 FFXIV 的巧匠玩家，提供批次準備管理功能。您可以同時展開多個配方，透過系統整合的市場價格、統計數據與 NPC 資訊，決定每一件素材該「購買」、「製作」或是「採集」，最後生成的清楚明瞭的待辦清單將大幅提升您的作業效率。'
+      },
+      {
+        q: '為什麼我寫筆記時查不到我想要的物品',
+        a: '只有可被製作的物品才會被搜尋到，另外，本網站拉取的翻譯資料來自於廣大社群維護的資料，有時候會發生翻譯名缺失導致無法搜尋到的狀況，但物品是存在的，你可以嘗試用英文名字搜尋看看。最後本站的資料有一大部分來自於 <a href="https://ffxivteamcraft.com" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">Teamcraft</a>，你也可以考慮前往他們的網頁為社群資料盡一份心力。'
       },
       {
         q: '為什麼預估的市場價格看起來不準確？',

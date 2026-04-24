@@ -28,7 +28,7 @@ export default {
   },
   recommended: {
     title: 'Rabbit\'s Picks',
-    description: 'Practical lists compiled by the rabbit. Use spaces to link search criteria.',
+    description: 'Practical lists compiled by the rabbit. Use spaces to link search criteria. If a note is missing the weapon or item you want, feel free to use the Note Workbench to modify it.',
     searchPlaceholder: 'Search...',
     emptyTitle: 'No Matching Notes Found',
     emptyDescription: 'Try a different keyword!'
@@ -222,6 +222,10 @@ export default {
       {
         q: 'What is this website for?',
         a: 'This website is designed for FFXIV crafters to manage batch preparations for items. By providing integrated market prices, statistics, and NPC information, it helps you decide whether to buy, craft, or gather materials. Finally, it generates a comprehensive Todo list to streamline your workflow.'
+      },
+      {
+        q: "Why can't I find the item I want when writing notes?",
+        a: 'Only craftable items are searchable. Additionally, the translation data on this site is maintained by the community, so missing translations may sometimes prevent items from being found. However, the items still exist, and you can try searching by their English names. Finally, much of our data comes from <a href="https://ffxivteamcraft.com" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">Teamcraft</a>; you might consider contributing to their project to help improve community data.'
       },
       {
         q: 'Why do the estimated market costs seem inaccurate?',

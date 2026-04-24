@@ -28,7 +28,7 @@ export default {
   },
   recommended: {
     title: '兔肉私心笔记',
-    description: '这些是站长整理出来实用的清单。可以用空格键串联检索条件。',
+    description: '这些是站长整理出来实用的清单。可以用空格键串联检索条件。如果笔记缺少你想要的武器或物品，欢迎前往笔记工作台修改笔记。',
     searchPlaceholder: '搜索...',
     emptyTitle: '找不到相符的笔记',
     emptyDescription: '换个关键字试试看吧！'
@@ -222,6 +222,10 @@ export default {
       {
         q: '这网站是做什么用的？',
         a: '本网站设计给 FFXIV 的巧匠玩家，提供批次准备管理功能。您可以同时展开多个配方，通过系统整合的市场价格、统计数据与 NPC 信息，决定每一件素材该「购买」、「制作」或是「采集」，最后生成的清楚明了的待办清单将大幅提升您的作业效率。'
+      },
+      {
+        q: '为什么我写笔记时查不到我想要的物品',
+        a: '只有可被制作的物品才会被搜索到，另外，本网站拉取的翻译数据来自于广大社区维护的数据，有时候会发生翻译名缺失导致无法搜索到的状况，但物品是存在的，你可以尝试用英文名字搜索看看。最后本站的数据有一大部分来自于 <a href="https://ffxivteamcraft.com" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">Teamcraft</a>，你也可以考虑前往他们的网页为社区数据尽一份心力。'
       },
       {
         q: '为什么预估的市场价格看起来不准确？',
