@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { changelogData } from '../../data/changelog'
+import type { LocalizedString } from '../../types/note'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+
+const getLocalized = (text: string | LocalizedString) => {
+  if (typeof text === 'string') return text;
+  const l = locale.value as keyof LocalizedString;
+  return text[l] || text.tw || text.en || text.ja || Object.values(text)[0];
+}
 </script>
 
 <template>
@@ -44,7 +51,7 @@ const { t } = useI18n()
             <ul class="flex flex-col gap-3">
               <li v-for="(change, cIndex) in release.changes" :key="cIndex" class="flex items-start gap-3">
                 <i class="pi pi-check-circle text-soft-green-500 dark:text-soft-green-600 mt-0.5 shrink-0 text-sm"></i>
-                <span class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{{ change }}</span>
+                <span class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{{ getLocalized(change) }}</span>
               </li>
             </ul>
           </div>
