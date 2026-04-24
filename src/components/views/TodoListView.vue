@@ -125,6 +125,9 @@ const generateAlarmMacro = () => {
     const macroLines: string[] = [];
     
     gatherItems.forEach(item => {
+        // Skip if already checked
+        if (todoChecked[`gather_${item.id}`]) return;
+
         if (item.gathering?.isLimited && item.gathering.spawns) {
             const itemName = getLocalizedName(item.name);
             const zoneName = item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName);
@@ -163,7 +166,9 @@ const handleExportHtml = (includeMarket: boolean) => {
             targetPrice: t('todo.targetPrice'),
             buySourceVendor: t('todo.buySourceVendor', { name: '{name}', zone: '{zone}', x: '{x}', y: '{y}' }),
             buySourceMarket: t('todo.buySourceMarket', { world: '{world}' }),
-            exportOfflineNote: t('todo.exportOfflineNote')
+            exportOfflineNote: t('todo.exportOfflineNote'),
+            copyAlarmMacro: t('todo.copyAlarmMacro'),
+            alarmMacroCopied: t('todo.alarmMacroCopied')
         },
         pageTitle: `${activeWorkbenchNote.value?.name ? getLocalizedName(activeWorkbenchNote.value.name) : t('todo.title')}${t('todo.exportSuffix')}`,
         includeMarket,

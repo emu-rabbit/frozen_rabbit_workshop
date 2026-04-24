@@ -10,6 +10,8 @@ export interface ExportContext {
     buySourceVendor: string;
     buySourceMarket: string;
     exportOfflineNote: string;
+    copyAlarmMacro: string;
+    alarmMacroCopied: string;
   };
   pageTitle: string;
   includeMarket: boolean;
@@ -36,6 +38,17 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
     'buy': ctx.translations.sectionBuy,
     'gather': ctx.translations.sectionGather,
     'craft': ctx.translations.sectionCraft,
+  };
+
+  const formatET = (spawns: number[] | undefined, duration: number | undefined) => {
+    if (!spawns || spawns.length === 0) return '';
+    const durHours = (duration || 120) / 60;
+    return spawns.map(start => {
+        const end = (start + durHours) % 24;
+        const startStr = start.toString().padStart(2, '0') + ':00';
+        const endStr = Math.floor(end).toString().padStart(2, '0') + ':00';
+        return `${startStr}~${endStr}`;
+    }).join(', ');
   };
 
   const sectionsHtml = sections.filter(s => s.items && s.items.length > 0).map(section => {
@@ -69,17 +82,27 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
           </div>
         `;
       } else if (section.key === 'gather' && item.gathering) {
+        const etDisplay = item.gathering.isLimited ? `
+          <div class="mt-1 flex items-center gap-1 text-[9px] md:text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40 shadow-sm">
+            <i class="pi pi-clock text-[9px]"></i>
+            <span>ET ${formatET(item.gathering.spawns, item.gathering.duration)}</span>
+          </div>
+        ` : '';
+
         infoColumnHtml = `
           <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
-            <div class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
-                <i class="pi pi-map-marker text-[10px] md:text-xs opacity-70"></i>
-                <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
-                    ${item.gathering.parentZoneName || ctx.getLocalizedName(item.gathering.zoneName)}
-                </span>
+            <div class="flex flex-col items-end gap-1.5">
+              <div class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                  <i class="pi pi-map-marker text-[10px] md:text-xs opacity-70"></i>
+                  <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
+                      ${item.gathering.parentZoneName || ctx.getLocalizedName(item.gathering.zoneName)}
+                  </span>
+              </div>
+              ${etDisplay}
+              <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none shadow-sm whitespace-nowrap">
+                  ${ctx.getJobName(item.gathering.jobName)} Lv.${item.gathering.level}${ctx.renderStars(item.gathering.stars)}
+              </span>
             </div>
-            <span class="mt-2 text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none">
-                ${ctx.getJobName(item.gathering.jobName)} Lv.${item.gathering.level}${ctx.renderStars(item.gathering.stars)}
-            </span>
           </div>
         `;
       } else if (section.key === 'craft' && item.crafting) {
@@ -92,9 +115,17 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         `;
       }
 
+      const gatheringData = (section.key === 'gather' && item.gathering) ? `
+        data-limited="${item.gathering.isLimited || false}"
+        data-spawns='${JSON.stringify(item.gathering.spawns || [])}'
+        data-zone="${(item.gathering.parentZoneName || ctx.getLocalizedName(item.gathering.zoneName)).replace(/"/g, '&quot;')}"
+      ` : '';
+
       return `
         <div class="item-card bg-white/90 dark:bg-[#0f172a] backdrop-blur-md rounded-2xl border-2 border-white dark:border-slate-800 shadow-sm flex items-center p-3 md:p-4 gap-3 md:gap-6 cursor-pointer select-none transition-all duration-300 relative group" 
              data-id="${itemIdId}" 
+             data-name="${ctx.getLocalizedName(item.name).replace(/"/g, '&quot;')}"
+             ${gatheringData}
              onclick="toggleCheck(this)">
             
             <div class="flex items-center gap-1.5 md:gap-3">
@@ -139,6 +170,18 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
       `;
     }).join('');
 
+    const hasTimedGatherItems = section.key === 'gather' && section.items.some((item: any) => item.gathering?.isLimited);
+    const alarmMacroBtnHtml = hasTimedGatherItems ? `
+      <button onclick="copyAlarmMacro(this)"
+              class="ml-auto flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all shadow-sm active:scale-95 group/btn overflow-hidden relative"
+      >
+          <div class="flex items-center gap-2 btn-content">
+              <i class="pi pi-clock text-xs md:text-sm"></i>
+              <span class="text-[10px] md:text-xs font-black uppercase tracking-wider">${ctx.translations.copyAlarmMacro}</span>
+          </div>
+      </button>
+    ` : '';
+
     return `
       <section class="todo-section mb-12">
           <div class="flex items-center gap-4 md:gap-6 mb-6 px-2">
@@ -153,6 +196,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                       ${section.items.length} ITEMS
                   </p>
               </div>
+              ${alarmMacroBtnHtml}
               <div class="h-px flex-1 bg-gradient-to-r from-slate-200 dark:from-slate-800 to-transparent ml-2 md:ml-4"></div>
           </div>
           <div class="sortable-list space-y-4 px-1" data-section="${section.key}">
@@ -213,7 +257,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
            <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md px-5 py-3 md:px-6 md:py-4 rounded-xl border border-soft-green-100 dark:border-slate-800 shadow-lg flex items-center min-w-[300px]">
               <div class="flex flex-col flex-1">
                  <div class="flex items-center justify-between mb-1 gap-4">
-                    <span class="text-[11px] md:text-[13px] font-black text-soft-green-500 dark:text-soft-green-500 uppercase tracking-widest text-progress-label">${ctx.translations.progress.replace('{n}', '0')}</span>
+                    <span class="text-[11px] md:text-[13px] font-black text-soft-green-500 dark:text-soft-green-500 uppercase tracking-widest text-progress-label">${ctx.translations.progress.replace('{n}', '0').replace('{total}', '0')}</span>
                     <span class="text-xl md:text-2xl font-black text-soft-green-900 dark:text-soft-green-400 font-mono tracking-tighter text-progress-percent">0%</span>
                  </div>
                  <div class="h-2 md:h-2.5 w-full bg-slate-100 dark:bg-slate-800/50 rounded-full overflow-hidden shadow-inner">
@@ -240,7 +284,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
             document.querySelector('.progress-bar').style.width = Math.round(percentage) + '%';
             document.querySelector('.text-progress-percent').innerText = Math.round(percentage) + '%';
             
-            let labelTemplate = \`${ctx.translations.progress}\`;
+            let labelTemplate = '${ctx.translations.progress.replace(/'/g, "\\'")}';
             let newLabel = labelTemplate.replace('{n}', completedItems).replace('{total}', totalItems);
             document.querySelector('.text-progress-label').innerText = newLabel;
         }
@@ -254,6 +298,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
             event.stopPropagation();
             navigator.clipboard.writeText(text).then(() => {
                 const icon = btn.querySelector('i');
+                if (!icon) return;
                 const originalClass = icon.className;
                 icon.className = 'pi pi-check text-soft-green-600 text-sm md:text-base';
                 setTimeout(() => {
@@ -261,6 +306,47 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                 }, 2000);
             }).catch(err => {
                 console.error('Could not copy text: ', err);
+            });
+        }
+
+        function copyAlarmMacro(btn) {
+            event.stopPropagation();
+            const gatherItems = document.querySelectorAll('.sortable-list[data-section="gather"] .item-card');
+            const macroLines = [];
+            
+            gatherItems.forEach(item => {
+                // Skip checked items
+                if (item.classList.contains('checked-card')) return;
+                
+                const isLimited = item.getAttribute('data-limited') === 'true';
+                if (!isLimited) return;
+                
+                const name = item.getAttribute('data-name');
+                const zone = item.getAttribute('data-zone');
+                const spawnsStr = item.getAttribute('data-spawns');
+                const spawns = JSON.parse(spawnsStr || '[]');
+                
+                const label = name + ' ' + zone;
+                
+                spawns.forEach(spawn => {
+                    const hhmm = spawn.toString().padStart(2, '0') + '00';
+                    macroLines.push('/alarm "' + label + '" et repeat ' + hhmm + ' 0 se00');
+                });
+            });
+            
+            const macroText = macroLines.join('\\n');
+            if (!macroText) return;
+            
+            navigator.clipboard.writeText(macroText).then(() => {
+                const content = btn.querySelector('.btn-content');
+                const originalHtml = content.innerHTML;
+                const copiedText = '${ctx.translations.alarmMacroCopied.replace(/'/g, "\\'")}';
+                content.innerHTML = '<i class="pi pi-check text-xs md:text-sm"></i><span class="text-[10px] md:text-xs font-black uppercase tracking-wider">' + copiedText + '</span>';
+                setTimeout(() => {
+                    content.innerHTML = originalHtml;
+                }, 2000);
+            }).catch(err => {
+                console.error('Could not copy macro: ', err);
             });
         }
 
