@@ -277,6 +277,25 @@ watch(marketDC, (newVal) => {
                 </div>
             </div>
         </div>
+
+        <!-- Version & Updates Section -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400 mb-1">
+                  <i class="pi pi-history text-xl"></i>
+                  <label class="font-bold text-lg">{{ t('settings.changelogTitle') }}</label>
+                </div>
+
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.changelogDesc') }}</p>
+
+                <div class="flex mt-2">
+                  <a href="#changelog" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-soft-green-50 dark:bg-soft-green-900/30 text-soft-green-700 dark:text-soft-green-400 font-bold text-sm hover:bg-soft-green-100 dark:hover:bg-soft-green-900/50 hover:shadow-sm border border-soft-green-200 dark:border-soft-green-800 transition-all">
+                    <i class="pi pi-external-link text-xs"></i>
+                    {{ t('settings.changelogLink') }}
+                  </a>
+                </div>
+            </div>
+        </div>
       </div>
     </div>
 </template>

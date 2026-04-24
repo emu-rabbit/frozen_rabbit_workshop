@@ -210,7 +210,10 @@ export default {
       universalis: 'Universalis - FFXIV 全世界のマーケットデータ',
       teamcraft: 'Teamcraft - アイテム、レシピ、採集データのソース',
       xivapi: 'XIVAPI - アイコンとアイテムの API サポート'
-    }
+    },
+    changelogTitle: 'システムアップデート',
+    changelogDesc: '本サイトの最新機能やアップデート履歴を確認できます',
+    changelogLink: 'アップデート履歴を見る'
   },
   faq: {
     title: 'よくある質問',
@@ -267,5 +270,10 @@ export default {
     subtitle: 'はじめる前に、ご希望の言語を選択してください',
     description: 'これにより、工房全体のインターフェース言語が調整されます。この設定はいつでも「工房の設定」から変更できます。',
     confirm: 'この言語で開始する！'
+  },
+  changelog: {
+    title: 'アップデート履歴',
+    description: 'ウェブサイトの更新履歴や新機能はこちらで確認できます。',
+    version: 'バージョン {v}'
   }
 }

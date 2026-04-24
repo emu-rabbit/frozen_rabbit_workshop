@@ -210,7 +210,10 @@ export default {
       universalis: 'Universalis - Global FFXIV market data cache',
       teamcraft: 'Teamcraft - Source for item, recipe, and gathering data',
       xivapi: 'XIVAPI - FFXIV icon and item API support'
-    }
+    },
+    changelogTitle: 'System Updates',
+    changelogDesc: 'Learn about the latest features and version updates of the workshop',
+    changelogLink: 'View Workshop Update History'
   },
   faq: {
     title: 'FAQ',
@@ -267,5 +270,10 @@ export default {
     subtitle: 'Please select your preferred language before we begin',
     description: 'This will adjust the entire workshop interface. You can change this anytime in "Workshop Settings".',
     confirm: 'Start with this language!'
+  },
+  changelog: {
+    title: 'Version Changelog',
+    description: 'View the update history and new features of the workshop here.',
+    version: 'Version {v}'
   }
 }

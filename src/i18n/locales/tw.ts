@@ -210,7 +210,10 @@ export default {
       universalis: 'Universalis - 全球 FFXIV 市場資料快取',
       teamcraft: 'Teamcraft - 物品、配方與採集資料來源',
       xivapi: 'XIVAPI - 提供遊戲內圖示與物品 API 支援'
-    }
+    },
+    changelogTitle: '系統更新',
+    changelogDesc: '了解本站的最新功能與版本更新內容',
+    changelogLink: '查看本站版本更新紀錄'
   },
   faq: {
     title: '常見問題',
@@ -267,5 +270,10 @@ export default {
     subtitle: '在你開始之前，請先選擇你偏好的語言',
     description: '這將會調整整個工坊的介面語言。你之後隨時可以在「工坊設定」中更改。',
     confirm: '就用這個語言開始吧！'
+  },
+  changelog: {
+    title: '版本更新紀錄',
+    description: '這裡記錄了網站的歷史更新與功能迭代。',
+    version: '版本 {v}'
   }
 }

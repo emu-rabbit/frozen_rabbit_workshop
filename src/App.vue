@@ -24,6 +24,7 @@ const WorkbenchView = defineAsyncComponent(() => import('./components/views/Work
 const SettingsView = defineAsyncComponent(() => import('./components/views/SettingsView.vue'))
 const TodoListView = defineAsyncComponent(() => import('./components/views/TodoListView.vue'))
 const FaqView = defineAsyncComponent(() => import('./components/views/FaqView.vue'))
+const ChangelogView = defineAsyncComponent(() => import('./components/views/ChangelogView.vue'))
 import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
@@ -57,7 +58,7 @@ const isLanguageModalOpen = ref(!initialized.value)
 // URL Hash Sync
 const syncTabFromHash = () => {
   const hash = window.location.hash.replace('#', '')
-  const validTabs = ['new', 'editor', 'history', 'settings', 'favorites', 'recommended', 'workbench', 'todo', 'faq']
+  const validTabs = ['new', 'editor', 'history', 'settings', 'favorites', 'recommended', 'workbench', 'todo', 'faq', 'changelog']
   if (hash && validTabs.includes(hash)) {
     currentTab.value = hash
   }
@@ -200,6 +201,10 @@ const handleLanguageSelect = (lang: string) => {
         v-if="currentTab === 'settings'" 
         :language="language" 
         @update:language="handleLanguageUpdate" 
+      />
+
+      <ChangelogView 
+        v-if="currentTab === 'changelog'" 
       />
     </main>
 
