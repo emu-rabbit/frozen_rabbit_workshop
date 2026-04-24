@@ -63,7 +63,7 @@ export const changelogData: ChangelogEntry[] = [
   },
   {
     version: '0.9.0',
-    date: '2026-04-24',
+    date: '2026-04-22',
     changes: [
       {
         tw: '優化了系統效能與部分介面體驗',
@@ -117,7 +117,7 @@ export const changelogData: ChangelogEntry[] = [
         tw: '優化 Universalis API 連線處理與錯誤提示',
         cn: '优化 Universalis API 连线处理与错误提示',
         en: 'Optimized Universalis API connection handling and error messages',
-        ja: 'Universalis API の接続処理とエラーメッセージを最適化しました'
+        ja: 'Universalis API の接続處理とエラーメッセージを最適化しました'
       }
     ]
   }
