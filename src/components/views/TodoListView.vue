@@ -116,6 +116,30 @@ const formatET = (spawns: number[] | undefined, duration: number | undefined) =>
 
 const lastCopied = ref<string | null>(null);
 
+const hasTimedGatherItems = computed(() => {
+    return sectionItems.value['gather']?.some(item => item.gathering?.isLimited) || false;
+});
+
+const generateAlarmMacro = () => {
+    const gatherItems = sectionItems.value['gather'] || [];
+    const macroLines: string[] = [];
+    
+    gatherItems.forEach(item => {
+        if (item.gathering?.isLimited && item.gathering.spawns) {
+            const itemName = getLocalizedName(item.name);
+            const zoneName = item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName);
+            const label = `${itemName} ${zoneName}`;
+            
+            item.gathering.spawns.forEach((spawn: number) => {
+                const hhmm = spawn.toString().padStart(2, '0') + '00';
+                macroLines.push(`/alarm "${label}" et repeat ${hhmm} 0 se00`);
+            });
+        }
+    });
+    
+    return macroLines.join('\n');
+};
+
 const copyToClipboard = (id: string, text: string) => {
     navigator.clipboard.writeText(text).then(() => {
         lastCopied.value = id;
@@ -224,7 +248,25 @@ const handleExportHtml = (includeMarket: boolean) => {
                                         {{ sectionItems[section.key].length }} {{ sectionItems[section.key].length > 1 ? 'Items' : 'Item' }}
                                     </p>
                                 </div>
-                                <div class="h-px flex-1 bg-gradient-to-r from-slate-200 dark:from-slate-800 to-transparent ml-2 md:ml-4"></div>
+
+                                <!-- Alarm Macro Button -->
+                                <button v-if="section.key === 'gather' && hasTimedGatherItems"
+                                        @click.stop="copyToClipboard('alarm_macro', generateAlarmMacro())"
+                                        class="ml-auto flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 hover:bg-amber-200 dark:hover:bg-amber-800/50 transition-all shadow-sm active:scale-95 group/btn overflow-hidden relative"
+                                >
+                                    <transition name="scale" mode="out-in">
+                                        <div v-if="lastCopied === 'alarm_macro'" class="flex items-center gap-2" :key="'copied'">
+                                            <i class="pi pi-check text-xs md:text-sm"></i>
+                                            <span class="text-[10px] md:text-xs font-black uppercase tracking-wider">{{ t('todo.alarmMacroCopied') }}</span>
+                                        </div>
+                                        <div v-else class="flex items-center gap-2" :key="'copy'">
+                                            <i class="pi pi-clock text-xs md:text-sm group-hover/btn:rotate-12 transition-transform"></i>
+                                            <span class="text-[10px] md:text-xs font-black uppercase tracking-wider">{{ t('todo.copyAlarmMacro') }}</span>
+                                        </div>
+                                    </transition>
+                                </button>
+
+                                <div :class="section.key === 'gather' && hasTimedGatherItems ? 'hidden md:block' : ''" class="h-px flex-1 bg-gradient-to-r from-slate-200 dark:from-slate-800 to-transparent ml-2 md:ml-4"></div>
                             </div>
 
                             <draggable 

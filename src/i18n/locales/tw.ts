@@ -160,7 +160,9 @@ export default {
     buySourceMarket: '市場版：{world}',
     buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
     gatherLocation: '採集點',
-    emptySection: '此區塊無項目'
+    emptySection: '此區塊無項目',
+    copyAlarmMacro: '複製鬧鐘巨集',
+    alarmMacroCopied: '已複製巨集！'
   },
   jobs: {
     crp: '木工師', bsm: '鍛造師', arm: '甲冑師', gsm: '金工師',

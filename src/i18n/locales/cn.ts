@@ -160,7 +160,9 @@ export default {
     buySourceMarket: '市场版：{world}',
     buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
     gatherLocation: '采集点',
-    emptySection: '此区块无项目'
+    emptySection: '此区块无项目',
+    copyAlarmMacro: '复制闹钟宏',
+    alarmMacroCopied: '已复制宏！'
   },
   jobs: {
     crp: '木工匠', bsm: '锻铁匠', arm: '铸甲匠', gsm: '雕金匠',

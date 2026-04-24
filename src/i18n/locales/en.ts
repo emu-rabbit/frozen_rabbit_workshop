@@ -160,7 +160,9 @@ export default {
     buySourceMarket: 'Market: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
     gatherLocation: 'Node',
-    emptySection: 'No items in this section'
+    emptySection: 'No items in this section',
+    copyAlarmMacro: 'Copy Alarm Macro',
+    alarmMacroCopied: 'Macro Copied!'
   },
   jobs: {
     crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',

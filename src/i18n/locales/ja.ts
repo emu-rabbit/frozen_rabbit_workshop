@@ -160,7 +160,9 @@ export default {
     buySourceMarket: 'マケボ: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
     gatherLocation: '採集ポイント',
-    emptySection: 'このセクションには項目がありません'
+    emptySection: 'このセクションには項目がありません',
+    copyAlarmMacro: 'アラームマクロをコピー',
+    alarmMacroCopied: 'マクロをコピーしました！'
   },
   jobs: {
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
