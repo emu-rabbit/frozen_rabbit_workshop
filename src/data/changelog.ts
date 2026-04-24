@@ -6,6 +6,15 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.0',
+    date: '2026-04-24',
+    changes: [
+      '新增待辦清單的一鍵複製鬧鐘巨集功能',
+      '新增 FAQ 項目說明翻譯缺失時的對應方法',
+      '在私心筆記頁提醒可以使用筆記工作台新增物品'
+    ]
+  },
+  {
     version: '0.9.0',
     date: '2026-04-24',
     changes: [
