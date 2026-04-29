@@ -1,11 +1,13 @@
 import { shallowRef, ref, reactive } from 'vue';
 
-const BASE_URL = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json';
-// The tw/ locale directory lives on the `staging` branch
-const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
+// Branch can be overridden via VITE_TEAMCRAFT_BRANCH (e.g. 'master' or 'staging').
+// Defaults to 'staging' which is Teamcraft's active development branch and receives
+// data updates (including non-global regions like TW) before they reach 'master'.
+const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
+const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
 
 const DICT_URLS: Record<string, string> = {
-  tw: `${BASE_URL_STAGING}/tw/tw-items.json`,
+  tw: `${BASE_URL}/tw/tw-items.json`,
   zh: `${BASE_URL}/zh/zh-items.json`,
   cn: `${BASE_URL}/zh/zh-items.json`,
   en: `${BASE_URL}/items.json`,
@@ -18,7 +20,7 @@ const ENGLISH_URL = `${BASE_URL}/items.json`;
 const MAPS_URL = `${BASE_URL}/maps.json`;
 
 // tw-places.json: Provides Traditional Chinese zone/map names for gathering nodes.
-const TW_PLACES_URL = `${BASE_URL_STAGING}/tw/tw-places.json`;
+const TW_PLACES_URL = `${BASE_URL}/tw/tw-places.json`;
 // places.json: Provides multi-language zone names (en, ja, de, fr)
 const GLOBAL_PLACES_URL = `${BASE_URL}/places.json`;
 

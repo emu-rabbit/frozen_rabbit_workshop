@@ -1,9 +1,10 @@
 import { ensurePlacesLoaded, getPlaceName, getCurrentLanguage, getMapData, ensureMapsLoaded } from './dictionary';
 
-const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
-const SHOPS_URL = `${BASE_URL_STAGING}/shops.json`;
-const NPCS_URL = `${BASE_URL_STAGING}/npcs.json`;
-const TW_NPCS_URL = `${BASE_URL_STAGING}/tw/tw-npcs.json`;
+const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
+const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
+const SHOPS_URL = `${BASE_URL}/shops.json`;
+const NPCS_URL = `${BASE_URL}/npcs.json`;
+const TW_NPCS_URL = `${BASE_URL}/tw/tw-npcs.json`;
 
 export interface VendorInfo {
   price: number;

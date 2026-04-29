@@ -1,8 +1,9 @@
 import { ensurePlacesLoaded, getPlaceName, ensureMapsLoaded, getMapData } from './dictionary';
 
-const BASE_URL_STAGING = 'https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/staging/libs/data/src/lib/json';
-const GATHERING_ITEMS_URL = `${BASE_URL_STAGING}/gathering-items.json`;
-const NODES_URL = `${BASE_URL_STAGING}/nodes.json`;
+const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
+const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
+const GATHERING_ITEMS_URL = `${BASE_URL}/gathering-items.json`;
+const NODES_URL = `${BASE_URL}/nodes.json`;
 
 export interface GatheringInfo {
   type: number;        // 0=採礦工, 1=園藝工, 2=釣魚人

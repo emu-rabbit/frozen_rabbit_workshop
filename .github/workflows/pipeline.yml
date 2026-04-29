@@ -46,6 +46,11 @@ jobs:
         
       - name: Build
         run: npm run build
+        env:
+          # Controls which Teamcraft branch all data JSONs are fetched from at runtime.
+          # Change VITE_TEAMCRAFT_BRANCH in .env and redeploy to switch sources.
+          # 'staging' = latest data (default); 'master' = Teamcraft production snapshot.
+          VITE_TEAMCRAFT_BRANCH: ${{ vars.VITE_TEAMCRAFT_BRANCH || 'staging' }}
         
       - name: Run E2E Tests
         run: npx playwright test
