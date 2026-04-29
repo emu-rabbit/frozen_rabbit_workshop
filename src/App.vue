@@ -40,12 +40,17 @@ watch(isDarkMode, (newVal) => {
   }
 }, { immediate: true })
 
+const i18nReady = ref(false)
+ 
 // Sync i18n locale and dictionary language with settings
 watch(language, async (newLang) => {
+  // Always ensure fallback is also loaded if needed, 
+  // but for simplicity we just load the requested one
   await loadLocaleMessages(newLang)
   locale.value = newLang
   setDictionaryLanguage(newLang)
   ensureDictionaryLoaded()
+  i18nReady.value = true
 }, { immediate: true })
 
 // State for navigation
@@ -127,7 +132,7 @@ const handleLanguageSelect = (lang: string) => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen bg-soft-green-50 dark:bg-slate-950 overflow-hidden text-slate-800 dark:text-slate-100 font-sans relative">
+  <div v-if="i18nReady" class="flex h-screen w-screen bg-soft-green-50 dark:bg-slate-950 overflow-hidden text-slate-800 dark:text-slate-100 font-sans relative">
     <!-- Mobile Header -->
     <header class="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-soft-green-100 dark:border-slate-800/50 flex items-center justify-between px-6 z-50">
       <div class="flex items-center gap-2">

@@ -6,7 +6,7 @@ export const i18n = createI18n({
   fallbackLocale: 'en',
   messages: {}
 })
-
+ 
 const loadedLocales: string[] = []
 
 export async function loadLocaleMessages(locale: string) {
