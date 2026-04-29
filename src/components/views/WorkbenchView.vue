@@ -144,6 +144,19 @@ const formatTime = (seconds: number) => {
     if (h === 0 && s > 0) res += `${s} ${t('workbench.view.summary.secs')}`
     return res.trim()
 }
+
+const lastCopied = ref<string | null>(null)
+
+const copyToClipboard = (id: string, text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+        lastCopied.value = id
+        setTimeout(() => {
+            if (lastCopied.value === id) lastCopied.value = null
+        }, 2000)
+    }).catch(err => {
+        console.error('Could not copy text: ', err)
+    })
+}
 </script>
 
 <template>
@@ -234,7 +247,18 @@ const formatTime = (seconds: number) => {
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 truncate tracking-tight">{{ workbenchItems[id]?.name }}</h3>
+                        <div class="flex items-center gap-2 min-w-0">
+                            <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 truncate tracking-tight">{{ getLocalizedName(workbenchItems[id]?.name) }}</h3>
+                            <button @click.stop="copyToClipboard(`wb_${id}`, getLocalizedName(workbenchItems[id]?.name))" 
+                                    class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 dark:hover:text-soft-green-400 transition-all active:scale-95 ml-auto sm:ml-0"
+                                    :class="lastCopied === `wb_${id}` ? 'text-soft-green-600' : 'text-slate-300 dark:text-slate-600'"
+                                    title="Copy Name">
+                                <transition name="scale" mode="out-in">
+                                    <i v-if="lastCopied === `wb_${id}`" class="pi pi-check text-base md:text-lg"></i>
+                                    <i v-else class="pi pi-copy text-base md:text-lg"></i>
+                                </transition>
+                            </button>
+                        </div>
                         <div class="flex flex-wrap gap-1.5 mt-1">
                             <!-- Price Badge -->
                             <span class="text-[12px] md:text-[14px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50 dark:border-slate-700">
@@ -470,7 +494,18 @@ const formatTime = (seconds: number) => {
                              <div v-for="ing in workbenchItems[id].crafting.ingredients" :key="ing.id" class="flex items-center gap-3 bg-slate-50/50 dark:bg-slate-800/50 p-2 rounded-xl border border-slate-100/50 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                                  <img :src="ing.icon" class="w-8 h-8 rounded-lg shadow-sm border border-white dark:border-slate-800" />
                                  <div class="flex-1 min-w-0">
-                                     <div class="text-[12px] font-bold text-slate-700 dark:text-slate-300 truncate leading-tight">{{ getLocalizedName(ing.name) }}</div>
+                                     <div class="flex items-center gap-2">
+                                        <div class="text-[12px] font-bold text-slate-700 dark:text-slate-300 truncate leading-tight">{{ getLocalizedName(ing.name) }}</div>
+                                        <button @click.stop="copyToClipboard(`ing_${ing.id}`, getLocalizedName(ing.name))" 
+                                                class="opacity-0 group-hover:opacity-100 p-0.5 hover:text-soft-green-600 dark:hover:text-soft-green-400 transition-all active:scale-95"
+                                                :class="lastCopied === `ing_${ing.id}` ? 'text-soft-green-600' : 'text-slate-300 dark:text-slate-600'"
+                                                title="Copy Name">
+                                            <transition name="scale" mode="out-in">
+                                                <i v-if="lastCopied === `ing_${ing.id}`" class="pi pi-check text-[10px]"></i>
+                                                <i v-else class="pi pi-copy text-[10px]"></i>
+                                            </transition>
+                                        </button>
+                                     </div>
                                      <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 mt-0.5">ID: #{{ ing.id }}</div>
                                  </div>
                                  <div class="text-sm font-black text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-700 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-600">
@@ -578,5 +613,14 @@ input[type=number] { -moz-appearance: textfield; }
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #cbd5e1;
+}
+
+/* Scale transition for Copy icons */
+.scale-enter-active, .scale-leave-active {
+  transition: all 0.2s ease;
+}
+.scale-enter-from, .scale-leave-to {
+  opacity: 0;
+  transform: scale(0.5);
 }
 </style>
