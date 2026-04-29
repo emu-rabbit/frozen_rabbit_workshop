@@ -8,6 +8,42 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.2',
+    date: '2026-04-29',
+    changes: [
+      {
+        tw: '在備料台頁面新增複製素材名稱按鈕',
+        cn: '在备料台页面新增复制素材名称按钮',
+        en: 'Added a button to copy material names in the materials workbench',
+        ja: '製作作業台ページに素材名をコピーするボタンを追加しました'
+      },
+      {
+        tw: '新增品級 690 以上的巧匠大地工具系列推薦筆記',
+        cn: '新增品级 690 以上的巧匠大地工具系列推荐笔记',
+        en: 'Added recommended notes for Crafting and Gathering Tools iLv 690 and above',
+        ja: '道具（クラフター・ギャザラー）の iLv 690 以上のオススメ筆記を追加しました'
+      },
+      {
+        tw: '優化多國語系載入邏輯',
+        cn: '优化多国语系载入逻辑',
+        en: 'Optimized multi-language loading logic',
+        ja: '多言語読み込みロジックを最適化しました'
+      },
+      {
+        tw: '優化網站 SEO',
+        cn: '优化网站 SEO',
+        en: 'Optimized website SEO',
+        ja: 'ウェブサイトの SEO を最適化しました'
+      },
+      {
+        tw: 'Teamcraft 資料全面採用最新的 staging 分支資料',
+        cn: 'Teamcraft 资料全面采用最新的 staging 分支资料',
+        en: 'Switched Teamcraft data source to the latest staging branch',
+        ja: 'Teamcraft のデータソースを最新の staging ブランチに変更しました'
+      }
+    ]
+  },
+  {
     version: '1.0.1',
     date: '2026-04-24',
     changes: [
