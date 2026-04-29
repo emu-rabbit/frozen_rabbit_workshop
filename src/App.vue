@@ -51,6 +51,16 @@ watch(language, async (newLang) => {
   setDictionaryLanguage(newLang)
   ensureDictionaryLoaded()
   i18nReady.value = true
+  
+  // Update document title based on locale
+  const baseTitle = t('app.title')
+  const suffixMap: Record<string, string> = {
+    'tw': ' | FFXIV 能工巧匠備料管理工具',
+    'cn': ' | FFXIV 能工巧匠备料管理工具',
+    'en': ' | FFXIV Crafting Prep Tool',
+    'ja': ' | FFXIV 製作準備管理ツール'
+  }
+  document.title = baseTitle + (suffixMap[newLang] || suffixMap['en'])
 }, { immediate: true })
 
 // State for navigation
