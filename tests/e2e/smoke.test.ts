@@ -11,7 +11,7 @@ test.describe('Baseline Smoke Test', () => {
     // 驗證主標題是否可見
     const title = page.getByText('冷凍兔肉的工坊').filter({ visible: true }).first();
     await expect(title).toBeVisible();
-    await expect(page).toHaveTitle(/Frozen Rabbit Workshop/);
+    await expect(page).toHaveTitle(/冷凍兔肉的工坊/);
   });
 
   test('sidebar should contain core navigation items', async ({ page, viewport }) => {
