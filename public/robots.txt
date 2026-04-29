@@ -1,0 +1,7 @@
+# robots.txt — 冷凍兔肉的工坊
+# https://emu-rabbit.github.io/frozen_rabbit_workshop/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://emu-rabbit.github.io/frozen_rabbit_workshop/sitemap.xml

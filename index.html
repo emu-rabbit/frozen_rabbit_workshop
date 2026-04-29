@@ -1,23 +1,118 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-TW">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="冷凍兔肉的工坊 - 為 FFXIV 能工巧匠打造的專業備料管理工具。提供市場價格追蹤、製作成本預算與一鍵代辦清單生成。" />
-    <meta property="og:title" content="冷凍兔肉的工坊 | Frozen Rabbit Workshop" />
-    <meta property="og:description" content="為 FFXIV 能工巧匠打造的專業備料管理工具。提供市場價格追蹤、製作成本預算與一鍵代辦清單生成。" />
-    <meta property="og:image" content="https://emu-rabbit.github.io/frozen_rabbit_workshop/logo.png" />
+
+    <!-- ===== 基本 SEO ===== -->
+    <title>冷凍兔肉的工坊 | FFXIV 能工巧匠備料管理工具</title>
+    <meta name="description" content="冷凍兔肉的工坊 — 為 FF14 / FFXIV 能工巧匠打造的備料管理神器。輸入製作清單，系統自動拆解配方、查詢市場即時價格、估算成本與時程，生成清晰的待辦清單。" />
+    <meta name="keywords" content="冷凍兔肉, 冷凍兔肉的工坊, FF14, FFXIV, 最終幻想14, 最終幻想XIV, 能工巧匠, 巧匠, 備料台, 備料管理, 製作清單, 採集, 市場板, Universalis, Teamcraft" />
+    <meta name="author" content="冷凍兔肉 (emu-rabbit)" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+
+    <!-- ===== 語言與地區 ===== -->
+    <meta name="language" content="zh-TW" />
+    <link rel="alternate" hreflang="zh-TW" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+    <link rel="alternate" hreflang="en" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+    <link rel="alternate" hreflang="ja" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+    <link rel="alternate" hreflang="x-default" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+
+    <!-- ===== Favicon ===== -->
+    <link rel="icon" type="image/png" href="/frozen_rabbit_workshop/logo.png" />
+    <link rel="apple-touch-icon" href="/frozen_rabbit_workshop/logo.png" />
+
+    <!-- ===== Open Graph (Facebook / Discord / LINE 分享) ===== -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://emu-rabbit.github.io/frozen_rabbit_workshop/" />
+    <meta property="og:site_name" content="冷凍兔肉的工坊" />
+    <meta property="og:locale" content="zh_TW" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ja_JP" />
+    <meta property="og:title" content="冷凍兔肉的工坊 | FFXIV 能工巧匠備料管理工具" />
+    <meta property="og:description" content="為 FF14 / FFXIV 能工巧匠打造的備料管理神器。輸入製作清單，系統自動拆解配方、查詢市場即時價格、估算成本與時程，生成清晰的待辦清單。" />
+    <meta property="og:image" content="https://emu-rabbit.github.io/frozen_rabbit_workshop/og-cover.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="冷凍兔肉的工坊 — FFXIV 能工巧匠備料管理工具" />
+
+    <!-- ===== Twitter Card ===== -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="冷凍兔肉的工坊 | Frozen Rabbit Workshop" />
-    <meta name="twitter:description" content="為 FFXIV 能工巧匠打造的專業備料管理工具。提供市場價格追蹤、製作成本預算與一鍵代辦清單生成。" />
-    <meta name="twitter:image" content="https://emu-rabbit.github.io/frozen_rabbit_workshop/logo.png" />
-    <title>冷凍兔肉的工坊 | Frozen Rabbit Workshop</title>
+    <meta name="twitter:title" content="冷凍兔肉的工坊 | FFXIV 能工巧匠備料管理工具" />
+    <meta name="twitter:description" content="為 FF14 / FFXIV 能工巧匠打造的備料管理神器。自動拆解配方、查市場價格、估算成本與時程。" />
+    <meta name="twitter:image" content="https://emu-rabbit.github.io/frozen_rabbit_workshop/og-cover.png" />
+    <meta name="twitter:image:alt" content="冷凍兔肉的工坊 — FFXIV 能工巧匠備料管理工具" />
+
+    <!-- ===== JSON-LD 結構化資料 ===== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "冷凍兔肉的工坊",
+      "alternateName": ["Frozen Rabbit Workshop", "冷兔工坊"],
+      "description": "為 FFXIV（Final Fantasy XIV / FF14）能工巧匠設計的批次備料管理平台。可同時展開多個配方，根據市場即時價格與個人需求制定最優化籌備路徑，並生成分類清晰的待辦清單。",
+      "url": "https://emu-rabbit.github.io/frozen_rabbit_workshop/",
+      "applicationCategory": "GameApplication",
+      "applicationSubCategory": "Utility",
+      "operatingSystem": "Web",
+      "browserRequirements": "Requires JavaScript",
+      "inLanguage": ["zh-TW", "zh-Hans", "en", "ja"],
+      "isAccessibleForFree": true,
+      "author": {
+        "@type": "Person",
+        "name": "冷凍兔肉",
+        "url": "https://github.com/emu-rabbit"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "TWD"
+      },
+      "keywords": "FFXIV, FF14, 最終幻想14, 能工巧匠, 巧匠, 備料台, 製作清單, 冷凍兔肉",
+      "image": "https://emu-rabbit.github.io/frozen_rabbit_workshop/og-cover.png",
+      "screenshot": "https://emu-rabbit.github.io/frozen_rabbit_workshop/og-cover.png",
+      "featureList": [
+        "配方自動拆解",
+        "市場即時價格查詢 (Universalis)",
+        "製作成本預算估算",
+        "採集地點與限時節點資訊",
+        "待辦清單一鍵生成",
+        "支援繁中、簡中、英文、日文"
+      ],
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://emu-rabbit.github.io/frozen_rabbit_workshop/"
+      }
+    }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- 靜態 noscript 內容，供停用 JavaScript 的搜尋爬蟲閱讀 -->
+      <noscript>
+        <div style="font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.8;">
+          <h1>冷凍兔肉的工坊 — FFXIV 能工巧匠備料管理工具</h1>
+          <p>
+            <strong>冷凍兔肉的工坊</strong>是一個專為 <strong>FF14 / FFXIV（最終幻想14）</strong> 玩家設計的免費線上工具，
+            特別適合 <strong>能工巧匠（巧匠）</strong> 進行大量備料、製作規劃與開銷管理。
+          </p>
+          <h2>主要功能</h2>
+          <ul>
+            <li>🛠️ <strong>備料台</strong>：輸入製作清單，系統自動拆解所有配方層級所需的素材。</li>
+            <li>💰 <strong>市場即時價格</strong>：串接 Universalis API 查詢各伺服器最新市場板價格，估算總備料成本。</li>
+            <li>📋 <strong>待辦清單生成</strong>：一鍵依購買、採集、製作分類生成行動清單，含 NPC 座標與採集地點。</li>
+            <li>⏰ <strong>限時採集節點</strong>：顯示 ET 時間與鬧鐘巨集，再也不會錯過限時素材。</li>
+            <li>🌐 <strong>多語系支援</strong>：繁體中文、簡體中文、English、日本語。</li>
+          </ul>
+          <h2>資料來源</h2>
+          <p>物品、配方與採集資料由 <a href="https://ffxivteamcraft.com">Teamcraft</a> 提供；市場價格由 <a href="https://universalis.app">Universalis</a> 提供；圖示由 XIVAPI 提供。</p>
+          <p><em>本網站需要啟用 JavaScript 才能正常使用。</em></p>
+        </div>
+      </noscript>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
