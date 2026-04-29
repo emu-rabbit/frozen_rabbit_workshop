@@ -97,7 +97,12 @@
   },
   {
     "id": "46729eb1-7620-4c26-9ad5-46227dac2da7",
-    "name": "Lv.100 iLv750 大地主副手5件套",
+    "name": {
+      "tw": "Lv.100 iLv750 大地工具5件套",
+      "cn": "Lv.100 iLv750 大地工具5件套",
+      "en": "Lv.100 iLv750 Gathering Tools 5-piece Set",
+      "ja": "Lv.100 iLv750 ギャザラー道具5点セット"
+    },
     "items": [
       {
         "id": 47171,
@@ -124,7 +129,12 @@
   },
   {
     "id": "f08ba9bd-594b-42ca-8209-a5fb40badb60",
-    "name": "Lv.100 iLv750 巧匠主副手16件套",
+    "name": {
+      "tw": "Lv.100 iLv750 巧匠工具16件套",
+      "cn": "Lv.100 iLv750 巧匠工具16件套",
+      "en": "Lv.100 iLv750 Crafting Tools 16-piece Set",
+      "ja": "Lv.100 iLv750 クラフター道具16点セット"
+    },
     "items": [
       {
         "id": 47163,

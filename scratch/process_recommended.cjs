@@ -24,8 +24,8 @@ const numberMap = {
 };
 
 function hasChinese(text) {
-    if (!text) return false;
-    return /[\u4e00-\u9fa5]/.test(text);
+  if (!text) return false;
+  return /[\u4e00-\u9fa5]/.test(text);
 }
 
 function translate(text) {
@@ -43,25 +43,22 @@ function translate(text) {
     }
   }
 
-  // 2. Handle numbers (Chinese characters to digits for EN/JA, keep for CN)
+  // 2. Handle numbers (Chinese characters to digits)
   const sortedNumKeys = Object.keys(numberMap).sort((a, b) => b.length - a.length);
   for (const key of sortedNumKeys) {
-      const val = numberMap[key];
-      const numRegex = new RegExp(key + '(?=件套|套裝|件)', 'g');
-      // DO NOT replace in cn (keep Chinese numbers like 十, 十六)
-      en = en.replace(numRegex, val);
-      ja = ja.replace(numRegex, val);
+    const val = numberMap[key];
+    // Only replace if followed by units
+    const numRegex = new RegExp(key + '(?=件套|套裝|件)', 'g');
+    cn = cn.replace(numRegex, val);
+    en = en.replace(numRegex, val);
+    ja = ja.replace(numRegex, val);
   }
 
-  // 3. Handle units (Zero-Leakage)
+  // 3. Handle "{n}件套裝" / "{n}件套" / "{n}件" (Zero-Leakage)
   const setRegex = /(\d+)件(套裝|套)?/g;
-  // For en/ja, we already converted numbers to digits above if they were Chinese.
-  // This regex handles both already-digits and newly-converted-digits.
+  cn = cn.replace(setRegex, (m, n) => `${n}件套`);
   en = en.replace(setRegex, (m, n) => `${n}-piece Set`);
   ja = ja.replace(setRegex, (m, n) => `${n}点セット`);
-
-  // Special handle for cn units (Traditional to Simplified)
-  cn = cn.replace(/件套裝/g, '件套装').replace(/件套/g, '件套');
 
   // 4. Handle remaining common Chinese characters
   cn = cn.replace(/套裝/g, '套装');
@@ -70,8 +67,10 @@ function translate(text) {
 
   // Final cleanup for English spacing
   en = en.replace(/\s+/g, ' ').trim();
-  
-  // Final Zero-Leakage check
+
+  // Final Zero-Leakage check: if there's still Chinese in EN or JA, it's a failure.
+  // We'll try to strip any remaining Chinese characters from EN and JA as a last resort,
+  // though it might leave weird gaps. Better than leakage.
   if (hasChinese(en)) en = en.replace(/[\u4e00-\u9fa5]/g, '').trim();
   if (hasChinese(ja)) ja = ja.replace(/[\u4e00-\u9fa5]/g, '').trim();
 
@@ -85,48 +84,47 @@ files.forEach(file => {
   const filePath = path.join(recommendedDir, file);
   console.log(`Processing ${file}...`);
   let content = fs.readFileSync(filePath, 'utf8');
-  
+
   if (content.trim().startsWith('{') && content.trim().includes('}{')) {
-      content = '[' + content.replace(/}\{/g, '},{') + ']';
+    content = '[' + content.replace(/}\{/g, '},{') + ']';
   }
 
   let data;
   try {
-      data = JSON.parse(content);
+    data = JSON.parse(content);
   } catch (e) {
-      console.error(`Failed to parse ${file}: ${e.message}`);
-      return;
+    console.error(`Failed to parse ${file}: ${e.message}`);
+    return;
   }
 
   if (Array.isArray(data)) {
-      data.forEach(note => {
-          if (typeof note.name === 'string') {
-              note.name = translate(note.name);
-          } else if (note.name && note.name.tw) {
-              // Re-translate but respect user's manual CN if possible?
-              // No, the user wants me to fix CN to not use digits.
-              note.name = translate(note.name.tw);
-          }
-      });
-      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    data.forEach(note => {
+      if (typeof note.name === 'string') {
+        note.name = translate(note.name);
+      } else if (note.name && note.name.tw) {
+        // Always re-translate to ensure Zero-Leakage and latest table
+        note.name = translate(note.name.tw);
+      }
+    });
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
   }
 });
 
 console.log('Update src/data/recommended/index.ts...');
 const indexFile = path.join(recommendedDir, 'index.ts');
 const uniqueFiles = [...new Set(files)];
-uniqueFiles.sort();
+uniqueFiles.sort(); // Sort files by name (usually sorts by iLv)
 
 let indexContent = "import type { Note } from '../../types/note';\n\n";
 uniqueFiles.forEach((f, i) => {
-    const varName = f.replace('.json', '').replace(/-/g, '_');
-    indexContent += `import ${varName} from './${f}';\n`;
+  const varName = f.replace('.json', '').replace(/-/g, '_');
+  indexContent += `import ${varName} from './${f}';\n`;
 });
 
 indexContent += '\nconst allRecommendedNotes: Note[] = [\n';
 uniqueFiles.forEach(f => {
-    const varName = f.replace('.json', '').replace(/-/g, '_');
-    indexContent += `  ...(${varName} as Note[]),\n`;
+  const varName = f.replace('.json', '').replace(/-/g, '_');
+  indexContent += `  ...(${varName} as Note[]),\n`;
 });
 indexContent += '].sort((a, b) => {\n';
 indexContent += '  const getILv = (n: Note) => {\n';
