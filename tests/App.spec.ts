@@ -5,6 +5,20 @@ import PrimeVue from 'primevue/config'
 import { createI18n } from 'vue-i18n'
 import twLocale from '../src/i18n/locales/tw'
 
+// Mock the async locale loader and dictionary services
+vi.mock('../src/i18n', async (importOriginal) => {
+  const actual = await importOriginal<any>()
+  return {
+    ...actual,
+    loadLocaleMessages: vi.fn().mockResolvedValue(undefined)
+  }
+})
+
+vi.mock('../src/services/dictionary', () => ({
+  ensureDictionaryLoaded: vi.fn(),
+  setDictionaryLanguage: vi.fn()
+}))
+
 describe('App', () => {
   let wrapper: VueWrapper<any>
 
@@ -55,7 +69,10 @@ describe('App', () => {
     })
   })
 
-  it('renders the sidebar correctly with all nav items', () => {
+  it('renders the sidebar correctly with all nav items', async () => {
+    // Wait for i18nReady to become true
+    await new Promise(resolve => setTimeout(resolve, 0));
+    
     const sidebar = wrapper.get('aside');
     expect(sidebar.text()).toContain('冷凍兔肉的工坊');
     expect(sidebar.text()).toContain('寫張新筆記');
@@ -63,13 +80,15 @@ describe('App', () => {
     expect(sidebar.text()).toContain('兔肉私心筆記');
   });
 
-  it('defaults to the "New Note" view', () => {
+  it('defaults to the "New Note" view', async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
     // Check if the home view content is present
     expect(wrapper.find('.new-note-view').exists()).toBe(true);
     expect(wrapper.text()).toContain('寫張新筆記');
   });
 
   it('switches to the history view when the history button is clicked', async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
     // Find the history button in the sidebar using the correct i18n text
     const sidebar = wrapper.get('aside');
     const buttons = sidebar.findAll('button');
@@ -85,7 +104,8 @@ describe('App', () => {
     expect(wrapper.text()).toContain('翻開舊紀錄');
   });
 
-  it('maintains a structured layout with sidebar and main containers', () => {
+  it('maintains a structured layout with sidebar and main containers', async () => {
+    await new Promise(resolve => setTimeout(resolve, 0));
     expect(wrapper.find('aside').exists()).toBe(true);
     expect(wrapper.find('main').exists()).toBe(true);
   });
