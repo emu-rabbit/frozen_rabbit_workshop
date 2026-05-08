@@ -14,7 +14,7 @@ import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
-import { trackPageView } from './services/analytics'
+import { trackRouteChange } from './services/analytics'
 
 // Views (Code Splitting)
 const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
@@ -106,7 +106,7 @@ watch(currentTab, (newTab, oldTab) => {
   if (newTab === oldTab) return
 
   window.requestAnimationFrame(() => {
-    trackPageView(`${window.location.pathname}#${newTab}`)
+    trackRouteChange(newTab)
   })
 })
 

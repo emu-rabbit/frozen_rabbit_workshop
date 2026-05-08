@@ -2,6 +2,7 @@ const CONSENT_KEY = 'frozen-rabbit-analytics-consent'
 const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
 const SCRIPT_ID = 'frozen-rabbit-google-analytics'
 const GA_ORIGIN = window.location.origin
+let hasTrackedAnalyticsReady = false
 
 export type AnalyticsConsent = 'granted' | 'denied'
 
@@ -36,7 +37,34 @@ export const initializeAnalytics = () => {
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
 
-  window.gtag('config', MEASUREMENT_ID, {
+  window.gtag('event', 'page_view', {
+    send_to: MEASUREMENT_ID,
+    page_title: document.title,
+    page_location: `${GA_ORIGIN}${pagePath}`,
+    page_path: pagePath,
+  })
+}
+
+export const trackAnalyticsReady = () => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag || hasTrackedAnalyticsReady) return
+
+  hasTrackedAnalyticsReady = true
+  window.gtag('event', 'analytics_ready', {
+    send_to: MEASUREMENT_ID,
+    page_title: document.title,
+    page_location: window.location.href,
+    page_path: window.location.pathname + window.location.hash,
+  })
+}
+
+export const trackRouteChange = (routeName: string) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  const pagePath = `${window.location.pathname}#${routeName}`
+  trackPageView(pagePath)
+  window.gtag('event', 'route_change', {
+    send_to: MEASUREMENT_ID,
+    route_name: routeName,
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
     page_path: pagePath,
@@ -47,8 +75,8 @@ const loadGoogleAnalytics = () => {
   if (!isAnalyticsAvailable() || window.gtag) return
 
   window.dataLayer = window.dataLayer || []
-  window.gtag = (...args: unknown[]) => {
-    window.dataLayer?.push(args)
+  window.gtag = function gtag() {
+    window.dataLayer?.push(arguments)
   }
 
   window.gtag('js', new Date())
@@ -73,6 +101,7 @@ const loadGoogleAnalytics = () => {
   script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`
   script.addEventListener('load', () => {
     trackPageView()
+    trackAnalyticsReady()
   }, { once: true })
   document.head.appendChild(script)
 }
