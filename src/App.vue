@@ -14,6 +14,7 @@ import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
+import { trackRouteChange } from './services/analytics'
 
 // Views (Code Splitting)
 const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
@@ -98,6 +99,15 @@ watch(currentTab, (newTab) => {
   if (window.location.hash !== `#${newTab}`) {
     window.location.hash = newTab
   }
+})
+
+// Track state-based route changes for GA4 after analytics consent is granted.
+watch(currentTab, (newTab, oldTab) => {
+  if (newTab === oldTab) return
+
+  window.requestAnimationFrame(() => {
+    trackRouteChange(newTab)
+  })
 })
 
 // Scroll to top when tab changes
