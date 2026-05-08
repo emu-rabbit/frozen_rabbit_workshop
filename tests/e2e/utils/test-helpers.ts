@@ -148,7 +148,7 @@ export async function setupTest(page: Page) {
   await setupDictionaryMocks(page);
 
   // 4. 載入頁面
-  await page.goto('/');
+  await page.goto('./');
 
   // 5. 確認應用程式標題可見（確保 Vue 已掛載）
   await expect(
