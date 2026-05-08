@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import App from './App.vue'
 import { i18n } from './i18n'
+import { initializeAnalytics } from './services/analytics'
 
 const app = createApp(App)
 
@@ -19,6 +20,7 @@ app.use(PrimeVue, {
 })
 
 app.mount('#app')
+initializeAnalytics()
 
 // Handle Vite dynamic import errors (e.g. after a new deployment)
 window.addEventListener('vite:preloadError', (event) => {

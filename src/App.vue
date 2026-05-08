@@ -13,6 +13,7 @@ import { loadLocaleMessages } from './i18n'
 import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
+import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
 
 // Views (Code Splitting)
 const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
@@ -229,6 +230,7 @@ const handleLanguageSelect = (lang: string) => {
       v-model:visible="isLanguageModalOpen" 
       @select="handleLanguageSelect"
     />
+    <AnalyticsConsentBanner :paused="isLanguageModalOpen" />
   </div>
 </template>
 
