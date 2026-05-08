@@ -8,6 +8,18 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.3',
+    date: '2026-05-08',
+    changes: [
+      {
+        tw: '新增 GA4 支援，協助理解使用者狀況',
+        cn: '新增 GA4 支持，协助理解使用者状况',
+        en: 'Added GA4 support to help understand user behavior',
+        ja: 'GA4 のサポートを追加し、ユーザーの利用状況の把握を改善しました'
+      }
+    ]
+  },
+  {
     version: '1.0.2',
     date: '2026-04-29',
     changes: [
