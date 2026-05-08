@@ -36,7 +36,7 @@ export const initializeAnalytics = () => {
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
 
-  window.gtag('event', 'page_view', {
+  window.gtag('config', MEASUREMENT_ID, {
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
     page_path: pagePath,
