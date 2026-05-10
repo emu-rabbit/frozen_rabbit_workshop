@@ -1,4 +1,4 @@
-# robots.txt — 冷凍兔肉的工坊
+# robots.txt for The Frozen Bunny Crafting Workshop
 # https://emu-rabbit.github.io/frozen_rabbit_workshop/
 
 User-agent: *
