@@ -8,6 +8,18 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.4',
+    date: '2026-05-12',
+    changes: [
+      {
+        tw: '新增常見問題項目，說明如何透過筆記工作臺編輯筆記、增減物品、修改數量與合併筆記',
+        cn: '新增常见问题项目，说明如何通过笔记工作台编辑笔记、增减物品、修改数量与合并笔记',
+        en: 'Added an FAQ item explaining how to edit notes, add or remove items, change quantities, and merge notes through the Note Workbench',
+        ja: 'ノート作業台でノートの編集、アイテムの追加・削除、数量変更、ノート結合を行う方法を説明するFAQ項目を追加しました'
+      }
+    ]
+  },
+  {
     version: '1.0.3',
     date: '2026-05-08',
     changes: [
