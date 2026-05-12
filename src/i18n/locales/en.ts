@@ -230,6 +230,10 @@ export default {
         a: 'Only craftable items are searchable. Additionally, the translation data on this site is maintained by the community, so missing translations may sometimes prevent items from being found. However, the items still exist, and you can try searching by their English names. Finally, much of our data comes from <a href="https://ffxivteamcraft.com" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">Teamcraft</a>; you might consider contributing to their project to help improve community data.'
       },
       {
+        q: 'Can notes be edited and have items added or removed?',
+        a: 'That is exactly what the Note Workbench is for. Find the Copy JSON button on your note, then paste and import it in the workbench. From there, you can add items, remove items, change quantities, and even merge in another note.'
+      },
+      {
         q: 'Why do the estimated market costs seem inaccurate?',
         a: 'Estimated costs are influenced by several factors: 1. Market data is cached and not real-time (minutes to hours old). 2. The system filters prices based on your selected "Cost Strategy" (Aggressive, Balanced, Conservative) using statistical markers like Q1 or Median. 3. It automatically compares market prices against NPC vendor prices to show the lowest acquisition cost. Please also ensure your Data Center settings are correct.'
       },
