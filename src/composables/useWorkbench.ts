@@ -82,12 +82,11 @@ type RecipeDependency = Pick<Recipe, 'result' | 'ingredients'>;
 
 export function sortCraftTodoItemsByDependency<T extends { id: number }>(
   items: T[],
-  recipes: RecipeDependency[] | null | undefined,
-  rootIds: number[] = []
+  recipes: RecipeDependency[] | null | undefined
 ): T[] {
   const craftItemIds = new Set(items.map(item => item.id));
-  const rootItemIds = new Set(rootIds.filter(id => craftItemIds.has(id)));
-  const rootVisitOrder = Array.from(rootItemIds).reverse();
+  const preferredItems = [...items].reverse();
+  const preferredIndex = new Map(preferredItems.map((item, index) => [item.id, index]));
   const recipeByResult = new Map<number, RecipeDependency>();
 
   (recipes || []).forEach(recipe => {
@@ -97,62 +96,67 @@ export function sortCraftTodoItemsByDependency<T extends { id: number }>(
   });
 
   const itemById = new Map(items.map(item => [item.id, item]));
-  const result: T[] = [];
-  const visiting = new Set<number>();
-  const visited = new Set<number>();
+  const dependencies = new Map<number, Set<number>>();
+  const dependents = new Map<number, Set<number>>();
+  const remainingDependencies = new Map<number, number>();
 
-  const visit = (id: number) => {
-    if (visited.has(id)) return;
-    if (visiting.has(id)) {
-      // Recipe data should be acyclic, but bail out gracefully if upstream data is not.
-      return;
-    }
+  items.forEach(item => {
+    dependencies.set(item.id, new Set());
+    dependents.set(item.id, new Set());
+    remainingDependencies.set(item.id, 0);
+  });
 
-    visiting.add(id);
-
+  items.forEach(item => {
+    const id = item.id;
     const recipe = recipeByResult.get(id);
     const ingredients: { id: number }[] = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
     ingredients.forEach(ingredient => {
       if (craftItemIds.has(ingredient.id)) {
-        visit(ingredient.id);
+        dependencies.get(id)?.add(ingredient.id);
+        dependents.get(ingredient.id)?.add(id);
       }
     });
+    remainingDependencies.set(id, dependencies.get(id)?.size || 0);
+  });
 
-    visiting.delete(id);
-    visited.add(id);
-
-    const item = itemById.get(id);
-    if (item) result.push(item);
+  const byPreferredOrder = (a: number, b: number) => {
+    return (preferredIndex.get(a) ?? Number.MAX_SAFE_INTEGER) - (preferredIndex.get(b) ?? Number.MAX_SAFE_INTEGER);
   };
 
-  items.forEach(item => visit(item.id));
+  const ready = items
+    .filter(item => (remainingDependencies.get(item.id) || 0) === 0)
+    .map(item => item.id)
+    .sort(byPreferredOrder);
 
-  const sortedRootItems: T[] = [];
-  const visitedRoots = new Set<number>();
+  const sortedIds: number[] = [];
 
-  const visitRoot = (id: number) => {
-    if (visitedRoots.has(id)) return;
+  while (ready.length > 0) {
+    const id = ready.shift()!;
+    sortedIds.push(id);
 
-    const recipe = recipeByResult.get(id);
-    const ingredients: { id: number }[] = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
-    ingredients.forEach(ingredient => {
-      if (rootItemIds.has(ingredient.id)) {
-        visitRoot(ingredient.id);
+    const nextIds = Array.from(dependents.get(id) || []);
+    nextIds.forEach(nextId => {
+      const nextCount = (remainingDependencies.get(nextId) || 0) - 1;
+      remainingDependencies.set(nextId, nextCount);
+      if (nextCount === 0) {
+        ready.push(nextId);
       }
     });
+    ready.sort(byPreferredOrder);
+  }
 
-    visitedRoots.add(id);
+  if (sortedIds.length < items.length) {
+    const sortedIdSet = new Set(sortedIds);
+    preferredItems.forEach(item => {
+      if (!sortedIdSet.has(item.id)) {
+        sortedIds.push(item.id);
+      }
+    });
+  }
 
-    const item = itemById.get(id);
-    if (item) sortedRootItems.push(item);
-  };
-
-  rootVisitOrder.forEach(id => visitRoot(id));
-
-  return [
-    ...result.filter(item => !rootItemIds.has(item.id)),
-    ...sortedRootItems
-  ];
+  return sortedIds
+    .map(id => itemById.get(id))
+    .filter((item): item is T => !!item);
 }
 
 // --- Shared State (Singleton) ---
@@ -441,8 +445,6 @@ const activeItemIds = computed(() => {
  * 生成待辦清單結構資料
  */
 const generateTodoSections = computed(() => {
-  const { activeWorkbenchNote } = useNotes();
-  const rootIds = activeWorkbenchNote.value?.items.map(item => item.id) || [];
   const sections: Record<string, TodoItem[]> = {
     other: [],
     buy: [],
@@ -488,7 +490,7 @@ const generateTodoSections = computed(() => {
     }
   });
 
-  sections.craft = sortCraftTodoItemsByDependency(sections.craft, globalRecipesCache.value, rootIds);
+  sections.craft = sortCraftTodoItemsByDependency(sections.craft, globalRecipesCache.value);
 
   sections.buy.sort((a, b) => {
       const infoA = a.purchaseInfo;
