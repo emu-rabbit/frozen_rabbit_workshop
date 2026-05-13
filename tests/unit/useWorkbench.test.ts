@@ -38,14 +38,14 @@ vi.mock('vue-i18n', () => ({
 }));
 
 describe('Workbench Service Logic', () => {
-    it('sorts craft todo items so crafted ingredients come before their consumers', async () => {
+    it('preserves the old reversed BFS preference while moving dependencies before consumers', async () => {
         const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
-        const mythrilPlate = { id: 5079, name: '秘銀板' };
-        const mythrilIngot = { id: 5056, name: '秘銀錠' };
-        const mythrilRivet = { id: 5099, name: '秘銀鉚釘' };
+        const mythrilRivet = { id: 5099, name: 'Mythril Rivets' };
+        const mythrilIngot = { id: 5056, name: 'Mythril Ingot' };
+        const mythrilPlate = { id: 5079, name: 'Mythril Plate' };
 
         const sorted = sortCraftTodoItemsByDependency(
-            [mythrilPlate, mythrilIngot, mythrilRivet],
+            [mythrilRivet, mythrilIngot, mythrilPlate],
             [
                 { result: 5079, ingredients: [{ id: 5056, amount: 2 }] },
                 { result: 5099, ingredients: [{ id: 5056, amount: 1 }] },
@@ -56,34 +56,33 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5079, 5099]);
     });
 
-    it('keeps selected output items grouped at the bottom in reverse note order', async () => {
+    it('keeps selected output items grouped at the bottom through the reversed BFS preference', async () => {
         const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
-        const plate = { id: 5079, name: '秘銀板' };
-        const ingot = { id: 5056, name: '秘銀錠' };
-        const rivet = { id: 5099, name: '秘銀鉚釘' };
-        const lumber = { id: 5381, name: '胡桃木材' };
-        const chair = { id: 6500, name: '胡桃木椅' };
+        const plate = { id: 5079, name: 'Mythril Plate' };
+        const rivet = { id: 5099, name: 'Mythril Rivets' };
+        const chair = { id: 6500, name: 'Walnut Chair' };
+        const ingot = { id: 5056, name: 'Mythril Ingot' };
+        const lumber = { id: 5381, name: 'Walnut Lumber' };
 
         const sorted = sortCraftTodoItemsByDependency(
-            [plate, ingot, rivet, lumber, chair],
+            [plate, rivet, chair, ingot, lumber],
             [
                 { result: 5079, ingredients: [{ id: 5056, amount: 2 }] },
                 { result: 5099, ingredients: [{ id: 5056, amount: 1 }] },
                 { result: 6500, ingredients: [{ id: 5381, amount: 3 }] },
                 { result: 5056, ingredients: [] },
                 { result: 5381, ingredients: [] }
-            ] as any[],
-            [5079, 5099, 6500]
+            ] as any[]
         );
 
-        expect(sorted.map(item => item.id)).toEqual([5056, 5381, 6500, 5099, 5079]);
+        expect(sorted.map(item => item.id)).toEqual([5381, 5056, 6500, 5099, 5079]);
     });
 
-    it('does not reverse selected output items past their own craft dependencies', async () => {
+    it('does not keep the BFS preference when selected outputs depend on each other', async () => {
         const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
-        const ingot = { id: 5056, name: '秘銀錠' };
-        const plate = { id: 5079, name: '秘銀板' };
-        const rivet = { id: 5099, name: '秘銀鉚釘' };
+        const ingot = { id: 5056, name: 'Mythril Ingot' };
+        const plate = { id: 5079, name: 'Mythril Plate' };
+        const rivet = { id: 5099, name: 'Mythril Rivets' };
 
         const sorted = sortCraftTodoItemsByDependency(
             [ingot, plate, rivet],
@@ -91,8 +90,7 @@ describe('Workbench Service Logic', () => {
                 { result: 5079, ingredients: [{ id: 5056, amount: 2 }] },
                 { result: 5099, ingredients: [{ id: 5056, amount: 1 }] },
                 { result: 5056, ingredients: [] }
-            ] as any[],
-            [5056, 5079, 5099]
+            ] as any[]
         );
 
         expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
