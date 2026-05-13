@@ -4,6 +4,14 @@ const SCRIPT_ID = 'frozen-rabbit-google-analytics'
 const GA_ORIGIN = window.location.origin
 let hasTrackedAnalyticsReady = false
 
+type AnalyticsLanguageContext = {
+  app_language?: string
+  browser_language?: string
+  browser_languages?: string
+}
+
+let languageContext: AnalyticsLanguageContext = {}
+
 export type AnalyticsConsent = 'granted' | 'denied'
 
 declare global {
@@ -34,11 +42,32 @@ export const initializeAnalytics = () => {
   }
 }
 
+export const setAnalyticsLanguage = (appLanguage: string) => {
+  languageContext = {
+    app_language: appLanguage,
+    browser_language: window.navigator.language,
+    browser_languages: window.navigator.languages?.join(',') || window.navigator.language,
+  }
+
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('set', 'user_properties', languageContext)
+  window.gtag('event', 'language_context_updated', {
+    send_to: MEASUREMENT_ID,
+    ...languageContext,
+  })
+}
+
+const getCommonEventParams = () => ({
+  ...languageContext,
+})
+
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
 
   window.gtag('event', 'page_view', {
     send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
     page_path: pagePath,
@@ -51,6 +80,7 @@ export const trackAnalyticsReady = () => {
   hasTrackedAnalyticsReady = true
   window.gtag('event', 'analytics_ready', {
     send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
     page_title: document.title,
     page_location: window.location.href,
     page_path: window.location.pathname + window.location.hash,
@@ -64,6 +94,7 @@ export const trackRouteChange = (routeName: string) => {
   trackPageView(pagePath)
   window.gtag('event', 'route_change', {
     send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
     route_name: routeName,
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
@@ -89,6 +120,7 @@ const loadGoogleAnalytics = () => {
   window.gtag('config', MEASUREMENT_ID, {
     send_page_view: false,
   })
+  window.gtag('set', 'user_properties', languageContext)
 
   if (document.getElementById(SCRIPT_ID)) {
     trackPageView()
