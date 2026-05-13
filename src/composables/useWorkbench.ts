@@ -82,9 +82,12 @@ type RecipeDependency = Pick<Recipe, 'result' | 'ingredients'>;
 
 export function sortCraftTodoItemsByDependency<T extends { id: number }>(
   items: T[],
-  recipes: RecipeDependency[] | null | undefined
+  recipes: RecipeDependency[] | null | undefined,
+  rootIds: number[] = []
 ): T[] {
   const craftItemIds = new Set(items.map(item => item.id));
+  const rootItemIds = new Set(rootIds.filter(id => craftItemIds.has(id)));
+  const rootVisitOrder = Array.from(rootItemIds).reverse();
   const recipeByResult = new Map<number, RecipeDependency>();
 
   (recipes || []).forEach(recipe => {
@@ -124,7 +127,32 @@ export function sortCraftTodoItemsByDependency<T extends { id: number }>(
 
   items.forEach(item => visit(item.id));
 
-  return result;
+  const sortedRootItems: T[] = [];
+  const visitedRoots = new Set<number>();
+
+  const visitRoot = (id: number) => {
+    if (visitedRoots.has(id)) return;
+
+    const recipe = recipeByResult.get(id);
+    const ingredients: { id: number }[] = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
+    ingredients.forEach(ingredient => {
+      if (rootItemIds.has(ingredient.id)) {
+        visitRoot(ingredient.id);
+      }
+    });
+
+    visitedRoots.add(id);
+
+    const item = itemById.get(id);
+    if (item) sortedRootItems.push(item);
+  };
+
+  rootVisitOrder.forEach(id => visitRoot(id));
+
+  return [
+    ...result.filter(item => !rootItemIds.has(item.id)),
+    ...sortedRootItems
+  ];
 }
 
 // --- Shared State (Singleton) ---
@@ -413,6 +441,8 @@ const activeItemIds = computed(() => {
  * 生成待辦清單結構資料
  */
 const generateTodoSections = computed(() => {
+  const { activeWorkbenchNote } = useNotes();
+  const rootIds = activeWorkbenchNote.value?.items.map(item => item.id) || [];
   const sections: Record<string, TodoItem[]> = {
     other: [],
     buy: [],
@@ -458,7 +488,7 @@ const generateTodoSections = computed(() => {
     }
   });
 
-  sections.craft = sortCraftTodoItemsByDependency(sections.craft, globalRecipesCache.value);
+  sections.craft = sortCraftTodoItemsByDependency(sections.craft, globalRecipesCache.value, rootIds);
 
   sections.buy.sort((a, b) => {
       const infoA = a.purchaseInfo;
