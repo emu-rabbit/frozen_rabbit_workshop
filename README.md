@@ -1,3 +1,69 @@
+# Frozen Rabbit Workshop
+
+> **"A practical notebook where Rabbit Meat keeps nothing secret."** Frozen Rabbit Workshop is a material planning and preparation tool for Final Fantasy XIV crafters and gatherers.
+
+[![FFXIV](https://img.shields.io/badge/Final%20Fantasy%20XIV-FFXIV-blue.svg)](https://na.finalfantasyxiv.com/)
+[![Vue](https://img.shields.io/badge/Vue-3-green.svg)](https://vuejs.org/)
+[![Universalis](https://img.shields.io/badge/Data-Universalis-orange.svg)](https://universalis.app/)
+
+## Overview
+
+**Frozen Rabbit Workshop** helps FFXIV players break down large crafting goals into clear, actionable preparation plans. Whether you are stocking up for HQ gear, consumables, or early-patch progression, the workshop can decompose recipes, estimate market costs with live pricing, and turn your decisions into an optimized prep route based on your needs.
+
+## Core Features
+
+### Workbench
+- **Smart allocation**: Assign each material in a list to buying, crafting, gathering, or existing inventory.
+- **Live budgeting**: Connects to the [Universalis](https://universalis.app/) API to estimate total cost from your selected data center.
+- **Time estimates**: Provides rough crafting and gathering time estimates for the full material list.
+- **Market strategy**: Supports aggressive, balanced, and conservative pricing baselines.
+
+### Todo List
+- **One-click generation**: Converts workbench allocations into organized action lists for buying, gathering, and crafting.
+- **Precise navigation**: Buying tasks show the cheapest market world or NPC location; gathering tasks include map, coordinates, and timed-node ET windows.
+- **Quick copy**: Copy item names instantly when searching the market board.
+
+### Recommended Notes
+- **Curated patch picks**: Includes high-value gear and consumable lists selected by the site maintainer, such as iLv710/770 gear sets.
+- **Fast import**: Load a recommended list directly into the workbench without searching for items one by one.
+
+## Language Support
+
+Frozen Rabbit Workshop provides localized terminology for:
+- Traditional Chinese
+- Simplified Chinese
+- English
+- Japanese
+
+## Tech Stack
+- **Frontend**: Vue 3 + Vite
+- **Styling**: Tailwind CSS / Vanilla CSS
+- **State Management**: Vue Composition API
+- **Internationalization**: Vue I18n
+- **Icons**: PrimeIcons
+
+## Credits and Open Source Notice
+
+This project is supported by data and tooling from community projects:
+- **Universalis**: Global market data.
+- **Teamcraft**: Item, recipe, and gathering details.
+- **XIVAPI**: In-game icons and item data APIs.
+
+---
+
+### FAQ
+
+**Q: Why is the rabbit meat frozen? Can I roast it instead?**  
+**A: No.**
+
+---
+
+*Made with love for the FFXIV community.*
+
+---
+
+## 繁體中文
+
 # ❄️ 冷凍兔肉的工坊 | Frozen Rabbit Workshop
 
 > **"兔肉不私藏的好筆記本"** — 為《最終幻想14》（FFXIV）能工巧匠設計的物資籌備管理工具。
