@@ -78,6 +78,55 @@ export interface TodoSection {
   items: TodoItem[];
 }
 
+type RecipeDependency = Pick<Recipe, 'result' | 'ingredients'>;
+
+export function sortCraftTodoItemsByDependency<T extends { id: number }>(
+  items: T[],
+  recipes: RecipeDependency[] | null | undefined
+): T[] {
+  const craftItemIds = new Set(items.map(item => item.id));
+  const recipeByResult = new Map<number, RecipeDependency>();
+
+  (recipes || []).forEach(recipe => {
+    if (craftItemIds.has(recipe.result)) {
+      recipeByResult.set(recipe.result, recipe);
+    }
+  });
+
+  const itemById = new Map(items.map(item => [item.id, item]));
+  const result: T[] = [];
+  const visiting = new Set<number>();
+  const visited = new Set<number>();
+
+  const visit = (id: number) => {
+    if (visited.has(id)) return;
+    if (visiting.has(id)) {
+      // Recipe data should be acyclic, but bail out gracefully if upstream data is not.
+      return;
+    }
+
+    visiting.add(id);
+
+    const recipe = recipeByResult.get(id);
+    const ingredients: { id: number }[] = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
+    ingredients.forEach(ingredient => {
+      if (craftItemIds.has(ingredient.id)) {
+        visit(ingredient.id);
+      }
+    });
+
+    visiting.delete(id);
+    visited.add(id);
+
+    const item = itemById.get(id);
+    if (item) result.push(item);
+  };
+
+  items.forEach(item => visit(item.id));
+
+  return result;
+}
+
 // --- Shared State (Singleton) ---
 const CRYSTAL_IDS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
 const CRAFT_JOB_NAMES: Record<number, string> = {
@@ -409,11 +458,7 @@ const generateTodoSections = computed(() => {
     }
   });
 
-  sections.craft.sort((a, b) => {
-      const indexA = activeItemIds.value.indexOf(a.id);
-      const indexB = activeItemIds.value.indexOf(b.id);
-      return indexB - indexA;
-  });
+  sections.craft = sortCraftTodoItemsByDependency(sections.craft, globalRecipesCache.value);
 
   sections.buy.sort((a, b) => {
       const infoA = a.purchaseInfo;

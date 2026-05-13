@@ -28,8 +28,12 @@ const sectionItems = ref<Record<string, any[]>>({});
 // Initialize/Sync local items with computed sections
 watch(generateTodoSections, (newSections) => {
     newSections.forEach(section => {
+        const currentItems = sectionItems.value[section.key];
+        const currentOrder = currentItems?.map(item => item.id).join(',') || '';
+        const nextOrder = section.items.map(item => item.id).join(',');
+
         // Only update if not already being dragged or if length changed
-        if (!sectionItems.value[section.key] || sectionItems.value[section.key].length !== section.items.length) {
+        if (!currentItems || currentItems.length !== section.items.length || currentOrder !== nextOrder) {
             sectionItems.value[section.key] = [...section.items];
         } else {
             // Update item data but keeps existing order
