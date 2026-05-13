@@ -56,7 +56,7 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5079, 5099]);
     });
 
-    it('keeps selected output items grouped at the bottom after their dependencies', async () => {
+    it('keeps selected output items grouped at the bottom in reverse note order', async () => {
         const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
         const plate = { id: 5079, name: '秘銀板' };
         const ingot = { id: 5056, name: '秘銀錠' };
@@ -76,7 +76,26 @@ describe('Workbench Service Logic', () => {
             [5079, 5099, 6500]
         );
 
-        expect(sorted.map(item => item.id)).toEqual([5056, 5381, 5079, 5099, 6500]);
+        expect(sorted.map(item => item.id)).toEqual([5056, 5381, 6500, 5099, 5079]);
+    });
+
+    it('does not reverse selected output items past their own craft dependencies', async () => {
+        const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
+        const ingot = { id: 5056, name: '秘銀錠' };
+        const plate = { id: 5079, name: '秘銀板' };
+        const rivet = { id: 5099, name: '秘銀鉚釘' };
+
+        const sorted = sortCraftTodoItemsByDependency(
+            [ingot, plate, rivet],
+            [
+                { result: 5079, ingredients: [{ id: 5056, amount: 2 }] },
+                { result: 5099, ingredients: [{ id: 5056, amount: 1 }] },
+                { result: 5056, ingredients: [] }
+            ] as any[],
+            [5056, 5079, 5099]
+        );
+
+        expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
     });
 
     it('should be importable and initialized', async () => {

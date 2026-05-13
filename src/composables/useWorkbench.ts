@@ -87,6 +87,7 @@ export function sortCraftTodoItemsByDependency<T extends { id: number }>(
 ): T[] {
   const craftItemIds = new Set(items.map(item => item.id));
   const rootItemIds = new Set(rootIds.filter(id => craftItemIds.has(id)));
+  const rootVisitOrder = Array.from(rootItemIds).reverse();
   const recipeByResult = new Map<number, RecipeDependency>();
 
   (recipes || []).forEach(recipe => {
@@ -126,9 +127,31 @@ export function sortCraftTodoItemsByDependency<T extends { id: number }>(
 
   items.forEach(item => visit(item.id));
 
+  const sortedRootItems: T[] = [];
+  const visitedRoots = new Set<number>();
+
+  const visitRoot = (id: number) => {
+    if (visitedRoots.has(id)) return;
+
+    const recipe = recipeByResult.get(id);
+    const ingredients: { id: number }[] = Array.isArray(recipe?.ingredients) ? recipe.ingredients : [];
+    ingredients.forEach(ingredient => {
+      if (rootItemIds.has(ingredient.id)) {
+        visitRoot(ingredient.id);
+      }
+    });
+
+    visitedRoots.add(id);
+
+    const item = itemById.get(id);
+    if (item) sortedRootItems.push(item);
+  };
+
+  rootVisitOrder.forEach(id => visitRoot(id));
+
   return [
     ...result.filter(item => !rootItemIds.has(item.id)),
-    ...result.filter(item => rootItemIds.has(item.id))
+    ...sortedRootItems
   ];
 }
 
