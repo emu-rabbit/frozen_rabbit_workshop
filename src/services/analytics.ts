@@ -4,6 +4,7 @@ const SCRIPT_ID = 'frozen-rabbit-google-analytics'
 const GA_ORIGIN = window.location.origin
 let hasTrackedAnalyticsReady = false
 let hasDeniedAnalyticsThisSession = false
+let hasConfiguredGoogleAnalytics = false
 
 type AnalyticsLanguageContext = {
   app_language?: string
@@ -36,20 +37,30 @@ export const getAnalyticsConsent = (): AnalyticsConsent | null => {
 }
 
 export const setAnalyticsConsent = (consent: AnalyticsConsent) => {
+  loadGoogleAnalytics()
+
   if (consent === 'granted') {
     hasDeniedAnalyticsThisSession = false
     window.localStorage.setItem(CONSENT_KEY, consent)
-    loadGoogleAnalytics()
+    updateGoogleConsent('granted')
+    window.gtag?.('set', 'user_properties', languageContext)
+    trackPageView()
+    trackAnalyticsReady()
     return
   }
 
   hasDeniedAnalyticsThisSession = true
   window.localStorage.removeItem(CONSENT_KEY)
+  updateGoogleConsent('denied')
 }
 
 export const initializeAnalytics = () => {
+  loadGoogleAnalytics()
+
   if (getAnalyticsConsent() === 'granted') {
-    loadGoogleAnalytics()
+    updateGoogleConsent('granted')
+    trackPageView()
+    trackAnalyticsReady()
   }
 }
 
@@ -114,27 +125,32 @@ export const trackRouteChange = (routeName: string) => {
 }
 
 const loadGoogleAnalytics = () => {
-  if (!isAnalyticsAvailable() || window.gtag) return
+  if (!isAnalyticsAvailable()) return
 
   window.dataLayer = window.dataLayer || []
-  window.gtag = function gtag() {
-    window.dataLayer?.push(arguments)
+  if (!window.gtag) {
+    window.gtag = function gtag() {
+      window.dataLayer?.push(arguments)
+    }
   }
 
-  window.gtag('js', new Date())
-  window.gtag('consent', 'default', {
-    analytics_storage: 'granted',
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-  })
-  window.gtag('config', MEASUREMENT_ID, {
-    send_page_view: false,
-  })
-  window.gtag('set', 'user_properties', languageContext)
+  if (!hasConfiguredGoogleAnalytics) {
+    hasConfiguredGoogleAnalytics = true
+    window.gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500,
+    })
+    window.gtag('js', new Date())
+    window.gtag('config', MEASUREMENT_ID, {
+      send_page_view: false,
+    })
+    window.gtag('set', 'user_properties', languageContext)
+  }
 
   if (document.getElementById(SCRIPT_ID)) {
-    trackPageView()
     return
   }
 
@@ -143,8 +159,21 @@ const loadGoogleAnalytics = () => {
   script.async = true
   script.src = `https://www.googletagmanager.com/gtag/js?id=${MEASUREMENT_ID}`
   script.addEventListener('load', () => {
+    if (getAnalyticsConsent() !== 'granted') return
+
     trackPageView()
     trackAnalyticsReady()
   }, { once: true })
   document.head.appendChild(script)
+}
+
+const updateGoogleConsent = (analyticsConsent: AnalyticsConsent) => {
+  if (!isAnalyticsAvailable() || !window.gtag) return
+
+  window.gtag('consent', 'update', {
+    analytics_storage: analyticsConsent,
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+  })
 }
