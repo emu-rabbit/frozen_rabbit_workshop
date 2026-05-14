@@ -3,6 +3,7 @@ const MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID
 const SCRIPT_ID = 'frozen-rabbit-google-analytics'
 const GA_ORIGIN = window.location.origin
 let hasTrackedAnalyticsReady = false
+let hasDeniedAnalyticsThisSession = false
 
 type AnalyticsLanguageContext = {
   app_language?: string
@@ -25,15 +26,25 @@ export const isAnalyticsAvailable = () => Boolean(import.meta.env.PROD && MEASUR
 
 export const getAnalyticsConsent = (): AnalyticsConsent | null => {
   const stored = window.localStorage.getItem(CONSENT_KEY)
-  return stored === 'granted' || stored === 'denied' ? stored : null
+  if (stored === 'granted') return 'granted'
+
+  if (stored === 'denied') {
+    window.localStorage.removeItem(CONSENT_KEY)
+  }
+
+  return hasDeniedAnalyticsThisSession ? 'denied' : null
 }
 
 export const setAnalyticsConsent = (consent: AnalyticsConsent) => {
-  window.localStorage.setItem(CONSENT_KEY, consent)
-
   if (consent === 'granted') {
+    hasDeniedAnalyticsThisSession = false
+    window.localStorage.setItem(CONSENT_KEY, consent)
     loadGoogleAnalytics()
+    return
   }
+
+  hasDeniedAnalyticsThisSession = true
+  window.localStorage.removeItem(CONSENT_KEY)
 }
 
 export const initializeAnalytics = () => {
