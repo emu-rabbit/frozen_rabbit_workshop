@@ -1,10 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ref } from 'vue';
 
+const mocks = vi.hoisted(() => ({
+    activeWorkbenchNote: { value: null as any },
+    fetchItemPrices: vi.fn()
+}));
+
 // Pre-mocking dependencies before importing the module under test
 vi.mock('../../src/composables/useNotes', () => ({
     useNotes: () => ({
-        activeWorkbenchNote: ref(null)
+        activeWorkbenchNote: mocks.activeWorkbenchNote
     })
 }));
 
@@ -12,12 +17,20 @@ vi.mock('../../src/services/dictionary', () => ({
     globalRecipesCache: ref([]),
     setDictionaryLanguage: vi.fn(),
     ensureDictionaryLoaded: vi.fn(),
+    getDictionaryItem: vi.fn((id: number) => ({
+        name: `Item ${id}`,
+        icon: `/icons/${id}.png`
+    })),
+    getRawItemData: vi.fn((id: number) => ({
+        name: `Item ${id}`,
+        icon: `/icons/${id}.png`
+    })),
     CRYSTAL_IDS: new Set()
 }));
 
 vi.mock('../../src/services/universalis', () => ({
-    fetchItemPrices: vi.fn(),
-    selectedDC: ref('陸行鳥')
+    fetchItemPrices: mocks.fetchItemPrices,
+    selectedDC: ref('Mana')
 }));
 
 vi.mock('../../src/services/gathering', () => ({
@@ -38,6 +51,12 @@ vi.mock('vue-i18n', () => ({
 }));
 
 describe('Workbench Service Logic', () => {
+    beforeEach(() => {
+        mocks.activeWorkbenchNote.value = null;
+        mocks.fetchItemPrices.mockReset();
+        mocks.fetchItemPrices.mockResolvedValue(new Map());
+    });
+
     it('preserves the old reversed BFS preference while moving dependencies before consumers', async () => {
         const { sortCraftTodoItemsByDependency } = await import('../../src/composables/useWorkbench');
         const mythrilRivet = { id: 5099, name: 'Mythril Rivets' };
@@ -100,8 +119,29 @@ describe('Workbench Service Logic', () => {
         // Dynamic import to ensure mocks are in place
         const { useWorkbench } = await import('../../src/composables/useWorkbench');
         const { totalDemands, workbenchItems } = useWorkbench();
-        
+
         expect(totalDemands).toBeDefined();
         expect(workbenchItems).toBeDefined();
+    });
+
+    it('does not mark prices as fetched when Universalis returns no result after cancellation', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-cancelled-prices',
+            name: 'Cancelled prices',
+            items: [{ id: 100, quantity: 2 }]
+        };
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, workbenchItems } = useWorkbench();
+        await initialize(true);
+
+        expect(mocks.fetchItemPrices).toHaveBeenCalledWith([100]);
+        expect(workbenchItems.value[100]).toMatchObject({
+            priceFetched: false,
+            marketPrice: null,
+            listings: []
+        });
     });
 });

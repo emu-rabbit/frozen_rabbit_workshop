@@ -301,10 +301,21 @@ const fetchPrices = async (ids: number[]) => {
   ids.forEach(id => {
     const item = workbenchItems.value[id];
     if (item) {
-      const priceData = prices.get(id);
-      item.listings = priceData?.listings || [];
+      if (!prices.has(id)) {
+        item.priceFetched = false;
+        item.listings = [];
+        item.lastUploadTime = 0;
+        item.marketPrice = null;
+        item.marketStats = undefined;
+        item.purchaseInfo = undefined;
+        updateItemEffectivePrice(item);
+        return;
+      }
+
+      const priceData = prices.get(id)!;
+      item.listings = priceData.listings || [];
       
-      item.lastUploadTime = priceData?.lastUploadTime ?? 0;
+      item.lastUploadTime = priceData.lastUploadTime ?? 0;
       item.priceFetched = true;
 
       // Calculate Market Stats for the detail drawer

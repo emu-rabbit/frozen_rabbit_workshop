@@ -8,6 +8,30 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.0.5',
+    date: '2026-05-14',
+    changes: [
+      {
+        tw: 'README 新增英文入口與專案說明，讓第一次造訪的使用者更快理解工具用途',
+        cn: 'README 新增英文入口与项目说明，让第一次访问的用户更快理解工具用途',
+        en: 'Added an English README introduction so first-time visitors can understand the tool more quickly',
+        ja: 'README に英語の導入説明を追加し、初めて訪れるユーザーにもツールの目的が伝わりやすくなりました'
+      },
+      {
+        tw: '調整備料台與待辦清單的製作排序，讓前置材料更穩定地排在成品之前，同時保留手動排序',
+        cn: '调整备料台与待办清单的制作排序，让前置材料更稳定地排在成品之前，同时保留手动排序',
+        en: 'Improved workbench and Todo craft ordering so prerequisite materials stay before finished items while preserving manual ordering',
+        ja: '仕込み台とTodoリストの製作順を調整し、前提素材が完成品より前に安定して並ぶようにしつつ、手動並び替えも維持しました'
+      },
+      {
+        tw: '修正 Universalis 查價重試時按下跳過後，備料台可能停在空白或不再重新查價的問題',
+        cn: '修正 Universalis 查价重试时按下跳过后，备料台可能停在空白或不再重新查价的问题',
+        en: 'Fixed an issue where skipping a Universalis price retry could leave the workbench blank or stop future price retries',
+        ja: 'Universalis の価格取得リトライ中にスキップした後、仕込み台が空白のままになったり再取得されなくなる問題を修正しました'
+      }
+    ]
+  },
+  {
     version: '1.0.4',
     date: '2026-05-12',
     changes: [
