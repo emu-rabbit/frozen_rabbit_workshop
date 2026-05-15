@@ -12,7 +12,12 @@ type AnalyticsLanguageContext = {
   browser_languages?: string
 }
 
+type AnalyticsThemeContext = {
+  app_theme_mode?: 'light' | 'dark'
+}
+
 let languageContext: AnalyticsLanguageContext = {}
+let themeContext: AnalyticsThemeContext = {}
 
 export type AnalyticsConsent = 'granted' | 'denied'
 
@@ -43,7 +48,7 @@ export const setAnalyticsConsent = (consent: AnalyticsConsent) => {
     hasDeniedAnalyticsThisSession = false
     window.localStorage.setItem(CONSENT_KEY, consent)
     updateGoogleConsent('granted')
-    window.gtag?.('set', 'user_properties', languageContext)
+    window.gtag?.('set', 'user_properties', getUserProperties())
     trackPageView()
     trackAnalyticsReady()
     return
@@ -73,15 +78,34 @@ export const setAnalyticsLanguage = (appLanguage: string) => {
 
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
 
-  window.gtag('set', 'user_properties', languageContext)
+  window.gtag('set', 'user_properties', getUserProperties())
   window.gtag('event', 'language_context_updated', {
     send_to: MEASUREMENT_ID,
     ...languageContext,
   })
 }
 
-const getCommonEventParams = () => ({
+export const setAnalyticsThemeMode = (isDarkMode: boolean) => {
+  themeContext = {
+    app_theme_mode: isDarkMode ? 'dark' : 'light',
+  }
+
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('set', 'user_properties', getUserProperties())
+  window.gtag('event', 'theme_context_updated', {
+    send_to: MEASUREMENT_ID,
+    ...themeContext,
+  })
+}
+
+const getUserProperties = () => ({
   ...languageContext,
+  ...themeContext,
+})
+
+const getCommonEventParams = () => ({
+  ...getUserProperties(),
 })
 
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
@@ -147,7 +171,7 @@ const loadGoogleAnalytics = () => {
     window.gtag('config', MEASUREMENT_ID, {
       send_page_view: false,
     })
-    window.gtag('set', 'user_properties', languageContext)
+    window.gtag('set', 'user_properties', getUserProperties())
   }
 
   if (document.getElementById(SCRIPT_ID)) {
