@@ -14,7 +14,7 @@ import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
-import { initializeAnalytics, setAnalyticsLanguage, trackRouteChange } from './services/analytics'
+import { initializeAnalytics, setAnalyticsLanguage, setAnalyticsThemeMode, trackRouteChange } from './services/analytics'
 
 // Views (Code Splitting)
 const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
@@ -40,6 +40,7 @@ watch(isDarkMode, (newVal) => {
   } else {
     document.documentElement.classList.remove('dark')
   }
+  setAnalyticsThemeMode(newVal)
 }, { immediate: true })
 
 const i18nReady = ref(false)
