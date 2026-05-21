@@ -242,24 +242,17 @@ const confirmMerge = () => {
           </div>
 
           <div class="flex flex-col gap-4">
-            <div 
-              v-for="(row, index) in editorDraft.searchRows" 
+            <div
+              v-for="(row, index) in editorDraft.searchRows"
               :key="row.id"
-              class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700"
+              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
             >
-              <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold">
-                    {{ index + 1 }}
-                  </div>
-                  <div class="sm:hidden flex-1">
-                    <button @click="removeSearchRow(index)" class="float-right text-slate-300 dark:text-slate-600 hover:text-red-400 p-1">
-                        <i class="pi pi-trash"></i>
-                    </button>
-                  </div>
+              <div class="mt-1 w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold md:mx-auto">
+                {{ index + 1 }}
               </div>
 
-              <div class="flex-1 min-w-0">
-                  <div class="flex items-stretch gap-0 w-full sm:w-[320px] max-w-full">
+              <div class="min-w-0 md:max-w-[24rem]">
+                  <div class="grid grid-cols-[minmax(0,1fr)_2.5rem] items-stretch w-full max-w-full">
                     <AutoComplete 
                       v-ffiv-clean
                       v-model="row.selectedItem" 
@@ -270,10 +263,10 @@ const confirmMerge = () => {
                       :delay="400" 
                       optionLabel="name" 
                       :placeholder="t('newNote.searchPlaceholder')" 
-                      class="flex-1 min-w-0"
+                      class="prep-item-search !w-full min-w-0 overflow-hidden"
                       :pt="{
                         input: { 
-                          class: 'w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
+                          class: 'min-w-0 !w-full !max-w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
                         },
                         panel: {
                           class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
@@ -309,7 +302,7 @@ const confirmMerge = () => {
                     <button
                       type="button"
                       @click="openFilterDialog(index)"
-                      class="w-10 h-10 -ml-px rounded-r-xl border border-soft-green-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-slate-800 transition-colors shrink-0 flex items-center justify-center"
+                      class="w-10 h-10 -ml-px rounded-r-xl border border-soft-green-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center"
                       :title="t('newNote.filter.open')"
                     >
                       <i class="pi pi-filter"></i>
@@ -321,20 +314,24 @@ const confirmMerge = () => {
                   </div>
               </div>
 
-              <div class="flex items-center justify-between sm:justify-start gap-2">
-                  <div class="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
+              <div class="col-start-2 md:col-start-4 flex items-center md:justify-end gap-2">
+                  <div class="flex h-10 items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
                     <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
                       <i class="pi pi-minus text-sm"></i>
                     </button>
-                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent dark:text-slate-200" />
+                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 h-8 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent dark:text-slate-200" />
                     <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors">
                       <i class="pi pi-plus text-sm"></i>
                     </button>
                   </div>
-                  <button @click="removeSearchRow(index)" class="hidden sm:flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0">
-                    <i class="pi pi-trash"></i>
-                  </button>
               </div>
+
+              <button
+                @click="removeSearchRow(index)"
+                class="row-start-1 col-start-3 md:row-start-2 md:col-start-4 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </div>
 

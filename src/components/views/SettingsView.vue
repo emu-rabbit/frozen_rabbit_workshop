@@ -104,19 +104,19 @@ watch(marketDC, (newVal) => {
 
               <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.appearanceDesc') }}</p>
 
-              <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
-                  <div class="flex flex-col">
+              <div class="flex items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50">
+                  <div class="flex min-w-0 flex-col">
                       <span class="font-bold text-slate-700 dark:text-slate-200">{{ t('settings.darkMode') }}</span>
                       <span class="text-xs text-slate-500 dark:text-slate-400">{{ t('settings.darkModeDesc') }}</span>
                   </div>
                   <button 
                     @click="isDarkMode = !isDarkMode" 
-                    class="w-14 h-8 rounded-full transition-all duration-300 relative"
+                    class="relative h-8 w-14 shrink-0 overflow-hidden rounded-full transition-colors duration-300"
                     :class="isDarkMode ? 'bg-soft-green-500' : 'bg-slate-300 dark:bg-slate-700'"
                   >
                     <div 
-                        class="absolute top-1 w-6 h-6 rounded-full bg-white shadow-sm transition-all duration-300 flex items-center justify-center overflow-hidden"
-                        :class="isDarkMode ? 'left-7' : 'left-1'"
+                        class="absolute left-1 top-1 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-white shadow-sm transition-transform duration-300"
+                        :class="isDarkMode ? 'translate-x-6' : 'translate-x-0'"
                     >
                         <i :class="isDarkMode ? 'pi pi-moon text-soft-green-600' : 'pi pi-sun text-amber-500'" class="text-[10px]"></i>
                     </div>

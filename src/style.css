@@ -31,6 +31,44 @@
   }
 }
 
+@layer components {
+  .prep-item-search {
+    height: 2.5rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden;
+  }
+
+  .prep-item-search .p-autocomplete-input {
+    box-sizing: border-box !important;
+    height: 2.5rem !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    line-height: 1.5rem !important;
+    border-color: theme('colors.soft-green.200') !important;
+    border-radius: 0.75rem 0 0 0.75rem !important;
+    background-color: white !important;
+    color: theme('colors.slate.900') !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .prep-item-search .p-autocomplete-input:focus {
+    border-color: theme('colors.soft-green.500') !important;
+    box-shadow: 0 0 0 1px theme('colors.soft-green.500') inset !important;
+  }
+
+  html.dark .prep-item-search .p-autocomplete-input {
+    border-color: theme('colors.slate.800') !important;
+    background-color: theme('colors.slate.950') !important;
+    color: white !important;
+  }
+
+  html.dark .prep-item-search .p-autocomplete-input::placeholder {
+    color: theme('colors.slate.600') !important;
+  }
+}
+
 /*
  * PrimeVue Fine-Tuning for Dark Mode
  * 
