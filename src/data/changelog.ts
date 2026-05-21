@@ -8,6 +8,42 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.1.0',
+    date: '2026-05-21',
+    changes: [
+      {
+        tw: '新增用篩選的方式為筆記加入新物品',
+        cn: '新增用筛选的方式为笔记加入新物品',
+        en: 'Added a filter-based way to add new items to notes',
+        ja: 'フィルターを使ってノートに新しいアイテムを追加できるようにしました'
+      },
+      {
+        tw: '新增以 HQ 查詢市場價格的切換按鈕',
+        cn: '新增以 HQ 查询市场价格的切换按钮',
+        en: 'Added a toggle for querying market prices as HQ items',
+        ja: 'HQ アイテムとして市場価格を取得する切り替えボタンを追加しました'
+      },
+      {
+        tw: '修正手機版上一些爆版的畫面元素',
+        cn: '修正手机版上一些溢出版面的画面元素',
+        en: 'Fixed several mobile layout elements that could overflow the screen',
+        ja: 'モバイル表示で一部の画面要素がはみ出す問題を修正しました'
+      },
+      {
+        tw: '新增備料台資料預熱機制',
+        cn: '新增备料台资料预热机制',
+        en: 'Added data prewarming for the material prep workbench',
+        ja: '素材準備台のデータを事前に読み込む仕組みを追加しました'
+      },
+      {
+        tw: '在常見問題中說明市場成本策略的功用',
+        cn: '在常见问题中说明市场成本策略的功用',
+        en: 'Explained what market cost strategies are for in the FAQ',
+        ja: 'FAQ で市場コスト戦略の役割を説明しました'
+      }
+    ]
+  },
+  {
     version: '1.0.5',
     date: '2026-05-14',
     changes: [
