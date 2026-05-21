@@ -61,6 +61,25 @@ export interface ItemFilterCriteria {
   categoryGroup?: ItemCategoryGroup | 'all';
 }
 
+// Teamcraft equipment data can include ADV for "all classes", but that is not
+// a player-facing job in FFXIV. Keep the filter aligned with the in-game
+// character window grouping instead of sorting abbreviations alphabetically.
+export const EQUIPMENT_JOB_ORDER = [
+  'GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB',
+  'CNJ', 'WHM', 'SCH', 'AST', 'SGE',
+  'PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM', 'RPR', 'VPR',
+  'ARC', 'BRD', 'MCH', 'DNC',
+  'THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU', 'PCT',
+  'CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'LWR', 'WVR', 'ALC', 'CUL',
+  'MIN', 'BTN', 'FSH',
+  'BST',
+] as const;
+
+const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV']);
+const EQUIPMENT_JOB_ORDER_INDEX = new Map<string, number>(
+  EQUIPMENT_JOB_ORDER.map((job, index) => [job, index])
+);
+
 const ITEM_CATEGORY_GROUPS: Record<ItemCategoryGroup, Set<number>> = {
   weapon: new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 84, 87, 88, 89, 96, 97, 98, 105, 106, 107, 108, 109, 110, 111]),
   tool: new Set([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 99]),
@@ -72,6 +91,17 @@ const ITEM_CATEGORY_GROUPS: Record<ItemCategoryGroup, Set<number>> = {
   furniture: new Set([57, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 95]),
   other: new Set([33, 39, 59, 60, 61, 62, 63, 64, 81, 82, 83, 85, 86, 90, 91, 92, 93, 94, 100, 101, 102, 103, 104, 112, 113, 114, 115]),
 };
+
+export function getOrderedEquipmentJobs(jobs: Iterable<string>): string[] {
+  return Array.from(new Set(jobs))
+    .filter(job => job && !HIDDEN_EQUIPMENT_JOBS.has(job))
+    .sort((a, b) => {
+      const orderA = EQUIPMENT_JOB_ORDER_INDEX.get(a) ?? Number.MAX_SAFE_INTEGER;
+      const orderB = EQUIPMENT_JOB_ORDER_INDEX.get(b) ?? Number.MAX_SAFE_INTEGER;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.localeCompare(b);
+    });
+}
 
 interface RawSearchIndexItem {
   id: number | string;

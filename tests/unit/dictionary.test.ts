@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { filterSearchableItems, getItemCategoryGroup, globalDictionaryCache, searchItems } from '../../src/services/dictionary';
+import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, globalDictionaryCache, searchItems } from '../../src/services/dictionary';
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
@@ -92,5 +92,11 @@ describe('Dictionary Search & Logic', () => {
         expect(getItemCategoryGroup({ id: 9, name: 'Meal', icon: '', category: 46 })).toBe('food');
         expect(getItemCategoryGroup({ id: 6, name: 'Metal', icon: '', category: 48 })).toBe('material');
         expect(getItemCategoryGroup({ id: 10, name: 'Tabletop', icon: '', category: 78 })).toBe('furniture');
+    });
+
+    it('orders equipment job filters like the in-game character window and hides adventurer', () => {
+        const jobs = getOrderedEquipmentJobs(['WVR', 'ADV', 'GNB', 'PLD', 'CRP', 'CNJ', 'PCT', 'MIN', 'GLA']);
+
+        expect(jobs).toEqual(['GLA', 'PLD', 'GNB', 'CNJ', 'PCT', 'CRP', 'WVR', 'MIN']);
     });
 });
