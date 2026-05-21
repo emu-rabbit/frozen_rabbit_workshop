@@ -162,7 +162,7 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
                 v-ffiv-clean
                 v-model="query"
                 type="text"
-                class="w-full rounded-lg border border-soft-green-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-soft-green-500"
+                class="filter-input"
                 :placeholder="t('newNote.searchPlaceholder')"
               />
             </label>
@@ -288,8 +288,18 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
   border-color: rgb(34 197 94);
 }
 
-:global(html.dark) .filter-input {
+:global(html.dark .filter-input) {
   border-color: rgb(51 65 85);
+  background: rgb(15 23 42);
+  color: rgb(241 245 249);
+  color-scheme: dark;
+}
+
+:global(html.dark .filter-input::placeholder) {
+  color: rgb(100 116 139);
+}
+
+:global(html.dark .filter-input option) {
   background: rgb(15 23 42);
   color: rgb(241 245 249);
 }
