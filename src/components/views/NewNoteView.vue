@@ -180,7 +180,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
             <div
               v-for="(row, index) in newNoteDraft.searchRows"
               :key="row.id"
-              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
+              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
             >
               <div class="mt-1 w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold md:mx-auto">
                 {{ index + 1 }}
@@ -265,7 +265,7 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
               <button
                 v-if="newNoteDraft.searchRows.length > 1"
                 @click="removeSearchRow(index)"
-                class="row-start-1 col-start-3 md:row-start-2 md:col-start-4 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
+                class="row-start-1 col-start-3 md:col-start-5 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
               >
                 <i class="pi pi-trash"></i>
               </button>

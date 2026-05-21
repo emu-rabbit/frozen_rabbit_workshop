@@ -245,7 +245,7 @@ const confirmMerge = () => {
             <div
               v-for="(row, index) in editorDraft.searchRows"
               :key="row.id"
-              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
+              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
             >
               <div class="mt-1 w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold md:mx-auto">
                 {{ index + 1 }}
@@ -285,7 +285,7 @@ const confirmMerge = () => {
                     <template #option="slotProps">
                         <div class="flex items-center gap-3 w-full">
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
-                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
+                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
                             <div class="flex-1 truncate text-sm">{{ slotProps.option.name }}</div>
                         </div>
                     </template>
@@ -315,7 +315,7 @@ const confirmMerge = () => {
               </div>
 
               <div class="col-start-2 md:col-start-4 flex items-center md:justify-end gap-2">
-                  <div class="flex h-10 items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
+                  <div class="flex h-10 items-center gap-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
                     <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
                       <i class="pi pi-minus text-sm"></i>
                     </button>
@@ -328,7 +328,7 @@ const confirmMerge = () => {
 
               <button
                 @click="removeSearchRow(index)"
-                class="row-start-1 col-start-3 md:row-start-2 md:col-start-4 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
+                class="row-start-1 col-start-3 md:col-start-5 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
               >
                 <i class="pi pi-trash"></i>
               </button>
