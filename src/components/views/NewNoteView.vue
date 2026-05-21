@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { searchItems } from '../../services/dictionary'
+import { isDictionaryLoading, searchItems } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
 
@@ -209,9 +209,9 @@ const handleLiveInput = (event: Event, sync: (val: string) => void) => {
                     </template>
                     <template #empty>
                         <div class="p-3 text-slate-500 text-sm flex items-center gap-2">
-                          <i v-if="row.searching" class="pi pi-spinner pi-spin"></i>
+                          <i v-if="row.searching || isDictionaryLoading" class="pi pi-spinner pi-spin"></i>
                           <i v-else-if="row.searchedEmpty" class="pi pi-exclamation-triangle text-orange-400"></i>
-                          <span v-if="row.searching">{{ t('newNote.searching') }}</span>
+                          <span v-if="row.searching || isDictionaryLoading">{{ t('newNote.searching') }}</span>
                           <span v-else-if="row.searchedEmpty">{{ t('newNote.notFound') }}</span>
                           <span v-else>{{ t('newNote.initialSearch') }}</span>
                         </div>

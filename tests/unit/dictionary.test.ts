@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { globalDictionaryCache, ensureDictionaryLoaded } from '../../src/services/dictionary';
+import { globalDictionaryCache, searchItems } from '../../src/services/dictionary';
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
@@ -24,5 +24,16 @@ describe('Dictionary Search & Logic', () => {
         );
         expect(results?.length).toBe(1);
         expect(results?.[0].id).toBe(3);
+    });
+
+    it('only returns craftable items from searchItems', async () => {
+        globalDictionaryCache.value = [
+            { id: 1, name: 'Iron Sword', enName: 'Iron Sword', icon: 'icon1', craftable: true },
+            { id: 2, name: 'Iron Token', enName: 'Iron Token', icon: 'icon2', craftable: false },
+        ];
+
+        const results = await searchItems('Iron');
+
+        expect(results.map(item => item.id)).toEqual([1]);
     });
 });

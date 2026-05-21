@@ -64,3 +64,34 @@ export const mockPlaces: Record<string, { en: string; tw?: string }> = {
 export const mockMaps: Record<string, { placename_id: number; region_id: number }> = {
   "16": { placename_id: 134, region_id: 22 },
 };
+
+export const mockItemSearchIndex = Object.keys(mockTwItems).map((id) => {
+  const itemId = Number(id);
+  const recipe = mockRecipes.find(recipe => recipe.result === itemId);
+
+  return {
+    id: recipe ? `${itemId}-r${recipe.id}` : itemId,
+    en: mockEnItems[id],
+    tw: mockTwItems[id],
+    zh: mockTwItems[id],
+    category: itemId === 12 ? 59 : 48,
+    ilvl: recipe ? 15 : 1,
+    craftable: !!recipe,
+    data: {
+      itemId,
+      icon: mockItemIcons[id],
+      ilvl: recipe ? 15 : 1,
+    },
+  };
+});
+
+export const mockEquipment = {};
+
+export const mockJobNames = {
+  "9": { en: "Blacksmith", tw: "鍛鐵匠", zh: "锻铁匠" },
+};
+
+export const mockSearchCategories = {
+  "48": { en: "Metal", tw: "金屬材", zh: "金属材" },
+  "59": { en: "Shard", tw: "碎晶", zh: "碎晶" },
+};

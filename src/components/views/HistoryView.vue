@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { isDictionaryLoading } from '../../services/dictionary'
+import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoading } from '../../services/dictionary'
 import { useNotes } from '../../composables/useNotes'
 import NoteCard from '../shared/NoteCard.vue'
 
@@ -11,6 +12,10 @@ const emit = defineEmits<{
 }>()
 
 const { notes, toggleFavorite, isFavorite } = useNotes()
+
+onMounted(() => {
+  ensureDisplayMetadataLoaded()
+})
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const { notes, toggleFavorite, isFavorite } = useNotes()
     </div>
 
     <div v-else class="flex flex-col gap-4">
-      <div v-if="isDictionaryLoading" class="flex justify-center items-center py-8">
+      <div v-if="isDictionaryLoading || isDisplayMetadataLoading" class="flex justify-center items-center py-8">
           <i class="pi pi-spinner pi-spin text-soft-green-500 text-3xl"></i>
           <span class="ml-3 text-soft-green-700">{{ t('history.syncing') }}</span>
       </div>
@@ -52,6 +57,5 @@ const { notes, toggleFavorite, isFavorite } = useNotes()
     </div>
   </div>
 </template>
-
 
 

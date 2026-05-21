@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
+import { isDictionaryLoading, searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
 
@@ -269,6 +269,15 @@ const confirmMerge = () => {
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
                             <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
                             <div class="flex-1 truncate text-sm">{{ slotProps.option.name }}</div>
+                        </div>
+                    </template>
+                    <template #empty>
+                        <div class="p-3 text-slate-500 text-sm flex items-center gap-2">
+                          <i v-if="row.searching || isDictionaryLoading" class="pi pi-spinner pi-spin"></i>
+                          <i v-else-if="row.searchedEmpty" class="pi pi-exclamation-triangle text-orange-400"></i>
+                          <span v-if="row.searching || isDictionaryLoading">{{ t('newNote.searching') }}</span>
+                          <span v-else-if="row.searchedEmpty">{{ t('newNote.notFound') }}</span>
+                          <span v-else>{{ t('newNote.initialSearch') }}</span>
                         </div>
                     </template>
                   </AutoComplete>

@@ -4,9 +4,12 @@ import { useI18n } from 'vue-i18n'
 import { useNotes } from './composables/useNotes'
 import { useSettings } from './composables/useSettings'
 import { 
-  ensureDictionaryLoaded, 
+  ensureSearchIndexLoaded,
+  preloadWorkbenchData,
   setDictionaryLanguage,
 } from './services/dictionary'
+import { ensureGatheringDataLoaded } from './services/gathering'
+import { ensureVendorDataLoaded } from './services/vendor'
 import { loadLocaleMessages } from './i18n'
 
 // Layout
@@ -53,7 +56,8 @@ watch(language, async (newLang) => {
   locale.value = newLang
   setDictionaryLanguage(newLang)
   setAnalyticsLanguage(newLang)
-  ensureDictionaryLoaded()
+  ensureSearchIndexLoaded()
+  preloadWorkbenchData([ensureGatheringDataLoaded, ensureVendorDataLoaded])
   i18nReady.value = true
   
   // Update document title based on locale
