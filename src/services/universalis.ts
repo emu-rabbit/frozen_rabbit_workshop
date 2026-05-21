@@ -59,22 +59,30 @@ const priceCache = new Map<string, CacheEntry>();
 /** Currently active requests: `{dc}:{itemId}` → Promise<ItemPrice> */
 const inflightRequests = new Map<string, Promise<ItemPrice>>();
 
-function cacheKey(dc: string, itemId: number) {
-  return `${dc}:${itemId}`;
+export interface FetchItemPriceOptions {
+  hqOnly?: boolean;
 }
 
-function getCached(dc: string, itemId: number): ItemPrice | null {
-  const entry = priceCache.get(cacheKey(dc, itemId));
+function qualityKey(options?: FetchItemPriceOptions) {
+  return options?.hqOnly ? 'hq' : 'all';
+}
+
+function cacheKey(dc: string, itemId: number, options?: FetchItemPriceOptions) {
+  return `${dc}:${qualityKey(options)}:${itemId}`;
+}
+
+function getCached(dc: string, itemId: number, options?: FetchItemPriceOptions): ItemPrice | null {
+  const entry = priceCache.get(cacheKey(dc, itemId, options));
   if (!entry) return null;
   if (Date.now() > entry.expiresAt) {
-    priceCache.delete(cacheKey(dc, itemId));
+    priceCache.delete(cacheKey(dc, itemId, options));
     return null;
   }
   return entry.data;
 }
 
-function setCache(dc: string, price: ItemPrice) {
-  priceCache.set(cacheKey(dc, price.itemId), {
+function setCache(dc: string, price: ItemPrice, options?: FetchItemPriceOptions) {
+  priceCache.set(cacheKey(dc, price.itemId, options), {
     data: price,
     expiresAt: Date.now() + CACHE_TTL_MS,
   });
@@ -175,7 +183,7 @@ export function setSelectedDC(dc: string) {
 
 // ─── Price Fetching ───────────────────────────────────────────────────────────
 
-function parseItemPrice(itemId: number, raw: any): ItemPrice {
+function parseItemPrice(itemId: number, raw: any, options?: FetchItemPriceOptions): ItemPrice {
   const safeData = raw || {};
   const listings: MarketListing[] = (safeData.listings || []).map((l: any) => ({
     pricePerUnit: l.pricePerUnit ?? 0,
@@ -183,7 +191,9 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
     hq: !!l.hq,
     worldName: l.worldName,
     worldID: l.worldID
-  })).sort((a: MarketListing, b: MarketListing) => a.pricePerUnit - b.pricePerUnit);
+  }))
+    .filter((listing: MarketListing) => !options?.hqOnly || listing.hq)
+    .sort((a: MarketListing, b: MarketListing) => a.pricePerUnit - b.pricePerUnit);
 
   return {
     itemId,
@@ -206,7 +216,8 @@ function parseItemPrice(itemId: number, raw: any): ItemPrice {
  * - Batches uncached items (max 100 per request) into one API call.
  */
 export async function fetchItemPrices(
-  itemIds: number[]
+  itemIds: number[],
+  options?: FetchItemPriceOptions
 ): Promise<Map<number, ItemPrice>> {
   const dc = marketDC.value;
   const result = new Map<number, ItemPrice>();
@@ -219,13 +230,13 @@ export async function fetchItemPrices(
   const awaitingInflight: { id: number; promise: Promise<ItemPrice> }[] = [];
 
   for (const id of uniqueIds) {
-    const cached = getCached(dc, id);
+    const cached = getCached(dc, id, options);
     if (cached) {
       result.set(id, cached);
       continue;
     }
 
-    const inflight = inflightRequests.get(cacheKey(dc, id));
+    const inflight = inflightRequests.get(cacheKey(dc, id, options));
     if (inflight) {
       awaitingInflight.push({ id, promise: inflight });
       continue;
@@ -277,7 +288,7 @@ export async function fetchItemPrices(
           resolvers[id] = resolve;
           rejecters[id] = reject;
         });
-        inflightRequests.set(cacheKey(dc, id), promise);
+        inflightRequests.set(cacheKey(dc, id, options), promise);
       });
 
       try {
@@ -297,7 +308,12 @@ export async function fetchItemPrices(
             }
 
             const encodedDC = encodeURIComponent(dc);
-            const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}`;
+            const query = new URLSearchParams();
+            if (options?.hqOnly) {
+              query.set('hq', 'true');
+            }
+            const queryString = query.toString();
+            const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}${queryString ? `?${queryString}` : ''}`;
 
             const timeoutController = new AbortController();
             const timeoutId = setTimeout(() => timeoutController.abort(), 5000); // 5 seconds
@@ -319,8 +335,8 @@ export async function fetchItemPrices(
               if (resp.status === 404) {
                 console.log(`[Universalis] 404 for item(s) ${batch.join(',')}, treating as unmarketable.`);
                 batch.forEach(id => {
-                  const emptyPrice = parseItemPrice(id, null);
-                  setCache(dc, emptyPrice);
+                  const emptyPrice = parseItemPrice(id, null, options);
+                  setCache(dc, emptyPrice, options);
                   result.set(id, emptyPrice);
                   resolvers[id](emptyPrice);
                 });
@@ -332,8 +348,8 @@ export async function fetchItemPrices(
             const json = await resp.json();
 
             if (batch.length === 1) {
-              const price = parseItemPrice(batch[0], json);
-              setCache(dc, price);
+              const price = parseItemPrice(batch[0], json, options);
+              setCache(dc, price, options);
               result.set(batch[0], price);
               resolvers[batch[0]](price);
             } else {
@@ -341,8 +357,8 @@ export async function fetchItemPrices(
               batch.forEach(id => {
                 const raw = items[String(id)];
                 // items map might omit unmarketable items even on a 200 response
-                const price = parseItemPrice(id, raw || null);
-                setCache(dc, price);
+                const price = parseItemPrice(id, raw || null, options);
+                setCache(dc, price, options);
                 result.set(id, price);
                 resolvers[id](price);
               });
@@ -377,7 +393,7 @@ export async function fetchItemPrices(
           }
         }
       } finally {
-        batch.forEach(id => inflightRequests.delete(cacheKey(dc, id)));
+        batch.forEach(id => inflightRequests.delete(cacheKey(dc, id, options)));
       }
     }
   } catch (err: any) {

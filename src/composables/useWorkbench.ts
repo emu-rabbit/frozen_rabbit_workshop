@@ -17,6 +17,14 @@ import type { VendorInfo } from '../services/vendor';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
 
+type MarketPriceMode = 'all' | 'hq';
+
+interface MarketPriceSnapshot {
+  priceFetched: boolean;
+  lastUploadTime?: number;
+  listings: MarketListing[];
+}
+
 export interface CraftingInfo {
   job: number;
   jobName: string;
@@ -33,6 +41,7 @@ export interface WorkbenchItem {
   canCraft: boolean;
   canGather: boolean;
   marketPrice: number | null;
+  marketPriceMode: MarketPriceMode;
   priceFetched: boolean;
   lastUploadTime?: number;
   listings?: MarketListing[];
@@ -45,6 +54,7 @@ export interface WorkbenchItem {
     medianPrice: number | null;
     worldName: string | null;
   };
+  marketSnapshots: Partial<Record<MarketPriceMode, MarketPriceSnapshot>>;
   purchaseInfo?: PurchaseInfo;
 }
 
@@ -240,10 +250,12 @@ const refreshItemsData = async (ids: number[]) => {
       canCraft: !!recipe,
       canGather: !!gather,
       marketPrice: null,
+      marketPriceMode: 'all',
       priceFetched: false,
       crafting,
       gathering: gather,
-      vendorInfo: vendor
+      vendorInfo: vendor,
+      marketSnapshots: {}
     };
   }
 };
@@ -269,9 +281,7 @@ const updateItemEffectivePrice = (item: WorkbenchItem) => {
         }
     }
 
-    const npcPrice = item.vendorInfo?.price ?? Infinity;
-    
-    // 取兩者最低
+    const npcPrice = item.marketPriceMode === 'hq' ? Infinity : (item.vendorInfo?.price ?? Infinity);
     const finalPrice = Math.min(baseMarketPrice ?? Infinity, npcPrice);
     item.marketPrice = finalPrice === Infinity ? null : finalPrice;
 
@@ -288,9 +298,32 @@ const updateItemEffectivePrice = (item: WorkbenchItem) => {
 /**
  * 批次獲取價格
  */
-const fetchPrices = async (ids: number[]) => {
+const applyMarketSnapshot = (item: WorkbenchItem, snapshot: MarketPriceSnapshot) => {
+  item.priceFetched = snapshot.priceFetched;
+  item.listings = snapshot.listings;
+  item.lastUploadTime = snapshot.lastUploadTime ?? 0;
+  item.marketStats = calculateMarketStats(snapshot.listings, Math.ceil((totalDemands.value[item.id] || 0) * 5));
+  if (!snapshot.priceFetched) {
+    item.marketPrice = null;
+    item.marketStats = undefined;
+    item.purchaseInfo = undefined;
+    return;
+  }
+  updateItemEffectivePrice(item);
+};
+
+const setItemPendingPrice = (item: WorkbenchItem) => {
+  item.priceFetched = false;
+  item.listings = [];
+  item.lastUploadTime = 0;
+  item.marketPrice = null;
+  item.marketStats = undefined;
+  item.purchaseInfo = undefined;
+};
+
+const fetchPricesForMode = async (ids: number[], mode: MarketPriceMode) => {
   const currentDC = selectedDC.value;
-  const prices = await fetchItemPrices(ids);
+  const prices = mode === 'hq' ? await fetchItemPrices(ids, { hqOnly: true }) : await fetchItemPrices(ids);
   
   // 校驗：如果在請求期間大區發生變動，則捨棄此次過時的回傳
   if (selectedDC.value !== currentDC) {
@@ -302,32 +335,59 @@ const fetchPrices = async (ids: number[]) => {
     const item = workbenchItems.value[id];
     if (item) {
       if (!prices.has(id)) {
-        item.priceFetched = false;
-        item.listings = [];
-        item.lastUploadTime = 0;
-        item.marketPrice = null;
-        item.marketStats = undefined;
-        item.purchaseInfo = undefined;
-        updateItemEffectivePrice(item);
+        const snapshot: MarketPriceSnapshot = {
+          priceFetched: false,
+          listings: [],
+          lastUploadTime: 0
+        };
+        item.marketSnapshots[mode] = snapshot;
+        if (item.marketPriceMode === mode) {
+          applyMarketSnapshot(item, snapshot);
+        }
         return;
       }
 
       const priceData = prices.get(id)!;
-      item.listings = priceData.listings || [];
-      
-      item.lastUploadTime = priceData.lastUploadTime ?? 0;
-      item.priceFetched = true;
+      const listings = priceData.listings || [];
+      const snapshot: MarketPriceSnapshot = {
+        priceFetched: true,
+        listings,
+        lastUploadTime: priceData.lastUploadTime ?? 0
+      };
+      item.marketSnapshots[mode] = snapshot;
+      if (item.marketPriceMode === mode) {
+        applyMarketSnapshot(item, snapshot);
+      }
 
-      // Calculate Market Stats for the detail drawer
-      item.marketStats = calculateMarketStats(item.listings || []);
-
-      // 根據策略更新有效價格
-      updateItemEffectivePrice(item);
     }
   });
 };
 
-// 監聽策略變更，即時更新所有價格
+const fetchPrices = async (ids: number[]) => {
+  return fetchPricesForMode(ids, 'all');
+};
+
+const toggleItemHqMarketPrice = async (id: number) => {
+  const item = workbenchItems.value[id];
+  if (!item?.canCraft) return;
+
+  const nextMode: MarketPriceMode = item.marketPriceMode === 'hq' ? 'all' : 'hq';
+  item.marketPriceMode = nextMode;
+
+  const snapshot = item.marketSnapshots[nextMode];
+  if (snapshot) {
+    applyMarketSnapshot(item, snapshot);
+    return;
+  }
+
+  setItemPendingPrice(item);
+  try {
+    await fetchPricesForMode([id], nextMode);
+  } catch (err) {
+    console.warn('[Workbench] fetchPrices error (quality toggle):', err);
+  }
+};
+
 watch(marketCostStrategy, () => {
     Object.values(workbenchItems.value).forEach(item => {
         updateItemEffectivePrice(item);
@@ -623,9 +683,13 @@ export function useWorkbench() {
           // 情況 B：同一份筆記但大區變更 -> 只重設價格標記與數值，保留決策
           console.log(`[Workbench] DC changed (${lastDC.value} -> ${currentDC}), refreshing prices.`);
           Object.values(workbenchItems.value).forEach(item => {
+              item.marketPriceMode = 'all';
+              item.marketSnapshots = {};
               item.priceFetched = false;
               item.marketPrice = null;
               item.listings = [];
+              item.marketStats = undefined;
+              item.purchaseInfo = undefined;
           });
       } else if (isNewLocale) {
           // 情況 C：語言變更 -> 清除辭典語言設定並重設物品名稱快取，保留決策
@@ -736,6 +800,11 @@ export function useWorkbench() {
            initSingleItemDecision(id, newTotal, isRoot);
         }
       }
+
+      if (item?.priceFetched) {
+        item.marketStats = calculateMarketStats(item.listings || [], Math.ceil(newTotal * 5));
+        updateItemEffectivePrice(item);
+      }
     });
   }, { deep: true });
 
@@ -752,6 +821,6 @@ export function useWorkbench() {
   return {
     workbenchItems, decisions, totalDemands, activeItemIds,
     isLoading, hasMismatch, todoChecked, todoOrder,
-    generateTodoSections, initialize
+    generateTodoSections, initialize, toggleItemHqMarketPrice
   };
 }

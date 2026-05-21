@@ -14,7 +14,8 @@ const {
   activeItemIds, 
   isLoading, 
   hasMismatch,
-  initialize 
+  initialize,
+  toggleItemHqMarketPrice
 } = useWorkbench()
 
 const emit = defineEmits(['generate-todo'])
@@ -247,10 +248,21 @@ const copyToClipboard = (id: string, text: string) => {
                         </div>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-2 min-w-0">
-                            <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 truncate tracking-tight">{{ getLocalizedName(workbenchItems[id]?.name) }}</h3>
+                        <div class="inline-flex items-center gap-1.5 min-w-0 max-w-full">
+                            <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 truncate tracking-tight min-w-0">{{ getLocalizedName(workbenchItems[id]?.name) }}</h3>
+                            <button v-if="workbenchItems[id]?.canCraft"
+                                    type="button"
+                                    @click.stop="toggleItemHqMarketPrice(id)"
+                                    class="hq-toggle-button shrink-0 h-7 md:h-8 px-2 rounded-lg border flex items-center justify-center text-[11px] md:text-xs font-black leading-none transition-all active:scale-95"
+                                    :class="workbenchItems[id]?.marketPriceMode === 'hq'
+                                      ? 'bg-amber-100 dark:bg-amber-950/50 border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300 shadow-sm ring-2 ring-amber-50 dark:ring-amber-950/40'
+                                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 dark:text-slate-500 md:hover:text-amber-600 md:dark:hover:text-amber-300 md:hover:border-amber-200 md:dark:hover:border-amber-800'"
+                                    :aria-pressed="workbenchItems[id]?.marketPriceMode === 'hq'"
+                                    :title="workbenchItems[id]?.marketPriceMode === 'hq' ? 'HQ 市場價格已啟用' : '切換為 HQ 市場價格'">
+                                HQ
+                            </button>
                             <button @click.stop="copyToClipboard(`wb_${id}`, getLocalizedName(workbenchItems[id]?.name))" 
-                                    class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 dark:hover:text-soft-green-400 transition-all active:scale-95 ml-auto sm:ml-0"
+                                    class="opacity-0 group-hover:opacity-100 p-1 hover:text-soft-green-600 dark:hover:text-soft-green-400 transition-all active:scale-95 shrink-0"
                                     :class="lastCopied === `wb_${id}` ? 'text-soft-green-600' : 'text-slate-300 dark:text-slate-600'"
                                     title="Copy Name">
                                 <transition name="scale" mode="out-in">
