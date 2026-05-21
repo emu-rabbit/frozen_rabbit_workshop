@@ -95,7 +95,7 @@ describe('Dictionary Search & Logic', () => {
     });
 
     it('orders equipment job filters like the in-game character window and hides adventurer', () => {
-        const jobs = getOrderedEquipmentJobs(['WVR', 'ADV', 'GNB', 'PLD', 'CRP', 'CNJ', 'PCT', 'MIN', 'GLA']);
+        const jobs = getOrderedEquipmentJobs(['WVR', 'ADV', 'BST', 'GNB', 'PLD', 'CRP', 'CNJ', 'PCT', 'MIN', 'GLA']);
 
         expect(jobs).toEqual(['GLA', 'PLD', 'GNB', 'CNJ', 'PCT', 'CRP', 'WVR', 'MIN']);
     });

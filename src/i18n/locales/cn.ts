@@ -84,7 +84,6 @@ export default {
         other: '其他'
       },
       jobs: {
-        ADV: '冒险者',
         GLA: '剑术师',
         PGL: '格斗家',
         MRD: '斧术师',
@@ -116,7 +115,6 @@ export default {
         SGE: '贤者',
         VPR: '蝰蛇剑士',
         PCT: '绘灵法师',
-        BST: '驯兽师',
         CRP: '刻木匠',
         BSM: '锻铁匠',
         ARM: '铸甲匠',

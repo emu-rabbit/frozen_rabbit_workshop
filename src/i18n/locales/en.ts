@@ -84,7 +84,6 @@ export default {
         other: 'Other'
       },
       jobs: {
-        ADV: 'Adventurer',
         GLA: 'Gladiator',
         PGL: 'Pugilist',
         MRD: 'Marauder',
@@ -116,7 +115,6 @@ export default {
         SGE: 'Sage',
         VPR: 'Viper',
         PCT: 'Pictomancer',
-        BST: 'Beastmaster',
         CRP: 'Carpenter',
         BSM: 'Blacksmith',
         ARM: 'Armorer',

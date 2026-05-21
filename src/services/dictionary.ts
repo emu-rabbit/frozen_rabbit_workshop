@@ -61,8 +61,7 @@ export interface ItemFilterCriteria {
   categoryGroup?: ItemCategoryGroup | 'all';
 }
 
-// Teamcraft equipment data can include ADV for "all classes", but that is not
-// a player-facing job in FFXIV. Keep the filter aligned with the in-game
+// Keep the filter aligned with Teamcraft TW job-name coverage and the in-game
 // character window grouping instead of sorting abbreviations alphabetically.
 export const EQUIPMENT_JOB_ORDER = [
   'GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB',
@@ -72,10 +71,9 @@ export const EQUIPMENT_JOB_ORDER = [
   'THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU', 'PCT',
   'CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'LWR', 'WVR', 'ALC', 'CUL',
   'MIN', 'BTN', 'FSH',
-  'BST',
 ] as const;
 
-const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV']);
+const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV', 'BST']);
 const EQUIPMENT_JOB_ORDER_INDEX = new Map<string, number>(
   EQUIPMENT_JOB_ORDER.map((job, index) => [job, index])
 );

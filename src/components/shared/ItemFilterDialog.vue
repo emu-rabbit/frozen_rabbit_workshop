@@ -21,7 +21,7 @@ const emit = defineEmits<{
   select: [item: MockItem]
 }>()
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 const query = ref('')
 const ilvlMin = ref<number | null>(null)
@@ -50,53 +50,6 @@ const categoryOptions: Array<{ value: ItemCategoryGroup | 'all'; labelKey: strin
   { value: 'other', labelKey: 'newNote.filter.categories.other' },
 ]
 
-const officialTwJobLabels: Record<string, string> = {
-  GLA: '劍術士',
-  MRD: '斧術士',
-  DRK: '暗黑騎士',
-  GNB: '絕槍戰士',
-  CNJ: '幻術士',
-  SCH: '學者',
-  AST: '占星術師',
-  SGE: '賢者',
-  PGL: '格鬥士',
-  LNC: '槍術士',
-  ROG: '雙劍士',
-  SAM: '武士',
-  RPR: '鐮刀士',
-  VPR: '蝰蛇劍士',
-  ARC: '弓箭手',
-  MCH: '機工士',
-  DNC: '舞者',
-  THM: '咒術士',
-  ACN: '秘術士',
-  RDM: '赤魔道士',
-  BLU: '青魔道士',
-  PCT: '繪靈法師',
-  CRP: '木工師',
-  BSM: '鍛冶師',
-  ARM: '甲冑師',
-  GSM: '雕金師',
-  LTW: '製革師',
-  LWR: '製革師',
-  WVR: '裁縫師',
-  ALC: '鍊金術師',
-  CUL: '烹調師',
-  MIN: '採礦師',
-  BTN: '園藝師',
-  FSH: '漁師',
-  PLD: '騎士',
-  MNK: '武僧',
-  WAR: '戰士',
-  DRG: '龍騎士',
-  BRD: '吟遊詩人',
-  WHM: '白魔導師',
-  BLM: '黑魔導師',
-  SMN: '召喚師',
-  NIN: '忍者',
-  BST: '魔獸使',
-}
-
 const jobOptions = computed(() => {
   const jobs = new Set<string>()
   allItems.value.forEach(item => {
@@ -106,10 +59,6 @@ const jobOptions = computed(() => {
 })
 
 const getJobLabel = (job: string) => {
-  if (locale.value === 'tw' && officialTwJobLabels[job]) {
-    return officialTwJobLabels[job]
-  }
-
   const translated = t(`newNote.filter.jobs.${job}`)
   return translated === `newNote.filter.jobs.${job}` ? job : translated
 }

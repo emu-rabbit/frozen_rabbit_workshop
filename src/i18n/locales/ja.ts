@@ -84,7 +84,6 @@ export default {
         other: 'その他'
       },
       jobs: {
-        ADV: '冒険者',
         GLA: '剣術士',
         PGL: '格闘士',
         MRD: '斧術士',
@@ -116,7 +115,6 @@ export default {
         SGE: '賢者',
         VPR: 'ヴァイパー',
         PCT: 'ピクトマンサー',
-        BST: '魔獣使い',
         CRP: '木工師',
         BSM: '鍛冶師',
         ARM: '甲冑師',
