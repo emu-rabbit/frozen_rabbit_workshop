@@ -37,7 +37,7 @@ export async function setupDictionaryMocks(page: Page) {
   await page.route('**/item-search.index', route => route.fulfill(fulfillDeflatedJson(mockItemSearchIndex)));
   await page.route('**/equipment.json', route => route.fulfill(fulfill(mockEquipment)));
   await page.route('**/job-name.json', route => route.fulfill(fulfill(mockJobNames)));
-  await page.route('**/search-category.json', route => route.fulfill(fulfill(mockSearchCategories)));
+  await page.route('**/item-category.json', route => route.fulfill(fulfill(mockSearchCategories)));
   await page.route('**/tw/tw-items.json', route => route.fulfill(fulfill(mockTwItems)));
   await page.route('**/zh/zh-items.json', route => route.fulfill(fulfill(mockEnItems)));
   await page.route('**/ffxiv-teamcraft/**json/items.json', route => route.fulfill(fulfill(mockEnItems)));

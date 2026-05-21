@@ -2,8 +2,10 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { isDictionaryLoading, searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
+import type { MockItem } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
+import ItemFilterDialog from '../shared/ItemFilterDialog.vue'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
@@ -22,6 +24,7 @@ const emit = defineEmits<{
 const errorMessage = ref('')
 const isMergeDialogOpen = ref(false)
 const mergeRawJson = ref('')
+const filterDialogRowIndex = ref<number | null>(null)
 
 // --- Logic ---
 
@@ -108,6 +111,27 @@ const removeSearchRow = (index: number) => {
   if (editorDraft.searchRows.length === 0) {
     editorDraft.isEditing = false // Back to import if everything is gone
   }
+}
+
+const openFilterDialog = (index: number) => {
+  filterDialogRowIndex.value = index
+}
+
+const closeFilterDialog = () => {
+  filterDialogRowIndex.value = null
+}
+
+const handleFilterSelect = (item: MockItem) => {
+  if (filterDialogRowIndex.value === null) return
+
+  const row = editorDraft.searchRows[filterDialogRowIndex.value]
+  if (!row) return
+
+  row.selectedItem = item
+  row.query = item.name
+  row.suggestions = []
+  row.searching = false
+  row.searchedEmpty = false
 }
 
 const canAddRow = computed(() => {
@@ -235,35 +259,36 @@ const confirmMerge = () => {
               </div>
 
               <div class="flex-1 min-w-0">
-                  <AutoComplete 
-                    v-ffiv-clean
-                    v-model="row.selectedItem" 
-                    :suggestions="row.suggestions" 
-                    @complete="onSearch($event, index)"
-                    completeOnFocus
-                    :minQueryLength="0"
-                    :delay="400" 
-                    optionLabel="name" 
-                    :placeholder="t('newNote.searchPlaceholder')" 
-                    class="w-full"
-                    :pt="{
-                      input: { 
-                        class: 'w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3 placeholder:dark:text-slate-600'
-                      },
-                      panel: {
-                        class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
-                      },
-                      list: {
-                        class: 'dark:!bg-slate-900'
-                      },
-                      item: {
-                        class: 'dark:!text-slate-300 dark:hover:!bg-slate-800'
-                      },
-                      emptyMessage: {
-                        class: 'dark:!bg-slate-900 dark:!text-slate-400'
-                      }
-                    }"
-                  >
+                  <div class="flex items-stretch gap-0 w-full sm:w-[320px] max-w-full">
+                    <AutoComplete 
+                      v-ffiv-clean
+                      v-model="row.selectedItem" 
+                      :suggestions="row.suggestions" 
+                      @complete="onSearch($event, index)"
+                      completeOnFocus
+                      :minQueryLength="0"
+                      :delay="400" 
+                      optionLabel="name" 
+                      :placeholder="t('newNote.searchPlaceholder')" 
+                      class="flex-1 min-w-0"
+                      :pt="{
+                        input: { 
+                          class: 'w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
+                        },
+                        panel: {
+                          class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
+                        },
+                        list: {
+                          class: 'dark:!bg-slate-900'
+                        },
+                        item: {
+                          class: 'dark:!text-slate-300 dark:hover:!bg-slate-800'
+                        },
+                        emptyMessage: {
+                          class: 'dark:!bg-slate-900 dark:!text-slate-400'
+                        }
+                      }"
+                    >
                     <template #option="slotProps">
                         <div class="flex items-center gap-3 w-full">
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
@@ -280,7 +305,16 @@ const confirmMerge = () => {
                           <span v-else>{{ t('newNote.initialSearch') }}</span>
                         </div>
                     </template>
-                  </AutoComplete>
+                    </AutoComplete>
+                    <button
+                      type="button"
+                      @click="openFilterDialog(index)"
+                      class="w-10 h-10 -ml-px rounded-r-xl border border-soft-green-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-slate-800 transition-colors shrink-0 flex items-center justify-center"
+                      :title="t('newNote.filter.open')"
+                    >
+                      <i class="pi pi-filter"></i>
+                    </button>
+                  </div>
                   <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 dark:text-soft-green-300 bg-soft-green-50 dark:bg-soft-green-900/30 border border-soft-green-100 dark:border-soft-green-800/50 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans shadow-sm">
                     <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
                     <span class="truncate font-bold tracking-tight">ID: {{ row.selectedItem.id }}</span>
@@ -373,4 +407,10 @@ const confirmMerge = () => {
     </div>
 
   </div>
+
+  <ItemFilterDialog
+    :visible="filterDialogRowIndex !== null"
+    @close="closeFilterDialog"
+    @select="handleFilterSelect"
+  />
 </template>

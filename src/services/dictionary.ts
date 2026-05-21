@@ -8,7 +8,7 @@ const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcr
 const ITEM_SEARCH_INDEX_URL = `${BASE_URL}/item-search.index`;
 const EQUIPMENT_URL = `${BASE_URL}/equipment.json`;
 const JOB_NAMES_URL = `${BASE_URL}/job-name.json`;
-const SEARCH_CATEGORIES_URL = `${BASE_URL}/search-category.json`;
+const ITEM_CATEGORIES_URL = `${BASE_URL}/item-category.json`;
 const RECIPES_URL = `${BASE_URL}/recipes.json`;
 const ICONS_URL = `${BASE_URL}/item-icons.json`;
 const ENGLISH_URL = `${BASE_URL}/items.json`;
@@ -48,6 +48,30 @@ export interface MockItem {
   equipJobs?: string[];
   equipSlotCategory?: number;
 }
+
+export type ItemCategoryGroup = 'weapon' | 'tool' | 'armor' | 'accessory' | 'medicine' | 'food' | 'material' | 'furniture' | 'other';
+
+export interface ItemFilterCriteria {
+  query?: string;
+  ilvlMin?: number | null;
+  ilvlMax?: number | null;
+  equipLevelMin?: number | null;
+  equipLevelMax?: number | null;
+  job?: string;
+  categoryGroup?: ItemCategoryGroup | 'all';
+}
+
+const ITEM_CATEGORY_GROUPS: Record<ItemCategoryGroup, Set<number>> = {
+  weapon: new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 84, 87, 88, 89, 96, 97, 98, 105, 106, 107, 108, 109, 110, 111]),
+  tool: new Set([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 99]),
+  armor: new Set([34, 35, 36, 37, 38]),
+  accessory: new Set([40, 41, 42, 43]),
+  medicine: new Set([44]),
+  food: new Set([46]),
+  material: new Set([45, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 58]),
+  furniture: new Set([57, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 95]),
+  other: new Set([33, 39, 59, 60, 61, 62, 63, 64, 81, 82, 83, 85, 86, 90, 91, 92, 93, 94, 100, 101, 102, 103, 104, 112, 113, 114, 115]),
+};
 
 interface RawSearchIndexItem {
   id: number | string;
@@ -89,7 +113,7 @@ const internalItemByIdCache = shallowRef<Map<number, MockItem>>(new Map());
 let rawSearchIndexCache: RawSearchIndexItem[] | null = null;
 let equipmentCache: Record<string, EquipmentData> | null = null;
 let jobNamesCache: Record<string, LocalizedEntry> | null = null;
-let searchCategoriesCache: Record<string, LocalizedEntry> | null = null;
+let itemCategoriesCache: Record<string, LocalizedEntry> | null = null;
 let searchIndexLoadPromise: Promise<MockItem[]> | null = null;
 let displayMetadataLoadPromise: Promise<void> | null = null;
 let displayMetadataLanguage: string | null = null;
@@ -140,7 +164,7 @@ function normalizeIconUrl(iconPath?: string): string {
 
 function getCategoryName(categoryId?: number): string | undefined {
   if (!categoryId) return undefined;
-  const name = getLocalizedEntry(searchCategoriesCache?.[String(categoryId)]);
+  const name = getLocalizedEntry(itemCategoriesCache?.[String(categoryId)]);
   return name || undefined;
 }
 
@@ -230,7 +254,7 @@ export async function ensureSearchIndexLoaded(): Promise<MockItem[]> {
         fetch(ITEM_SEARCH_INDEX_URL),
         fetch(EQUIPMENT_URL),
         fetch(JOB_NAMES_URL),
-        fetch(SEARCH_CATEGORIES_URL),
+        fetch(ITEM_CATEGORIES_URL),
       ]);
 
       if (!indexRes.ok || !equipmentRes.ok || !jobNamesRes.ok || !categoriesRes.ok) {
@@ -247,7 +271,7 @@ export async function ensureSearchIndexLoaded(): Promise<MockItem[]> {
       rawSearchIndexCache = searchIndex;
       equipmentCache = equipment;
       jobNamesCache = jobNames;
-      searchCategoriesCache = categories;
+      itemCategoriesCache = categories;
       rebuildDictionaryCacheFromSearchIndex();
       console.log(`[Dictionary] Search index ready. Count: ${globalDictionaryCache.value?.length || 0}`);
     } catch (err) {
@@ -425,6 +449,68 @@ export async function searchItems(query: string): Promise<MockItem[]> {
     const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
     return mainMatch || enMatch;
   }).slice(0, 100);
+}
+
+export function getItemCategoryGroup(item: MockItem): ItemCategoryGroup {
+  const category = item.category;
+  if (category === undefined) return 'other';
+
+  for (const [group, categoryIds] of Object.entries(ITEM_CATEGORY_GROUPS)) {
+    if (categoryIds.has(category)) return group as ItemCategoryGroup;
+  }
+
+  return 'other';
+}
+
+export async function getSearchableItems(): Promise<MockItem[]> {
+  const dictionary = await ensureSearchIndexLoaded();
+  return dictionary.filter(item => !!item.craftable);
+}
+
+function matchesNumberRange(value: number | undefined, min?: number | null, max?: number | null): boolean {
+  const hasMin = typeof min === 'number' && Number.isFinite(min);
+  const hasMax = typeof max === 'number' && Number.isFinite(max);
+
+  if (!hasMin && !hasMax) return true;
+  if (value === undefined || value === null) return false;
+  if (hasMin && value < min!) return false;
+  if (hasMax && value > max!) return false;
+
+  return true;
+}
+
+export async function filterSearchableItems(criteria: ItemFilterCriteria): Promise<MockItem[]> {
+  const items = await getSearchableItems();
+  const normalizedQuery = criteria.query?.trim().toLowerCase() ?? '';
+  const categoryGroup = criteria.categoryGroup ?? 'all';
+  const job = criteria.job?.trim();
+
+  return items
+    .filter(item => {
+      if (normalizedQuery) {
+        const mainMatch = item.name.toLowerCase().includes(normalizedQuery);
+        const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
+        if (!mainMatch && !enMatch) return false;
+      }
+
+      if (!matchesNumberRange(item.ilvl, criteria.ilvlMin, criteria.ilvlMax)) return false;
+      if (!matchesNumberRange(item.equipLevel, criteria.equipLevelMin, criteria.equipLevelMax)) return false;
+
+      if (job && !(item.equipJobs || []).includes(job)) return false;
+      if (categoryGroup !== 'all' && getItemCategoryGroup(item) !== categoryGroup) return false;
+
+      return true;
+    })
+    .sort((a, b) => {
+      const ilvlDiff = (b.ilvl ?? 0) - (a.ilvl ?? 0);
+      if (ilvlDiff !== 0) return ilvlDiff;
+
+      const equipLevelDiff = (b.equipLevel ?? 0) - (a.equipLevel ?? 0);
+      if (equipLevelDiff !== 0) return equipLevelDiff;
+
+      return a.id - b.id;
+    })
+    .slice(0, 300);
 }
 
 export async function ensurePlacesLoaded(): Promise<void> {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { globalDictionaryCache, searchItems } from '../../src/services/dictionary';
+import { filterSearchableItems, getItemCategoryGroup, globalDictionaryCache, searchItems } from '../../src/services/dictionary';
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
@@ -35,5 +35,62 @@ describe('Dictionary Search & Logic', () => {
         const results = await searchItems('Iron');
 
         expect(results.map(item => item.id)).toEqual([1]);
+    });
+
+    it('filters the local searchable list by item level, equip level, job, and category group', async () => {
+        globalDictionaryCache.value = [
+            {
+                id: 1,
+                name: 'Sky Armor',
+                enName: 'Sky Armor',
+                icon: 'icon1',
+                craftable: true,
+                ilvl: 700,
+                equipLevel: 100,
+                equipJobs: ['PLD', 'WAR'],
+                category: 35,
+            },
+            {
+                id: 2,
+                name: 'Sky Ingot',
+                enName: 'Sky Ingot',
+                icon: 'icon2',
+                craftable: true,
+                ilvl: 690,
+                category: 48,
+            },
+            {
+                id: 3,
+                name: 'Sky Token',
+                enName: 'Sky Token',
+                icon: 'icon3',
+                craftable: false,
+                ilvl: 700,
+                equipLevel: 100,
+                equipJobs: ['PLD'],
+                category: 35,
+            },
+        ];
+
+        const results = await filterSearchableItems({
+            ilvlMin: 700,
+            equipLevelMin: 100,
+            job: 'PLD',
+            categoryGroup: 'armor',
+        });
+
+        expect(results.map(item => item.id)).toEqual([1]);
+    });
+
+    it('maps detailed Teamcraft item categories into broad filter groups', () => {
+        expect(getItemCategoryGroup({ id: 1, name: 'Sword', icon: '', category: 2 })).toBe('weapon');
+        expect(getItemCategoryGroup({ id: 8, name: 'Carpenter Saw', icon: '', category: 12, equipJobs: ['CRP'] })).toBe('tool');
+        expect(getItemCategoryGroup({ id: 2, name: 'Hammer', icon: '', category: 14 })).toBe('tool');
+        expect(getItemCategoryGroup({ id: 3, name: 'Body', icon: '', category: 35 })).toBe('armor');
+        expect(getItemCategoryGroup({ id: 4, name: 'Ring', icon: '', category: 43 })).toBe('accessory');
+        expect(getItemCategoryGroup({ id: 5, name: 'Potion', icon: '', category: 44 })).toBe('medicine');
+        expect(getItemCategoryGroup({ id: 9, name: 'Meal', icon: '', category: 46 })).toBe('food');
+        expect(getItemCategoryGroup({ id: 6, name: 'Metal', icon: '', category: 48 })).toBe('material');
+        expect(getItemCategoryGroup({ id: 10, name: 'Tabletop', icon: '', category: 78 })).toBe('furniture');
     });
 });
