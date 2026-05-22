@@ -1,249 +1,546 @@
-import { shallowRef, ref, reactive } from 'vue';
+import { shallowRef, ref } from 'vue';
 
 // Branch can be overridden via VITE_TEAMCRAFT_BRANCH (e.g. 'master' or 'staging').
-// Defaults to 'staging' which is Teamcraft's active development branch and receives
-// data updates (including non-global regions like TW) before they reach 'master'.
+// Defaults to 'staging' so non-global regions such as TW get Teamcraft updates early.
 const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
 const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
+
+const ITEM_SEARCH_INDEX_URL = `${BASE_URL}/item-search.index`;
+const EQUIPMENT_URL = `${BASE_URL}/equipment.json`;
+const JOB_NAMES_URL = `${BASE_URL}/job-name.json`;
+const ITEM_CATEGORIES_URL = `${BASE_URL}/item-category.json`;
+const RECIPES_URL = `${BASE_URL}/recipes.json`;
+const ICONS_URL = `${BASE_URL}/item-icons.json`;
+const ENGLISH_URL = `${BASE_URL}/items.json`;
+const MAPS_URL = `${BASE_URL}/maps.json`;
+const TW_PLACES_URL = `${BASE_URL}/tw/tw-places.json`;
+const GLOBAL_PLACES_URL = `${BASE_URL}/places.json`;
 
 const DICT_URLS: Record<string, string> = {
   tw: `${BASE_URL}/tw/tw-items.json`,
   zh: `${BASE_URL}/zh/zh-items.json`,
   cn: `${BASE_URL}/zh/zh-items.json`,
   en: `${BASE_URL}/items.json`,
-  ja: `${BASE_URL}/ja/ja-items.json`, // Will likely 404, but handled now
+  ja: `${BASE_URL}/ja/ja-items.json`,
 };
 
-const ICONS_URL = `${BASE_URL}/item-icons.json`;
-const RECIPES_URL = `${BASE_URL}/recipes.json`;
-const ENGLISH_URL = `${BASE_URL}/items.json`;
-const MAPS_URL = `${BASE_URL}/maps.json`;
-
-// tw-places.json: Provides Traditional Chinese zone/map names for gathering nodes.
-const TW_PLACES_URL = `${BASE_URL}/tw/tw-places.json`;
-// places.json: Provides multi-language zone names (en, ja, de, fr)
-const GLOBAL_PLACES_URL = `${BASE_URL}/places.json`;
-
 export interface Recipe {
-    id: number;
-    result: number;
-    yields: number;
-    ingredients: any;
-    job: number;
-    lvl: number;
-    [key: string]: any;
+  id: number;
+  result: number;
+  yields: number;
+  ingredients: any;
+  job: number;
+  lvl: number;
+  stars?: number;
+  [key: string]: any;
 }
 
 export interface MockItem {
   id: number;
-  name: string; // localized name
-  enName?: string; // English name for cross-language search
+  name: string;
+  enName?: string;
   icon: string;
+  ilvl?: number;
+  category?: number;
+  categoryName?: string;
+  craftable?: boolean;
+  equipLevel?: number;
+  equipJobs?: string[];
+  equipSlotCategory?: number;
 }
 
-// Global RAM cache as reactive refs
+export type ItemCategoryGroup = 'weapon' | 'tool' | 'armor' | 'accessory' | 'medicine' | 'food' | 'material' | 'furniture' | 'other';
+
+export interface ItemFilterCriteria {
+  query?: string;
+  ilvlMin?: number | null;
+  ilvlMax?: number | null;
+  equipLevelMin?: number | null;
+  equipLevelMax?: number | null;
+  job?: string;
+  categoryGroup?: ItemCategoryGroup | 'all';
+}
+
+// Keep the filter aligned with Teamcraft TW job-name coverage and the in-game
+// character window grouping instead of sorting abbreviations alphabetically.
+export const EQUIPMENT_JOB_ORDER = [
+  'GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB',
+  'CNJ', 'WHM', 'SCH', 'AST', 'SGE',
+  'PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM', 'RPR', 'VPR',
+  'ARC', 'BRD', 'MCH', 'DNC',
+  'THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU', 'PCT',
+  'CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'LWR', 'WVR', 'ALC', 'CUL',
+  'MIN', 'BTN', 'FSH',
+] as const;
+
+const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV', 'BST']);
+const EQUIPMENT_JOB_ORDER_INDEX = new Map<string, number>(
+  EQUIPMENT_JOB_ORDER.map((job, index) => [job, index])
+);
+
+const ITEM_CATEGORY_GROUPS: Record<ItemCategoryGroup, Set<number>> = {
+  weapon: new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 84, 87, 88, 89, 96, 97, 98, 105, 106, 107, 108, 109, 110, 111]),
+  tool: new Set([12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 99]),
+  armor: new Set([34, 35, 36, 37, 38]),
+  accessory: new Set([40, 41, 42, 43]),
+  medicine: new Set([44]),
+  food: new Set([46]),
+  material: new Set([45, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 58]),
+  furniture: new Set([57, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 95]),
+  other: new Set([33, 39, 59, 60, 61, 62, 63, 64, 81, 82, 83, 85, 86, 90, 91, 92, 93, 94, 100, 101, 102, 103, 104, 112, 113, 114, 115]),
+};
+
+export function getOrderedEquipmentJobs(jobs: Iterable<string>): string[] {
+  return Array.from(new Set(jobs))
+    .filter(job => job && !HIDDEN_EQUIPMENT_JOBS.has(job))
+    .sort((a, b) => {
+      const orderA = EQUIPMENT_JOB_ORDER_INDEX.get(a) ?? Number.MAX_SAFE_INTEGER;
+      const orderB = EQUIPMENT_JOB_ORDER_INDEX.get(b) ?? Number.MAX_SAFE_INTEGER;
+      if (orderA !== orderB) return orderA - orderB;
+      return a.localeCompare(b);
+    });
+}
+
+interface RawSearchIndexItem {
+  id: number | string;
+  en?: string;
+  de?: string;
+  ja?: string;
+  fr?: string;
+  ko?: string;
+  zh?: string;
+  tw?: string;
+  iconId?: string;
+  category?: number;
+  ilvl?: number;
+  craftable?: boolean;
+  data?: {
+    itemId?: number;
+    icon?: string;
+    ilvl?: number;
+  };
+}
+
+interface EquipmentData {
+  equipSlotCategory?: number;
+  level?: number;
+  jobs?: string[];
+}
+
+type LocalizedEntry = Record<string, string>;
+
 export const globalDictionaryCache = shallowRef<MockItem[] | null>(null);
 export const globalRecipesCache = shallowRef<Recipe[] | null>(null);
 export const isDictionaryLoading = ref(false);
+export const isDisplayMetadataLoading = ref(false);
+export const isRecipeDataLoading = ref(false);
+export const isWorkbenchDataPreloading = ref(false);
 
-const internalEnglishCache = shallowRef<Record<string, any> | null>(null);
-const internalIconsCache = shallowRef<Record<string, string> | null>(null);
+const internalItemByIdCache = shallowRef<Map<number, MockItem>>(new Map());
 
-/** Raw name map from the current target language — includes ALL items, not just craftable ones */
-let internalRawTargetNames: Record<string, any> = {};
-/** Raw icon map — includes ALL items */
-let internalRawIcons: Record<string, string> = {};
+let rawSearchIndexCache: RawSearchIndexItem[] | null = null;
+let equipmentCache: Record<string, EquipmentData> | null = null;
+let jobNamesCache: Record<string, LocalizedEntry> | null = null;
+let itemCategoriesCache: Record<string, LocalizedEntry> | null = null;
+let searchIndexLoadPromise: Promise<MockItem[]> | null = null;
+let displayMetadataLoadPromise: Promise<void> | null = null;
+let displayMetadataLanguage: string | null = null;
+let recipeLoadPromise: Promise<Recipe[]> | null = null;
+let workbenchPreloadPromise: Promise<void> | null = null;
 
-/** tw-places.json cache — { [zoneId: string]: { tw: string } } */
-let globalPlacesCache: Record<string, { tw?: string }> | null = null;
+let globalPlacesCache: Record<string, { tw?: string; [key: string]: any }> | null = null;
 let placesLoadPromise: Promise<void> | null = null;
-
-/** maps.json cache — { [mapId: string]: any } */
 let globalMapsCache: Record<string, any> | null = null;
 let mapsLoadPromise: Promise<void> | null = null;
 
 let currentLanguage = 'tw';
 
-export function setDictionaryLanguage(lang: string) {
-  if (currentLanguage !== lang) {
-    currentLanguage = lang;
-    globalDictionaryCache.value = null; 
-    globalPlacesCache = null;
-    placesLoadPromise = null;
+function normalizeLanguage(lang = currentLanguage) {
+  return lang === 'cn' ? 'zh' : lang;
+}
+
+function getLocalizedEntry(entry: LocalizedEntry | undefined): string {
+  if (!entry) return '';
+  const lang = normalizeLanguage();
+  return entry[lang] || entry.en || entry.tw || entry.zh || entry.ja || Object.values(entry)[0] || '';
+}
+
+function getLocalizedItemName(item: RawSearchIndexItem): string {
+  const lang = normalizeLanguage();
+  return (item as any)[lang] || item.en || item.tw || item.zh || item.ja || `Item #${getCanonicalItemId(item)}`;
+}
+
+function getCanonicalItemId(item: RawSearchIndexItem): number {
+  return item.data?.itemId ?? Number(item.id);
+}
+
+function getSearchIndexIcon(item: RawSearchIndexItem): string {
+  if (item.data?.icon) return `https://xivapi.com${item.data.icon}`;
+
+  if (item.iconId) {
+    const folder = item.iconId.slice(0, 3).padEnd(3, '0');
+    return `https://xivapi.com/i/${folder}000/${item.iconId}_hr1.png`;
   }
+
+  return '';
+}
+
+function normalizeIconUrl(iconPath?: string): string {
+  if (!iconPath) return '';
+  return iconPath.startsWith('http') ? iconPath : `https://xivapi.com${iconPath}`;
+}
+
+function getCategoryName(categoryId?: number): string | undefined {
+  if (!categoryId) return undefined;
+  const name = getLocalizedEntry(itemCategoriesCache?.[String(categoryId)]);
+  return name || undefined;
+}
+
+function rebuildDictionaryCacheFromSearchIndex() {
+  if (!rawSearchIndexCache) return;
+
+  const itemMap = new Map<number, MockItem>();
+
+  rawSearchIndexCache.forEach(item => {
+    const itemId = getCanonicalItemId(item);
+    if (!Number.isFinite(itemId)) return;
+
+    const equipment = equipmentCache?.[String(itemId)];
+    const existing = itemMap.get(itemId);
+    itemMap.set(itemId, {
+      ...(existing || {}),
+      id: itemId,
+      name: getLocalizedItemName(item),
+      enName: item.en || existing?.enName,
+      icon: getSearchIndexIcon(item) || existing?.icon || '',
+      ilvl: item.ilvl ?? item.data?.ilvl ?? existing?.ilvl,
+      category: item.category ?? existing?.category,
+      categoryName: getCategoryName(item.category) || existing?.categoryName,
+      craftable: !!item.craftable || !!existing?.craftable,
+      equipLevel: equipment?.level ?? existing?.equipLevel,
+      equipJobs: equipment?.jobs ?? existing?.equipJobs,
+      equipSlotCategory: equipment?.equipSlotCategory ?? existing?.equipSlotCategory,
+    });
+  });
+
+  const items = Array.from(itemMap.values());
+  globalDictionaryCache.value = items;
+  internalItemByIdCache.value = itemMap;
+}
+
+async function readDeflatedJson<T>(response: Response): Promise<T> {
+  if (!('DecompressionStream' in globalThis)) {
+    throw new Error('This browser cannot decompress Teamcraft item-search.index.');
+  }
+
+  const stream = response.body?.pipeThrough(new DecompressionStream('deflate'));
+  if (!stream) throw new Error('Compressed item index response has no body.');
+  return new Response(stream).json();
+}
+
+async function generateFallbackItemData(): Promise<MockItem[]> {
+  return [
+    {
+      id: 41234,
+      name: 'Item #41234',
+      enName: 'Item #41234',
+      icon: 'https://xivapi.com/i/051000/051941.png',
+      craftable: true,
+    },
+  ];
+}
+
+export function setDictionaryLanguage(lang: string) {
+  if (currentLanguage === lang) return;
+
+  currentLanguage = lang;
+  if (rawSearchIndexCache) {
+    rebuildDictionaryCacheFromSearchIndex();
+    displayMetadataLanguage = null;
+  } else {
+    globalDictionaryCache.value = null;
+    internalItemByIdCache.value = new Map();
+  }
+
+  globalPlacesCache = null;
+  placesLoadPromise = null;
 }
 
 export function getCurrentLanguage() {
   return currentLanguage;
 }
 
-async function generateFallbackItemData() {
-    return [
-        { id: 41234, name: '諾弗蘭特遠見釣竿（複製品）', icon: 'https://xivapi.com/i/051000/051941.png' }
-    ];
-}
-
-export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
-  if (globalDictionaryCache.value !== null && globalRecipesCache.value !== null) {
-      return globalDictionaryCache.value;
-  }
-
-  if (isDictionaryLoading.value) {
-      while(isDictionaryLoading.value) {
-          await new Promise(r => setTimeout(r, 100));
-      }
-      return globalDictionaryCache.value || [];
-  }
+export async function ensureSearchIndexLoaded(): Promise<MockItem[]> {
+  if (globalDictionaryCache.value !== null) return globalDictionaryCache.value;
+  if (searchIndexLoadPromise) return searchIndexLoadPromise;
 
   isDictionaryLoading.value = true;
-  try {
-      console.log(`[Dictionary] Starting sync for lang: ${currentLanguage}...`);
-      
+  searchIndexLoadPromise = (async () => {
+    try {
+      console.log(`[Dictionary] Loading search index for lang: ${currentLanguage}...`);
+      const [indexRes, equipmentRes, jobNamesRes, categoriesRes] = await Promise.all([
+        fetch(ITEM_SEARCH_INDEX_URL),
+        fetch(EQUIPMENT_URL),
+        fetch(JOB_NAMES_URL),
+        fetch(ITEM_CATEGORIES_URL),
+      ]);
+
+      if (!indexRes.ok || !equipmentRes.ok || !jobNamesRes.ok || !categoriesRes.ok) {
+        throw new Error('Search index metadata failed to load.');
+      }
+
+      const [searchIndex, equipment, jobNames, categories] = await Promise.all([
+        readDeflatedJson<RawSearchIndexItem[]>(indexRes),
+        equipmentRes.json(),
+        jobNamesRes.json(),
+        categoriesRes.json(),
+      ]);
+
+      rawSearchIndexCache = searchIndex;
+      equipmentCache = equipment;
+      jobNamesCache = jobNames;
+      itemCategoriesCache = categories;
+      rebuildDictionaryCacheFromSearchIndex();
+      console.log(`[Dictionary] Search index ready. Count: ${globalDictionaryCache.value?.length || 0}`);
+    } catch (err) {
+      console.error('[Dictionary] Search index failed:', err);
+      globalDictionaryCache.value = await generateFallbackItemData();
+      internalItemByIdCache.value = new Map(globalDictionaryCache.value.map(item => [item.id, item]));
+    } finally {
+      isDictionaryLoading.value = false;
+      searchIndexLoadPromise = null;
+    }
+
+    return globalDictionaryCache.value!;
+  })();
+
+  return searchIndexLoadPromise;
+}
+
+export async function ensureDisplayMetadataLoaded(): Promise<void> {
+  const normalizedCurrentLanguage = normalizeLanguage();
+  if (displayMetadataLanguage === normalizedCurrentLanguage) return;
+  if (displayMetadataLoadPromise) return displayMetadataLoadPromise;
+
+  isDisplayMetadataLoading.value = true;
+  displayMetadataLoadPromise = (async () => {
+    try {
+      await ensureSearchIndexLoaded();
+
+      const needsEnglish = normalizedCurrentLanguage !== 'en';
       const fetchQueue = [
         fetch(DICT_URLS[currentLanguage] || DICT_URLS.tw),
         fetch(ICONS_URL),
-        fetch(RECIPES_URL)
       ];
 
-      const needsEnglish = currentLanguage !== 'en' && !internalEnglishCache.value;
       if (needsEnglish) {
         fetchQueue.push(fetch(ENGLISH_URL));
       }
 
-      const results = await Promise.all(fetchQueue);
-      
-      // Target Dictionary Fallback (If Target Lang 404s, we don't crash)
-      let rawTargetNames: Record<string, any> = {};
-      if (results[0].ok) {
-        rawTargetNames = await results[0].json();
-      } else {
-        console.warn(`[Dictionary] Target language ${currentLanguage} data not found, falling back to English.`);
-      }
+      const [targetRes, iconsRes, englishRes] = await Promise.all(fetchQueue);
+      if (!iconsRes.ok) throw new Error('Item icons failed to load.');
 
-      // Vital files check
-      if (!results[1].ok || !results[2].ok) {
-        throw new Error("Vital dictionary files (Icons or Recipes) failed to load.");
-      }
+      const targetNames: Record<string, LocalizedEntry | string> = targetRes.ok ? await targetRes.json() : {};
+      const iconMap: Record<string, string> = await iconsRes.json();
+      const englishNames: Record<string, LocalizedEntry | string> = needsEnglish && englishRes?.ok ? await englishRes.json() : targetNames;
 
-      const rawIcons = await results[1].json();
-      const rawRecipes: Recipe[] = await results[2].json();
-      
-      if (needsEnglish) {
-        if (results[3].ok) {
-          internalEnglishCache.value = await results[3].json();
-        }
-      } else if (currentLanguage === 'en') {
-        internalEnglishCache.value = rawTargetNames;
-      }
-      
-      internalIconsCache.value = rawIcons;
-      internalRawIcons = rawIcons;
-      internalRawTargetNames = rawTargetNames;
-      globalRecipesCache.value = rawRecipes;
+      const itemMap = new Map(internalItemByIdCache.value);
+      const allIds = new Set([
+        ...Object.keys(targetNames),
+        ...Object.keys(englishNames),
+        ...Object.keys(iconMap),
+      ]);
 
-      const craftableIds = new Set<number>();
-      for (const recipe of rawRecipes) {
-          if (recipe.result) {
-              craftableIds.add(recipe.result);
-          }
-      }
+      allIds.forEach(idStr => {
+        const id = Number(idStr);
+        if (!Number.isFinite(id)) return;
 
-      const itemsList: MockItem[] = [];
-      
-      const extractName = (entry: any, langOverride?: string) => {
-        if (typeof entry === 'string') return entry;
-        if (entry && typeof entry === 'object') {
-          const l = langOverride || currentLanguage;
-          return entry[l] || entry['en'] || Object.values(entry)[0];
-        }
-        return '';
-      };
+        const existing = itemMap.get(id);
+        const targetEntry = targetNames[idStr];
+        const englishEntry = englishNames[idStr];
+        const localizedName = getLocalizedEntry(typeof targetEntry === 'string' ? { en: targetEntry } : targetEntry);
+        const englishName = getLocalizedEntry(typeof englishEntry === 'string' ? { en: englishEntry } : englishEntry);
+        const icon = normalizeIconUrl(iconMap[idStr]);
 
-      for (const id of craftableIds) {
-         const idStr = id.toString();
-         
-         let iconUrl = '';
-         const iconPath = rawIcons[idStr];
-         if (iconPath) {
-           iconUrl = `https://xivapi.com${iconPath}`;
-         }
+        itemMap.set(id, {
+          ...(existing || {
+            id,
+            name: localizedName || englishName || `Item #${id}`,
+            icon,
+            craftable: false,
+          }),
+          name: localizedName || existing?.name || englishName || `Item #${id}`,
+          enName: existing?.enName || englishName || undefined,
+          icon: existing?.icon || icon,
+        });
+      });
 
-         const targetEntry = rawTargetNames[idStr];
-         const englishEntry = internalEnglishCache.value?.[idStr];
-         
-         const name = extractName(targetEntry) || extractName(englishEntry) || `Item #${id}`;
-         const enName = extractName(englishEntry, 'en');
+      internalItemByIdCache.value = itemMap;
+      globalDictionaryCache.value = Array.from(itemMap.values());
+      displayMetadataLanguage = normalizedCurrentLanguage;
+    } catch (err) {
+      console.error('[Dictionary] Display metadata failed:', err);
+    } finally {
+      isDisplayMetadataLoading.value = false;
+      displayMetadataLoadPromise = null;
+    }
+  })();
 
-         itemsList.push({ id, name, enName, icon: iconUrl });
-      }
-      
-      globalDictionaryCache.value = itemsList;
-      console.log(`[Dictionary] Sync complete. Language: ${currentLanguage}. Count: ${itemsList.length}`);
-  } catch (err) {
-      console.error("[Dictionary] Sync failed:", err);
-      globalDictionaryCache.value = await generateFallbackItemData();
-  } finally {
-      isDictionaryLoading.value = false;
-  }
-  
-  return globalDictionaryCache.value!;
+  return displayMetadataLoadPromise;
+}
+
+export async function ensureRecipeDataLoaded(): Promise<Recipe[]> {
+  if (globalRecipesCache.value !== null) return globalRecipesCache.value;
+  if (recipeLoadPromise) return recipeLoadPromise;
+
+  isRecipeDataLoading.value = true;
+  recipeLoadPromise = (async () => {
+    try {
+      const res = await fetch(RECIPES_URL);
+      if (!res.ok) throw new Error('Recipes failed to load.');
+      globalRecipesCache.value = await res.json();
+    } catch (err) {
+      console.error('[Dictionary] Recipe data failed:', err);
+      globalRecipesCache.value = [];
+    } finally {
+      isRecipeDataLoading.value = false;
+      recipeLoadPromise = null;
+    }
+
+    return globalRecipesCache.value || [];
+  })();
+
+  return recipeLoadPromise;
+}
+
+export async function ensureDictionaryLoaded(): Promise<MockItem[]> {
+  const [dictionary] = await Promise.all([
+    ensureSearchIndexLoaded(),
+    ensureRecipeDataLoaded(),
+  ]);
+  return dictionary;
+}
+
+export function preloadWorkbenchData(loaders: Array<() => Promise<unknown>> = []): Promise<void> {
+  if (workbenchPreloadPromise) return workbenchPreloadPromise;
+
+  isWorkbenchDataPreloading.value = true;
+  workbenchPreloadPromise = ensureSearchIndexLoaded()
+    .then(async () => {
+      await Promise.all([
+        ensureRecipeDataLoaded(),
+        ...loaders.map(loader => loader()),
+      ]);
+    })
+    .catch(err => {
+      console.warn('[Dictionary] Workbench preload failed:', err);
+    })
+    .finally(() => {
+      isWorkbenchDataPreloading.value = false;
+      workbenchPreloadPromise = null;
+    });
+
+  return workbenchPreloadPromise;
 }
 
 export function getDictionaryItem(id: number): MockItem | undefined {
-    return globalDictionaryCache.value?.find(item => item.id === id);
+  return internalItemByIdCache.value.get(id) ?? globalDictionaryCache.value?.find(item => item.id === id);
 }
 
-/**
- * Looks up any item by ID using the full raw data, even if it's not in the craftable list.
- * Falls back to English name when TW name is missing.
- */
 export function getRawItemData(id: number): { name: string; icon: string } {
-    const idStr = id.toString();
-    const targetEntry = internalRawTargetNames[idStr];
-    const englishEntry = internalEnglishCache.value?.[idStr];
-    
-    const extractName = (entry: any, lang?: string) => {
-        if (typeof entry === 'string') return entry;
-        if (entry && typeof entry === 'object') {
-            const l = lang || 'tw';
-            return entry[l] || entry['en'] || Object.values(entry)[0] as string;
-        }
-        return '';
-    };
+  const indexed = getDictionaryItem(id);
+  if (indexed) return { name: indexed.name, icon: indexed.icon };
 
-    const name = extractName(targetEntry) || extractName(englishEntry, 'en') || `Item #${id}`;
-    const iconPath = internalRawIcons[idStr];
-    const icon = iconPath ? `https://xivapi.com${iconPath}` : '';
-    return { name, icon };
+  return { name: `Item #${id}`, icon: '' };
 }
 
 export async function getRecipes(): Promise<Recipe[]> {
-    await ensureDictionaryLoaded();
-    return globalRecipesCache.value || [];
+  return ensureRecipeDataLoaded();
+}
+
+export function getJobName(jobId: number): string {
+  return getLocalizedEntry(jobNamesCache?.[String(jobId)]) || `Job #${jobId}`;
 }
 
 export async function searchItems(query: string): Promise<MockItem[]> {
-  const dictionary = await ensureDictionaryLoaded();
-  
+  const dictionary = await ensureSearchIndexLoaded();
+
   if (!query || query.trim() === '') {
     return [];
   }
 
   const normalizedQuery = query.toLowerCase().trim();
-  
   return dictionary.filter(item => {
+    if (!item.craftable) return false;
+
     const mainMatch = item.name.toLowerCase().includes(normalizedQuery);
     const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
     return mainMatch || enMatch;
-  }).slice(0, 50);
+  }).slice(0, 100);
 }
 
-// ─── Places (Gathering Zone Names) ──────────────────────────────────────────
+export function getItemCategoryGroup(item: MockItem): ItemCategoryGroup {
+  const category = item.category;
+  if (category === undefined) return 'other';
 
-/**
- * Lazy-loads tw-places.json (once per session).
- * Used to display Traditional Chinese zone names for gathering nodes.
- */
+  for (const [group, categoryIds] of Object.entries(ITEM_CATEGORY_GROUPS)) {
+    if (categoryIds.has(category)) return group as ItemCategoryGroup;
+  }
+
+  return 'other';
+}
+
+export async function getSearchableItems(): Promise<MockItem[]> {
+  const dictionary = await ensureSearchIndexLoaded();
+  return dictionary.filter(item => !!item.craftable);
+}
+
+function matchesNumberRange(value: number | undefined, min?: number | null, max?: number | null): boolean {
+  const hasMin = typeof min === 'number' && Number.isFinite(min);
+  const hasMax = typeof max === 'number' && Number.isFinite(max);
+
+  if (!hasMin && !hasMax) return true;
+  if (value === undefined || value === null) return false;
+  if (hasMin && value < min!) return false;
+  if (hasMax && value > max!) return false;
+
+  return true;
+}
+
+export async function filterSearchableItems(criteria: ItemFilterCriteria): Promise<MockItem[]> {
+  const items = await getSearchableItems();
+  const normalizedQuery = criteria.query?.trim().toLowerCase() ?? '';
+  const categoryGroup = criteria.categoryGroup ?? 'all';
+  const job = criteria.job?.trim();
+
+  return items
+    .filter(item => {
+      if (normalizedQuery) {
+        const mainMatch = item.name.toLowerCase().includes(normalizedQuery);
+        const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
+        if (!mainMatch && !enMatch) return false;
+      }
+
+      if (!matchesNumberRange(item.ilvl, criteria.ilvlMin, criteria.ilvlMax)) return false;
+      if (!matchesNumberRange(item.equipLevel, criteria.equipLevelMin, criteria.equipLevelMax)) return false;
+
+      if (job && !(item.equipJobs || []).includes(job)) return false;
+      if (categoryGroup !== 'all' && getItemCategoryGroup(item) !== categoryGroup) return false;
+
+      return true;
+    })
+    .sort((a, b) => {
+      const ilvlDiff = (b.ilvl ?? 0) - (a.ilvl ?? 0);
+      if (ilvlDiff !== 0) return ilvlDiff;
+
+      const equipLevelDiff = (b.equipLevel ?? 0) - (a.equipLevel ?? 0);
+      if (equipLevelDiff !== 0) return equipLevelDiff;
+
+      return a.id - b.id;
+    })
+    .slice(0, 300);
+}
+
 export async function ensurePlacesLoaded(): Promise<void> {
   const isTW = currentLanguage === 'tw';
   if (globalPlacesCache !== null) return;
@@ -252,23 +549,18 @@ export async function ensurePlacesLoaded(): Promise<void> {
   placesLoadPromise = (async () => {
     try {
       if (isTW) {
-        // TW 模式同步抓取兩份，確保有完整 fallback
         const [twRes, globalRes] = await Promise.all([
           fetch(TW_PLACES_URL),
-          fetch(GLOBAL_PLACES_URL)
+          fetch(GLOBAL_PLACES_URL),
         ]);
-        
+
         const globalData = globalRes.ok ? await globalRes.json() : {};
         const twData = twRes.ok ? await twRes.json() : {};
-        
-        // 合併：TW 蓋過 Global
         globalPlacesCache = { ...globalData, ...twData };
-        console.log('[Dictionary] Places data merged (TW + Global fallback).');
       } else {
         const res = await fetch(GLOBAL_PLACES_URL);
         if (!res.ok) throw new Error(`Global places fail: ${res.status}`);
         globalPlacesCache = await res.json();
-        console.log('[Dictionary] Global places data loaded.');
       }
     } catch (err) {
       console.warn('[Dictionary] Failed to load places:', err);
@@ -281,29 +573,18 @@ export async function ensurePlacesLoaded(): Promise<void> {
   return placesLoadPromise;
 }
 
-/**
- * Returns the Traditional Chinese name for a zone ID.
- * Falls back to English name if TW translation is missing.
- * @param zoneId - The zoneid from nodes.json
- * @param enFallback - English name to display if TW is unavailable
- */
 export function getPlaceName(zoneId: number, enFallback?: string): string {
-  const entry = globalPlacesCache?.[zoneId.toString()] as any;
+  const entry = globalPlacesCache?.[zoneId.toString()];
   if (!entry) return enFallback || `Zone #${zoneId}`;
-  
+
   if (currentLanguage === 'tw') {
     return entry.tw || enFallback || `Zone #${zoneId}`;
   }
-  
-  // Global places.json uses en, ja, de, fr
-  const lang = currentLanguage === 'cn' || currentLanguage === 'zh' ? 'zh' : currentLanguage;
-  return entry[lang] || entry['en'] || enFallback || `Zone #${zoneId}`;
+
+  const lang = normalizeLanguage();
+  return entry[lang] || entry.en || enFallback || `Zone #${zoneId}`;
 }
 
-/**
- * Lazy-loads maps.json (once per session).
- * Provides metadata for map hierarchy (region_id, placename_id).
- */
 export async function ensureMapsLoaded(): Promise<void> {
   if (globalMapsCache !== null) return;
   if (mapsLoadPromise) return mapsLoadPromise;
@@ -315,10 +596,9 @@ export async function ensureMapsLoaded(): Promise<void> {
     })
     .then(data => {
       globalMapsCache = data;
-      console.log('[Dictionary] maps.json loaded.');
     })
     .catch(err => {
-      console.warn('[Dictionary] Could not load maps.json:', err);
+      console.warn('[Dictionary] Could not load maps:', err);
       globalMapsCache = {};
     })
     .finally(() => {
@@ -328,9 +608,6 @@ export async function ensureMapsLoaded(): Promise<void> {
   return mapsLoadPromise;
 }
 
-/**
- * Returns map metadata for a given map ID.
- */
 export function getMapData(mapId: number): any | undefined {
   return globalMapsCache?.[mapId.toString()];
 }

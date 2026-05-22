@@ -15,8 +15,17 @@ vi.mock('../src/i18n', async (importOriginal) => {
 })
 
 vi.mock('../src/services/dictionary', () => ({
-  ensureDictionaryLoaded: vi.fn(),
+  ensureSearchIndexLoaded: vi.fn(),
+  preloadWorkbenchData: vi.fn(),
   setDictionaryLanguage: vi.fn()
+}))
+
+vi.mock('../src/services/gathering', () => ({
+  ensureGatheringDataLoaded: vi.fn()
+}))
+
+vi.mock('../src/services/vendor', () => ({
+  ensureVendorDataLoaded: vi.fn()
 }))
 
 describe('App', () => {

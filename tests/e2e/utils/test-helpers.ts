@@ -1,9 +1,14 @@
 import { Page, expect } from '@playwright/test';
+import { deflateSync } from 'node:zlib';
 import {
   mockTwItems,
   mockEnItems,
   mockItemIcons,
   mockRecipes,
+  mockItemSearchIndex,
+  mockEquipment,
+  mockJobNames,
+  mockSearchCategories,
   mockPlaces,
   mockMaps,
 } from '../data/mock-dictionary';
@@ -23,8 +28,16 @@ export async function setupDictionaryMocks(page: Page) {
     contentType: 'application/json',
     body: JSON.stringify(body),
   });
+  const fulfillDeflatedJson = (body: unknown) => ({
+    contentType: 'application/octet-stream',
+    body: deflateSync(Buffer.from(JSON.stringify(body))),
+  });
 
   // ── 字典服務（dictionary.ts）─────────────────────────────────────────────
+  await page.route('**/item-search.index', route => route.fulfill(fulfillDeflatedJson(mockItemSearchIndex)));
+  await page.route('**/equipment.json', route => route.fulfill(fulfill(mockEquipment)));
+  await page.route('**/job-name.json', route => route.fulfill(fulfill(mockJobNames)));
+  await page.route('**/item-category.json', route => route.fulfill(fulfill(mockSearchCategories)));
   await page.route('**/tw/tw-items.json', route => route.fulfill(fulfill(mockTwItems)));
   await page.route('**/zh/zh-items.json', route => route.fulfill(fulfill(mockEnItems)));
   await page.route('**/ffxiv-teamcraft/**json/items.json', route => route.fulfill(fulfill(mockEnItems)));

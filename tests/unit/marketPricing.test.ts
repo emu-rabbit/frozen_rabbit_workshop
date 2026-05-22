@@ -40,5 +40,28 @@ describe('Market Pricing Utility', () => {
             expect(stats.medianPrice).toBe(777);
             expect(stats.q1Price).toBe(777);
         });
+
+        it('weights Q1 and median by listing quantity instead of listing count', () => {
+            const stats = calculateMarketStats([
+                { pricePerUnit: 100, quantity: 1, hq: false, worldName: 'Test' },
+                { pricePerUnit: 200, quantity: 1, hq: false, worldName: 'Test' },
+                { pricePerUnit: 1200, quantity: 30, hq: false, worldName: 'Test' },
+                { pricePerUnit: 1300, quantity: 30, hq: false, worldName: 'Test' },
+            ]);
+
+            expect(stats.q1Price).toBe(1200);
+            expect(stats.medianPrice).toBe(1200);
+        });
+
+        it('samples only the requested low-price quantity band before calculating weighted percentiles', () => {
+            const stats = calculateMarketStats([
+                { pricePerUnit: 100, quantity: 10, hq: false, worldName: 'Test' },
+                { pricePerUnit: 200, quantity: 40, hq: false, worldName: 'Test' },
+                { pricePerUnit: 10000, quantity: 100, hq: false, worldName: 'Test' },
+            ], 50);
+
+            expect(stats.q1Price).toBe(200);
+            expect(stats.medianPrice).toBe(200);
+        });
     });
 });

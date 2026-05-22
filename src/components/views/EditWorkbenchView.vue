@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
+import { isDictionaryLoading, searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
+import type { MockItem } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
+import ItemFilterDialog from '../shared/ItemFilterDialog.vue'
 
 import InputText from 'primevue/inputtext'
 import AutoComplete from 'primevue/autocomplete'
@@ -22,6 +24,7 @@ const emit = defineEmits<{
 const errorMessage = ref('')
 const isMergeDialogOpen = ref(false)
 const mergeRawJson = ref('')
+const filterDialogRowIndex = ref<number | null>(null)
 
 // --- Logic ---
 
@@ -108,6 +111,27 @@ const removeSearchRow = (index: number) => {
   if (editorDraft.searchRows.length === 0) {
     editorDraft.isEditing = false // Back to import if everything is gone
   }
+}
+
+const openFilterDialog = (index: number) => {
+  filterDialogRowIndex.value = index
+}
+
+const closeFilterDialog = () => {
+  filterDialogRowIndex.value = null
+}
+
+const handleFilterSelect = (item: MockItem) => {
+  if (filterDialogRowIndex.value === null) return
+
+  const row = editorDraft.searchRows[filterDialogRowIndex.value]
+  if (!row) return
+
+  row.selectedItem = item
+  row.query = item.name
+  row.suggestions = []
+  row.searching = false
+  row.searchedEmpty = false
 }
 
 const canAddRow = computed(() => {
@@ -218,80 +242,96 @@ const confirmMerge = () => {
           </div>
 
           <div class="flex flex-col gap-4">
-            <div 
-              v-for="(row, index) in editorDraft.searchRows" 
+            <div
+              v-for="(row, index) in editorDraft.searchRows"
               :key="row.id"
-              class="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700"
+              class="grid grid-cols-[2.25rem_minmax(0,1fr)_auto] md:grid-cols-[2.25rem_minmax(0,24rem)_minmax(1rem,1fr)_auto_auto] items-start gap-3 md:gap-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700/50"
             >
-              <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold">
-                    {{ index + 1 }}
-                  </div>
-                  <div class="sm:hidden flex-1">
-                    <button @click="removeSearchRow(index)" class="float-right text-slate-300 dark:text-slate-600 hover:text-red-400 p-1">
-                        <i class="pi pi-trash"></i>
-                    </button>
-                  </div>
+              <div class="mt-1 w-8 h-8 flex items-center justify-center bg-soft-green-100 dark:bg-soft-green-900/40 text-soft-green-600 dark:text-soft-green-400 rounded-lg shrink-0 font-bold md:mx-auto">
+                {{ index + 1 }}
               </div>
 
-              <div class="flex-1 min-w-0">
-                  <AutoComplete 
-                    v-ffiv-clean
-                    v-model="row.selectedItem" 
-                    :suggestions="row.suggestions" 
-                    @complete="onSearch($event, index)"
-                    completeOnFocus
-                    :minQueryLength="0"
-                    :delay="400" 
-                    optionLabel="name" 
-                    :placeholder="t('newNote.searchPlaceholder')" 
-                    class="w-full"
-                    :pt="{
-                      input: { 
-                        class: 'w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl py-2 px-3 placeholder:dark:text-slate-600'
-                      },
-                      panel: {
-                        class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
-                      },
-                      list: {
-                        class: 'dark:!bg-slate-900'
-                      },
-                      item: {
-                        class: 'dark:!text-slate-300 dark:hover:!bg-slate-800'
-                      },
-                      emptyMessage: {
-                        class: 'dark:!bg-slate-900 dark:!text-slate-400'
-                      }
-                    }"
-                  >
+              <div class="min-w-0 md:max-w-[24rem]">
+                  <div class="grid grid-cols-[minmax(0,1fr)_2.5rem] items-stretch w-full max-w-full">
+                    <AutoComplete 
+                      v-ffiv-clean
+                      v-model="row.selectedItem" 
+                      :suggestions="row.suggestions" 
+                      @complete="onSearch($event, index)"
+                      completeOnFocus
+                      :minQueryLength="0"
+                      :delay="400" 
+                      optionLabel="name" 
+                      :placeholder="t('newNote.searchPlaceholder')" 
+                      class="prep-item-search !w-full min-w-0 overflow-hidden"
+                      :pt="{
+                        input: { 
+                          class: 'min-w-0 !w-full !max-w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
+                        },
+                        panel: {
+                          class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
+                        },
+                        list: {
+                          class: 'dark:!bg-slate-900'
+                        },
+                        item: {
+                          class: 'dark:!text-slate-300 dark:hover:!bg-slate-800'
+                        },
+                        emptyMessage: {
+                          class: 'dark:!bg-slate-900 dark:!text-slate-400'
+                        }
+                      }"
+                    >
                     <template #option="slotProps">
                         <div class="flex items-center gap-3 w-full">
                             <img v-if="slotProps.option.icon" :alt="slotProps.option.name" :src="slotProps.option.icon" class="w-6 h-6 object-cover rounded-sm shadow-sm" />
-                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
+                            <div class="pi pi-box w-6 h-6 flex items-center justify-center text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 rounded-sm" v-else></div>
                             <div class="flex-1 truncate text-sm">{{ slotProps.option.name }}</div>
                         </div>
                     </template>
-                  </AutoComplete>
+                    <template #empty>
+                        <div class="p-3 text-slate-500 text-sm flex items-center gap-2">
+                          <i v-if="row.searching || isDictionaryLoading" class="pi pi-spinner pi-spin"></i>
+                          <i v-else-if="row.searchedEmpty" class="pi pi-exclamation-triangle text-orange-400"></i>
+                          <span v-if="row.searching || isDictionaryLoading">{{ t('newNote.searching') }}</span>
+                          <span v-else-if="row.searchedEmpty">{{ t('newNote.notFound') }}</span>
+                          <span v-else>{{ t('newNote.initialSearch') }}</span>
+                        </div>
+                    </template>
+                    </AutoComplete>
+                    <button
+                      type="button"
+                      @click="openFilterDialog(index)"
+                      class="w-10 h-10 -ml-px rounded-r-xl border border-soft-green-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-slate-800 transition-colors flex items-center justify-center"
+                      :title="t('newNote.filter.open')"
+                    >
+                      <i class="pi pi-filter"></i>
+                    </button>
+                  </div>
                   <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 dark:text-soft-green-300 bg-soft-green-50 dark:bg-soft-green-900/30 border border-soft-green-100 dark:border-soft-green-800/50 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans shadow-sm">
                     <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
                     <span class="truncate font-bold tracking-tight">ID: {{ row.selectedItem.id }}</span>
                   </div>
               </div>
 
-              <div class="flex items-center justify-between sm:justify-start gap-2">
-                  <div class="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
+              <div class="col-start-2 md:col-start-4 flex items-center md:justify-end gap-2">
+                  <div class="flex h-10 items-center gap-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg p-0.5 shadow-sm shrink-0">
                     <button @click="row.quantity = Math.max(1, row.quantity - 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors disabled:opacity-50" :disabled="row.quantity <= 1">
                       <i class="pi pi-minus text-sm"></i>
                     </button>
-                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent dark:text-slate-200" />
+                    <input type="number" v-model.number="row.quantity" min="1" class="w-10 h-8 text-center text-sm font-medium focus:outline-none appearance-none bg-transparent dark:text-slate-200" />
                     <button @click="row.quantity++" class="w-8 h-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors">
                       <i class="pi pi-plus text-sm"></i>
                     </button>
                   </div>
-                  <button @click="removeSearchRow(index)" class="hidden sm:flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0">
-                    <i class="pi pi-trash"></i>
-                  </button>
               </div>
+
+              <button
+                @click="removeSearchRow(index)"
+                class="row-start-1 col-start-3 md:col-start-5 md:justify-self-end flex w-10 h-10 rounded-lg items-center justify-center text-slate-400 dark:text-slate-500 hover:bg-neutral-100 dark:hover:bg-slate-800 hover:text-red-500 transition-colors shrink-0"
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </div>
 
@@ -364,4 +404,10 @@ const confirmMerge = () => {
     </div>
 
   </div>
+
+  <ItemFilterDialog
+    :visible="filterDialogRowIndex !== null"
+    @close="closeFilterDialog"
+    @select="handleFilterSelect"
+  />
 </template>

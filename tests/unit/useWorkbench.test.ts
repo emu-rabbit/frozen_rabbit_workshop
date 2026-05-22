@@ -3,7 +3,8 @@ import { ref } from 'vue';
 
 const mocks = vi.hoisted(() => ({
     activeWorkbenchNote: { value: null as any },
-    fetchItemPrices: vi.fn()
+    fetchItemPrices: vi.fn(),
+    recipesCache: { value: [] as any[] }
 }));
 
 // Pre-mocking dependencies before importing the module under test
@@ -14,7 +15,7 @@ vi.mock('../../src/composables/useNotes', () => ({
 }));
 
 vi.mock('../../src/services/dictionary', () => ({
-    globalRecipesCache: ref([]),
+    globalRecipesCache: mocks.recipesCache,
     setDictionaryLanguage: vi.fn(),
     ensureDictionaryLoaded: vi.fn(),
     getDictionaryItem: vi.fn((id: number) => ({
@@ -53,6 +54,7 @@ vi.mock('vue-i18n', () => ({
 describe('Workbench Service Logic', () => {
     beforeEach(() => {
         mocks.activeWorkbenchNote.value = null;
+        mocks.recipesCache.value = [];
         mocks.fetchItemPrices.mockReset();
         mocks.fetchItemPrices.mockResolvedValue(new Map());
     });
@@ -142,6 +144,65 @@ describe('Workbench Service Logic', () => {
             priceFetched: false,
             marketPrice: null,
             listings: []
+        });
+    });
+
+    it('toggles a craftable item between all-quality and HQ-only market prices', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-hq-toggle',
+            name: 'HQ toggle',
+            items: [{ id: 100, quantity: 10 }]
+        };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, stars: 0, yields: 1, ingredients: [] }
+        ];
+        mocks.fetchItemPrices.mockImplementation(async (_ids: number[], options?: { hqOnly?: boolean }) => new Map([
+            [100, {
+                itemId: 100,
+                listings: options?.hqOnly
+                    ? [
+                        { pricePerUnit: 280, quantity: 10, hq: true, worldName: 'HQ World' },
+                        { pricePerUnit: 360, quantity: 20, hq: true, worldName: 'HQ World' },
+                        { pricePerUnit: 9999, quantity: 120, hq: true, worldName: 'Tail World' }
+                    ]
+                    : [
+                        { pricePerUnit: 90, quantity: 10, hq: false, worldName: 'NQ World' },
+                        { pricePerUnit: 180, quantity: 20, hq: true, worldName: 'HQ World' },
+                        { pricePerUnit: 9999, quantity: 120, hq: false, worldName: 'Tail World' }
+                    ],
+                lastUploadTime: 1000
+            }]
+        ]));
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, workbenchItems, toggleItemHqMarketPrice } = useWorkbench();
+        await initialize(true);
+
+        expect(workbenchItems.value[100]).toMatchObject({
+            marketPriceMode: 'all',
+            marketPrice: 180,
+            purchaseInfo: { type: 'market', worldName: 'NQ World' }
+        });
+        mocks.fetchItemPrices.mockClear();
+
+        await toggleItemHqMarketPrice(100);
+
+        expect(mocks.fetchItemPrices).toHaveBeenLastCalledWith([100], { hqOnly: true });
+        expect(mocks.fetchItemPrices).toHaveBeenCalledTimes(1);
+        expect(workbenchItems.value[100]).toMatchObject({
+            marketPriceMode: 'hq',
+            marketPrice: 360,
+            purchaseInfo: { type: 'market', worldName: 'HQ World' }
+        });
+
+        await toggleItemHqMarketPrice(100);
+
+        expect(mocks.fetchItemPrices).toHaveBeenCalledTimes(1);
+        expect(workbenchItems.value[100]).toMatchObject({
+            marketPriceMode: 'all',
+            marketPrice: 180
         });
     });
 });
