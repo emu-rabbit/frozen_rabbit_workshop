@@ -137,28 +137,28 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
 </script>
 
 <template>
-  <div v-if="visible" class="fixed inset-0 z-[100] flex items-center justify-center p-4">
+  <div v-if="visible" class="fixed inset-0 z-[100] flex items-start sm:items-center justify-center overflow-y-auto p-3 sm:p-4">
     <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="emit('close')"></div>
 
-    <div class="relative z-10 w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl border border-soft-green-100 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col">
-      <div class="px-5 md:px-6 py-4 border-b border-soft-green-100 dark:border-slate-800 bg-soft-green-50 dark:bg-slate-950 flex items-center justify-between gap-4">
+    <div class="relative z-10 my-auto w-full min-w-0 max-w-4xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[90vh] bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-soft-green-100 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col">
+      <div class="px-4 sm:px-5 md:px-6 py-4 border-b border-soft-green-100 dark:border-slate-800 bg-soft-green-50 dark:bg-slate-950 flex items-center justify-between gap-3 sm:gap-4">
         <div class="min-w-0">
-          <h3 class="font-bold text-lg text-soft-green-800 dark:text-soft-green-400 flex items-center gap-2">
+          <h3 class="font-bold text-lg text-soft-green-800 dark:text-soft-green-400 flex items-center gap-2 min-w-0">
             <i class="pi pi-filter"></i>
-            {{ t('newNote.filter.title') }}
+            <span class="truncate">{{ t('newNote.filter.title') }}</span>
           </h3>
           <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ t('newNote.filter.description') }}</p>
         </div>
-        <button @click="emit('close')" class="w-9 h-9 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-colors" :title="t('newNote.filter.close')">
+        <button @click="emit('close')" class="w-9 h-9 shrink-0 rounded-lg text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-white dark:hover:bg-slate-800 transition-colors" :title="t('newNote.filter.close')">
           <i class="pi pi-times"></i>
         </button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] min-h-0">
-        <aside class="p-5 md:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 overflow-y-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-[320px_minmax(0,1fr)] min-h-0 overflow-y-auto lg:overflow-hidden">
+        <aside class="min-w-0 p-4 sm:p-5 md:p-6 border-b lg:border-b-0 lg:border-r border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 lg:overflow-y-auto">
           <div class="flex flex-col gap-4">
-            <label class="flex flex-col gap-1.5">
-              <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.keyword') }}</span>
+            <label class="flex min-w-0 flex-col gap-1.5">
+              <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.keyword') }}</span>
               <input
                 v-ffiv-clean
                 v-model="query"
@@ -168,38 +168,38 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
               />
             </label>
 
-            <div class="grid grid-cols-2 gap-3">
-              <label class="flex flex-col gap-1.5">
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.ilvlMin') }}</span>
+            <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3">
+              <label class="flex min-w-0 flex-col gap-1.5">
+                <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.ilvlMin') }}</span>
                 <input v-model.number="ilvlMin" type="number" min="0" class="filter-input" />
               </label>
-              <label class="flex flex-col gap-1.5">
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.ilvlMax') }}</span>
+              <label class="flex min-w-0 flex-col gap-1.5">
+                <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.ilvlMax') }}</span>
                 <input v-model.number="ilvlMax" type="number" min="0" class="filter-input" />
               </label>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-              <label class="flex flex-col gap-1.5">
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.equipLevelMin') }}</span>
+            <div class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-3">
+              <label class="flex min-w-0 flex-col gap-1.5">
+                <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.equipLevelMin') }}</span>
                 <input v-model.number="equipLevelMin" type="number" min="0" class="filter-input" />
               </label>
-              <label class="flex flex-col gap-1.5">
-                <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.equipLevelMax') }}</span>
+              <label class="flex min-w-0 flex-col gap-1.5">
+                <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.equipLevelMax') }}</span>
                 <input v-model.number="equipLevelMax" type="number" min="0" class="filter-input" />
               </label>
             </div>
 
-            <label class="flex flex-col gap-1.5">
-              <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.job') }}</span>
+            <label class="flex min-w-0 flex-col gap-1.5">
+              <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.job') }}</span>
               <select v-model="selectedJob" class="filter-input">
                 <option value="">{{ t('newNote.filter.allJobs') }}</option>
                 <option v-for="job in jobOptions" :key="job" :value="job">{{ getJobLabel(job) }}</option>
               </select>
             </label>
 
-            <label class="flex flex-col gap-1.5">
-              <span class="text-xs font-bold text-slate-500 dark:text-slate-400">{{ t('newNote.filter.category') }}</span>
+            <label class="flex min-w-0 flex-col gap-1.5">
+              <span class="text-xs font-bold leading-tight text-slate-500 dark:text-slate-400">{{ t('newNote.filter.category') }}</span>
               <select v-model="selectedCategory" class="filter-input">
                 <option v-for="option in categoryOptions" :key="option.value" :value="option.value">
                   {{ t(option.labelKey) }}
@@ -217,7 +217,7 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
           </div>
         </aside>
 
-        <section class="p-5 md:p-6 min-h-0 flex flex-col">
+        <section class="min-w-0 p-4 sm:p-5 md:p-6 min-h-0 flex flex-col">
           <div class="flex items-center justify-between gap-3 mb-4">
             <div class="text-sm text-slate-500 dark:text-slate-400">
               {{ t('newNote.filter.resultCount', { count: results.length }) }}
@@ -225,7 +225,7 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
             <i v-if="isFiltering || isDictionaryLoading" class="pi pi-spinner pi-spin text-soft-green-500"></i>
           </div>
 
-          <div class="min-h-[360px] max-h-[52vh] overflow-y-auto rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40">
+          <div class="min-h-[320px] max-h-[52vh] overflow-y-auto rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/40">
             <button
               v-for="item in results"
               :key="item.id"
@@ -257,14 +257,14 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
         </section>
       </div>
 
-      <div class="px-5 md:px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex justify-end gap-3">
-        <button @click="emit('close')" class="px-4 py-2 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+      <div class="px-4 sm:px-5 md:px-6 py-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+        <button @click="emit('close')" class="w-full sm:w-auto px-4 py-2 rounded-lg font-bold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           {{ t('newNote.filter.cancel') }}
         </button>
         <button
           @click="confirmSelection"
           :disabled="!selectedItem"
-          class="px-6 py-2 rounded-lg font-bold bg-soft-green-500 dark:bg-soft-green-600 text-white hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 disabled:cursor-not-allowed transition-colors"
+          class="w-full sm:w-auto px-6 py-2 rounded-lg font-bold bg-soft-green-500 dark:bg-soft-green-600 text-white hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 disabled:cursor-not-allowed transition-colors"
         >
           {{ t('newNote.filter.confirm') }}
         </button>
@@ -276,6 +276,8 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
 <style scoped>
 .filter-input {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   border-radius: 0.5rem;
   border: 1px solid rgb(187 247 208);
   background: white;
