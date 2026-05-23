@@ -16,6 +16,7 @@ import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
+import { sanitizeNoteItems } from '../utils/noteItems';
 
 type MarketPriceMode = 'all' | 'hq';
 
@@ -426,11 +427,13 @@ const totalDemands = computed(() => {
   const { activeWorkbenchNote } = useNotes();
   if (!activeWorkbenchNote.value) return demands;
 
-  activeWorkbenchNote.value.items.forEach(item => {
+  const noteItems = sanitizeNoteItems(activeWorkbenchNote.value.items);
+
+  noteItems.forEach(item => {
     demands[item.id] = (demands[item.id] || 0) + item.quantity;
   });
 
-  const queue = activeWorkbenchNote.value.items.map(i => i.id);
+  const queue = noteItems.map(i => i.id);
   const processed = new Set<number>();
   
   let head = 0;
@@ -472,7 +475,7 @@ const activeItemIds = computed(() => {
   const seen = new Set<number>();
   const { activeWorkbenchNote } = useNotes();
 
-  const rootIds = activeWorkbenchNote.value?.items.map(i => i.id) || [];
+  const rootIds = sanitizeNoteItems(activeWorkbenchNote.value?.items).map(i => i.id);
   const queue = [...rootIds];
 
   let head = 0;
@@ -727,19 +730,20 @@ export function useWorkbench() {
       lastLocale.value = currentLocale;
 
       // 2. 獲取初始項目資料
-      const rootIds = activeWorkbenchNote.value.items.map(i => i.id);
+      const rootNoteItems = sanitizeNoteItems(activeWorkbenchNote.value.items);
+      const rootIds = rootNoteItems.map(i => i.id);
       await refreshItemsData(rootIds);
 
       // 3. 初始分配根節點決策 (僅在切換新筆記或是強制重設時需要在此執行)
       if (isNewNote || force) {
-          activeWorkbenchNote.value.items.forEach(item => {
+          rootNoteItems.forEach(item => {
             initSingleItemDecision(item.id, item.quantity, true);
           });
       }
 
       // 4. 初始化展開項目的決策 (會觸發 activeItemIds 變化)
       activeItemIds.value.forEach(id => {
-          const isRoot = activeWorkbenchNote.value?.items.some(ri => ri.id === id) || false;
+          const isRoot = rootIds.includes(id);
           initSingleItemDecision(id, totalDemands.value[id] || 0, isRoot);
       });
 
@@ -781,7 +785,7 @@ export function useWorkbench() {
     }
 
     newIds.forEach(id => {
-      const isRoot = activeWorkbenchNote.value?.items.some(ri => ri.id === id) || false;
+      const isRoot = sanitizeNoteItems(activeWorkbenchNote.value?.items).some(ri => ri.id === id);
       initSingleItemDecision(id, totalDemands.value[id] || 0, isRoot);
     });
     
@@ -820,7 +824,7 @@ export function useWorkbench() {
           }
         } else if (activeCategories.length === 0 && newTotal > 0) {
            // 特殊情況：如果原本是 0（可能是剛出現的新項目），則套用預設邏輯
-           const isRoot = activeWorkbenchNote.value?.items.some(ri => ri.id === id) || false;
+           const isRoot = sanitizeNoteItems(activeWorkbenchNote.value?.items).some(ri => ri.id === id);
            initSingleItemDecision(id, newTotal, isRoot);
         }
       }

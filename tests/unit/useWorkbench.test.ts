@@ -140,6 +140,30 @@ describe('Workbench Service Logic', () => {
         expect(workbenchItems).toBeDefined();
     });
 
+    it('ignores malformed note items without a valid item id', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-with-invalid-item',
+            name: 'Invalid item note',
+            items: [
+                { id: 100, quantity: 2 },
+                { quantity: 1 },
+                { id: undefined, quantity: 1 },
+                { id: 'not-a-number', quantity: 1 }
+            ]
+        };
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, workbenchItems, activeItemIds, generateTodoSections } = useWorkbench();
+        await initialize(true);
+
+        expect(mocks.fetchItemPrices).toHaveBeenCalledWith([100]);
+        expect(Object.keys(workbenchItems.value)).toEqual(['100']);
+        expect(activeItemIds.value).toEqual([100]);
+        expect(generateTodoSections.value.flatMap(section => section.items.map(item => item.id))).toEqual([100]);
+    });
+
     it('does not mark prices as fetched when Universalis returns no result after cancellation', async () => {
         mocks.activeWorkbenchNote.value = {
             id: 'note-cancelled-prices',
