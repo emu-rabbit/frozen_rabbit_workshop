@@ -28,6 +28,7 @@ interface MarketPriceSnapshot {
 export interface CraftingInfo {
   job: number;
   jobName: string;
+  canCraftHq: boolean;
   level: number;
   stars: number;
   yields: number;
@@ -39,6 +40,7 @@ export interface WorkbenchItem {
   name: string;
   icon: string;
   canCraft: boolean;
+  canCraftHq: boolean;
   canGather: boolean;
   marketPrice: number | null;
   marketPriceMode: MarketPriceMode;
@@ -188,6 +190,10 @@ export function getCraftJobName(recipe: Pick<Recipe, 'id' | 'job'>): string {
   return CRAFT_JOB_NAMES[recipe.job] || '製作';
 }
 
+export function canRecipeCraftHq(recipe: Pick<Recipe, 'job'>): boolean {
+  return recipe.job !== 0 && recipe.job !== -10;
+}
+
 const workbenchItems = ref<Record<number, WorkbenchItem>>({});
 const decisions = reactive<Record<string, ItemDecision>>({});
 const isLoading = ref(false);
@@ -239,6 +245,7 @@ const refreshItemsData = async (ids: number[]) => {
     const crafting: CraftingInfo | null = recipe ? {
       job: recipe.job,
       jobName: getCraftJobName(recipe),
+      canCraftHq: canRecipeCraftHq(recipe),
       level: recipe.lvl,
       stars: recipe.stars || 0,
       yields: recipe.yields || 1,
@@ -260,6 +267,7 @@ const refreshItemsData = async (ids: number[]) => {
       name: itemInfo.name,
       icon: itemInfo.icon,
       canCraft: !!recipe,
+      canCraftHq: recipe ? canRecipeCraftHq(recipe) : false,
       canGather: !!gather,
       marketPrice: null,
       marketPriceMode: 'all',
@@ -381,7 +389,14 @@ const fetchPrices = async (ids: number[]) => {
 
 const toggleItemHqMarketPrice = async (id: number) => {
   const item = workbenchItems.value[id];
-  if (!item?.canCraft) return;
+  if (!item?.canCraft || !item.canCraftHq) {
+    if (item?.marketPriceMode === 'hq') {
+      item.marketPriceMode = 'all';
+      const snapshot = item.marketSnapshots.all;
+      if (snapshot) applyMarketSnapshot(item, snapshot);
+    }
+    return;
+  }
 
   const nextMode: MarketPriceMode = item.marketPriceMode === 'hq' ? 'all' : 'hq';
   item.marketPriceMode = nextMode;
