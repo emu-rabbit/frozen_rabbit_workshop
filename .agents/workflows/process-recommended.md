@@ -7,7 +7,7 @@ description: 處理 recommended.json 中的所有語法錯誤以及調整成可�
 執行前請先閱讀：
 
 - `.agents/skills/business/recommended_notes.md`
-- `.agents/skills/core/language_policy.md`
+- `.agents/skills/mission/product_architecture.md`
 
 # 核心原則 (請先閱讀)
 

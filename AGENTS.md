@@ -33,13 +33,13 @@
 
 ### Core
 
-- `.agents/skills/core/language_policy.md`：規定回覆、任務說明與文件預設使用繁體中文。
+- `.agents/skills/core/language_policy.md`：規定 Agent 與使用者之間的回覆、進度與協作說明預設使用繁體中文；不管理產品對外 UI 文案。
 - `.agents/skills/core/global_standards.md`：定義分析方式、回應風格、編碼與安全讀寫規範。
 
 ### Mission
 
 - `.agents/skills/mission/project_mission.md`：專案定位、核心目標與不可過度承諾的邊界。
-- `.agents/skills/mission/product_architecture.md`：備料台、待辦清單、推薦筆記、歷史與設定的分工。
+- `.agents/skills/mission/product_architecture.md`：備料台、待辦清單、推薦筆記、歷史、設定、產品對外 UI 文案與 locale 分工。
 - `.agents/skills/mission/brand_identity.md`：Frozen Rabbit 品牌人格、語氣與視覺方向。
 - `.agents/skills/mission/reference_project.md`：姊妹專案 `frozen_rabbit_tome` 的命名、資料與 i18n 參考。
 
@@ -86,13 +86,13 @@
 - `frozen_rabbit_workshop` 是 Final Fantasy XIV 能工巧匠與採集素材的備料管理工具。
 - 本專案協助玩家把大型製作目標拆成可行動的購買、製作、採集與既有庫存分配，並用市場資料估算成本與時間。
 - 對外文案應避免宣稱全域「最佳」或「絕對最低成本」。市場價格會隨時間、伺服器、HQ/NQ 與樣本數變動；請使用「估算」、「建議」、「依目前資料」等保守語氣。
-- 本專案支援繁體中文、簡體中文、英文與日文。新增或修正可見文字時，預設維持 `tw`、`cn`、`en`、`ja` 四語同步。
+- 產品對外 UI 與 locale 規範由 `.agents/skills/mission/product_architecture.md` 管理。
 - 品牌為 Frozen Rabbit，語氣應像友善且專業的朋友：親切、可靠、方便上手。
 - UI 與視覺風格可參考姊妹專案 `frozen_rabbit_tome`，但 Workshop 的主線是快速備料與成本判斷，不能為一致性犧牲操作密度與清單效率。
 
 ## 固定行為規範
 
-- 回覆使用者、撰寫文件、撰寫任務說明時，預設使用繁體中文。
+- 回覆使用者、回報進度、撰寫任務說明時，預設使用繁體中文。
 - 技術關鍵字、程式碼識別字、套件名稱與無通用譯名的專有名詞可保留英文。
 - 修改程式碼時，遵循既有專案風格，保持變更聚焦，不主動重構無關 legacy code。
 - 前端實作需重視元件小型化、關注點分離、暗黑模式、RWD 與一致的設計系統。
