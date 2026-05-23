@@ -47,6 +47,7 @@ export default {
     initialSearch: '输入物品名称开始',
     addRow: '还需要准备其他东西？',
     rowHint: '* 必须确保上一列已经填入并选择物品后，才能继续新增。',
+    invalidSelection: '这一列还没有选中有效物品，请从下拉选单或筛选器选择物品。',
     save: '好，把这些放上备料台！',
     addToFavorites: '立刻将此笔记加入我的收藏',
     defaultTitle: '{name}的笔记',

@@ -5,6 +5,7 @@ import { isDictionaryLoading, searchItems, ensureDictionaryLoaded, getDictionary
 import type { MockItem } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
+import { normalizeItemId, sanitizeNoteItems } from '../../utils/noteItems'
 import ItemFilterDialog from '../shared/ItemFilterDialog.vue'
 
 import InputText from 'primevue/inputtext'
@@ -137,14 +138,57 @@ const handleFilterSelect = (item: MockItem) => {
 const canAddRow = computed(() => {
   if (editorDraft.searchRows.length === 0) return true;
   const lastRow = editorDraft.searchRows[editorDraft.searchRows.length - 1]
-  return !!lastRow.selectedItem
+  return isValidSelectedItem(lastRow.selectedItem)
 })
 
+const isValidSelectedItem = (item: unknown): item is MockItem => {
+  return typeof item === 'object' && item !== null && normalizeItemId((item as MockItem).id) !== null
+}
+
+const getRowDraftText = (row: { query: string, selectedItem: MockItem | string | null }) => {
+  if (isValidSelectedItem(row.selectedItem)) return ''
+  if (typeof row.selectedItem === 'string') return row.selectedItem
+  return row.query
+}
+
+const hasInvalidSearchRow = (row: { query: string, selectedItem: MockItem | string | null }) => {
+  return getRowDraftText(row).trim().length > 0
+}
+
+const getSearchInputClass = (row: { query: string, selectedItem: MockItem | string | null }) => {
+  const baseClass = 'min-w-0 !w-full !max-w-full bg-white dark:!bg-slate-950 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
+  return hasInvalidSearchRow(row)
+    ? `${baseClass} !border-red-400 dark:!border-red-500 focus:!border-red-500 !ring-red-400`
+    : `${baseClass} border-soft-green-200 dark:!border-slate-800`
+}
+
+const handleSearchClear = (index: number) => {
+  const row = editorDraft.searchRows[index]
+  if (!row) return
+  row.selectedItem = null
+  row.query = ''
+  row.suggestions = []
+  row.searching = false
+  row.searchedEmpty = false
+}
+
+const getValidItems = () => sanitizeNoteItems(
+  editorDraft.searchRows
+    .filter(row => isValidSelectedItem(row.selectedItem))
+    .map(row => ({
+      id: row.selectedItem!.id,
+      quantity: row.quantity
+    }))
+)
+
+const hasValidItems = computed(() => getValidItems().length > 0)
+const hasInvalidSearchRows = computed(() => editorDraft.searchRows.some(row => hasInvalidSearchRow(row)))
+const canSubmitNote = computed(() => !!editorDraft.noteTitle && hasValidItems.value && !hasInvalidSearchRows.value)
+
 const handleExportJson = () => {
-  if (!editorDraft.noteTitle) return;
-  const validItems = editorDraft.searchRows
-    .filter(row => row.selectedItem !== null)
-    .map(row => ({ id: row.selectedItem!.id, quantity: row.quantity }))
+  if (!canSubmitNote.value) return;
+  const validItems = getValidItems()
+  if (validItems.length === 0) return;
 
   const exportData = {
     id: crypto.randomUUID(),
@@ -162,10 +206,9 @@ const handleExportJson = () => {
 }
 
 const handleCreateNote = () => {
-  if (!editorDraft.noteTitle) return;
-  const validItems = editorDraft.searchRows
-    .filter(row => row.selectedItem !== null)
-    .map(row => ({ id: row.selectedItem!.id, quantity: row.quantity }))
+  if (!canSubmitNote.value) return;
+  const validItems = getValidItems()
+  if (validItems.length === 0) return;
 
   emit('create-note', editorDraft.noteTitle, validItems, editorDraft.shouldFavorite)
   
@@ -258,6 +301,7 @@ const confirmMerge = () => {
                       v-model="row.selectedItem" 
                       :suggestions="row.suggestions" 
                       @complete="onSearch($event, index)"
+                      @clear="handleSearchClear(index)"
                       completeOnFocus
                       :minQueryLength="0"
                       :delay="400" 
@@ -266,7 +310,7 @@ const confirmMerge = () => {
                       class="prep-item-search !w-full min-w-0 overflow-hidden"
                       :pt="{
                         input: { 
-                          class: 'min-w-0 !w-full !max-w-full bg-white dark:!bg-slate-950 border-soft-green-200 dark:!border-slate-800 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
+                          class: getSearchInputClass(row)
                         },
                         panel: {
                           class: 'dark:!bg-slate-900 dark:!border-slate-800 dark:!text-slate-100'
@@ -308,9 +352,13 @@ const confirmMerge = () => {
                       <i class="pi pi-filter"></i>
                     </button>
                   </div>
-                  <div v-if="row.selectedItem" class="mt-2 text-[12px] text-soft-green-700 dark:text-soft-green-300 bg-soft-green-50 dark:bg-soft-green-900/30 border border-soft-green-100 dark:border-soft-green-800/50 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans shadow-sm">
+                  <div v-if="isValidSelectedItem(row.selectedItem)" class="mt-2 text-[12px] text-soft-green-700 dark:text-soft-green-300 bg-soft-green-50 dark:bg-soft-green-900/30 border border-soft-green-100 dark:border-soft-green-800/50 px-2.5 py-1.5 rounded-lg inline-flex items-center gap-2 max-w-full font-sans shadow-sm">
                     <img v-if="row.selectedItem.icon" :src="row.selectedItem.icon" class="w-4 h-4 rounded-sm" />
                     <span class="truncate font-bold tracking-tight">ID: {{ row.selectedItem.id }}</span>
+                  </div>
+                  <div v-else-if="hasInvalidSearchRow(row)" class="mt-2 text-[12px] text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/50 px-2.5 py-1.5 rounded-lg inline-flex items-start gap-2 max-w-full font-bold shadow-sm">
+                    <i class="pi pi-exclamation-circle text-[11px] mt-0.5 shrink-0"></i>
+                    <span>{{ t('newNote.invalidSelection') }}</span>
                   </div>
               </div>
 
@@ -357,7 +405,7 @@ const confirmMerge = () => {
             </label>
 
             <div class="flex items-center gap-3 w-full md:w-auto">
-              <button @click="handleExportJson" :disabled="!editorDraft.noteTitle" class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 dark:text-soft-green-400 border-2 border-soft-green-100 dark:border-slate-800 hover:border-soft-green-200 dark:hover:border-soft-green-700 hover:bg-soft-green-50 dark:hover:bg-soft-green-950/20 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden" :title="t('newNote.copyJson')">
+              <button @click="handleExportJson" :disabled="!canSubmitNote" class="group flex items-center gap-0 hover:gap-3 px-3 py-3 rounded-xl font-bold text-soft-green-600 dark:text-soft-green-400 border-2 border-soft-green-100 dark:border-slate-800 hover:border-soft-green-200 dark:hover:border-soft-green-700 hover:bg-soft-green-50 dark:hover:bg-soft-green-950/20 transition-all duration-500 active:scale-95 disabled:opacity-50 overflow-hidden" :title="t('newNote.copyJson')">
                 <transition name="scale" mode="out-in">
                   <i v-if="isCopied" class="pi pi-check text-xl text-soft-green-600 dark:text-soft-green-400"></i>
                   <i v-else class="pi pi-copy text-xl"></i>
@@ -367,7 +415,7 @@ const confirmMerge = () => {
                 </span>
               </button>
               
-              <button @click="handleCreateNote" :disabled="!editorDraft.noteTitle" class="flex-1 md:flex-none justify-center bg-soft-green-500 dark:bg-soft-green-600 hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
+              <button @click="handleCreateNote" :disabled="!canSubmitNote" class="flex-1 md:flex-none justify-center bg-soft-green-500 dark:bg-soft-green-600 hover:bg-soft-green-600 dark:hover:bg-soft-green-700 disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white px-6 md:px-8 py-3.5 rounded-xl font-bold shadow-md transition-all duration-300 transform active:scale-95 flex items-center gap-2 text-base md:text-lg">
                 <i class="pi pi-save"></i> {{ t('newNote.save') }}
               </button>
             </div>

@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { getDictionaryItem } from '../../services/dictionary'
 import type { Note, LocalizedString } from '../../types/note'
+import { sanitizeNoteItems } from '../../utils/noteItems'
 
 const { t, locale } = useI18n()
 
@@ -53,6 +54,8 @@ const formattedDate = computed(() => {
   }).format(d)
 })
 
+const validItems = computed(() => sanitizeNoteItems(props.note?.items))
+
 // --- Methods ---
 
 const handleToggleFavorite = () => {
@@ -65,7 +68,7 @@ const handleExportJson = () => {
   const exportData = {
     id: props.note.id,
     name: localizedName.value,
-    items: props.note.items.map(i => ({ id: i.id, quantity: i.quantity })),
+    items: validItems.value,
     createdAt: props.note.createdAt
   }
   
@@ -122,16 +125,16 @@ const handleExportJson = () => {
         <div v-if="note" class="flex-1 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100/50 dark:border-slate-700/50 min-w-0">
             <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-[0.1em] flex items-center gap-2">
                <i class="pi pi-box text-[10px]"></i>
-               {{ t('history.itemsCount') }} ({{note.items.length}})
+               {{ t('history.itemsCount') }} ({{ validItems.length }})
             </div>
             
-            <div v-if="note.items.length === 0" class="text-slate-400 text-sm italic py-2">
+            <div v-if="validItems.length === 0" class="text-slate-400 text-sm italic py-2">
               {{ t('history.noItems') }}
             </div>
             
             <div v-else class="flex flex-wrap gap-2.5">
               <div 
-                v-for="item in note.items" 
+                v-for="item in validItems"
                 :key="item.id" 
                 class="bg-white dark:bg-slate-800 border border-soft-green-200/60 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-sm shadow-sm overflow-hidden flex items-center h-9 rounded-lg font-sans max-w-full hover:border-soft-green-400 dark:hover:border-soft-green-600 transition-colors"
               >
@@ -186,6 +189,4 @@ const handleExportJson = () => {
     </div>
   </div>
 </template>
-
-
 

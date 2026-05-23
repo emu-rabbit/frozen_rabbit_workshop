@@ -47,6 +47,7 @@ export default {
     initialSearch: 'Type to begin',
     addRow: 'Need anything else?',
     rowHint: '* Fill out the previous row before adding another.',
+    invalidSelection: 'This row has text but no selected item. Pick an item from the suggestions or filter.',
     save: 'Toss these on the Workbench!',
     addToFavorites: 'Add to favorites immediately',
     defaultTitle: '{name}\'s Note',

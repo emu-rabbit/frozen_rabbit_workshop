@@ -1,6 +1,7 @@
 import { useLocalStorage } from '@vueuse/core'
 import type { Note, NoteItem } from '../types/note'
 import { computed, ref } from 'vue'
+import { sanitizeNoteItems } from '../utils/noteItems'
 
 import recommendedNotesData from '../data/recommended'
 
@@ -17,10 +18,11 @@ const activeWorkbenchNote = ref<Note | null>(null)
 export function useNotes() {
   const addNote = (name: string, items: NoteItem[], shouldFavorite: boolean = false) => {
     const id = crypto.randomUUID()
+    const validItems = sanitizeNoteItems(items)
     const newNote: Note = {
       id,
       name: name.trim(),
-      items: items,
+      items: validItems,
       createdAt: new Date()
     }
     

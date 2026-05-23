@@ -47,6 +47,7 @@ export default {
     initialSearch: '名前を入れてね',
     addRow: '他に欲しいものはある？',
     rowHint: '* 追加する前に今選んでいるアイテムを決めてね！',
+    invalidSelection: 'この行は文字だけでアイテムが選択されていません。候補または絞り込みから選んでください。',
     save: 'よし、これを仕込み台へ！',
     addToFavorites: '同時にお気に入りに追加する',
     defaultTitle: '{name}のノート',
