@@ -8,6 +8,30 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.1.1',
+    date: '2026-05-23',
+    changes: [
+      {
+        tw: '修正公會合建與開拓製作配方無法被搜尋的問題',
+        cn: '修正部队合建与开拓制作配方无法被搜索的问题',
+        en: 'Fixed an issue where Company Crafting and Sanctuary Crafting recipes could not be searched',
+        ja: 'カンパニークラフトと開拓製作のレシピを検索できない問題を修正しました'
+      },
+      {
+        tw: '備料台現在可以正確辨認公會合建與開拓製作的類別標示',
+        cn: '备料台现在可以正确识别部队合建与开拓制作的类别标示',
+        en: 'The material prep workbench now correctly identifies Company Crafting and Sanctuary Crafting category labels',
+        ja: '素材準備台でカンパニークラフトと開拓製作のカテゴリ表示を正しく判別できるようにしました'
+      },
+      {
+        tw: '公會合建與開拓製作的成品不再被歸類為可搜尋 HQ 價格',
+        cn: '部队合建与开拓制作的成品不再被归类为可搜索 HQ 价格',
+        en: 'Company Crafting and Sanctuary Crafting products are no longer treated as items that can query HQ prices',
+        ja: 'カンパニークラフトと開拓製作の完成品を HQ 価格検索の対象として扱わないようにしました'
+      }
+    ]
+  },
+  {
     version: '1.1.0',
     date: '2026-05-21',
     changes: [

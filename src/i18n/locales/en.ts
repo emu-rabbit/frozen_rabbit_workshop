@@ -246,7 +246,9 @@ export default {
   jobs: {
     crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
     lwr: 'Leatherworker', wvr: 'Weaver', alc: 'Alchemist', cul: 'Culinarian',
-    min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering'
+    min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering',
+    companyCrafting: 'Company Crafting',
+    islandCrafting: 'Sanctuary Crafting'
   },
   settings: {
     title: 'Workshop Settings',

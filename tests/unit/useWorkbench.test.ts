@@ -117,6 +117,20 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
     });
 
+    it('uses one display label for all island sanctuary recipe jobs', async () => {
+        const { canRecipeCraftHq, getCraftJobName } = await import('../../src/composables/useWorkbench');
+
+        expect(getCraftJobName({ id: 'mji-8', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'fc539', job: 0 })).toBe('jobs.companyCrafting');
+        expect(getCraftJobName({ id: 123, job: 8 })).toBe('jobs.crp');
+        expect(canRecipeCraftHq({ job: -10 })).toBe(false);
+        expect(canRecipeCraftHq({ job: 0 })).toBe(false);
+        expect(canRecipeCraftHq({ job: 8 })).toBe(true);
+    });
+
     it('should be importable and initialized', async () => {
         // Dynamic import to ensure mocks are in place
         const { useWorkbench } = await import('../../src/composables/useWorkbench');
@@ -203,6 +217,43 @@ describe('Workbench Service Logic', () => {
         expect(workbenchItems.value[100]).toMatchObject({
             marketPriceMode: 'all',
             marketPrice: 180
+        });
+    });
+
+    it('does not toggle HQ-only market prices for company or island recipes', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-special-no-hq',
+            name: 'Special no HQ',
+            items: [
+                { id: 22527, quantity: 1 },
+                { id: 37618, quantity: 1 }
+            ]
+        };
+        mocks.recipesCache.value = [
+            { id: 'fc539', result: 22527, job: 0, lvl: 1, stars: 0, yields: 1, ingredients: [] },
+            { id: 'mji-craftworks-9', result: 37618, job: -10, lvl: 1, stars: 0, yields: 1, ingredients: [] }
+        ];
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, workbenchItems, toggleItemHqMarketPrice } = useWorkbench();
+        await initialize(true);
+        mocks.fetchItemPrices.mockClear();
+
+        await toggleItemHqMarketPrice(22527);
+        await toggleItemHqMarketPrice(37618);
+
+        expect(mocks.fetchItemPrices).not.toHaveBeenCalled();
+        expect(workbenchItems.value[22527]).toMatchObject({
+            canCraftHq: false,
+            marketPriceMode: 'all',
+            crafting: { canCraftHq: false }
+        });
+        expect(workbenchItems.value[37618]).toMatchObject({
+            canCraftHq: false,
+            marketPriceMode: 'all',
+            crafting: { canCraftHq: false }
         });
     });
 });

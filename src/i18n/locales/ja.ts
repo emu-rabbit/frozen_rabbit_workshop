@@ -246,7 +246,9 @@ export default {
   jobs: {
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
     lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
-    min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集'
+    min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集',
+    companyCrafting: 'カンパニークラフト',
+    islandCrafting: '開拓製作'
   },
   settings: {
     title: '工房の設定',

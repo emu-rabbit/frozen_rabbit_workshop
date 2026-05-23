@@ -250,7 +250,7 @@ const copyToClipboard = (id: string, text: string) => {
                     <div class="min-w-0 flex-1">
                         <div class="inline-flex items-center gap-1.5 min-w-0 max-w-full">
                             <h3 class="text-base md:text-lg font-black text-slate-900 dark:text-slate-100 truncate tracking-tight min-w-0">{{ getLocalizedName(workbenchItems[id]?.name) }}</h3>
-                            <button v-if="workbenchItems[id]?.canCraft"
+                            <button v-if="workbenchItems[id]?.canCraft && workbenchItems[id]?.canCraftHq"
                                     type="button"
                                     @click.stop="toggleItemHqMarketPrice(id)"
                                     class="hq-toggle-button shrink-0 h-7 md:h-8 px-2 rounded-lg border flex items-center justify-center text-[11px] md:text-xs font-black leading-none transition-all active:scale-95"
