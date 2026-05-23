@@ -172,9 +172,21 @@ export function sortCraftTodoItemsByDependency<T extends { id: number }>(
 // --- Shared State (Singleton) ---
 const CRYSTAL_IDS = new Set([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
 const CRAFT_JOB_NAMES: Record<number, string> = {
+  0: 'jobs.companyCrafting',
   8: 'jobs.crp', 9: 'jobs.bsm', 10: 'jobs.arm', 11: 'jobs.gsm',
   12: 'jobs.lwr', 13: 'jobs.wvr', 14: 'jobs.alc', 15: 'jobs.cul'
 };
+
+export function getCraftJobName(recipe: Pick<Recipe, 'id' | 'job'>): string {
+  if (recipe.job === -10) {
+    const recipeId = String(recipe.id);
+    if (recipeId.startsWith('mji-craftworks-')) return 'jobs.islandWorkshopProduct';
+    if (recipeId.startsWith('mji-building-') || recipeId.startsWith('mji-landmark-')) return 'jobs.islandBuilding';
+    return 'jobs.islandDevelopmentCrafting';
+  }
+
+  return CRAFT_JOB_NAMES[recipe.job] || '製作';
+}
 
 const workbenchItems = ref<Record<number, WorkbenchItem>>({});
 const decisions = reactive<Record<string, ItemDecision>>({});
@@ -226,7 +238,7 @@ const refreshItemsData = async (ids: number[]) => {
 
     const crafting: CraftingInfo | null = recipe ? {
       job: recipe.job,
-      jobName: CRAFT_JOB_NAMES[recipe.job] || '製作',
+      jobName: getCraftJobName(recipe),
       level: recipe.lvl,
       stars: recipe.stars || 0,
       yields: recipe.yields || 1,

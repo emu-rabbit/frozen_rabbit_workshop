@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, globalDictionaryCache, searchItems } from '../../src/services/dictionary';
+import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, searchItems } from '../../src/services/dictionary';
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
@@ -8,6 +8,7 @@ describe('Dictionary Search & Logic', () => {
             { id: 2, name: '青金塊', enName: 'Electrum Ingot', icon: 'icon2' },
             { id: 3, name: '鐵礦', enName: 'Iron Ore', icon: 'icon3' },
         ];
+        globalRecipesCache.value = [];
     });
 
     it('should find items by partial name match', () => {
@@ -35,6 +36,22 @@ describe('Dictionary Search & Logic', () => {
         const results = await searchItems('Iron');
 
         expect(results.map(item => item.id)).toEqual([1]);
+    });
+
+    it('treats recipe results as searchable even when Teamcraft search marks them non-craftable', async () => {
+        globalDictionaryCache.value = [
+            { id: 22527, name: 'Whale-class Bridge', enName: 'Whale-class Bridge', icon: 'icon1', craftable: false },
+            { id: 22528, name: 'Whale-class Pressure Hull', enName: 'Whale-class Pressure Hull', icon: 'icon2', craftable: false },
+        ];
+        globalRecipesCache.value = [
+            { id: 'fc539', result: 22527, yields: 1, ingredients: [], job: 0, lvl: 1 },
+        ];
+
+        const results = await searchItems('Whale');
+        const searchable = await getSearchableItems();
+
+        expect(results.map(item => item.id)).toEqual([22527]);
+        expect(searchable.map(item => item.id)).toEqual([22527]);
     });
 
     it('filters the local searchable list by item level, equip level, job, and category group', async () => {

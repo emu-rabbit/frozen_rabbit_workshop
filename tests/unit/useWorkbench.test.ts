@@ -117,6 +117,17 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
     });
 
+    it('classifies special island sanctuary recipe jobs by hardcoded recipe id prefixes', async () => {
+        const { getCraftJobName } = await import('../../src/composables/useWorkbench');
+
+        expect(getCraftJobName({ id: 'mji-8', job: -10 })).toBe('jobs.islandDevelopmentCrafting');
+        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandWorkshopProduct');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandBuilding');
+        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandBuilding');
+        expect(getCraftJobName({ id: 'fc539', job: 0 })).toBe('jobs.companyCrafting');
+        expect(getCraftJobName({ id: 123, job: 8 })).toBe('jobs.crp');
+    });
+
     it('should be importable and initialized', async () => {
         // Dynamic import to ensure mocks are in place
         const { useWorkbench } = await import('../../src/composables/useWorkbench');

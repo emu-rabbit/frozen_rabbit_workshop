@@ -246,7 +246,11 @@ export default {
   jobs: {
     crp: '木工匠', bsm: '锻铁匠', arm: '铸甲匠', gsm: '雕金匠',
     lwr: '制革匠', wvr: '裁缝匠', alc: '炼金术士', cul: '烹调师',
-    min: '采矿工', btn: '园艺工', fsh: '捕鱼人', gather: '采集'
+    min: '采矿工', btn: '园艺工', fsh: '捕鱼人', gather: '采集',
+    companyCrafting: '部队合建',
+    islandDevelopmentCrafting: '无人岛开拓制作',
+    islandWorkshopProduct: '无人岛工坊制品',
+    islandBuilding: '无人岛建筑'
   },
   settings: {
     title: '工坊设定',

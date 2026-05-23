@@ -25,7 +25,7 @@ const DICT_URLS: Record<string, string> = {
 };
 
 export interface Recipe {
-  id: number;
+  id: number | string;
   result: number;
   yields: number;
   ingredients: any;
@@ -146,6 +146,8 @@ let searchIndexLoadPromise: Promise<MockItem[]> | null = null;
 let displayMetadataLoadPromise: Promise<void> | null = null;
 let displayMetadataLanguage: string | null = null;
 let recipeLoadPromise: Promise<Recipe[]> | null = null;
+let recipeResultIdsCache: Set<number> | null = null;
+let recipeResultIdsSource: Recipe[] | null = null;
 let workbenchPreloadPromise: Promise<void> | null = null;
 
 let globalPlacesCache: Record<string, { tw?: string; [key: string]: any }> | null = null;
@@ -196,6 +198,34 @@ function getCategoryName(categoryId?: number): string | undefined {
   return name || undefined;
 }
 
+function getRecipeResultIds(): Set<number> | null {
+  const recipes = globalRecipesCache.value;
+  if (!recipes) return null;
+  if (recipeResultIdsCache && recipeResultIdsSource === recipes) return recipeResultIdsCache;
+
+  recipeResultIdsSource = recipes;
+  recipeResultIdsCache = new Set(
+    recipes
+      .map(recipe => Number(recipe.result))
+      .filter(result => Number.isFinite(result))
+  );
+  return recipeResultIdsCache;
+}
+
+function setRecipeCache(recipes: Recipe[]) {
+  globalRecipesCache.value = recipes;
+  recipeResultIdsSource = null;
+  getRecipeResultIds();
+
+  if (rawSearchIndexCache) {
+    rebuildDictionaryCacheFromSearchIndex();
+  }
+}
+
+function isCraftableItem(item: Pick<MockItem, 'id' | 'craftable'>): boolean {
+  return !!item.craftable || !!getRecipeResultIds()?.has(item.id);
+}
+
 function rebuildDictionaryCacheFromSearchIndex() {
   if (!rawSearchIndexCache) return;
 
@@ -216,7 +246,7 @@ function rebuildDictionaryCacheFromSearchIndex() {
       ilvl: item.ilvl ?? item.data?.ilvl ?? existing?.ilvl,
       category: item.category ?? existing?.category,
       categoryName: getCategoryName(item.category) || existing?.categoryName,
-      craftable: !!item.craftable || !!existing?.craftable,
+      craftable: !!item.craftable || !!existing?.craftable || !!getRecipeResultIds()?.has(itemId),
       equipLevel: equipment?.level ?? existing?.equipLevel,
       equipJobs: equipment?.jobs ?? existing?.equipJobs,
       equipSlotCategory: equipment?.equipSlotCategory ?? existing?.equipSlotCategory,
@@ -398,10 +428,10 @@ export async function ensureRecipeDataLoaded(): Promise<Recipe[]> {
     try {
       const res = await fetch(RECIPES_URL);
       if (!res.ok) throw new Error('Recipes failed to load.');
-      globalRecipesCache.value = await res.json();
+      setRecipeCache(await res.json());
     } catch (err) {
       console.error('[Dictionary] Recipe data failed:', err);
-      globalRecipesCache.value = [];
+      setRecipeCache([]);
     } finally {
       isRecipeDataLoading.value = false;
       recipeLoadPromise = null;
@@ -463,15 +493,18 @@ export function getJobName(jobId: number): string {
 }
 
 export async function searchItems(query: string): Promise<MockItem[]> {
-  const dictionary = await ensureSearchIndexLoaded();
+  await Promise.all([
+    ensureSearchIndexLoaded(),
+    ensureRecipeDataLoaded(),
+  ]);
 
   if (!query || query.trim() === '') {
     return [];
   }
 
   const normalizedQuery = query.toLowerCase().trim();
-  return dictionary.filter(item => {
-    if (!item.craftable) return false;
+  return (globalDictionaryCache.value || []).filter(item => {
+    if (!isCraftableItem(item)) return false;
 
     const mainMatch = item.name.toLowerCase().includes(normalizedQuery);
     const enMatch = item.enName ? item.enName.toLowerCase().includes(normalizedQuery) : false;
@@ -491,8 +524,11 @@ export function getItemCategoryGroup(item: MockItem): ItemCategoryGroup {
 }
 
 export async function getSearchableItems(): Promise<MockItem[]> {
-  const dictionary = await ensureSearchIndexLoaded();
-  return dictionary.filter(item => !!item.craftable);
+  await Promise.all([
+    ensureSearchIndexLoaded(),
+    ensureRecipeDataLoaded(),
+  ]);
+  return (globalDictionaryCache.value || []).filter(isCraftableItem);
 }
 
 function matchesNumberRange(value: number | undefined, min?: number | null, max?: number | null): boolean {
