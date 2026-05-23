@@ -181,10 +181,7 @@ const CRAFT_JOB_NAMES: Record<number, string> = {
 
 export function getCraftJobName(recipe: Pick<Recipe, 'id' | 'job'>): string {
   if (recipe.job === -10) {
-    const recipeId = String(recipe.id);
-    if (recipeId.startsWith('mji-craftworks-')) return 'jobs.islandWorkshopProduct';
-    if (recipeId.startsWith('mji-building-') || recipeId.startsWith('mji-landmark-')) return 'jobs.islandBuilding';
-    return 'jobs.islandDevelopmentCrafting';
+    return 'jobs.islandCrafting';
   }
 
   return CRAFT_JOB_NAMES[recipe.job] || '製作';
