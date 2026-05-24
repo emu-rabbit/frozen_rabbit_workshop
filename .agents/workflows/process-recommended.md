@@ -2,6 +2,13 @@
 description: 處理 recommended.json 中的所有語法錯誤以及調整成可以用的資料格式
 ---
 
+# 參考技能
+
+執行前請先閱讀：
+
+- `.agents/skills/business/recommended_notes.md`
+- `.agents/skills/mission/product_architecture.md`
+
 # 核心原則 (請先閱讀)
 
 > **⚠️ 絕對禁止觸碰已完成的筆記**
@@ -67,9 +74,9 @@ description: 處理 recommended.json 中的所有語法錯誤以及調整成可�
 
 ## Step 4：寫回檔案
 
-使用 `write_to_file` 工具將修改後的 JSON 寫回原始檔案，格式需保持一致（2 space indent）。
+使用目前 Codex 可用的 `apply_patch` 或安全的格式化工具將修改後的 JSON 寫回原始檔案，格式需保持一致（2 space indent）。
 
-> **⚠️ 嚴禁使用 PowerShell 的 `Set-Content`、`>` 或 `Out-File`**，這些指令會將編碼改為 UTF-16，導致中日文字符變成亂碼。
+> **⚠️ 嚴禁使用 PowerShell 的 `Set-Content`、`>` 或 `Out-File`**，這些指令可能將編碼改為 UTF-16，導致中日文字符變成亂碼。
 
 ## Step 5：更新 index.ts
 

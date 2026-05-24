@@ -8,19 +8,19 @@
 
 ## Overview
 
-**Frozen Rabbit Workshop** helps FFXIV players break down large crafting goals into clear, actionable preparation plans. Whether you are stocking up for HQ gear, consumables, or early-patch progression, the workshop can decompose recipes, estimate market costs with live pricing, and turn your decisions into an optimized prep route based on your needs.
+**Frozen Rabbit Workshop** helps FFXIV players break down large crafting goals into clear, actionable preparation plans. Whether you are stocking up for HQ gear, consumables, or early-patch progression, the workshop can decompose recipes, estimate market costs from cached Universalis data, and turn your decisions into a practical prep route based on your needs.
 
 ## Core Features
 
 ### Workbench
 - **Smart allocation**: Assign each material in a list to buying, crafting, gathering, or existing inventory.
-- **Live budgeting**: Connects to the [Universalis](https://universalis.app/) API to estimate total cost from your selected data center.
+- **Estimated budgeting**: Connects to the [Universalis](https://universalis.app/) API to estimate total cost from your selected data center. Market data is cached and may differ from the in-game board at the time of purchase.
 - **Time estimates**: Provides rough crafting and gathering time estimates for the full material list.
 - **Market strategy**: Supports aggressive, balanced, and conservative pricing baselines.
 
 ### Todo List
 - **One-click generation**: Converts workbench allocations into organized action lists for buying, gathering, and crafting.
-- **Precise navigation**: Buying tasks show the cheapest market world or NPC location; gathering tasks include map, coordinates, and timed-node ET windows.
+- **Source-aware navigation**: Buying tasks show a lower-cost market world from the available data or an NPC location; gathering tasks include map, coordinates, and timed-node ET windows.
 - **Quick copy**: Copy item names instantly when searching the market board.
 
 ### Recommended Notes
@@ -74,19 +74,19 @@ This project is supported by data and tooling from community projects:
 
 ## 📖 專案簡介
 
-**冷凍兔肉的工坊** 是一個專為 FFXIV 玩家打造的批次備料管理平台。當你需要製作大量的 HQ 裝備、消耗品或是進行版本初期的拓荒準備時，工坊能協助你將複雜的配方拆解，並根據市場即時價格與個人需求，制定最優化的籌備路徑。
+**冷凍兔肉的工坊** 是一個專為 FFXIV 玩家打造的批次備料管理平台。當你需要製作大量的 HQ 裝備、消耗品或是進行版本初期的拓荒準備時，工坊能協助你將複雜的配方拆解，並根據 Universalis 快取市場資料與個人需求，整理出實用的籌備路徑。
 
 ## ✨ 核心功能
 
 ### 🛠️ 備料台 (Workbench)
 - **智慧分配**：針對清單中的每一項素材，自由分配「購買」、「製作」、「採集」或「既有庫存」。
-- **即時預算**：串接 [Universalis](https://universalis.app/) API，根據你選定的資料中心即時預估總花費。
+- **預算估算**：串接 [Universalis](https://universalis.app/) API，根據你選定的資料中心估算總花費。市場資料來自快取，實際購買時仍可能與遊戲內市場板不同。
 - **時程估算**：粗略估算完成整份清單所需的製作與採集時間。
-- **市場策略**：支援「激進（最低價）」、「平衡（1/4 位數）」與「保守（中位數）」三種定價基準。
+- **市場策略**：支援「激進（偏向低價）」、「平衡（1/4 位數）」與「保守（中位數）」三種定價基準。
 
 ### 📋 待辦清單 (Todo List)
 - **一鍵生成**：根據備料台的分配結果，生成分類清晰的行動清單（購買區、採集區、製作區）。
-- **精確導航**：購買項目會列出最便宜的市場服或 NPC 座標；採集項目則包含地圖、座標以及限時點的 ET 時間。
+- **來源導向**：購買項目會依目前資料列出較低成本的市場服或 NPC 座標；採集項目則包含地圖、座標以及限時點的 ET 時間。
 - **快速複製**：內建一鍵複製素材名稱功能，搜尋市場板不再手忙腳亂。
 
 ### 🐰 兔肉私心筆記 (Recommended Notes)
