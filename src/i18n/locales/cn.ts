@@ -367,6 +367,13 @@ export default {
     description: '这将会调整整个工坊的界面语言。你之后随时可以在「工坊设置」中更改。',
     confirm: '就用这个语言开始吧！'
   },
+  marketSetupReminder: {
+    title: '别忘了设置市场来源',
+    description: '市场价格会依照你选择的地区与数据中心估算。开始备料前，建议先确认市场来源是否符合你游玩的服务器。',
+    note: '你可以在“工坊设置”中调整市场地区、数据中心与成本策略。',
+    openSettings: '前往工坊设置',
+    later: '稍后再说'
+  },
   changelog: {
     title: '版本更新记录',
     description: '这里记录了网站的历史更新与功能迭代。',

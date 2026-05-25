@@ -367,6 +367,13 @@ export default {
     description: '這將會調整整個工坊的介面語言。你之後隨時可以在「工坊設定」中更改。',
     confirm: '就用這個語言開始吧！'
   },
+  marketSetupReminder: {
+    title: '別忘了設定市場來源',
+    description: '市場價格會依照你選擇的地區與資料中心估算。開始備料前，建議先確認市場來源是否符合你遊玩的伺服器。',
+    note: '你可以在「工坊設定」中調整市場地區、資料中心與成本策略。',
+    openSettings: '前往工坊設定',
+    later: '稍後再說'
+  },
   changelog: {
     title: '版本更新紀錄',
     description: '這裡記錄了網站的歷史更新與功能迭代。',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from './composables/useNotes'
 import { useSettings } from './composables/useSettings'
@@ -16,6 +16,7 @@ import { loadLocaleMessages } from './i18n'
 import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
+import MarketSetupReminderModal from './components/modals/MarketSetupReminderModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
 import { initializeAnalytics, setAnalyticsLanguage, setAnalyticsThemeMode, trackRouteChange } from './services/analytics'
 
@@ -78,6 +79,12 @@ const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 const isSponsorModalOpen = ref(false)
 const isLanguageModalOpen = ref(!initialized.value)
+const isMarketSetupReminderOpen = ref(false)
+const isMarketSetupStepActive = ref(false)
+const isMarketSettingsVisitPending = ref(false)
+const shouldPauseAnalyticsConsent = computed(() =>
+  isLanguageModalOpen.value || isMarketSetupReminderOpen.value || isMarketSetupStepActive.value
+)
 
 // URL Hash Sync
 const syncTabFromHash = () => {
@@ -125,6 +132,13 @@ watch(currentTab, () => {
   }
 })
 
+watch(currentTab, (newTab, oldTab) => {
+  if (isMarketSettingsVisitPending.value && oldTab === 'settings' && newTab !== 'settings') {
+    isMarketSettingsVisitPending.value = false
+    isMarketSetupStepActive.value = false
+  }
+})
+
 // Handle data-loss fallback (e.g. page refresh while on workbench/todo)
 watch([currentTab, activeWorkbenchNote], ([newTab, activeNote]) => {
   if ((newTab === 'workbench' || newTab === 'todo') && !activeNote) {
@@ -156,6 +170,21 @@ const handleLanguageSelect = (lang: string) => {
   language.value = lang as any
   initialized.value = true
   isLanguageModalOpen.value = false
+  isMarketSetupStepActive.value = true
+  isMarketSetupReminderOpen.value = true
+}
+
+const handleOpenMarketSettings = () => {
+  isMarketSettingsVisitPending.value = true
+  isMarketSetupReminderOpen.value = false
+  currentTab.value = 'settings'
+}
+
+const handleMarketSetupReminderVisibility = (val: boolean) => {
+  isMarketSetupReminderOpen.value = val
+  if (!val && !isMarketSettingsVisitPending.value) {
+    isMarketSetupStepActive.value = false
+  }
 }
 </script>
 
@@ -247,7 +276,12 @@ const handleLanguageSelect = (lang: string) => {
       v-model:visible="isLanguageModalOpen" 
       @select="handleLanguageSelect"
     />
-    <AnalyticsConsentBanner :paused="isLanguageModalOpen" />
+    <MarketSetupReminderModal
+      :visible="isMarketSetupReminderOpen"
+      @update:visible="handleMarketSetupReminderVisibility"
+      @open-settings="handleOpenMarketSettings"
+    />
+    <AnalyticsConsentBanner :paused="shouldPauseAnalyticsConsent" />
   </div>
 </template>
 

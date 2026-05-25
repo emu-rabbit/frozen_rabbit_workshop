@@ -367,6 +367,13 @@ export default {
     description: 'This will adjust the entire workshop interface. You can change this anytime in "Workshop Settings".',
     confirm: 'Start with this language!'
   },
+  marketSetupReminder: {
+    title: 'Set your market source',
+    description: 'Market prices are estimated from the region and data center you choose. Before planning your materials, it is worth checking that the source matches the server you play on.',
+    note: 'You can adjust the market region, data center, and cost strategy in Workshop Settings.',
+    openSettings: 'Open Workshop Settings',
+    later: 'Do this later'
+  },
   changelog: {
     title: 'Version Changelog',
     description: 'View the update history and new features of the workshop here.',
