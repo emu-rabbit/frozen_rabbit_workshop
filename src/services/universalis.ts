@@ -231,6 +231,7 @@ export async function fetchItemPrices(
           resolvers[id] = resolve;
           rejecters[id] = reject;
         });
+        promise.catch(() => undefined);
         inflightRequests.set(cacheKey(dc, id, options), promise);
       });
 
@@ -336,7 +337,13 @@ export async function fetchItemPrices(
           }
         }
       } finally {
-        batch.forEach(id => inflightRequests.delete(cacheKey(dc, id, options)));
+        const fallbackRejection = localAbortController.signal.aborted
+          ? new Error('UserCancelled')
+          : new Error('Price request ended before resolving item data');
+        batch.forEach(id => {
+          inflightRequests.delete(cacheKey(dc, id, options));
+          try { rejecters[id](fallbackRejection); } catch { }
+        });
       }
     }
   } catch (err: any) {

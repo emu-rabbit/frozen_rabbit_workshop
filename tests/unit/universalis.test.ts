@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fetchItemPrices, clearPriceCache } from '../../src/services/universalis';
+import {
+    abortPriceFetch,
+    clearPriceCache,
+    fetchItemPrices,
+    isFetchingPrices,
+    isRetrying
+} from '../../src/services/universalis';
 
 describe('Universalis API Caching', () => {
     beforeEach(() => {
@@ -16,6 +22,7 @@ describe('Universalis API Caching', () => {
     });
 
     afterEach(() => {
+        abortPriceFetch();
         vi.useRealTimers();
         vi.unstubAllGlobals();
     });
@@ -68,5 +75,25 @@ describe('Universalis API Caching', () => {
 
         await fetchItemPrices([1], { hqOnly: true });
         expect(fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('settles shared inflight waiters when a retry backoff is skipped', async () => {
+        vi.mocked(fetch).mockRejectedValue(new TypeError('Failed to fetch'));
+
+        const primaryRequest = fetchItemPrices([99]);
+        await vi.waitFor(() => {
+            expect(fetch).toHaveBeenCalledTimes(1);
+            expect(isRetrying.value).toBe(true);
+        });
+
+        const sharedInflightRequest = fetchItemPrices([99]);
+        await Promise.resolve();
+
+        abortPriceFetch();
+
+        await expect(primaryRequest).resolves.toEqual(new Map());
+        await expect(sharedInflightRequest).resolves.toEqual(new Map());
+        expect(isFetchingPrices.value).toBe(false);
+        expect(isRetrying.value).toBe(false);
     });
 });
