@@ -369,9 +369,9 @@ export default {
   },
   marketSetupReminder: {
     title: 'Set your market source',
-    description: 'Market prices are estimated from the region and data center you choose. Before planning your materials, it is worth checking that the source matches the server you play on.',
-    note: 'You can adjust the market region, data center, and cost strategy in Workshop Settings.',
-    openSettings: 'Open Workshop Settings',
+    description: 'Market prices are estimated from the region and data center you choose. Before planning your materials, check that the source matches where you play.',
+    note: 'After you choose a market region and data center, the workshop will use that source for market price estimates.',
+    confirm: 'Use this source',
     later: 'Do this later'
   },
   changelog: {

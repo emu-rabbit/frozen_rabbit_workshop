@@ -8,6 +8,7 @@
  */
 
 import { ref, readonly } from 'vue';
+import { MARKET_DATA_CENTERS, type DataCenter } from '../data/marketServers';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -16,13 +17,6 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 /** DEBUG: 暫時用來模擬 Universalis API 掛掉時的情境。設置為 true 即可觸發假性 CORS 網路阻擋錯誤。 */
 export const DEBUG_SIMULATE_API_ERROR = false;
-
-/** All available data centers fetched from Universalis. */
-export interface DataCenter {
-  name: string;
-  region: string;
-  worlds: number[];
-}
 
 /** Price data for a single item. */
 export interface ItemPrice {
@@ -92,7 +86,7 @@ function setCache(dc: string, price: ItemPrice, options?: FetchItemPriceOptions)
 import { useSettings } from '../composables/useSettings'
 const { marketDC } = useSettings()
 
-const _dataCenters = ref<DataCenter[]>([]);
+const _dataCenters = ref<DataCenter[]>([...MARKET_DATA_CENTERS]);
 const _isFetchingPrices = ref(false);
 const _isPriceError = ref(false);
 const _isRetrying = ref(false);
@@ -114,69 +108,18 @@ export function abortPriceFetch() {
 
 // ─── Data Center Management ───────────────────────────────────────────────────
 
-const FALLBACK_DATA_CENTERS: DataCenter[] = [
-  { "name": "Elemental", "region": "Japan", "worlds": [45, 49, 50, 58, 68, 72, 90, 94] },
-  { "name": "Gaia", "region": "Japan", "worlds": [43, 46, 51, 59, 69, 76, 92, 98] },
-  { "name": "Mana", "region": "Japan", "worlds": [23, 28, 44, 47, 48, 61, 70, 96] },
-  { "name": "Aether", "region": "North-America", "worlds": [40, 54, 57, 63, 65, 73, 79, 99] },
-  { "name": "Primal", "region": "North-America", "worlds": [35, 53, 55, 64, 77, 78, 93, 95] },
-  { "name": "Chaos", "region": "Europe", "worlds": [39, 71, 80, 83, 85, 97, 400, 401] },
-  { "name": "Light", "region": "Europe", "worlds": [33, 36, 42, 56, 66, 67, 402, 403] },
-  { "name": "Crystal", "region": "North-America", "worlds": [34, 37, 41, 62, 74, 75, 81, 91] },
-  { "name": "Materia", "region": "Oceania", "worlds": [21, 22, 86, 87, 88] },
-  { "name": "Meteor", "region": "Japan", "worlds": [24, 29, 30, 31, 32, 52, 60, 82] },
-  { "name": "Dynamis", "region": "North-America", "worlds": [404, 405, 406, 407, 408, 409, 410, 411] },
-  { "name": "NA Cloud DC (Beta)", "region": "NA-Cloud-DC", "worlds": [3000, 3001] },
-  { "name": "陆行鸟", "region": "中国", "worlds": [1167, 1081, 1042, 1044, 1060, 1173, 1174, 1175] },
-  { "name": "莫古力", "region": "中国", "worlds": [1172, 1076, 1171, 1170, 1113, 1121, 1166, 1176] },
-  { "name": "猫小胖", "region": "中国", "worlds": [1043, 1169, 1106, 1045, 1177, 1178, 1179] },
-  { "name": "豆豆柴", "region": "中国", "worlds": [1192, 1183, 1180, 1186, 1201] },
-  { "name": "한국", "region": "한국", "worlds": [2075, 2076, 2077, 2078, 2080] },
-  { "name": "陸行鳥", "region": "繁中服", "worlds": [4028, 4029, 4030, 4031, 4032, 4033, 4034, 4035] }
-];
-
-let _dcFetchPromise: Promise<DataCenter[]> | null = null;
-
-/** Fetches and caches the full list of Universalis data centers (once per session). */
+/** Loads the static Universalis-supported data center snapshot bundled with the app. */
 export async function ensureDataCentersLoaded(): Promise<DataCenter[]> {
-  // Always start with fallback data if empty, ensuring UI is never empty
   if (_dataCenters.value.length === 0) {
-    _dataCenters.value = [...FALLBACK_DATA_CENTERS];
+    _dataCenters.value = [...MARKET_DATA_CENTERS];
   }
-
-  if (_dcFetchPromise) return _dcFetchPromise;
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-  _dcFetchPromise = fetch(`${UNIVERSALIS_BASE}/data-centers`, { signal: controller.signal })
-    .then(r => {
-      clearTimeout(timeoutId);
-      if (!r.ok) throw new Error('Failed to fetch data centers');
-      return r.json() as Promise<DataCenter[]>;
-    })
-    .then(list => {
-      // Update with fresh data from API
-      _dataCenters.value = list;
-      return list;
-    })
-    .catch(err => {
-      clearTimeout(timeoutId);
-      console.warn('[Universalis] Failed to refresh data centers, using fallbacks:', err.message);
-      // Return existing (fallback) data instead of throwing, making the error silent to UI
-      return _dataCenters.value;
-    })
-    .finally(() => {
-      _dcFetchPromise = null;
-    });
-
-  return _dcFetchPromise;
+  return _dataCenters.value;
 }
 
 /** Persists the selected data center to settings. */
 export function setSelectedDC(dc: string) {
   marketDC.value = dc;
-  // Invalidate the existing cache when DC changes
+  // Invalidate the existing cache when the price source changes
   priceCache.clear();
   inflightRequests.clear();
 }

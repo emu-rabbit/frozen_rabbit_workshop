@@ -196,7 +196,7 @@ const workbenchItems = ref<Record<number, WorkbenchItem>>({});
 const decisions = reactive<Record<string, ItemDecision>>({});
 const isLoading = ref(false);
 const lastNoteId = ref<string | null>(null);
-const lastDC = ref<string | null>(null);
+const lastMarketSource = ref<string | null>(null);
 const lastLocale = ref<string | null>(null);
 
 // Todo List State
@@ -340,12 +340,12 @@ const setItemPendingPrice = (item: WorkbenchItem) => {
 };
 
 const fetchPricesForMode = async (ids: number[], mode: MarketPriceMode) => {
-  const currentDC = selectedDC.value;
+  const currentMarketSource = selectedDC.value;
   const prices = mode === 'hq' ? await fetchItemPrices(ids, { hqOnly: true }) : await fetchItemPrices(ids);
   
-  // 校驗：如果在請求期間大區發生變動，則捨棄此次過時的回傳
-  if (selectedDC.value !== currentDC) {
-    console.warn(`[Workbench] DC changed from "${currentDC}" to "${selectedDC.value}" during fetch, discarding stale data.`);
+  // 校驗：如果在請求期間市場來源發生變動，則捨棄此次過時的回傳
+  if (selectedDC.value !== currentMarketSource) {
+    console.warn(`[Workbench] Market source changed from "${currentMarketSource}" to "${selectedDC.value}" during fetch, discarding stale data.`);
     return;
   }
 
@@ -677,15 +677,15 @@ export function useWorkbench() {
   const initialize = async (force: boolean = false) => {
     if (!activeWorkbenchNote.value) return;
     
-    const currentDC = selectedDC.value;
+    const currentMarketSource = selectedDC.value;
     const currentLocale = locale.value;
     
     const isNewNote = activeWorkbenchNote.value.id !== lastNoteId.value;
-    const isNewDC = currentDC !== lastDC.value;
+    const isNewMarketSource = currentMarketSource !== lastMarketSource.value;
     const isNewLocale = currentLocale !== lastLocale.value;
 
     // 如果都不變，且已有資料，則跳過初始化 (除非是強制的 reset)
-    if (!force && !isNewNote && !isNewDC && !isNewLocale && Object.keys(workbenchItems.value).length > 0) {
+    if (!force && !isNewNote && !isNewMarketSource && !isNewLocale && Object.keys(workbenchItems.value).length > 0) {
         return;
     }
 
@@ -706,9 +706,9 @@ export function useWorkbench() {
           Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
           Object.keys(todoOrder).forEach(k => delete todoOrder[k]);
           workbenchItems.value = {};
-      } else if (isNewDC) {
-          // 情況 B：同一份筆記但大區變更 -> 只重設價格標記與數值，保留決策
-          console.log(`[Workbench] DC changed (${lastDC.value} -> ${currentDC}), refreshing prices.`);
+      } else if (isNewMarketSource) {
+          // 情況 B：同一份筆記但市場來源變更 -> 只重設價格標記與數值，保留決策
+          console.log(`[Workbench] Market source changed (${lastMarketSource.value} -> ${currentMarketSource}), refreshing prices.`);
           Object.values(workbenchItems.value).forEach(item => {
               item.marketPriceMode = 'all';
               item.marketSnapshots = {};
@@ -726,7 +726,7 @@ export function useWorkbench() {
       }
 
       lastNoteId.value = activeWorkbenchNote.value.id;
-      lastDC.value = currentDC;
+      lastMarketSource.value = currentMarketSource;
       lastLocale.value = currentLocale;
 
       // 2. 獲取初始項目資料

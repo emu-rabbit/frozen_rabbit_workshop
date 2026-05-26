@@ -8,6 +8,30 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.1.2',
+    date: '2026-05-26',
+    changes: [
+      {
+        tw: '撰寫筆記時，未選中有效物品的列現在會有更醒目的提示',
+        cn: '撰写笔记时，未选中有效物品的列现在会有更醒目的提示',
+        en: 'Added a clearer highlight when a note row does not have a valid item selected',
+        ja: 'ノート作成時、有効なアイテムが選択されていない行をより分かりやすく表示するようにしました'
+      },
+      {
+        tw: '初次使用時會提醒先設定市場來源伺服器，讓價格估算更貼近實際需求',
+        cn: '初次使用时会提醒先设置市场来源服务器，让价格估算更贴近实际需求',
+        en: 'Added a first-time reminder to set a market source world so price estimates better match the user\'s needs',
+        ja: '初回利用時に市場価格の取得元ワールド設定を案内し、価格見積もりが利用者の状況に近づくようにしました'
+      },
+      {
+        tw: '優化多國語系、手機版面與 SEO 的細節',
+        cn: '优化多国语系、手机版面与 SEO 的细节',
+        en: 'Improved localization, mobile layout, and SEO details',
+        ja: '多言語対応、モバイル表示、SEO の細部を改善しました'
+      }
+    ]
+  },
+  {
     version: '1.1.1',
     date: '2026-05-23',
     changes: [
