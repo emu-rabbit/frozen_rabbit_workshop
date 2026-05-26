@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import SelectButton from 'primevue/selectbutton'
 import Dropdown from 'primevue/dropdown'
@@ -30,28 +30,9 @@ const strategyOptions = computed(() => [
   { label: t('settings.marketStrategyConservative'), value: 'conservative' }
 ])
 
-// Market Settings Logic
-const dcLoading = ref(false)
-
 onMounted(async () => {
-  dcLoading.value = true
-  try {
-    await ensureDataCentersLoaded()
-    
-    // Safety check: Ensure current selection matches available data
-    const regionExists = regionOptions.value.some(r => r.value === marketRegion.value)
-    if (!regionExists && regionOptions.value.length > 0) {
-      marketRegion.value = regionOptions.value[0].value
-    } else {
-        // Even if region exists, check if DC exists in that region
-        const dcExists = filteredDCs.value.some(dc => dc.value === marketDC.value)
-        if (!dcExists && filteredDCs.value.length > 0) {
-            marketDC.value = filteredDCs.value[0].value
-        }
-    }
-  } finally {
-    dcLoading.value = false
-  }
+  await ensureDataCentersLoaded()
+  syncMarketSelection()
 })
 
 const regionOptions = computed(() => {
@@ -67,6 +48,18 @@ const filteredDCs = computed(() => {
     .filter(dc => dc.region === marketRegion.value)
     .map(dc => ({ label: dc.name, value: dc.name }))
 })
+
+const syncMarketSelection = () => {
+  const regionExists = regionOptions.value.some(r => r.value === marketRegion.value)
+  if (!regionExists && regionOptions.value.length > 0) {
+    marketRegion.value = regionOptions.value[0].value
+  }
+
+  const dcExists = filteredDCs.value.some(dc => dc.value === marketDC.value)
+  if (!dcExists && filteredDCs.value.length > 0) {
+    marketDC.value = filteredDCs.value[0].value
+  }
+}
 
 // When switching region, reset DC to the first available in that region
 watch(marketRegion, (newVal, oldVal) => {
@@ -154,15 +147,9 @@ watch(marketDC, (newVal) => {
           <div class="flex flex-col gap-8">
               <!-- Sub-section 1: Market Data Source -->
               <div class="flex flex-col gap-4">
-                  <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
-                      <i class="pi pi-database text-xl"></i>
-                      <label class="font-bold text-lg">{{ t('settings.marketTitle') }}</label>
-                    </div>
-                    <div v-if="dcLoading" class="flex items-center gap-2 text-slate-400 text-[10px] md:text-xs">
-                      <i class="pi pi-spinner pi-spin"></i>
-                      <span>Syncing...</span>
-                    </div>
+                  <div class="flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
+                    <i class="pi pi-database text-xl"></i>
+                    <label class="font-bold text-lg">{{ t('settings.marketTitle') }}</label>
                   </div>
 
                   <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed -mt-3 px-1">{{ t('settings.marketDesc') }}</p>
@@ -175,8 +162,7 @@ watch(marketDC, (newVal) => {
                         :options="regionOptions" 
                         optionLabel="label" 
                         optionValue="value"
-                        :loading="dcLoading"
-                        :disabled="dcLoading"
+                        :aria-label="t('settings.marketRegion')"
                         class="w-full !border-emerald-100 dark:!border-slate-800 !rounded-xl"
                         :pt="{
                           root: { class: 'dark:bg-slate-950 dark:border-slate-800' },
@@ -195,8 +181,7 @@ watch(marketDC, (newVal) => {
                         :options="filteredDCs" 
                         optionLabel="label" 
                         optionValue="value"
-                        :loading="dcLoading"
-                        :disabled="dcLoading"
+                        :aria-label="t('settings.marketDC')"
                         class="w-full !border-emerald-100 dark:!border-slate-800 !rounded-xl"
                         :pt="{
                           root: { class: 'dark:bg-slate-950 dark:border-slate-800' },

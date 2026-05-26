@@ -69,14 +69,12 @@ export async function setupDictionaryMocks(page: Page) {
   await page.route('**/tw/tw-npcs.json', route => route.fulfill(fulfill({})));
 
   // ── Universalis 市場價格 API（universalis.ts）─────────────────────────────
-  // data-centers 回傳 DataCenter[]，price batch 回傳 { items: {} }
-  await page.route('**/universalis.app/api/v2/data-centers', route =>
-    route.fulfill(fulfill([{ name: 'Elemental', region: 'Japan', worlds: [] }]))
-  );
   // 批次價格查詢 /{dc}/{ids} 回傳 { items: {} }（代表沒有市場資料，但不會 crash）
   await page.route('**/universalis.app/api/v2/**', route =>
     route.fulfill(fulfill({ items: {}, lastUploadTime: 0 }))
   );
+  // 資料中心清單改由本地靜態維護，E2E 不應再依賴 runtime list API。
+  await page.route('**/universalis.app/api/v2/data-centers', route => route.abort());
 }
 
 

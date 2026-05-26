@@ -81,7 +81,6 @@ const isSponsorModalOpen = ref(false)
 const isLanguageModalOpen = ref(!initialized.value)
 const isMarketSetupReminderOpen = ref(false)
 const isMarketSetupStepActive = ref(false)
-const isMarketSettingsVisitPending = ref(false)
 const shouldPauseAnalyticsConsent = computed(() =>
   isLanguageModalOpen.value || isMarketSetupReminderOpen.value || isMarketSetupStepActive.value
 )
@@ -132,13 +131,6 @@ watch(currentTab, () => {
   }
 })
 
-watch(currentTab, (newTab, oldTab) => {
-  if (isMarketSettingsVisitPending.value && oldTab === 'settings' && newTab !== 'settings') {
-    isMarketSettingsVisitPending.value = false
-    isMarketSetupStepActive.value = false
-  }
-})
-
 // Handle data-loss fallback (e.g. page refresh while on workbench/todo)
 watch([currentTab, activeWorkbenchNote], ([newTab, activeNote]) => {
   if ((newTab === 'workbench' || newTab === 'todo') && !activeNote) {
@@ -174,15 +166,9 @@ const handleLanguageSelect = (lang: string) => {
   isMarketSetupReminderOpen.value = true
 }
 
-const handleOpenMarketSettings = () => {
-  isMarketSettingsVisitPending.value = true
-  isMarketSetupReminderOpen.value = false
-  currentTab.value = 'settings'
-}
-
 const handleMarketSetupReminderVisibility = (val: boolean) => {
   isMarketSetupReminderOpen.value = val
-  if (!val && !isMarketSettingsVisitPending.value) {
+  if (!val) {
     isMarketSetupStepActive.value = false
   }
 }
@@ -274,12 +260,12 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
     <SponsorModal v-model:visible="isSponsorModalOpen" />
     <LanguageSelectModal 
       v-model:visible="isLanguageModalOpen" 
+      @preview-language="handleLanguageUpdate"
       @select="handleLanguageSelect"
     />
     <MarketSetupReminderModal
       :visible="isMarketSetupReminderOpen"
       @update:visible="handleMarketSetupReminderVisibility"
-      @open-settings="handleOpenMarketSettings"
     />
     <AnalyticsConsentBanner :paused="shouldPauseAnalyticsConsent" />
   </div>
