@@ -59,6 +59,7 @@ const summary = computed(() => {
     // Track max requirements per job: { jobName: { level, stars } }
     let maxCraft = new Map<string, { level: number, stars: number }>()
     let maxGather = new Map<string, { level: number, stars: number }>()
+    let maxBattleLevel = 0
     let hasUnknownPrice = false
 
     activeItemIds.value.forEach(id => {
@@ -91,13 +92,16 @@ const summary = computed(() => {
                 maxGather.set(item.gathering.jobName, { level: item.gathering.level, stars: item.gathering.stars })
             }
             totalTime += (d.gather * 5)
+        } else if (d.gather > 0 && item.canHunt && item.monsterDropLevel) {
+            maxBattleLevel = Math.max(maxBattleLevel, item.monsterDropLevel)
         }
     })
 
     const craftJobs = Array.from(maxCraft.entries()).map(([name, req]) => `${name}|${req.level}|${req.stars}`)
     const gatherJobs = Array.from(maxGather.entries()).map(([name, req]) => `${name}|${req.level}|${req.stars}`)
+    const huntJobs = maxBattleLevel > 0 ? [`jobs.battle|${maxBattleLevel}|0`] : []
 
-    return { totalCost, totalTime, craftJobs, gatherJobs, hasUnknownPrice }
+    return { totalCost, totalTime, craftJobs, gatherJobs, huntJobs, hasUnknownPrice }
 })
 
 const updateDecision = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', delta: number) => {
@@ -131,6 +135,22 @@ const toggleExpand = (id: number) => { expandedItems.value[id] = !expandedItems.
 
 // Helper for stars display
 const renderStars = (count: number) => '★'.repeat(count)
+
+const getMaterialSource = (id: number) => {
+    const item = workbenchItems.value[id]
+    if (item?.canGather) return 'gather'
+    if (item?.canHunt) return 'hunt'
+    return null
+}
+
+const getMaterialSourceLabel = (id: number) => {
+    const source = getMaterialSource(id)
+    if (source === 'gather') return t('workbench.view.source.gather')
+    if (source === 'hunt') return t('workbench.view.source.hunt')
+    return t('workbench.view.source.cannotGatherHunt')
+}
+
+const getPrimaryDropPosition = (drop: any) => drop?.positions?.[0]
 
 const formatTime = (seconds: number) => {
     if (seconds <= 0) return `0 ${t('workbench.view.summary.mins')}`
@@ -276,6 +296,10 @@ const copyToClipboard = (id: string, text: string) => {
                             <span class="text-[12px] md:text-[14px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50 dark:border-slate-700">
                                 {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
+                            <!-- Battle Drop Badge -->
+                            <span v-if="workbenchItems[id]?.canHunt && workbenchItems[id]?.monsterDropLevel" class="text-[12px] md:text-[14px] bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded-md font-bold border border-violet-100 dark:border-violet-900/50">
+                                {{ t('jobs.battle') }} Lv.{{ workbenchItems[id]?.monsterDropLevel }}
+                            </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100 dark:border-indigo-900/50">
                                 {{ t(workbenchItems[id]?.crafting?.jobName) }} Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
@@ -319,16 +343,16 @@ const copyToClipboard = (id: string, text: string) => {
                            </div>
                         </div>
 
-                        <!-- GATHER -->
+                        <!-- GATHER / HUNT -->
                         <div class="relative p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
-                             :class="[!workbenchItems[id]?.canGather ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.gather > 0 ? 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 ring-2 ring-amber-50 dark:ring-amber-950/40 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
-                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'">
-                               {{ !workbenchItems[id]?.canGather ? t('workbench.view.source.cannotGather') : t('workbench.view.source.gather') }}
+                             :class="[!getMaterialSource(id) ? 'opacity-20 grayscale pointer-events-none border-slate-200/40 dark:border-slate-700/30 bg-transparent' : (decisions[String(id)]?.gather > 0 ? (getMaterialSource(id) === 'hunt' ? 'bg-violet-50 dark:bg-violet-950/40 border-violet-300 dark:border-violet-800 ring-2 ring-violet-50 dark:ring-violet-950/40 shadow-sm' : 'bg-amber-50 dark:bg-amber-950/40 border-amber-300 dark:border-amber-800 ring-2 ring-amber-50 dark:ring-amber-950/40 shadow-sm') : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800')]">
+                           <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.gather > 0 ? (getMaterialSource(id) === 'hunt' ? 'text-violet-600 dark:text-violet-400' : 'text-amber-600 dark:text-amber-400') : 'text-slate-400 dark:text-slate-500'">
+                               {{ getMaterialSourceLabel(id) }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
-                               <button @click="updateDecision(id, 'gather', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-amber-400 dark:hover:border-amber-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <button @click="updateDecision(id, 'gather', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-left scale-75"></i></button>
                                <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
-                               <button @click="updateDecision(id, 'gather', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-amber-400 dark:hover:border-amber-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button @click="updateDecision(id, 'gather', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -484,6 +508,48 @@ const copyToClipboard = (id: string, text: string) => {
                         </div>
                     </div>
 
+                    <!-- HUNTING CARD -->
+                    <div v-if="workbenchItems[id]?.monsterDrops?.length" class="group/card bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-violet-500 dark:bg-violet-600 flex items-center justify-center text-white shadow-lg shadow-violet-100 dark:shadow-none">
+                                <i class="pi pi-bolt scale-90"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.huntTitle') }}</span>
+                                <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">
+                                    {{ t('jobs.battle') }} Lv.{{ workbenchItems[id].monsterDropLevel || '?' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 max-h-[190px] overflow-y-auto pr-1 custom-scrollbar">
+                            <div v-for="drop in workbenchItems[id].monsterDrops" :key="drop.monsterId" class="bg-slate-50/50 dark:bg-slate-800/50 rounded-xl px-3 py-3 border border-slate-100/50 dark:border-slate-700/50">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="min-w-0">
+                                        <div class="text-[12px] font-black text-slate-700 dark:text-slate-300 truncate leading-tight">{{ drop.monsterName }}</div>
+                                        <div class="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] font-bold text-slate-400 dark:text-slate-500">
+                                            <span class="bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded border border-violet-100 dark:border-violet-900/40">{{ t('jobs.battle') }} Lv.{{ drop.level || '?' }}</span>
+                                            <span v-if="getPrimaryDropPosition(drop)?.parentZoneName" class="inline-flex items-center gap-1 min-w-0">
+                                                <i class="pi pi-map-marker text-[9px]"></i>
+                                                <span class="truncate max-w-[150px]">{{ getPrimaryDropPosition(drop)?.parentZoneName }}</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <span v-if="getPrimaryDropPosition(drop)?.x !== undefined && getPrimaryDropPosition(drop)?.y !== undefined" class="text-[11px] font-black text-soft-green-600 dark:text-soft-green-500 font-mono whitespace-nowrap">
+                                        ({{ getPrimaryDropPosition(drop)?.x?.toFixed(1) }}, {{ getPrimaryDropPosition(drop)?.y?.toFixed(1) }})
+                                    </span>
+                                </div>
+                                <div v-if="getPrimaryDropPosition(drop)?.zoneName && getPrimaryDropPosition(drop)?.zoneName !== getPrimaryDropPosition(drop)?.parentZoneName" class="mt-2 flex items-center gap-2 text-[11px] font-bold text-slate-500 dark:text-slate-400">
+                                    <i class="pi pi-map text-[10px]"></i>
+                                    <span class="truncate">{{ getPrimaryDropPosition(drop)?.zoneName }}</span>
+                                </div>
+                                <div v-else-if="!getPrimaryDropPosition(drop)" class="mt-2 text-[11px] font-bold text-slate-400 dark:text-slate-500">
+                                    {{ t('workbench.view.details.huntNoPosition') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- CRAFTING CARD -->
                     <div v-if="workbenchItems[id]?.crafting" class="group/card bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-shadow">
                         <div class="flex items-center gap-3 mb-4">
@@ -564,6 +630,9 @@ const copyToClipboard = (id: string, text: string) => {
                 </span>
                 <span v-for="jobRaw in summary.gatherJobs" :key="jobRaw" class="text-[11px] md:text-[15px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50 whitespace-nowrap">
                     {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}{{ renderStars(parseInt(jobRaw.split('|')[2])) }}
+                </span>
+                <span v-for="jobRaw in summary.huntJobs" :key="jobRaw" class="text-[11px] md:text-[15px] bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded-md font-bold border border-violet-100 dark:border-violet-900/50 whitespace-nowrap">
+                    {{ t(jobRaw.split('|')[0]) }} Lv.{{ jobRaw.split('|')[1] }}
                 </span>
             </div>
         </div>

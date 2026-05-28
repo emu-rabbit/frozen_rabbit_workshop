@@ -14,6 +14,8 @@ import { calculateMarketStats } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
 import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
+import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
+import type { MonsterDropInfo } from '../services/monsterDrops';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
 import { sanitizeNoteItems } from '../utils/noteItems';
@@ -43,6 +45,7 @@ export interface WorkbenchItem {
   canCraft: boolean;
   canCraftHq: boolean;
   canGather: boolean;
+  canHunt: boolean;
   marketPrice: number | null;
   marketPriceMode: MarketPriceMode;
   priceFetched: boolean;
@@ -50,6 +53,8 @@ export interface WorkbenchItem {
   listings?: MarketListing[];
   crafting: CraftingInfo | null;
   gathering: any | null; // GatheringInfo from gathering.ts
+  monsterDrops: MonsterDropInfo[] | null;
+  monsterDropLevel: number | null;
   vendorInfo: VendorInfo | null;
   marketStats?: {
     minPrice: number | null;
@@ -75,7 +80,7 @@ export interface ItemDecision {
 }
 
 export interface TodoItem {
-  sectionKey: 'other' | 'buy' | 'gather' | 'craft';
+  sectionKey: 'other' | 'hunt' | 'buy' | 'gather' | 'craft';
   id: number;
   quantity: number;
   name: any;
@@ -83,11 +88,12 @@ export interface TodoItem {
   marketPrice: number | null;
   purchaseInfo?: PurchaseInfo;
   gathering?: any;
+  monsterDrops?: MonsterDropInfo[] | null;
   crafting?: any;
 }
 
 export interface TodoSection {
-  key: 'other' | 'buy' | 'gather' | 'craft';
+  key: 'other' | 'hunt' | 'buy' | 'gather' | 'craft';
   items: TodoItem[];
 }
 
@@ -220,6 +226,8 @@ const initSingleItemDecision = (id: number, demand: number, isRoot: boolean = fa
           decisions[String(id)] = { buy: 0, craft: demand, gather: 0, other: 0 };
       } else if (itemData?.canGather) {
           decisions[String(id)] = { buy: 0, craft: 0, gather: demand, other: 0 };
+      } else if (itemData?.canHunt) {
+          decisions[String(id)] = { buy: 0, craft: 0, gather: demand, other: 0 };
       } else {
           decisions[String(id)] = { buy: demand, craft: 0, gather: 0, other: 0 };
       }
@@ -238,6 +246,8 @@ const refreshItemsData = async (ids: number[]) => {
 
     const recipe = globalRecipesCache.value?.find(r => r.result === id);
     const gather = getGatheringInfo(id);
+    const monsterDrops = getMonsterDropInfo(id);
+    const monsterDropLevel = getMonsterDropPreferredLevel(monsterDrops);
     const vendor = getBestVendor(id);
 
     const crafting: CraftingInfo | null = recipe ? {
@@ -267,11 +277,14 @@ const refreshItemsData = async (ids: number[]) => {
       canCraft: !!recipe,
       canCraftHq: recipe ? canRecipeCraftHq(recipe) : false,
       canGather: !!gather,
+      canHunt: !!monsterDrops && monsterDrops.length > 0,
       marketPrice: null,
       marketPriceMode: 'all',
       priceFetched: false,
       crafting,
       gathering: gather,
+      monsterDrops,
+      monsterDropLevel,
       vendorInfo: vendor,
       marketSnapshots: {}
     };
@@ -510,10 +523,11 @@ const activeItemIds = computed(() => {
 
       const getWeight = (id: number, item: any, isRoot: boolean, isCrystal: boolean) => {
           if (isRoot) return 0;
-          if (isCrystal) return 4;
           if (item?.canCraft) return 1;
-          if (item?.canGather) return 2;
-          return 3;
+          if (isCrystal) return 5;
+          if (item?.canGather && !isCrystal) return 2;
+          if (item?.canHunt) return 3;
+          return 4;
       };
 
       const wA = getWeight(a, itemA, isRootA, isCrystalA);
@@ -521,9 +535,13 @@ const activeItemIds = computed(() => {
 
       if (wA !== wB) return wA - wB;
 
-      if (wA === 1 || wA === 2) {
-          const metaA = wA === 1 ? itemA?.crafting : itemA?.gathering;
-          const metaB = wA === 1 ? itemB?.crafting : itemB?.gathering;
+      if (wA === 1 || wA === 2 || wA === 3) {
+          const metaA = wA === 1
+            ? itemA?.crafting
+            : (wA === 2 ? itemA?.gathering : { level: itemA?.monsterDropLevel || 0, stars: 0, type: 99 });
+          const metaB = wA === 1
+            ? itemB?.crafting
+            : (wA === 2 ? itemB?.gathering : { level: itemB?.monsterDropLevel || 0, stars: 0, type: 99 });
           if (metaA && metaB) {
               if (metaB.level !== metaA.level) return metaB.level - metaA.level;
               if (metaB.stars !== metaA.stars) return metaB.stars - metaA.stars;
@@ -531,7 +549,7 @@ const activeItemIds = computed(() => {
               const jobB = wA === 1 ? metaB.job : metaB.type;
               if (jobA !== jobB) return jobA - jobB;
           }
-      } else if (wA === 4) {
+      } else if (wA === 5) {
           return b - a;
       }
 
@@ -545,6 +563,7 @@ const activeItemIds = computed(() => {
 const generateTodoSections = computed(() => {
   const sections: Record<string, TodoItem[]> = {
     other: [],
+    hunt: [],
     buy: [],
     gather: [],
     craft: []
@@ -572,11 +591,19 @@ const generateTodoSections = computed(() => {
     }
 
     if (d.gather > 0) {
-      sections.gather.push({
-        sectionKey: 'gather', id, quantity: d.gather,
-        name: item.name, icon: item.icon, marketPrice: null,
-        gathering: item.gathering
-      });
+      if (item.canGather) {
+        sections.gather.push({
+          sectionKey: 'gather', id, quantity: d.gather,
+          name: item.name, icon: item.icon, marketPrice: null,
+          gathering: item.gathering
+        });
+      } else if (item.canHunt) {
+        sections.hunt.push({
+          sectionKey: 'hunt', id, quantity: d.gather,
+          name: item.name, icon: item.icon, marketPrice: null,
+          monsterDrops: item.monsterDrops
+        });
+      }
     }
 
     if (d.craft > 0) {
@@ -642,8 +669,32 @@ const generateTodoSections = computed(() => {
       return (gB.level || 0) - (gA.level || 0);
   });
 
+  sections.hunt.sort((a, b) => {
+      const hA = a.monsterDrops?.[0];
+      const hB = b.monsterDrops?.[0];
+      if (!hA && !hB) return 0;
+      if (!hA) return 1;
+      if (!hB) return -1;
+
+      const regA = hA.regionName || '';
+      const regB = hB.regionName || '';
+      if (regA !== regB) return regA.localeCompare(regB);
+
+      const pZoneA = hA.parentZoneName || '';
+      const pZoneB = hB.parentZoneName || '';
+      if (pZoneA !== pZoneB) return pZoneA.localeCompare(pZoneB);
+
+      const zoneA = hA.zoneName || '';
+      const zoneB = hB.zoneName || '';
+      if (zoneA !== zoneB) return zoneA.localeCompare(zoneB);
+
+      if ((hB.level || 0) !== (hA.level || 0)) return (hB.level || 0) - (hA.level || 0);
+      return hA.monsterName.localeCompare(hB.monsterName);
+  });
+
   const result: TodoSection[] = [
     { key: 'other', items: sections.other },
+    { key: 'hunt', items: sections.hunt },
     { key: 'buy', items: sections.buy },
     { key: 'gather', items: sections.gather },
     { key: 'craft', items: sections.craft }
@@ -694,6 +745,7 @@ export function useWorkbench() {
       await Promise.all([
         ensureDictionaryLoaded(),
         ensureGatheringDataLoaded(),
+        ensureMonsterDropDataLoaded(),
         ensureVendorDataLoaded()
       ]);
 

@@ -51,6 +51,7 @@
 ### Business
 
 - `.agents/skills/business/ffxiv_data_sources.md`：Teamcraft、Universalis、XIVAPI 與本地資料快取的維護規範。
+- `.agents/skills/business/monster_drop_sources.md`：怪物掉落來源、Teamcraft drop/mob/monster 資料格式、檔案大小與實作路徑。
 - `.agents/skills/business/recommended_notes.md`：推薦筆記 JSON、多語系名稱、排序與處理 workflow 規範。
 - `.agents/skills/business/market_pricing.md`：市場價格策略、HQ/NQ 切換、快取與失敗處理規範。
 
@@ -67,6 +68,10 @@
 若任務涉及 Teamcraft 資料、物品搜尋、配方、採集資訊、地圖地名、職業名稱或資料載入失敗，另讀：
 
 - `.agents/skills/business/ffxiv_data_sources.md`
+
+若任務涉及怪物掉落、狩獵素材、怪物名稱、怪物所在地或 `drop-sources.json` / `monsters.json` / `mobs.json`，另讀：
+
+- `.agents/skills/business/monster_drop_sources.md`
 
 若任務涉及 `src/data/recommended/`、推薦筆記、站長精選清單、FAQ 中推薦筆記說明或多語系筆記名稱，另讀：
 
