@@ -5,6 +5,7 @@ const GA_ORIGIN = window.location.origin
 let hasTrackedAnalyticsReady = false
 let hasDeniedAnalyticsThisSession = false
 let hasConfiguredGoogleAnalytics = false
+let hasTrackedInitialPageView = false
 
 type AnalyticsLanguageContext = {
   app_language?: string
@@ -57,7 +58,7 @@ export const setAnalyticsConsent = (consent: AnalyticsConsent) => {
     window.localStorage.setItem(CONSENT_KEY, consent)
     updateGoogleConsent('granted')
     window.gtag?.('set', 'user_properties', getUserProperties())
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
     return
   }
@@ -72,7 +73,7 @@ export const initializeAnalytics = () => {
 
   if (getAnalyticsConsent() === 'granted') {
     updateGoogleConsent('granted')
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
   }
 }
@@ -219,6 +220,13 @@ export const trackPageView = (pagePath = window.location.pathname + window.locat
   })
 }
 
+const trackInitialPageView = () => {
+  if (hasTrackedInitialPageView || !isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  hasTrackedInitialPageView = true
+  trackPageView()
+}
+
 export const trackAnalyticsReady = () => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag || hasTrackedAnalyticsReady) return
 
@@ -285,7 +293,7 @@ const loadGoogleAnalytics = () => {
   script.addEventListener('load', () => {
     if (getAnalyticsConsent() !== 'granted') return
 
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
   }, { once: true })
   document.head.appendChild(script)
