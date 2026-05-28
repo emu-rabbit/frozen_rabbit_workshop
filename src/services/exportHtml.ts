@@ -113,9 +113,6 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         const drop = item.monsterDrops[0];
         const position = drop.positions?.[0];
         const zone = drop.parentZoneName || drop.zoneName || '';
-        const coords = position?.x !== undefined && position?.y !== undefined
-          ? `X:${position.x.toFixed(1)} Y:${position.y.toFixed(1)}`
-          : '';
         infoColumnHtml = `
           <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
             <div class="flex flex-col items-end gap-1.5">
@@ -132,7 +129,6 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                     .replace('{x}', position?.x?.toFixed(1) || '??')
                     .replace('{y}', position?.y?.toFixed(1) || '??')}
               </div>
-              ${coords ? `<div class="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 font-mono">${coords}</div>` : ''}
               <span class="text-[10px] md:text-sm font-black bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 px-3 py-1 rounded-full border border-violet-100 dark:border-violet-900/40 leading-none shadow-sm whitespace-nowrap">
                   ${ctx.getJobName('jobs.battle')} Lv.${drop.level || '?'}
               </span>
