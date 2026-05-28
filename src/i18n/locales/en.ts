@@ -174,9 +174,11 @@ export default {
         buy: 'Market',
         craft: 'Craft',
         gather: 'Gather',
+        hunt: 'Hunt',
         other: 'Stock+',
         cannotCraft: 'No Recipe',
-        cannotGather: 'No Node'
+        cannotGather: 'No Node',
+        cannotGatherHunt: 'No Node / Hunt'
       },
       status: {
         missing: '{n} more needed',
@@ -189,6 +191,8 @@ export default {
       },
       details: {
         gatherTitle: 'Gathering Details',
+        huntTitle: 'Monster Drop Sources',
+        huntNoPosition: 'Teamcraft has a known drop source, but no outdoor coordinates.',
         limited: 'Timed',
         unknownZone: 'Unknown Zone',
         spawnTime: 'Spawns',
@@ -231,6 +235,7 @@ export default {
     progress: '{n}/{total} Completed',
     section: {
       other: 'Stock & Other Sources',
+      hunt: 'Items to Hunt',
       buy: 'Items to Purchase',
       gather: 'Items to Gather',
       craft: 'Items to Craft'
@@ -239,6 +244,7 @@ export default {
     targetPrice: 'Reference Price',
     buySourceMarket: 'Market: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
+    huntSource: '{monster}: {zone} X:{x} Y:{y}',
     gatherLocation: 'Node',
     emptySection: 'No items in this section',
     copyAlarmMacro: 'Copy Alarm Macro',
@@ -248,6 +254,7 @@ export default {
     crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
     lwr: 'Leatherworker', wvr: 'Weaver', alc: 'Alchemist', cul: 'Culinarian',
     min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering',
+    battle: 'Battle',
     companyCrafting: 'Company Crafting',
     islandCrafting: 'Sanctuary Crafting'
   },

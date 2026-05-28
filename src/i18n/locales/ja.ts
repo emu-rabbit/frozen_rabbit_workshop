@@ -174,9 +174,11 @@ export default {
         buy: '購入',
         craft: '製作',
         gather: '採集',
+        hunt: '討伐',
         other: '在庫+',
         cannotCraft: '製作不可',
-        cannotGather: '採集不可'
+        cannotGather: '採集不可',
+        cannotGatherHunt: '採集/討伐不可'
       },
       status: {
         missing: 'あと {n} 個',
@@ -189,6 +191,8 @@ export default {
       },
       details: {
         gatherTitle: '採集場所と詳細',
+        huntTitle: 'モンスタードロップ元',
+        huntNoPosition: 'Teamcraft に既知のドロップ元がありますが、フィールド座標がありません。',
         limited: 'ＥＴ限定',
         unknownZone: '未知の場所',
         spawnTime: '出現時間',
@@ -231,6 +235,7 @@ export default {
     progress: '{n}/{total} 完了',
     section: {
       other: '在庫・その他',
+      hunt: '討伐するもの',
       buy: '購入するもの',
       gather: '採集するもの',
       craft: '制作するもの'
@@ -239,6 +244,7 @@ export default {
     targetPrice: '参考単価',
     buySourceMarket: 'マケボ: {world}',
     buySourceVendor: 'NPC: {name} ({zone} X:{x} Y:{y})',
+    huntSource: '{monster}: {zone} X:{x} Y:{y}',
     gatherLocation: '採集ポイント',
     emptySection: 'このセクションには項目がありません',
     copyAlarmMacro: 'アラームマクロをコピー',
@@ -248,6 +254,7 @@ export default {
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
     lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
     min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集',
+    battle: '戦闘',
     companyCrafting: 'カンパニークラフト',
     islandCrafting: '開拓製作'
   },

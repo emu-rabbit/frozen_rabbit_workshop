@@ -3,12 +3,14 @@ export interface ExportContext {
     title: string;
     progress: string;
     sectionOther: string;
+    sectionHunt: string;
     sectionBuy: string;
     sectionGather: string;
     sectionCraft: string;
     targetPrice: string;
     buySourceVendor: string;
     buySourceMarket: string;
+    huntSource: string;
     exportOfflineNote: string;
     copyAlarmMacro: string;
     alarmMacroCopied: string;
@@ -26,6 +28,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
   const getSectionConfig = (key: string) => {
     switch (key) {
       case 'other': return { color: 'emerald', icon: 'pi-box', bg: 'bg-emerald-50 dark:bg-emerald-950/20', border: 'border-emerald-100 dark:border-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' };
+      case 'hunt': return { color: 'violet', icon: 'pi-bolt', bg: 'bg-violet-50 dark:bg-violet-950/20', border: 'border-violet-100 dark:border-violet-900/30', text: 'text-violet-600 dark:text-violet-400' };
       case 'buy': return { color: 'slate', icon: 'pi-shopping-cart', bg: 'bg-slate-50 dark:bg-slate-800/40', border: 'border-slate-200 dark:border-slate-700/50', text: 'text-slate-600 dark:text-slate-400' };
       case 'gather': return { color: 'amber', icon: 'pi-map-marker', bg: 'bg-amber-50 dark:bg-amber-950/20', border: 'border-amber-100 dark:border-amber-900/30', text: 'text-amber-600 dark:text-amber-400' };
       case 'craft': return { color: 'indigo', icon: 'pi-hammer', bg: 'bg-indigo-50 dark:bg-indigo-950/20', border: 'border-indigo-100 dark:border-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' };
@@ -35,6 +38,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
 
   const sectionLabelObj: Record<string, string> = {
     'other': ctx.translations.sectionOther,
+    'hunt': ctx.translations.sectionHunt,
     'buy': ctx.translations.sectionBuy,
     'gather': ctx.translations.sectionGather,
     'craft': ctx.translations.sectionCraft,
@@ -101,6 +105,36 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
               ${etDisplay}
               <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none shadow-sm whitespace-nowrap">
                   ${ctx.getJobName(item.gathering.jobName)} Lv.${item.gathering.level}${ctx.renderStars(item.gathering.stars)}
+              </span>
+            </div>
+          </div>
+        `;
+      } else if (section.key === 'hunt' && item.monsterDrops?.[0]) {
+        const drop = item.monsterDrops[0];
+        const position = drop.positions?.[0];
+        const zone = drop.parentZoneName || drop.zoneName || '';
+        const coords = position?.x !== undefined && position?.y !== undefined
+          ? `X:${position.x.toFixed(1)} Y:${position.y.toFixed(1)}`
+          : '';
+        infoColumnHtml = `
+          <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
+            <div class="flex flex-col items-end gap-1.5">
+              <div class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                  <i class="pi pi-bolt text-[10px] md:text-xs opacity-70"></i>
+                  <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
+                      ${drop.monsterName}
+                  </span>
+              </div>
+              <div class="text-[10px] md:text-xs font-bold text-slate-500 dark:text-slate-400">
+                  ${ctx.translations.huntSource
+                    .replace('{monster}', drop.monsterName || '')
+                    .replace('{zone}', zone || '')
+                    .replace('{x}', position?.x?.toFixed(1) || '??')
+                    .replace('{y}', position?.y?.toFixed(1) || '??')}
+              </div>
+              ${coords ? `<div class="text-[10px] md:text-xs font-black text-slate-400 dark:text-slate-500 font-mono">${coords}</div>` : ''}
+              <span class="text-[10px] md:text-sm font-black bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 px-3 py-1 rounded-full border border-violet-100 dark:border-violet-900/40 leading-none shadow-sm whitespace-nowrap">
+                  ${ctx.getJobName('jobs.battle')} Lv.${drop.level || '?'}
               </span>
             </div>
           </div>

@@ -60,6 +60,13 @@ export async function setupDictionaryMocks(page: Page) {
   })));
   await page.route('**/gathering-search-index.json', route => route.fulfill(fulfill({})));
 
+  // ── 怪物掉落服務（monsterDrops.ts）───────────────────────────────────────
+  await page.route('**/drop-sources.json', route => route.fulfill(fulfill({})));
+  await page.route('**/monsters.json', route => route.fulfill(fulfill({})));
+  await page.route('**/ffxiv-teamcraft/**json/mobs.json', route => route.fulfill(fulfill({})));
+  await page.route('**/tw/tw-mobs.json', route => route.fulfill(fulfill({})));
+  await page.route('**/zh/zh-mobs.json', route => route.fulfill(fulfill({})));
+
   // ── 販售 NPC 服務（vendor.ts）─────────────────────────────────────────────
   // shops.json: NPCshop array
   await page.route('**/shops.json', route => route.fulfill(fulfill([])));

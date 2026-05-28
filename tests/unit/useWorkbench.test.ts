@@ -4,7 +4,9 @@ import { ref } from 'vue';
 const mocks = vi.hoisted(() => ({
     activeWorkbenchNote: { value: null as any },
     fetchItemPrices: vi.fn(),
-    recipesCache: { value: [] as any[] }
+    recipesCache: { value: [] as any[] },
+    getGatheringInfo: vi.fn(),
+    getMonsterDropInfo: vi.fn()
 }));
 
 // Pre-mocking dependencies before importing the module under test
@@ -36,7 +38,17 @@ vi.mock('../../src/services/universalis', () => ({
 
 vi.mock('../../src/services/gathering', () => ({
     ensureGatheringDataLoaded: vi.fn(),
-    getGatheringInfo: vi.fn()
+    getGatheringInfo: mocks.getGatheringInfo
+}));
+
+vi.mock('../../src/services/monsterDrops', () => ({
+    ensureMonsterDropDataLoaded: vi.fn(),
+    getMonsterDropInfo: mocks.getMonsterDropInfo,
+    getMonsterDropMaxLevel: vi.fn((drops: any[] | null | undefined) => {
+        if (!drops || drops.length === 0) return null;
+        const maxLevel = drops.reduce((max, drop) => Math.max(max, drop.level || 0), 0);
+        return maxLevel > 0 ? maxLevel : null;
+    })
 }));
 
 vi.mock('../../src/services/vendor', () => ({
@@ -57,6 +69,10 @@ describe('Workbench Service Logic', () => {
         mocks.recipesCache.value = [];
         mocks.fetchItemPrices.mockReset();
         mocks.fetchItemPrices.mockResolvedValue(new Map());
+        mocks.getGatheringInfo.mockReset();
+        mocks.getGatheringInfo.mockReturnValue(null);
+        mocks.getMonsterDropInfo.mockReset();
+        mocks.getMonsterDropInfo.mockReturnValue(null);
     });
 
     it('preserves the old reversed BFS preference while moving dependencies before consumers', async () => {
@@ -279,5 +295,87 @@ describe('Workbench Service Logic', () => {
             marketPriceMode: 'all',
             crafting: { canCraftHq: false }
         });
+    });
+
+    it('routes root items with monster drops into the hunting todo section', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-hunt-source',
+            name: 'Hunt source',
+            items: [{ id: 36257, quantity: 3 }]
+        };
+        mocks.getMonsterDropInfo.mockReturnValue([
+            {
+                monsterId: 10471,
+                monsterName: '慕斯怪',
+                level: 84,
+                regionName: '星外天域',
+                parentZoneName: '嘆息海',
+                zoneName: '嘆息海',
+                positions: [{ level: 84, x: 16.2, y: 25.9, regionName: '星外天域', parentZoneName: '嘆息海', zoneName: '嘆息海' }]
+            }
+        ]);
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, workbenchItems, decisions, generateTodoSections } = useWorkbench();
+        await initialize(true);
+
+        expect(workbenchItems.value[36257]).toMatchObject({
+            canGather: false,
+            canHunt: true,
+            monsterDropMaxLevel: 84
+        });
+        expect(decisions['36257']).toMatchObject({ gather: 3 });
+        expect(generateTodoSections.value).toHaveLength(1);
+        expect(generateTodoSections.value[0]).toMatchObject({
+            key: 'hunt',
+            items: [{ sectionKey: 'hunt', id: 36257, quantity: 3 }]
+        });
+        expect(generateTodoSections.value[0].items[0].monsterDrops?.[0]).toMatchObject({
+            monsterName: '慕斯怪',
+            level: 84
+        });
+    });
+
+    it('sorts hunt-only materials after gather-only materials and before crystals', async () => {
+        mocks.activeWorkbenchNote.value = {
+            id: 'note-source-sort',
+            name: 'Source sort',
+            items: [{ id: 9000, quantity: 1 }]
+        };
+        mocks.recipesCache.value = [
+            {
+                result: 9000,
+                job: 8,
+                lvl: 90,
+                stars: 0,
+                yields: 1,
+                ingredients: [
+                    { id: 36257, amount: 1 },
+                    { id: 12, amount: 1 },
+                    { id: 5106, amount: 1 }
+                ]
+            }
+        ];
+        mocks.getGatheringInfo.mockImplementation((id: number) => id === 5106 || id === 12
+            ? { type: 2, jobName: 'jobs.btn', level: 15, stars: 0, isLimited: false, spawns: [], duration: 0 }
+            : null
+        );
+        mocks.getMonsterDropInfo.mockImplementation((id: number) => id === 36257
+            ? [{ monsterId: 10471, monsterName: '慕斯怪', level: 84, positions: [{ level: 84, x: 16.2, y: 25.9 }] }]
+            : null
+        );
+        vi.resetModules();
+
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+
+        const { initialize, activeItemIds } = useWorkbench();
+        await initialize(true);
+
+        const sortedIds = activeItemIds.value;
+        expect(sortedIds[0]).toBe(9000);
+        expect(sortedIds.indexOf(5106)).toBeLessThan(sortedIds.indexOf(36257));
+        expect(sortedIds.indexOf(36257)).toBeLessThan(sortedIds.indexOf(12));
     });
 });

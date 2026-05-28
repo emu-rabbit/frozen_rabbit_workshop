@@ -174,9 +174,11 @@ export default {
         buy: '购买',
         craft: '制作',
         gather: '采集',
+        hunt: '狩猎',
         other: '库存 (其他)',
         cannotCraft: '不可制作',
-        cannotGather: '不可采集'
+        cannotGather: '不可采集',
+        cannotGatherHunt: '不可采集/狩猎'
       },
       status: {
         missing: '尚缺 {n} 个',
@@ -189,6 +191,8 @@ export default {
       },
       details: {
         gatherTitle: '采集地点与详情',
+        huntTitle: '狩猎掉落来源',
+        huntNoPosition: 'Teamcraft 有已知掉落来源，但缺少野外坐标',
         limited: '限时',
         unknownZone: '未知地点',
         spawnTime: '出现时间',
@@ -231,6 +235,7 @@ export default {
     progress: '已完成 {n}/{total} 项',
     section: {
       other: '库存 / 其他来源',
+      hunt: '待狩猎物品',
       buy: '待购买物品',
       gather: '待采集物品',
       craft: '待制作物品'
@@ -239,6 +244,7 @@ export default {
     targetPrice: '参考单价',
     buySourceMarket: '市场版：{world}',
     buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
+    huntSource: '{monster}：{zone} X:{x} Y:{y}',
     gatherLocation: '采集点',
     emptySection: '此区块无项目',
     copyAlarmMacro: '复制闹钟宏',
@@ -248,6 +254,7 @@ export default {
     crp: '木工匠', bsm: '锻铁匠', arm: '铸甲匠', gsm: '雕金匠',
     lwr: '制革匠', wvr: '裁缝匠', alc: '炼金术士', cul: '烹调师',
     min: '采矿工', btn: '园艺工', fsh: '捕鱼人', gather: '采集',
+    battle: '战斗',
     companyCrafting: '部队合建',
     islandCrafting: '开拓制作'
   },

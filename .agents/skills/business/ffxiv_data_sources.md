@@ -9,7 +9,7 @@
 - 更新 e2e mock、測試 fixture 或資料載入 URL。
 
 ## 資料來源
-- **Teamcraft**：主要資料來源，包含 `item-search.index`、`items.json`、`recipes.json`、`gathering-items.json`、`nodes.json`、`maps.json`、`places.json`、`job-name.json` 等。
+- **Teamcraft**：主要資料來源，包含 `item-search.index`、`items.json`、`recipes.json`、`gathering-items.json`、`nodes.json`、`maps.json`、`places.json`、`job-name.json` 等。若涉及怪物掉落，另讀 `.agents/skills/business/monster_drop_sources.md`。
 - **Universalis**：市場看板資料來源，負責價格、listing、資料中心與世界資訊。
 - **XIVAPI**：主要用於 icon URL 或 Teamcraft icon path 的 fallback。
 - **本地 JSON**：`src/data/recommended/` 與 changelog 等站內內容。
@@ -26,6 +26,13 @@
 - 同一 item 可能有多個 node 或多種採集情境，應優先修正 schema / helper，不要只在 UI 遮掩。
 - 採集地名應走 `places` / `maps` helper，以目前 locale 顯示。
 - 釣魚資料若與採掘/園藝差異過大，不要假設可用同一路徑完整支援。
+
+## 怪物掉落資料規範
+
+- 怪物掉落來源不屬於採集節點，應獨立於 `gathering.ts` 建模。
+- Teamcraft `drop-sources.json` 可用於 `itemId -> monsterId[]`，`monsters.json` 提供座標與等級，`mobs.json` / locale mobs 提供怪物名稱。
+- `drop-sources.json` 不提供掉率；產品文案應使用「可由怪物掉落」或「已知掉落來源」，不要宣稱保證掉落。
+- 詳細資料格式、檔案大小與已驗證範例見 `.agents/skills/business/monster_drop_sources.md`。
 
 ## 驗證方式
 - 修改資料載入後，至少執行 `npm run build`。

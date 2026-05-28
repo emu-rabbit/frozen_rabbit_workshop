@@ -174,9 +174,11 @@ export default {
         buy: '購買',
         craft: '製作',
         gather: '採集',
+        hunt: '狩獵',
         other: '庫存 (其他)',
         cannotCraft: '不可製作',
-        cannotGather: '不可採集'
+        cannotGather: '不可採集',
+        cannotGatherHunt: '不可採集/狩獵'
       },
       status: {
         missing: '尚缺 {n} 個',
@@ -189,6 +191,8 @@ export default {
       },
       details: {
         gatherTitle: '採集地點與詳情',
+        huntTitle: '狩獵掉落來源',
+        huntNoPosition: 'Teamcraft 有已知掉落來源，但缺少野外座標',
         limited: '限時',
         unknownZone: '未知地點',
         spawnTime: '出現時間',
@@ -231,6 +235,7 @@ export default {
     progress: '已完成 {n}/{total} 項',
     section: {
       other: '庫存 / 其他來源',
+      hunt: '待狩獵物品',
       buy: '待購買物品',
       gather: '待採集物品',
       craft: '待製作物品'
@@ -239,6 +244,7 @@ export default {
     targetPrice: '參考單價',
     buySourceMarket: '市場版：{world}',
     buySourceVendor: 'NPC：{name} ({zone} X:{x} Y:{y})',
+    huntSource: '{monster}：{zone} X:{x} Y:{y}',
     gatherLocation: '採集點',
     emptySection: '此區塊無項目',
     copyAlarmMacro: '複製鬧鐘巨集',
@@ -248,6 +254,7 @@ export default {
     crp: '木工師', bsm: '鍛造師', arm: '甲冑師', gsm: '金工師',
     lwr: '皮革師', wvr: '裁縫師', alc: '鍊金術師', cul: '烹調師',
     min: '採掘師', btn: '園藝師', fsh: '漁師', gather: '採集',
+    battle: '戰鬥',
     companyCrafting: '公會合建',
     islandCrafting: '開拓製作'
   },

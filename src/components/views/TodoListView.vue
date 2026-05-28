@@ -67,6 +67,9 @@ const formatMoney = (val: number | null) => {
 
 const renderStars = (count: number) => '★'.repeat(count);
 
+const getPrimaryDrop = (item: any) => item.monsterDrops?.[0];
+const getPrimaryDropPosition = (item: any) => getPrimaryDrop(item)?.positions?.[0];
+
 const progress = computed(() => {
     let total = 0;
     let completed = 0;
@@ -95,6 +98,7 @@ const onDragEnd = (sectionKey: string) => {
 const getSectionConfig = (key: string) => {
     switch(key) {
         case 'other': return { color: 'emerald', icon: 'pi-box', bg: 'bg-emerald-50 dark:bg-emerald-950/20', border: 'border-emerald-100 dark:border-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' };
+        case 'hunt': return { color: 'violet', icon: 'pi-bolt', bg: 'bg-violet-50 dark:bg-violet-950/20', border: 'border-violet-100 dark:border-violet-900/30', text: 'text-violet-600 dark:text-violet-400' };
         case 'buy': return { color: 'slate', icon: 'pi-shopping-cart', bg: 'bg-slate-50 dark:bg-slate-800/40', border: 'border-slate-200 dark:border-slate-700/50', text: 'text-slate-600 dark:text-slate-400' };
         case 'gather': return { color: 'amber', icon: 'pi-map-marker', bg: 'bg-amber-50 dark:bg-amber-950/20', border: 'border-amber-100 dark:border-amber-900/30', text: 'text-amber-600 dark:text-amber-400' };
         case 'craft': return { color: 'indigo', icon: 'pi-hammer', bg: 'bg-indigo-50 dark:bg-indigo-950/20', border: 'border-indigo-100 dark:border-indigo-900/30', text: 'text-indigo-600 dark:text-indigo-400' };
@@ -164,12 +168,14 @@ const handleExportHtml = (includeMarket: boolean) => {
             title: t('todo.title'),
             progress: t('todo.progress', { n: '{n}', total: '{total}' }),
             sectionOther: t('todo.section.other'),
+            sectionHunt: t('todo.section.hunt'),
             sectionBuy: t('todo.section.buy'),
             sectionGather: t('todo.section.gather'),
             sectionCraft: t('todo.section.craft'),
             targetPrice: t('todo.targetPrice'),
             buySourceVendor: t('todo.buySourceVendor', { name: '{name}', zone: '{zone}', x: '{x}', y: '{y}' }),
             buySourceMarket: t('todo.buySourceMarket', { world: '{world}' }),
+            huntSource: t('todo.huntSource', { monster: '{monster}', zone: '{zone}', x: '{x}', y: '{y}' }),
             exportOfflineNote: t('todo.exportOfflineNote'),
             copyAlarmMacro: t('todo.copyAlarmMacro'),
             alarmMacroCopied: t('todo.alarmMacroCopied')
@@ -362,6 +368,17 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                                     </div>
                                                                 </div>
                                                             </template>
+                                                            <template v-if="section.key === 'hunt' && getPrimaryDrop(item)">
+                                                                <div class="flex flex-col gap-0.5 min-w-0">
+                                                                    <span class="truncate max-w-[150px]">{{ getPrimaryDrop(item).monsterName }}</span>
+                                                                    <div class="flex items-center gap-1.5 min-w-0">
+                                                                        <span class="truncate max-w-[90px]">{{ getPrimaryDrop(item).parentZoneName || getPrimaryDrop(item).zoneName || t('workbench.view.details.unknownZone') }}</span>
+                                                                        <span v-if="getPrimaryDropPosition(item)?.x !== undefined && getPrimaryDropPosition(item)?.y !== undefined" class="font-mono text-violet-600 dark:text-violet-400 whitespace-nowrap">
+                                                                            X:{{ getPrimaryDropPosition(item)?.x?.toFixed(1) }} Y:{{ getPrimaryDropPosition(item)?.y?.toFixed(1) }}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </template>
                                                             <template v-if="section.key === 'gather' && item.gathering">
                                                                 <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
                                                                 <span class="text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
@@ -394,6 +411,29 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                     </span>
                                                     <span v-else>
                                                         {{ t('todo.buySourceMarket', { world: item.purchaseInfo.worldName || t('workbench.view.source.buy') }) }}
+                                                    </span>
+                                                </div>
+                                            </template>
+
+                                            <!-- Hunt: Info -->
+                                            <template v-if="section.key === 'hunt' && getPrimaryDrop(item)">
+                                                <div class="flex flex-col items-end gap-1.5 md:gap-2">
+                                                    <div class="flex flex-col items-end text-slate-500 dark:text-slate-400">
+                                                        <div class="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                                                            <i class="pi pi-bolt text-[10px] md:text-xs opacity-70"></i>
+                                                            <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
+                                                                {{ getPrimaryDrop(item).monsterName }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="mt-1 flex items-center gap-1.5 text-[10px] md:text-xs font-bold text-slate-500 dark:text-slate-400">
+                                                            <span class="truncate max-w-[130px]">{{ getPrimaryDrop(item).parentZoneName || getPrimaryDrop(item).zoneName || t('workbench.view.details.unknownZone') }}</span>
+                                                            <span v-if="getPrimaryDropPosition(item)?.x !== undefined && getPrimaryDropPosition(item)?.y !== undefined" class="font-mono whitespace-nowrap">
+                                                                X:{{ getPrimaryDropPosition(item)?.x?.toFixed(1) }} Y:{{ getPrimaryDropPosition(item)?.y?.toFixed(1) }}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <span class="text-[10px] md:text-sm font-black bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-400 px-3 py-1 rounded-full border border-violet-100 dark:border-violet-900/40 shadow-sm leading-none whitespace-nowrap">
+                                                        {{ t('jobs.battle') }} Lv.{{ getPrimaryDrop(item).level || '?' }}
                                                     </span>
                                                 </div>
                                             </template>
