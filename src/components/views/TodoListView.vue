@@ -7,6 +7,7 @@ import { useNotes } from '../../composables/useNotes';
 import { useSettings } from '../../composables/useSettings';
 import ExportTodoModal from '../modals/ExportTodoModal.vue';
 import { generateTodoExportHtml, type ExportContext } from '../../services/exportHtml';
+import { trackTodoListExported } from '../../services/analytics';
 
 const { t, locale } = useI18n();
 const { isDarkMode } = useSettings();
@@ -163,6 +164,13 @@ const copyToClipboard = (id: string, text: string) => {
 };
 
 const handleExportHtml = (includeMarket: boolean) => {
+    const todoItemCount = generateTodoSections.value.reduce((sum, section) => sum + section.items.length, 0);
+
+    trackTodoListExported({
+        includeMarket,
+        todoItemCount,
+    });
+
     const ctx: ExportContext = {
         translations: {
             title: t('todo.title'),

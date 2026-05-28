@@ -5,11 +5,13 @@ import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoad
 import { useNotes } from '../../composables/useNotes'
 import NoteCard from '../shared/NoteCard.vue'
 import draggable from 'vuedraggable'
+import type { Note } from '../../types/note'
+import type { WorkbenchNoteSource } from '../../services/analytics'
 
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  'open-workbench': [note: any]
+  'open-workbench': [note: Note, source: WorkbenchNoteSource]
 }>()
 
 const { favoriteNotes, toggleFavorite, isFavorite, updateFavoriteOrder } = useNotes()
@@ -22,6 +24,10 @@ const favoritesList = computed({
     updateFavoriteOrder(newIds)
   }
 })
+
+const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource) => {
+  emit('open-workbench', note, source)
+}
 
 onMounted(() => {
   ensureDisplayMetadataLoaded()
@@ -69,7 +75,7 @@ onMounted(() => {
               :is-favorite="isFavorite(element.id)"
               :draggable="true"
               @toggle-favorite="toggleFavorite"
-              @open-workbench="emit('open-workbench', $event)"
+              @open-workbench="handleOpenWorkbench"
             />
           </div>
         </template>

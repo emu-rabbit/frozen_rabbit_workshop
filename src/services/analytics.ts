@@ -16,10 +16,18 @@ type AnalyticsThemeContext = {
   app_theme_mode?: 'light' | 'dark'
 }
 
+type AnalyticsMarketSettingsContext = {
+  app_market_region?: string
+  app_market_data_center?: string
+  app_market_cost_strategy?: string
+}
+
 let languageContext: AnalyticsLanguageContext = {}
 let themeContext: AnalyticsThemeContext = {}
+let marketSettingsContext: AnalyticsMarketSettingsContext = {}
 
 export type AnalyticsConsent = 'granted' | 'denied'
+export type WorkbenchNoteSource = 'created' | 'history' | 'favorites' | 'recommended'
 
 declare global {
   interface Window {
@@ -99,14 +107,97 @@ export const setAnalyticsThemeMode = (isDarkMode: boolean) => {
   })
 }
 
+export const setAnalyticsMarketSettings = (context: {
+  marketRegion: string
+  marketDataCenter: string
+  marketCostStrategy: string
+}) => {
+  marketSettingsContext = {
+    app_market_region: context.marketRegion,
+    app_market_data_center: context.marketDataCenter,
+    app_market_cost_strategy: context.marketCostStrategy,
+  }
+
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('set', 'user_properties', getUserProperties())
+  window.gtag('event', 'market_settings_context_updated', {
+    send_to: MEASUREMENT_ID,
+    ...marketSettingsContext,
+  })
+}
+
 const getUserProperties = () => ({
   ...languageContext,
   ...themeContext,
+  ...marketSettingsContext,
 })
 
 const getCommonEventParams = () => ({
   ...getUserProperties(),
 })
+
+export const getWorkbenchItemCountBucket = (itemCount: number) => {
+  if (itemCount <= 1) return '1'
+  if (itemCount <= 3) return '2~3'
+  if (itemCount <= 5) return '4~5'
+  if (itemCount <= 10) return '6~10'
+  if (itemCount <= 20) return '10~20'
+  return '20+'
+}
+
+export const trackWorkbenchNoteOpened = (context: {
+  noteSource: WorkbenchNoteSource
+  itemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'workbench_note_opened', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    note_source: context.noteSource,
+    item_count: context.itemCount,
+    workbench_item_count_bucket: getWorkbenchItemCountBucket(context.itemCount),
+  })
+}
+
+export const trackRecommendedNoteOpened = (context: {
+  noteNameTw: string
+  itemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'recommended_note_opened', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    recommended_note_name_tw: context.noteNameTw,
+    item_count: context.itemCount,
+    workbench_item_count_bucket: getWorkbenchItemCountBucket(context.itemCount),
+  })
+}
+
+export const trackTodoListGenerated = () => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'todo_list_generated', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+  })
+}
+
+export const trackTodoListExported = (context: {
+  includeMarket: boolean
+  todoItemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'todo_list_exported', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    include_market: context.includeMarket,
+    todo_item_count: context.todoItemCount,
+  })
+}
 
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return

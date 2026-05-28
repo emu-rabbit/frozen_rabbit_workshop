@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { getDictionaryItem } from '../../services/dictionary'
 import type { Note, LocalizedString } from '../../types/note'
 import { sanitizeNoteItems } from '../../utils/noteItems'
+import type { WorkbenchNoteSource } from '../../services/analytics'
 
 const { t, locale } = useI18n()
 
@@ -24,7 +25,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   'toggle-favorite': [noteOrId: Note | { id: string }]
-  'open-workbench': [note: Note]
+  'open-workbench': [note: Note, source: WorkbenchNoteSource]
 }>()
 
 // --- Computed Helpers ---
@@ -180,7 +181,7 @@ const handleExportJson = () => {
 
           <button 
             v-if="note" 
-            @click="emit('open-workbench', note)" 
+            @click="emit('open-workbench', note, mode)"
             class="flex-1 md:flex-none h-10 md:h-11 px-6 md:px-8 rounded-full flex items-center justify-center text-white bg-soft-green-500 hover:bg-soft-green-600 dark:bg-soft-green-600 dark:hover:bg-soft-green-700 shadow-md dark:shadow-none hover:shadow-lg transition-all text-xs md:text-sm font-bold gap-2 whitespace-nowrap active:scale-95"
           >
               {{ t('history.openWorkbench') }} <i class="pi pi-angle-right text-xs md:text-sm"></i>

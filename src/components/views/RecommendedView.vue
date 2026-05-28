@@ -9,13 +9,19 @@ import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoad
 import type { LocalizedString } from '../../types/note'
 import { useDebounceFn } from '@vueuse/core'
 import { vFfivClean } from '../../utils/inputUtils'
+import type { Note } from '../../types/note'
+import type { WorkbenchNoteSource } from '../../services/analytics'
 
 const { t } = useI18n()
 const { recommendedNotes, toggleFavorite, isFavorite } = useNotes()
 
 const emit = defineEmits<{
-  'open-workbench': [note: any]
+  'open-workbench': [note: Note, source: WorkbenchNoteSource]
 }>()
+
+const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource) => {
+  emit('open-workbench', note, source)
+}
 
 const searchQuery = ref('')
 const first = ref(0)
@@ -119,7 +125,7 @@ onMounted(() => {
           mode="recommended"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
-          @open-workbench="emit('open-workbench', $event)"
+          @open-workbench="handleOpenWorkbench"
         />
       </div>
 
