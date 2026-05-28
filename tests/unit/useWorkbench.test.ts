@@ -362,10 +362,17 @@ describe('Workbench Service Logic', () => {
             ? { type: 2, jobName: 'jobs.btn', level: 15, stars: 0, isLimited: false, spawns: [], duration: 0 }
             : null
         );
-        mocks.getMonsterDropInfo.mockImplementation((id: number) => id === 36257
-            ? [{ monsterId: 10471, monsterName: '慕斯怪', level: 84, positions: [{ level: 84, x: 16.2, y: 25.9 }] }]
-            : null
-        );
+        mocks.getMonsterDropInfo.mockImplementation((id: number) => {
+            if (id === 36257) {
+                return [{ monsterId: 10471, monsterName: '慕斯怪', level: 84, positions: [{ level: 84, x: 16.2, y: 25.9 }] }];
+            }
+
+            if (id === 12) {
+                return [{ monsterId: 20012, monsterName: '晶簇怪', level: 66, positions: [{ level: 66, x: 12.3, y: 18.4 }] }];
+            }
+
+            return null;
+        });
         vi.resetModules();
 
         const { useWorkbench } = await import('../../src/composables/useWorkbench');

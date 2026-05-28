@@ -524,9 +524,9 @@ const activeItemIds = computed(() => {
       const getWeight = (id: number, item: any, isRoot: boolean, isCrystal: boolean) => {
           if (isRoot) return 0;
           if (item?.canCraft) return 1;
+          if (isCrystal) return 5;
           if (item?.canGather && !isCrystal) return 2;
           if (item?.canHunt) return 3;
-          if (isCrystal) return 5;
           return 4;
       };
 
