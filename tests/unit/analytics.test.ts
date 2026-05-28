@@ -55,4 +55,39 @@ describe('analytics consent mode', () => {
     expect(calls.some(([command, eventName]) => command === 'event' && eventName === 'page_view')).toBe(true)
     expect(calls.some(([command, eventName]) => command === 'event' && eventName === 'analytics_ready')).toBe(true)
   })
+
+  it('tracks the initial page view only once when the GA script finishes loading after opt-in', async () => {
+    const { initializeAnalytics, setAnalyticsConsent } = await import('../../src/services/analytics')
+
+    initializeAnalytics()
+    setAnalyticsConsent('granted')
+    document.getElementById('frozen-rabbit-google-analytics')?.dispatchEvent(new Event('load'))
+
+    const pageViewCalls = getGtagCalls()
+      .filter(([command, eventName]) => command === 'event' && eventName === 'page_view')
+
+    expect(pageViewCalls).toHaveLength(1)
+  })
+
+  it('still tracks virtual page views for route changes after the initial page view', async () => {
+    const { initializeAnalytics, setAnalyticsConsent, trackRouteChange } = await import('../../src/services/analytics')
+
+    initializeAnalytics()
+    setAnalyticsConsent('granted')
+    trackRouteChange('workbench')
+
+    const calls = getGtagCalls()
+    const pageViewCalls = calls
+      .filter(([command, eventName]) => command === 'event' && eventName === 'page_view')
+
+    expect(pageViewCalls).toHaveLength(2)
+    expect(calls).toContainEqual([
+      'event',
+      'route_change',
+      expect.objectContaining({
+        route_name: 'workbench',
+        page_path: expect.stringContaining('#workbench'),
+      }),
+    ])
+  })
 })

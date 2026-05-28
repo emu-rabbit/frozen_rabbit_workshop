@@ -252,7 +252,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
             theme: {
                 extend: {
                     colors: {
-                        'soft-green': { 50: '#f2fdf7', 100: '#e1f9ee', 200: '#c5f2dd', 300: '#92c5b2', 400: '#75bfa9', 500: '#52a890', 600: '#3e8f7a', 700: '#388e3c', 800: '#2e7d32', 900: '#2d6a5a', 950: '#1b4137' }
+                        'soft-green': { 50: '#e8f5e9', 100: '#e1f9ee', 200: '#c5f2dd', 300: '#92c5b2', 400: '#75bfa9', 500: '#52a890', 600: '#3e8f7a', 700: '#388e3c', 800: '#2e7d32', 900: '#2d6a5a', 950: '#1b4137' }
                     }
                 }
             }
@@ -276,7 +276,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="${ctx.isDarkMode ? 'dark bg-slate-950' : 'bg-soft-green-50/50'} min-h-screen font-sans pb-32 transition-colors duration-500">
+<body class="${ctx.isDarkMode ? 'dark bg-slate-950' : 'bg-soft-green-50'} min-h-screen font-sans pb-32 transition-colors duration-500">
     <div class="px-4 py-6 md:p-6 max-w-6xl w-full mx-auto">
         <header class="mb-8 md:mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6 p-4">
            <div>

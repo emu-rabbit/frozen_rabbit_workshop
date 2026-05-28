@@ -11,6 +11,8 @@ import {
 import { ensureGatheringDataLoaded } from './services/gathering'
 import { ensureVendorDataLoaded } from './services/vendor'
 import { loadLocaleMessages } from './i18n'
+import type { LocalizedString, Note } from './types/note'
+import { sanitizeNoteItems } from './utils/noteItems'
 
 // Layout
 import Sidebar from './components/layout/Sidebar.vue'
@@ -18,7 +20,17 @@ import SponsorModal from './components/modals/SponsorModal.vue'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 import MarketSetupReminderModal from './components/modals/MarketSetupReminderModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
-import { initializeAnalytics, setAnalyticsLanguage, setAnalyticsThemeMode, trackRouteChange } from './services/analytics'
+import {
+  initializeAnalytics,
+  setAnalyticsLanguage,
+  setAnalyticsMarketSettings,
+  setAnalyticsThemeMode,
+  trackRecommendedNoteOpened,
+  trackRouteChange,
+  trackTodoListGenerated,
+  trackWorkbenchNoteOpened,
+  type WorkbenchNoteSource,
+} from './services/analytics'
 
 // Views (Code Splitting)
 const NewNoteView = defineAsyncComponent(() => import('./components/views/NewNoteView.vue'))
@@ -34,7 +46,14 @@ const ChangelogView = defineAsyncComponent(() => import('./components/views/Chan
 import logo from './assets/logo.png'
 
 const { t, locale } = useI18n()
-const { language, initialized, isDarkMode } = useSettings()
+const {
+  language,
+  initialized,
+  isDarkMode,
+  marketRegion,
+  marketDC,
+  marketCostStrategy,
+} = useSettings()
 const { addNote, activeWorkbenchNote, notes } = useNotes()
 
 // Sync Dark Mode
@@ -46,6 +65,14 @@ watch(isDarkMode, (newVal) => {
   }
   setAnalyticsThemeMode(newVal)
 }, { immediate: true })
+
+watch([marketRegion, marketDC, marketCostStrategy], ([newRegion, newDC, newStrategy]) => {
+  setAnalyticsMarketSettings({
+    marketRegion: newRegion,
+    marketDataCenter: newDC,
+    marketCostStrategy: newStrategy,
+  })
+}, { immediate: true, flush: 'post' })
 
 const i18nReady = ref(false)
  
@@ -145,13 +172,47 @@ const handleCreateNote = (title: string, items: { id: number, quantity: number }
   const newNote = notes.value[0]
   if (newNote) {
     activeWorkbenchNote.value = newNote
+    trackWorkbenchOpen(newNote, 'created')
   }
   currentTab.value = 'workbench'
 }
 
-const handleOpenWorkbench = (note: any) => {
+const getWorkbenchItemTypeCount = (note: Note) => {
+  return new Set(sanitizeNoteItems(note.items).map(item => item.id)).size
+}
+
+const getTraditionalChineseNoteName = (name: Note['name']) => {
+  if (typeof name === 'string') return name
+
+  const localizedName = name as LocalizedString
+  return localizedName.tw || localizedName.en || localizedName.ja || localizedName.cn || ''
+}
+
+const trackWorkbenchOpen = (note: Note, source: WorkbenchNoteSource) => {
+  const itemCount = getWorkbenchItemTypeCount(note)
+
+  trackWorkbenchNoteOpened({
+    noteSource: source,
+    itemCount,
+  })
+
+  if (source === 'recommended') {
+    trackRecommendedNoteOpened({
+      noteNameTw: getTraditionalChineseNoteName(note.name),
+      itemCount,
+    })
+  }
+}
+
+const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource = 'history') => {
   activeWorkbenchNote.value = note
+  trackWorkbenchOpen(note, source)
   currentTab.value = 'workbench'
+}
+
+const handleGenerateTodo = () => {
+  trackTodoListGenerated()
+  currentTab.value = 'todo'
 }
 
 const handleLanguageUpdate = (val: string) => {
@@ -233,7 +294,7 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
       
       <WorkbenchView 
         v-if="currentTab === 'workbench'" 
-        @generate-todo="currentTab = 'todo'"
+        @generate-todo="handleGenerateTodo"
       />
 
       <TodoListView

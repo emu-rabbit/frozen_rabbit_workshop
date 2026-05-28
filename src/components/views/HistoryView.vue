@@ -4,14 +4,20 @@ import { useI18n } from 'vue-i18n'
 import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoading } from '../../services/dictionary'
 import { useNotes } from '../../composables/useNotes'
 import NoteCard from '../shared/NoteCard.vue'
+import type { Note } from '../../types/note'
+import type { WorkbenchNoteSource } from '../../services/analytics'
 
 const { t } = useI18n()
 
 const emit = defineEmits<{
-  'open-workbench': [note: any]
+  'open-workbench': [note: Note, source: WorkbenchNoteSource]
 }>()
 
 const { notes, toggleFavorite, isFavorite } = useNotes()
+
+const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource) => {
+  emit('open-workbench', note, source)
+}
 
 onMounted(() => {
   ensureDisplayMetadataLoaded()
@@ -51,11 +57,9 @@ onMounted(() => {
           mode="history"
           :is-favorite="isFavorite(note.id)"
           @toggle-favorite="toggleFavorite"
-          @open-workbench="emit('open-workbench', $event)"
+          @open-workbench="handleOpenWorkbench"
         />
       </div>
     </div>
   </div>
 </template>
-
-

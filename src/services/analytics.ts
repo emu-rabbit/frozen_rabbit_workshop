@@ -5,6 +5,7 @@ const GA_ORIGIN = window.location.origin
 let hasTrackedAnalyticsReady = false
 let hasDeniedAnalyticsThisSession = false
 let hasConfiguredGoogleAnalytics = false
+let hasTrackedInitialPageView = false
 
 type AnalyticsLanguageContext = {
   app_language?: string
@@ -16,10 +17,18 @@ type AnalyticsThemeContext = {
   app_theme_mode?: 'light' | 'dark'
 }
 
+type AnalyticsMarketSettingsContext = {
+  app_market_region?: string
+  app_market_data_center?: string
+  app_market_cost_strategy?: string
+}
+
 let languageContext: AnalyticsLanguageContext = {}
 let themeContext: AnalyticsThemeContext = {}
+let marketSettingsContext: AnalyticsMarketSettingsContext = {}
 
 export type AnalyticsConsent = 'granted' | 'denied'
+export type WorkbenchNoteSource = 'created' | 'history' | 'favorites' | 'recommended'
 
 declare global {
   interface Window {
@@ -49,7 +58,7 @@ export const setAnalyticsConsent = (consent: AnalyticsConsent) => {
     window.localStorage.setItem(CONSENT_KEY, consent)
     updateGoogleConsent('granted')
     window.gtag?.('set', 'user_properties', getUserProperties())
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
     return
   }
@@ -64,7 +73,7 @@ export const initializeAnalytics = () => {
 
   if (getAnalyticsConsent() === 'granted') {
     updateGoogleConsent('granted')
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
   }
 }
@@ -99,25 +108,123 @@ export const setAnalyticsThemeMode = (isDarkMode: boolean) => {
   })
 }
 
+export const setAnalyticsMarketSettings = (context: {
+  marketRegion: string
+  marketDataCenter: string
+  marketCostStrategy: string
+}) => {
+  marketSettingsContext = {
+    app_market_region: context.marketRegion,
+    app_market_data_center: context.marketDataCenter,
+    app_market_cost_strategy: context.marketCostStrategy,
+  }
+
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('set', 'user_properties', getUserProperties())
+  window.gtag('event', 'market_settings_context_updated', {
+    send_to: MEASUREMENT_ID,
+    ...marketSettingsContext,
+  })
+}
+
 const getUserProperties = () => ({
   ...languageContext,
   ...themeContext,
+  ...marketSettingsContext,
 })
 
 const getCommonEventParams = () => ({
   ...getUserProperties(),
 })
 
+export const getRouteNameFromPagePath = (pagePath: string) => {
+  const hashRoute = pagePath.split('#')[1]?.split('?')[0]
+  return hashRoute || 'new'
+}
+
+export const getWorkbenchItemCountBucket = (itemCount: number) => {
+  if (itemCount <= 1) return '1'
+  if (itemCount <= 3) return '2~3'
+  if (itemCount <= 5) return '4~5'
+  if (itemCount <= 10) return '6~10'
+  if (itemCount <= 20) return '10~20'
+  return '20+'
+}
+
+export const trackWorkbenchNoteOpened = (context: {
+  noteSource: WorkbenchNoteSource
+  itemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'workbench_note_opened', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    note_source: context.noteSource,
+    item_count: context.itemCount,
+    workbench_item_count_bucket: getWorkbenchItemCountBucket(context.itemCount),
+  })
+}
+
+export const trackRecommendedNoteOpened = (context: {
+  noteNameTw: string
+  itemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'recommended_note_opened', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    recommended_note_name_tw: context.noteNameTw,
+    item_count: context.itemCount,
+    workbench_item_count_bucket: getWorkbenchItemCountBucket(context.itemCount),
+  })
+}
+
+export const trackTodoListGenerated = () => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'todo_list_generated', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+  })
+}
+
+export const trackTodoListExported = (context: {
+  includeMarket: boolean
+  todoItemCount: number
+}) => {
+  if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  window.gtag('event', 'todo_list_exported', {
+    send_to: MEASUREMENT_ID,
+    ...getCommonEventParams(),
+    include_market: context.includeMarket,
+    todo_item_count: context.todoItemCount,
+  })
+}
+
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  const routeName = getRouteNameFromPagePath(pagePath)
 
   window.gtag('event', 'page_view', {
     send_to: MEASUREMENT_ID,
     ...getCommonEventParams(),
+    route_name: routeName,
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
     page_path: pagePath,
   })
+}
+
+const trackInitialPageView = () => {
+  if (hasTrackedInitialPageView || !isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
+
+  hasTrackedInitialPageView = true
+  trackPageView()
 }
 
 export const trackAnalyticsReady = () => {
@@ -127,6 +234,7 @@ export const trackAnalyticsReady = () => {
   window.gtag('event', 'analytics_ready', {
     send_to: MEASUREMENT_ID,
     ...getCommonEventParams(),
+    route_name: getRouteNameFromPagePath(window.location.pathname + window.location.hash),
     page_title: document.title,
     page_location: window.location.href,
     page_path: window.location.pathname + window.location.hash,
@@ -185,7 +293,7 @@ const loadGoogleAnalytics = () => {
   script.addEventListener('load', () => {
     if (getAnalyticsConsent() !== 'granted') return
 
-    trackPageView()
+    trackInitialPageView()
     trackAnalyticsReady()
   }, { once: true })
   document.head.appendChild(script)
