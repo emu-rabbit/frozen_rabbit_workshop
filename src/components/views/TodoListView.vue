@@ -348,7 +348,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                         <span class="text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 shrink-0">#{{ item.id }}</span>
                                                         
                                                         <!-- Mobile Only Metadata -->
-                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400" :class="section.key === 'gather' || section.key === 'craft' ? 'basis-full' : ''">
                                                             <template v-if="section.key === 'buy'">
                                                                 <div class="flex flex-col gap-0.5">
                                                                     <span class="text-orange-600 dark:text-orange-400 font-black">{{ formatMoney(item.marketPrice) }}</span>
@@ -380,8 +380,10 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                                 </div>
                                                             </template>
                                                             <template v-if="section.key === 'gather' && item.gathering">
-                                                                <span class="truncate max-w-[80px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
-                                                                <span class="text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
+                                                                <div class="flex flex-col gap-0.5 min-w-0">
+                                                                    <span class="truncate max-w-[150px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
+                                                                    <span class="self-start text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
+                                                                </div>
                                                             </template>
                                                             <template v-if="section.key === 'craft' && item.crafting">
                                                                 <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ t(item.crafting.jobName).substring(0, 2) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</span>
