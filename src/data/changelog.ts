@@ -8,6 +8,24 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.2.0',
+    date: '2026-05-28',
+    changes: [
+      {
+        tw: '支援可狩獵取得的素材標示地區和怪物名稱',
+        cn: '支持可狩猎取得的素材显示地区和怪物名称',
+        en: 'Added region and monster name details for materials obtainable from monster drops',
+        ja: 'モンスターから入手できる素材に地域とモンスター名を表示するようにしました'
+      },
+      {
+        tw: '調整待辦清單的手機版版面',
+        cn: '调整待办清单的手机版版面',
+        en: 'Adjusted the Todo list layout on mobile',
+        ja: 'Todo リストのモバイル表示を調整しました'
+      }
+    ]
+  },
+  {
     version: '1.1.2',
     date: '2026-05-26',
     changes: [
