@@ -137,6 +137,11 @@ const getCommonEventParams = () => ({
   ...getUserProperties(),
 })
 
+export const getRouteNameFromPagePath = (pagePath: string) => {
+  const hashRoute = pagePath.split('#')[1]?.split('?')[0]
+  return hashRoute || 'new'
+}
+
 export const getWorkbenchItemCountBucket = (itemCount: number) => {
   if (itemCount <= 1) return '1'
   if (itemCount <= 3) return '2~3'
@@ -202,9 +207,12 @@ export const trackTodoListExported = (context: {
 export const trackPageView = (pagePath = window.location.pathname + window.location.hash) => {
   if (!isAnalyticsAvailable() || getAnalyticsConsent() !== 'granted' || !window.gtag) return
 
+  const routeName = getRouteNameFromPagePath(pagePath)
+
   window.gtag('event', 'page_view', {
     send_to: MEASUREMENT_ID,
     ...getCommonEventParams(),
+    route_name: routeName,
     page_title: document.title,
     page_location: `${GA_ORIGIN}${pagePath}`,
     page_path: pagePath,
@@ -218,6 +226,7 @@ export const trackAnalyticsReady = () => {
   window.gtag('event', 'analytics_ready', {
     send_to: MEASUREMENT_ID,
     ...getCommonEventParams(),
+    route_name: getRouteNameFromPagePath(window.location.pathname + window.location.hash),
     page_title: document.title,
     page_location: window.location.href,
     page_path: window.location.pathname + window.location.hash,

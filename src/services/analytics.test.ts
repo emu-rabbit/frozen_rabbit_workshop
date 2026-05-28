@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { getWorkbenchItemCountBucket } from './analytics'
+import { getRouteNameFromPagePath, getWorkbenchItemCountBucket } from './analytics'
+
+describe('getRouteNameFromPagePath', () => {
+  it('uses the hash route as a stable GA route dimension', () => {
+    expect(getRouteNameFromPagePath('/frozen_rabbit_workshop/#recommended')).toBe('recommended')
+    expect(getRouteNameFromPagePath('/frozen_rabbit_workshop/#settings?debug=true')).toBe('settings')
+  })
+
+  it('falls back to the default new-note route when no hash is present', () => {
+    expect(getRouteNameFromPagePath('/frozen_rabbit_workshop/')).toBe('new')
+  })
+})
 
 describe('getWorkbenchItemCountBucket', () => {
   it('groups workbench item type counts into GA-friendly buckets', () => {
