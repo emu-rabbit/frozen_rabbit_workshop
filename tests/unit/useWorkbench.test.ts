@@ -44,10 +44,10 @@ vi.mock('../../src/services/gathering', () => ({
 vi.mock('../../src/services/monsterDrops', () => ({
     ensureMonsterDropDataLoaded: vi.fn(),
     getMonsterDropInfo: mocks.getMonsterDropInfo,
-    getMonsterDropMaxLevel: vi.fn((drops: any[] | null | undefined) => {
+    getMonsterDropPreferredLevel: vi.fn((drops: any[] | null | undefined) => {
         if (!drops || drops.length === 0) return null;
-        const maxLevel = drops.reduce((max, drop) => Math.max(max, drop.level || 0), 0);
-        return maxLevel > 0 ? maxLevel : null;
+        const levels = drops.map(drop => drop.level).filter((level: number) => level > 0);
+        return levels.length > 0 ? Math.min(...levels) : null;
     })
 }));
 
@@ -324,7 +324,7 @@ describe('Workbench Service Logic', () => {
         expect(workbenchItems.value[36257]).toMatchObject({
             canGather: false,
             canHunt: true,
-            monsterDropMaxLevel: 84
+            monsterDropLevel: 84
         });
         expect(decisions['36257']).toMatchObject({ gather: 3 });
         expect(generateTodoSections.value).toHaveLength(1);

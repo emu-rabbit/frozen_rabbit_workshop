@@ -14,7 +14,7 @@ import { calculateMarketStats } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
 import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
-import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropMaxLevel } from '../services/monsterDrops';
+import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
 import type { MonsterDropInfo } from '../services/monsterDrops';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
@@ -54,7 +54,7 @@ export interface WorkbenchItem {
   crafting: CraftingInfo | null;
   gathering: any | null; // GatheringInfo from gathering.ts
   monsterDrops: MonsterDropInfo[] | null;
-  monsterDropMaxLevel: number | null;
+  monsterDropLevel: number | null;
   vendorInfo: VendorInfo | null;
   marketStats?: {
     minPrice: number | null;
@@ -247,7 +247,7 @@ const refreshItemsData = async (ids: number[]) => {
     const recipe = globalRecipesCache.value?.find(r => r.result === id);
     const gather = getGatheringInfo(id);
     const monsterDrops = getMonsterDropInfo(id);
-    const monsterDropMaxLevel = getMonsterDropMaxLevel(monsterDrops);
+    const monsterDropLevel = getMonsterDropPreferredLevel(monsterDrops);
     const vendor = getBestVendor(id);
 
     const crafting: CraftingInfo | null = recipe ? {
@@ -284,7 +284,7 @@ const refreshItemsData = async (ids: number[]) => {
       crafting,
       gathering: gather,
       monsterDrops,
-      monsterDropMaxLevel,
+      monsterDropLevel,
       vendorInfo: vendor,
       marketSnapshots: {}
     };
@@ -538,10 +538,10 @@ const activeItemIds = computed(() => {
       if (wA === 1 || wA === 2 || wA === 3) {
           const metaA = wA === 1
             ? itemA?.crafting
-            : (wA === 2 ? itemA?.gathering : { level: itemA?.monsterDropMaxLevel || 0, stars: 0, type: 99 });
+            : (wA === 2 ? itemA?.gathering : { level: itemA?.monsterDropLevel || 0, stars: 0, type: 99 });
           const metaB = wA === 1
             ? itemB?.crafting
-            : (wA === 2 ? itemB?.gathering : { level: itemB?.monsterDropMaxLevel || 0, stars: 0, type: 99 });
+            : (wA === 2 ? itemB?.gathering : { level: itemB?.monsterDropLevel || 0, stars: 0, type: 99 });
           if (metaA && metaB) {
               if (metaB.level !== metaA.level) return metaB.level - metaA.level;
               if (metaB.stars !== metaA.stars) return metaB.stars - metaA.stars;

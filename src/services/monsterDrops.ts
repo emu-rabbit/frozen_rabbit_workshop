@@ -64,6 +64,23 @@ let twMobsCache: Record<string, LocalizedMobName> | null = null;
 let zhMobsCache: Record<string, LocalizedMobName> | null = null;
 let loadPromise: Promise<void> | null = null;
 
+function isKnownLevel(level: number | null | undefined): level is number {
+  return typeof level === 'number' && Number.isFinite(level) && level > 0;
+}
+
+function compareKnownLevelAsc(a: number | null | undefined, b: number | null | undefined): number {
+  const aKnown = isKnownLevel(a);
+  const bKnown = isKnownLevel(b);
+  if (aKnown !== bKnown) return aKnown ? -1 : 1;
+  if (aKnown && bKnown && a !== b) return a - b;
+  return 0;
+}
+
+function getLowestKnownLevel(positions: MonsterDropPosition[]): number {
+  const levels = positions.map(position => position.level).filter(isKnownLevel);
+  return levels.length > 0 ? Math.min(...levels) : 0;
+}
+
 export async function ensureMonsterDropDataLoaded(): Promise<void> {
   await Promise.all([ensurePlacesLoaded(), ensureMapsLoaded()]);
 
@@ -160,6 +177,9 @@ function sortPositions(a: MonsterDropPosition, b: MonsterDropPosition): number {
   const bIsFate = b.fate && b.fate !== 0 ? 1 : 0;
   if (aIsFate !== bIsFate) return aIsFate - bIsFate;
 
+  const levelSort = compareKnownLevelAsc(a.level, b.level);
+  if (levelSort !== 0) return levelSort;
+
   const aHasCoords = a.x !== undefined && a.y !== undefined ? 1 : 0;
   const bHasCoords = b.x !== undefined && b.y !== undefined ? 1 : 0;
   if (aHasCoords !== bHasCoords) return bHasCoords - aHasCoords;
@@ -167,7 +187,7 @@ function sortPositions(a: MonsterDropPosition, b: MonsterDropPosition): number {
   if ((a.regionName || '') !== (b.regionName || '')) return (a.regionName || '').localeCompare(b.regionName || '');
   if ((a.parentZoneName || '') !== (b.parentZoneName || '')) return (a.parentZoneName || '').localeCompare(b.parentZoneName || '');
   if ((a.zoneName || '') !== (b.zoneName || '')) return (a.zoneName || '').localeCompare(b.zoneName || '');
-  return (b.level || 0) - (a.level || 0);
+  return 0;
 }
 
 function sortDrops(a: MonsterDropInfo, b: MonsterDropInfo): number {
@@ -179,7 +199,6 @@ function sortDrops(a: MonsterDropInfo, b: MonsterDropInfo): number {
 
   const posSort = sortPositions(aPos, bPos);
   if (posSort !== 0) return posSort;
-  if (b.level !== a.level) return b.level - a.level;
   return a.monsterName.localeCompare(b.monsterName);
 }
 
@@ -195,7 +214,7 @@ export function getMonsterDropInfo(itemId: number): MonsterDropInfo[] | null {
       .map(resolvePosition)
       .sort(sortPositions);
     const primary = positions[0];
-    const level = positions.reduce((max, position) => Math.max(max, position.level || 0), primary?.level || 0);
+    const level = getLowestKnownLevel(positions);
 
     return {
       monsterId,
@@ -213,8 +232,13 @@ export function getMonsterDropInfo(itemId: number): MonsterDropInfo[] | null {
   return drops.sort(sortDrops);
 }
 
-export function getMonsterDropMaxLevel(drops: MonsterDropInfo[] | null | undefined): number | null {
+export function getMonsterDropPreferredLevel(drops: MonsterDropInfo[] | null | undefined): number | null {
   if (!drops || drops.length === 0) return null;
-  const maxLevel = drops.reduce((max, drop) => Math.max(max, drop.level || 0), 0);
-  return maxLevel > 0 ? maxLevel : null;
+  const levels = drops.map(drop => drop.level).filter(isKnownLevel);
+  if (levels.length === 0) return null;
+  return Math.min(...levels);
+}
+
+export function getMonsterDropMaxLevel(drops: MonsterDropInfo[] | null | undefined): number | null {
+  return getMonsterDropPreferredLevel(drops);
 }

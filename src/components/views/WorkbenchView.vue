@@ -92,8 +92,8 @@ const summary = computed(() => {
                 maxGather.set(item.gathering.jobName, { level: item.gathering.level, stars: item.gathering.stars })
             }
             totalTime += (d.gather * 5)
-        } else if (d.gather > 0 && item.canHunt && item.monsterDropMaxLevel) {
-            maxBattleLevel = Math.max(maxBattleLevel, item.monsterDropMaxLevel)
+        } else if (d.gather > 0 && item.canHunt && item.monsterDropLevel) {
+            maxBattleLevel = Math.max(maxBattleLevel, item.monsterDropLevel)
         }
     })
 
@@ -297,8 +297,8 @@ const copyToClipboard = (id: string, text: string) => {
                                 {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
                             <!-- Battle Drop Badge -->
-                            <span v-if="workbenchItems[id]?.canHunt && workbenchItems[id]?.monsterDropMaxLevel" class="text-[12px] md:text-[14px] bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded-md font-bold border border-violet-100 dark:border-violet-900/50">
-                                {{ t('jobs.battle') }} Lv.{{ workbenchItems[id]?.monsterDropMaxLevel }}
+                            <span v-if="workbenchItems[id]?.canHunt && workbenchItems[id]?.monsterDropLevel" class="text-[12px] md:text-[14px] bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded-md font-bold border border-violet-100 dark:border-violet-900/50">
+                                {{ t('jobs.battle') }} Lv.{{ workbenchItems[id]?.monsterDropLevel }}
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100 dark:border-indigo-900/50">
@@ -517,7 +517,7 @@ const copyToClipboard = (id: string, text: string) => {
                             <div class="flex-1 min-w-0">
                                 <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.huntTitle') }}</span>
                                 <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">
-                                    {{ t('jobs.battle') }} Lv.{{ workbenchItems[id].monsterDropMaxLevel || '?' }}
+                                    {{ t('jobs.battle') }} Lv.{{ workbenchItems[id].monsterDropLevel || '?' }}
                                 </span>
                             </div>
                         </div>
