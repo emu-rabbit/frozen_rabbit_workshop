@@ -12,7 +12,7 @@ import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateMarketStats } from '../utils/marketPricing';
 import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
-import { ensureVendorDataLoaded, getBestVendor } from '../services/vendor';
+import { ensureVendorDataLoaded, getVendors } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
 import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
 import type { MonsterDropInfo } from '../services/monsterDrops';
@@ -56,6 +56,7 @@ export interface WorkbenchItem {
   monsterDrops: MonsterDropInfo[] | null;
   monsterDropLevel: number | null;
   vendorInfo: VendorInfo | null;
+  vendorInfos: VendorInfo[];
   marketStats?: {
     minPrice: number | null;
     q1Price: number | null;
@@ -248,7 +249,8 @@ const refreshItemsData = async (ids: number[]) => {
     const gather = getGatheringInfo(id);
     const monsterDrops = getMonsterDropInfo(id);
     const monsterDropLevel = getMonsterDropPreferredLevel(monsterDrops);
-    const vendor = getBestVendor(id);
+    const vendors = getVendors(id);
+    const vendor = vendors[0] || null;
 
     const crafting: CraftingInfo | null = recipe ? {
       job: recipe.job,
@@ -286,6 +288,7 @@ const refreshItemsData = async (ids: number[]) => {
       monsterDrops,
       monsterDropLevel,
       vendorInfo: vendor,
+      vendorInfos: vendors,
       marketSnapshots: {}
     };
   }

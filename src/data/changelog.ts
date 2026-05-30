@@ -8,6 +8,24 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.2.1',
+    date: '2026-05-30',
+    changes: [
+      {
+        tw: '修正 NPC 在售資訊中的地區錯誤',
+        cn: '修正 NPC 在售信息中的地区错误',
+        en: 'Fixed incorrect region details in NPC vendor sale information',
+        ja: 'NPC 販売情報に表示される地域の誤りを修正しました'
+      },
+      {
+        tw: '現在會列出所有販售該物品的 NPC 資訊',
+        cn: '现在会列出所有出售该物品的 NPC 信息',
+        en: 'NPC vendor details now list every NPC that sells the item',
+        ja: '対象アイテムを販売しているすべての NPC 情報を表示するようにしました'
+      }
+    ]
+  },
+  {
     version: '1.2.0',
     date: '2026-05-28',
     changes: [

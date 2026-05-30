@@ -53,7 +53,7 @@ vi.mock('../../src/services/monsterDrops', () => ({
 
 vi.mock('../../src/services/vendor', () => ({
     ensureVendorDataLoaded: vi.fn(),
-    getBestVendor: vi.fn()
+    getVendors: vi.fn(() => [])
 }));
 
 vi.mock('vue-i18n', () => ({

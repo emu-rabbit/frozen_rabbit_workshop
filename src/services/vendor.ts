@@ -1,4 +1,4 @@
-import { ensurePlacesLoaded, getPlaceName, getCurrentLanguage, getMapData, ensureMapsLoaded } from './dictionary';
+import { ensurePlacesLoaded, getPlaceName, getCurrentLanguage } from './dictionary';
 
 const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
 const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
@@ -28,10 +28,7 @@ let loadPromise: Promise<void> | null = null;
  */
 export async function ensureVendorDataLoaded(): Promise<void> {
   // 必須確保子依賴地名與地圖快取隨時更新（特別是語言切換後）
-  await Promise.all([
-    ensurePlacesLoaded(),
-    ensureMapsLoaded()
-  ]);
+  await ensurePlacesLoaded();
 
   if (shopsCache !== null && npcsCache !== null && twNpcsCache !== null) return;
   if (loadPromise) return loadPromise;
@@ -45,7 +42,6 @@ export async function ensureVendorDataLoaded(): Promise<void> {
         fetch(NPCS_URL),
         fetch(TW_NPCS_URL),
         ensurePlacesLoaded(), // 需要地名快取
-        ensureMapsLoaded(),   // 需要地圖快取，用於 Map ID 轉 PlaceName ID
       ]);
 
       if (!shopsRes.ok || !npcsRes.ok || !twNpcsRes.ok) {
@@ -69,21 +65,6 @@ export async function ensureVendorDataLoaded(): Promise<void> {
 
         const npcIds = Array.isArray(shop.npcs) ? shop.npcs : (shop.npcId ? [shop.npcId] : []);
         if (npcIds.length === 0) return;
-
-        let bestNpcId = npcIds[0];
-        let bestNpcData = npcsCache![bestNpcId];
-
-        for (const nid of npcIds) {
-          const ndata = npcsCache![nid];
-          if (ndata?.position) {
-            bestNpcId = nid;
-            bestNpcData = ndata;
-            break;
-          }
-        }
-
-        const zoneId = bestNpcData?.position?.zoneid;
-        const coords = bestNpcData?.position ? { x: bestNpcData.position.x, y: bestNpcData.position.y } : undefined;
         
         shop.trades.forEach((trade: any) => {
           const gilCurrency = trade.currencies?.find((c: any) => c.id === 1);
@@ -97,13 +78,25 @@ export async function ensureVendorDataLoaded(): Promise<void> {
 
             if (!itemToVendorsMap[itemId]) itemToVendorsMap[itemId] = [];
             
-            itemToVendorsMap[itemId].push({
-              price,
-              npcId: Number(bestNpcId),
-              npcName: '', // Will be resolved dynamically
-              zoneId: zoneId || 0,
-              zoneName: '', // Will be resolved dynamically
-              coords
+            npcIds.forEach((npcId: number | string) => {
+              const npcData = npcsCache![npcId];
+              const zoneId = npcData?.position?.zoneid;
+              const coords = npcData?.position ? { x: npcData.position.x, y: npcData.position.y } : undefined;
+              const normalizedNpcId = Number(npcId);
+              const alreadyIndexed = itemToVendorsMap[itemId].some(vendor =>
+                vendor.npcId === normalizedNpcId && vendor.price === price
+              );
+
+              if (alreadyIndexed) return;
+
+              itemToVendorsMap[itemId].push({
+                price,
+                npcId: normalizedNpcId,
+                npcName: '', // Will be resolved dynamically
+                zoneId: zoneId || 0,
+                zoneName: '', // Will be resolved dynamically
+                coords
+              });
             });
           });
         });
@@ -111,7 +104,7 @@ export async function ensureVendorDataLoaded(): Promise<void> {
 
       // 針對每個 itemId，按價格升序排序
       Object.keys(itemToVendorsMap).forEach(id => {
-        itemToVendorsMap[Number(id)].sort((a, b) => a.price - b.price);
+        itemToVendorsMap[Number(id)].sort((a, b) => a.price - b.price || a.npcId - b.npcId);
       });
 
       console.log(`[Vendor] Data loaded. Indexed ${Object.keys(itemToVendorsMap).length} items.`);
@@ -147,20 +140,31 @@ function getNpcName(npcId: number): string {
 }
 
 /**
+ * 解析 NPC 販售資訊的動態語系欄位
+ */
+function resolveVendorInfo(vendor: VendorInfo): VendorInfo {
+  const resolved = { ...vendor };
+  
+  // 動態填入語言名稱
+  resolved.npcName = getNpcName(resolved.npcId);
+  
+  // Teamcraft NPC position.zoneid is already the display place id. Do not
+  // reinterpret it through maps.json because overlapping ids can point elsewhere.
+  resolved.zoneName = resolved.zoneId ? getPlaceName(resolved.zoneId) : 'Unknown Zone';
+  
+  return resolved;
+}
+
+/**
+ * 獲取物品所有 NPC 販售資訊，已按價格升序排序
+ */
+export function getVendors(itemId: number): VendorInfo[] {
+  return (itemToVendorsMap[itemId] || []).map(resolveVendorInfo);
+}
+
+/**
  * 獲取物品最划算的 NPC 販售資訊
  */
 export function getBestVendor(itemId: number): VendorInfo | null {
-  const vendors = itemToVendorsMap[itemId];
-  if (!vendors || vendors.length === 0) return null;
-  const best = { ...vendors[0] };
-  
-  // 動態填入語言名稱
-  best.npcName = getNpcName(best.npcId);
-  
-  // npc 的 zoneId 其實是 Map ID，需要先過一次 maps.json 轉為 PlaceName ID
-  const mapData = getMapData(best.zoneId);
-  const effectivePlaceId = mapData?.placename_id || best.zoneId;
-  best.zoneName = effectivePlaceId ? getPlaceName(effectivePlaceId) : 'Unknown Zone';
-  
-  return best;
+  return getVendors(itemId)[0] || null;
 }
