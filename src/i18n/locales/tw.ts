@@ -202,6 +202,7 @@ export default {
         vendorTitle: 'NPC 販售資訊',
         vendorDesc: 'NPC 在售 單價 {price} Gil {location}',
         vendorPrice: '販售價格',
+        vendorCount: '{n} 個來源',
         mbTitle: '市場版販售資訊',
         mbMinPrice: '架上最低價',
         q1Price: '1/4 分位數',

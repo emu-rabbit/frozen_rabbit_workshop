@@ -202,6 +202,7 @@ export default {
         vendorTitle: 'NPC Vendor Info',
         vendorDesc: 'Sold by NPC: {price} Gil in {location}',
         vendorPrice: 'Vendor Price',
+        vendorCount: '{n} sources',
         mbTitle: 'Market Board Listings',
         mbMinPrice: 'Lowest Listed Price',
         q1Price: '1/4 Percentile',

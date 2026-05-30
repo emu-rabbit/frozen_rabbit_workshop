@@ -202,6 +202,7 @@ export default {
         vendorTitle: 'NPC販売情報',
         vendorDesc: 'NPC販売: {price} Gil {location}',
         vendorPrice: '販売価格',
+        vendorCount: '{n} 件',
         mbTitle: 'マーケットボード販売情報',
         mbMinPrice: '最低出品価格',
         q1Price: '第1四分位数',

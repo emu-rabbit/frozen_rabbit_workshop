@@ -390,33 +390,34 @@ const copyToClipboard = (id: string, text: string) => {
             <div v-show="expandedItems[id]" class="border-t border-slate-100/50 dark:border-slate-800/50 bg-slate-50/30 dark:bg-slate-950/40 p-4 md:p-8">
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     <!-- NPC VENDOR CARD (ORDERED FIRST) -->
-                    <div v-if="workbenchItems[id]?.vendorInfo" class="group/card bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all">
+                    <div v-if="workbenchItems[id]?.vendorInfos?.length" class="group/card bg-white dark:bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-10 h-10 rounded-xl bg-slate-500 dark:bg-slate-600 flex items-center justify-center text-white shadow-lg shadow-slate-100 dark:shadow-none">
                                 <i class="pi pi-shopping-bag scale-90"></i>
                             </div>
                             <div class="flex-1 min-w-0">
                                 <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.vendorTitle') }}</span>
-                                <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">{{ workbenchItems[id].vendorInfo.npcName }}</span>
+                                <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">{{ t('workbench.view.details.vendorCount', { n: workbenchItems[id].vendorInfos.length }) }}</span>
                             </div>
                         </div>
 
-                        <div class="space-y-3">
-                            <div class="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-100/50 dark:border-slate-700/50 flex flex-wrap items-center justify-between gap-2">
-                                <div class="flex flex-col min-w-0">
-                                    <span class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-1 leading-none">{{ t('workbench.view.details.vendorPrice') }}</span>
-                                    <span class="text-base md:text-lg font-black text-slate-700 dark:text-slate-200 font-mono tracking-tighter truncate">{{ new Intl.NumberFormat().format(workbenchItems[id].vendorInfo.price) }} Gil</span>
-                                </div>
-                                <i class="pi pi-verified text-slate-300 dark:text-slate-600 text-xl opacity-50 shrink-0"></i>
-                            </div>
-
-                            <div class="flex items-start gap-2 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl px-3 py-3 border border-slate-100/30 dark:border-slate-700/30">
-                                <i class="pi pi-map-marker text-slate-400 dark:text-slate-500 text-xs mt-0.5"></i>
-                                <div class="flex-1 min-w-0">
-                                    <div class="text-xs font-bold text-slate-700 dark:text-slate-300 truncate mb-1">{{ workbenchItems[id].vendorInfo.zoneName }}</div>
-                                    <div v-if="workbenchItems[id].vendorInfo.coords" class="text-[11px] font-black text-slate-400 dark:text-slate-500 font-mono">
-                                        X: {{ workbenchItems[id].vendorInfo.coords.x.toFixed(1) }}, Y: {{ workbenchItems[id].vendorInfo.coords.y.toFixed(1) }}
+                        <div class="space-y-2 max-h-[190px] overflow-y-auto pr-1 custom-scrollbar">
+                            <div v-for="vendor in workbenchItems[id].vendorInfos" :key="`${vendor.npcId}_${vendor.price}`" class="min-h-[68px] bg-slate-50/50 dark:bg-slate-800/50 rounded-xl px-3 py-3 border transition-colors"
+                                 :class="workbenchItems[id].vendorInfo?.npcId === vendor.npcId && workbenchItems[id].vendorInfo?.price === vendor.price ? 'border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800' : 'border-slate-100/50 dark:border-slate-700/50'">
+                                <div class="flex items-start justify-between gap-3">
+                                    <div class="min-w-0 text-[12px] font-black text-slate-700 dark:text-slate-300 truncate leading-5">{{ vendor.npcName }}</div>
+                                    <div class="inline-flex items-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-2.5 py-1 text-[10px] font-black font-mono leading-none whitespace-nowrap shadow-sm dark:shadow-none shrink-0">
+                                        {{ new Intl.NumberFormat().format(vendor.price) }} Gil
                                     </div>
+                                </div>
+                                <div class="mt-1.5 flex items-center gap-1.5 min-w-0 text-[11px] font-black text-slate-600 dark:text-slate-300 leading-5">
+                                    <i class="pi pi-map-marker text-[10px] shrink-0 text-slate-400 dark:text-slate-500"></i>
+                                    <span class="truncate">
+                                        {{ vendor.zoneName }}
+                                        <span v-if="vendor.coords" class="font-mono text-[10px] text-slate-400 dark:text-slate-500">
+                                            ({{ vendor.coords.x.toFixed(1) }}, {{ vendor.coords.y.toFixed(1) }})
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
