@@ -148,7 +148,7 @@ export const getWorkbenchItemCountBucket = (itemCount: number) => {
   if (itemCount <= 3) return '2~3'
   if (itemCount <= 5) return '4~5'
   if (itemCount <= 10) return '6~10'
-  if (itemCount <= 20) return '10~20'
+  if (itemCount <= 20) return '11~20'
   return '20+'
 }
 
