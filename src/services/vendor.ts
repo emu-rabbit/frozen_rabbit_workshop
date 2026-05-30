@@ -155,11 +155,36 @@ function resolveVendorInfo(vendor: VendorInfo): VendorInfo {
   return resolved;
 }
 
+function getVendorDisplayKey(vendor: VendorInfo): string {
+  const coordsKey = vendor.coords
+    ? `${vendor.coords.x.toFixed(1)},${vendor.coords.y.toFixed(1)}`
+    : '';
+
+  return [
+    vendor.npcName,
+    vendor.price,
+    vendor.zoneName,
+    coordsKey
+  ].join('|');
+}
+
+function mergeVendorsWithSameDisplay(vendors: VendorInfo[]): VendorInfo[] {
+  const seen = new Set<string>();
+
+  return vendors.filter(vendor => {
+    const key = getVendorDisplayKey(vendor);
+    if (seen.has(key)) return false;
+
+    seen.add(key);
+    return true;
+  });
+}
+
 /**
  * 獲取物品所有 NPC 販售資訊，已按價格升序排序
  */
 export function getVendors(itemId: number): VendorInfo[] {
-  return (itemToVendorsMap[itemId] || []).map(resolveVendorInfo);
+  return mergeVendorsWithSameDisplay((itemToVendorsMap[itemId] || []).map(resolveVendorInfo));
 }
 
 /**

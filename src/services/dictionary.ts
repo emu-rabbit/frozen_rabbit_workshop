@@ -614,7 +614,7 @@ export function getPlaceName(zoneId: number, enFallback?: string): string {
   if (!entry) return enFallback || `Zone #${zoneId}`;
 
   if (currentLanguage === 'tw') {
-    return entry.tw || enFallback || `Zone #${zoneId}`;
+    return entry.tw || entry.en || enFallback || `Zone #${zoneId}`;
   }
 
   const lang = normalizeLanguage();

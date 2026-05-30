@@ -6,6 +6,7 @@ vi.mock('../../src/services/dictionary', () => ({
     getPlaceName: vi.fn((id: number) => {
         if (id === 53) return '格里達尼亞舊街';
         if (id === 63) return '庫爾札斯中央高地';
+        if (id === 5219) return 'Sinus Ardorum';
         if (id === 999) return `Zone #${id}`;
         return `Zone #${id}`;
     }),
@@ -44,6 +45,17 @@ describe('vendor service', () => {
                             },
                         ],
                     },
+                    {
+                        id: 262721,
+                        type: 'GilShop',
+                        npcs: [1052589, 1052601, 1052641, 1052651, 1052700],
+                        trades: [
+                            {
+                                currencies: [{ id: 1, amount: 40309 }],
+                                items: [{ id: 27087, amount: 1 }],
+                            },
+                        ],
+                    },
                 ]);
             }
 
@@ -64,6 +76,23 @@ describe('vendor service', () => {
                     '1000999': {
                         en: 'Fallback Merchant',
                         position: { zoneid: 999, x: 1, y: 2 },
+                    },
+                    '1052589': {
+                        en: 'Godgyth',
+                        position: { zoneid: 5219, x: 21.88, y: 21.86 },
+                    },
+                    '1052601': {
+                        en: 'Godgyth',
+                        position: { zoneid: 5219, x: 21.86, y: 21.86 },
+                    },
+                    '1052641': {
+                        en: 'Godgyth',
+                    },
+                    '1052651': {
+                        en: 'Godgyth',
+                    },
+                    '1052700': {
+                        en: 'Different Merchant',
                     },
                 });
             }
@@ -109,5 +138,37 @@ describe('vendor service', () => {
         await ensureVendorDataLoaded();
 
         expect(getBestVendor(99)?.zoneName).toBe('Zone #999');
+    });
+
+    it('merges vendor rows that resolve to the same displayed information', async () => {
+        const { ensureVendorDataLoaded, getVendors } = await import('../../src/services/vendor');
+
+        await ensureVendorDataLoaded();
+
+        const vendors = getVendors(27087);
+
+        expect(vendors).toEqual([
+            expect.objectContaining({
+                npcId: 1052589,
+                npcName: 'Godgyth',
+                price: 40309,
+                zoneName: 'Sinus Ardorum',
+                coords: { x: 21.88, y: 21.86 },
+            }),
+            expect.objectContaining({
+                npcId: 1052641,
+                npcName: 'Godgyth',
+                price: 40309,
+                zoneName: 'Unknown Zone',
+                coords: undefined,
+            }),
+            expect.objectContaining({
+                npcId: 1052700,
+                npcName: 'Different Merchant',
+                price: 40309,
+                zoneName: 'Unknown Zone',
+                coords: undefined,
+            }),
+        ]);
     });
 });
