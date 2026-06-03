@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, searchItems } from '../../src/services/dictionary';
+import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, normalizeIconUrl, searchItems } from '../../src/services/dictionary';
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
@@ -115,5 +115,17 @@ describe('Dictionary Search & Logic', () => {
         const jobs = getOrderedEquipmentJobs(['WVR', 'ADV', 'BST', 'GNB', 'PLD', 'CRP', 'CNJ', 'PCT', 'MIN', 'GLA']);
 
         expect(jobs).toEqual(['GLA', 'PLD', 'GNB', 'CNJ', 'PCT', 'CRP', 'WVR', 'MIN']);
+    });
+
+    it('routes XIVAPI asset icon URLs through the v2 asset host', () => {
+        const assetPath = '/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png';
+
+        expect(normalizeIconUrl(assetPath)).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
+        expect(normalizeIconUrl(`https://xivapi.com${assetPath}`)).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
+        expect(normalizeIconUrl('api/asset?path=ui/icon/040000/040176_hr1.tex&format=png')).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
+    });
+
+    it('keeps non-asset icon paths on the legacy icon host', () => {
+        expect(normalizeIconUrl('/i/020000/020751.png')).toBe('https://xivapi.com/i/020000/020751.png');
     });
 });
