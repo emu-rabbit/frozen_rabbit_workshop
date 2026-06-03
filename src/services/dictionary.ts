@@ -15,6 +15,8 @@ const ENGLISH_URL = `${BASE_URL}/items.json`;
 const MAPS_URL = `${BASE_URL}/maps.json`;
 const TW_PLACES_URL = `${BASE_URL}/tw/tw-places.json`;
 const GLOBAL_PLACES_URL = `${BASE_URL}/places.json`;
+const XIVAPI_ASSET_BASE_URL = 'https://v2.xivapi.com';
+const XIVAPI_LEGACY_BASE_URL = 'https://xivapi.com';
 
 const DICT_URLS: Record<string, string> = {
   tw: `${BASE_URL}/tw/tw-items.json`,
@@ -177,19 +179,33 @@ function getCanonicalItemId(item: RawSearchIndexItem): number {
 }
 
 function getSearchIndexIcon(item: RawSearchIndexItem): string {
-  if (item.data?.icon) return `https://xivapi.com${item.data.icon}`;
+  if (item.data?.icon) return normalizeIconUrl(item.data.icon);
 
   if (item.iconId) {
     const folder = item.iconId.slice(0, 3).padEnd(3, '0');
-    return `https://xivapi.com/i/${folder}000/${item.iconId}_hr1.png`;
+    return normalizeIconUrl(`/i/${folder}000/${item.iconId}_hr1.png`);
   }
 
   return '';
 }
 
-function normalizeIconUrl(iconPath?: string): string {
-  if (!iconPath) return '';
-  return iconPath.startsWith('http') ? iconPath : `https://xivapi.com${iconPath}`;
+export function normalizeIconUrl(iconPath?: string): string {
+  const normalizedPath = iconPath?.trim();
+  if (!normalizedPath) return '';
+
+  if (normalizedPath.startsWith(`${XIVAPI_LEGACY_BASE_URL}/api/asset`)) {
+    return `${XIVAPI_ASSET_BASE_URL}${normalizedPath.slice(XIVAPI_LEGACY_BASE_URL.length)}`;
+  }
+
+  if (normalizedPath.startsWith('/api/asset')) {
+    return `${XIVAPI_ASSET_BASE_URL}${normalizedPath}`;
+  }
+
+  if (normalizedPath.startsWith('api/asset')) {
+    return `${XIVAPI_ASSET_BASE_URL}/${normalizedPath}`;
+  }
+
+  return normalizedPath.startsWith('http') ? normalizedPath : `${XIVAPI_LEGACY_BASE_URL}${normalizedPath}`;
 }
 
 function getCategoryName(categoryId?: number): string | undefined {
@@ -274,7 +290,7 @@ async function generateFallbackItemData(): Promise<MockItem[]> {
       id: 41234,
       name: 'Item #41234',
       enName: 'Item #41234',
-      icon: 'https://xivapi.com/i/051000/051941.png',
+      icon: normalizeIconUrl('/i/051000/051941.png'),
       craftable: true,
     },
   ];
