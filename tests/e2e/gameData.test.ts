@@ -92,40 +92,61 @@ test('warm startup only checks the manifest and makes no upstream requests', asy
   expect(requests.filter(url => /\/game-data\/.*\.bin$/.test(url))).toHaveLength(0);
   expect(requests.filter(url => url.includes('raw.githubusercontent.com'))).toHaveLength(0);
 });
-for (const activate of [false, true]) test(`complete update is ${activate ? 'confirmed and reloaded' : 'deferred until the next opening'}`, async ({ page }) => {
+for (const action of ['apply', 'later', 'escape', 'close', 'mask']) test(`complete update popup handles ${action}`, async ({ page }) => {
   await setupTest(page);
   const old = mockGamePackages(); const next = mockGamePackages('新版鐵錠');
   await expect.poll(() => storedVersion(page)).toBe(old.manifest.version);
-  await page.route('**/game-data/**', route => {
+  let release!: () => void;
+  const hold = new Promise<void>(resolve => { release = resolve; });
+  await page.route('**/game-data/**', async route => {
     const file = new URL(route.request().url()).pathname.split('/').pop()!;
     if (file === 'manifest.json') return route.fulfill({ json: next.manifest });
+    if (file === next.manifest.bundles.sources.file) await hold;
     const body = next.assets.get(file) || old.assets.get(file);
     return body ? route.fulfill({ body, contentType: 'application/octet-stream' }) : route.fulfill({ status: 404 });
   });
   await page.reload();
-  await expect(page.getByText('新遊戲資料已下載完成。', { exact: true })).toBeVisible();
+  await page.locator('#item-name').fill('尚未儲存的草稿');
+  await expect(page.getByRole('dialog', { name: '檢測到新遊戲資料更新', exact: true })).toHaveCount(0);
+  release();
+  const dialog = page.getByRole('dialog', { name: '檢測到新遊戲資料更新', exact: true });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('新遊戲資料已下載完畢可供使用，你可以選擇套用的時間點。');
+  await expect(page.getByTestId('game-data-status')).toHaveCount(0);
   await expect.poll(() => storedVersion(page, 'pending')).toBe(next.manifest.version);
   expect(await storedVersion(page)).toBe(old.manifest.version);
-  await page.locator('#item-name').fill('尚未儲存的草稿');
-  if (activate) {
-    await page.getByRole('button', { name: '套用並重新整理', exact: true }).click();
-    const dialog = page.getByRole('dialog', { name: '套用並重新整理', exact: true });
-    await expect(dialog).toContainText('未保存');
-    await dialog.getByRole('button', { name: '取消', exact: true }).last().click();
+  await expect(dialog.getByRole('heading', { name: '檢測到新遊戲資料更新', exact: true })).toBeFocused();
+  if (action === 'later') {
+    for (const dark of [false, true]) {
+      await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+      const bounds = await dialog.boundingBox();
+      const viewport = page.viewportSize()!;
+      expect(bounds!.x).toBeGreaterThanOrEqual(0);
+      expect(bounds!.y).toBeGreaterThanOrEqual(0);
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
+      expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(viewport.height);
+      await page.screenshot({ path: `.cache/game-data/update-popup-${test.info().project.name.replace(/ /g, '-')}${dark ? '-dark' : ''}.png`, fullPage: true });
+    }
+  }
+  if (action === 'apply') {
+    await dialog.getByRole('button', { name: '現在套用並重新整理', exact: true }).click();
+  } else {
+    if (action === 'escape') await page.keyboard.press('Escape');
+    else if (action === 'mask') await page.locator('.p-dialog-mask').click({ position: { x: 4, y: 4 } });
+    else await dialog.getByRole('button', { name: '下次套用', exact: true })[action === 'close' ? 'first' : 'last']().click();
     await expect(dialog).toHaveCount(0);
     await expect(page.locator('#item-name')).toHaveValue('尚未儲存的草稿');
     expect(await storedVersion(page)).toBe(old.manifest.version);
-    await page.getByRole('button', { name: '套用並重新整理', exact: true }).click();
-    await dialog.getByRole('button', { name: '套用並重新整理', exact: true }).click();
-  } else {
-    await page.getByRole('button', { name: '下次開啟再套用', exact: true }).click();
-    await expect(page.getByTestId('game-data-status')).toHaveCount(0);
-    await expect(page.locator('#item-name')).toHaveValue('尚未儲存的草稿');
-    expect(await storedVersion(page)).toBe(old.manifest.version);
+    await navigateTo(page, '工坊設置');
+    await expect(page.getByRole('button', { name: '清除遊戲資料快取並重新下載', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '新遊戲資料已下載完成。', exact: true })).toHaveCount(0);
+    await expect(dialog).toHaveCount(0);
     await page.reload();
   }
   await expect.poll(() => storedVersion(page)).toBe(next.manifest.version);
   await expect.poll(() => storedVersion(page, 'pending')).toBeNull();
+  await expect(dialog).toHaveCount(0);
+  if (action !== 'apply') await navigateTo(page, '寫張新筆記');
   await searchAndSelectItem(page, '找尋物品...', '新版鐵錠', '新版鐵錠');
 });
 test('a failed core download offers retry and never saves an incomplete cache', async ({ page }) => {

@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GameDataConfirmDialog from './GameDataConfirmDialog.vue'
-import { currentDataManifest, pendingDataManifest, dataCacheAvailable, updateDismissed, repairDataCache } from '../../services/gameData'
+import { currentDataManifest, dataCacheAvailable, repairDataCache } from '../../services/gameData'
 const { t } = useI18n()
 const busy = ref(false)
 const showRepair = ref(false)
@@ -26,10 +26,6 @@ async function repair() {
       </p>
       <p v-if="!dataCacheAvailable" class="text-sm leading-relaxed text-amber-700 dark:text-amber-300">{{ t('gameData.cacheUnavailable') }}</p>
       <div class="flex flex-col sm:flex-row flex-wrap gap-3 mt-2">
-        <button v-if="pendingDataManifest" type="button" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-soft-green-50 dark:bg-soft-green-900/30 text-soft-green-700 dark:text-soft-green-400 font-bold text-sm hover:bg-soft-green-100 dark:hover:bg-soft-green-900/50 hover:shadow-sm border border-soft-green-200 dark:border-soft-green-800 transition-all" @click="updateDismissed = false">
-          <i class="pi pi-download text-xs shrink-0" aria-hidden="true"></i>
-          {{ t('gameData.updateReady') }}
-        </button>
         <button type="button" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-soft-green-50 dark:bg-soft-green-900/30 text-soft-green-700 dark:text-soft-green-400 font-bold text-sm hover:bg-soft-green-100 dark:hover:bg-soft-green-900/50 hover:shadow-sm border border-soft-green-200 dark:border-soft-green-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed" :disabled="busy" @click="showRepair = true">
           <i class="pi pi-refresh text-xs shrink-0" aria-hidden="true"></i>
           {{ t('gameData.repair') }}
