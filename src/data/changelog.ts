@@ -40,12 +40,6 @@ export const changelogData: ChangelogEntry[] = [
         cn: '补全无人岛建筑与地标的繁体中文名称',
         en: 'Added missing Traditional Chinese names for Island Sanctuary buildings and landmarks',
         ja: '無人島開拓の建築とランドマークに不足していた繁体字中国語名を追加しました'
-      },
-      {
-        tw: '遊戲資料更新改以彈出視窗提醒，可選擇現在或之後套用，並移除設定頁的更新提示按鈕',
-        cn: '游戏数据更新改用弹窗提醒，可选择现在或稍后应用，并移除设置页的更新提示按钮',
-        en: 'Game data updates now open a dialog with Apply now and Later options; removed the update notification button from Settings',
-        ja: 'ゲームデータ更新時に今すぐ適用するかあとで適用するかを選べるダイアログを表示し、設定画面の更新通知ボタンを削除しました'
       }
     ]
   },
