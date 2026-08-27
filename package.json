@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run data:verify",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
+    "data:generate": "node scripts/generate-game-data.mjs",
+    "data:verify": "node scripts/generate-game-data.mjs --verify",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"

@@ -27,3 +27,6 @@ dist-ssr
 # Playwright
 playwright-report
 test-results
+
+# Manual Teamcraft source snapshots (generated bundles in public/game-data are tracked)
+.cache/game-data/
