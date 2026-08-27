@@ -1,5 +1,13 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Page, type Locator } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 import { mockGamePackages, setupTest, searchAndSelectItem, navigateTo } from './utils/test-helpers';
+
+async function badgeStyle(locator: Locator) {
+  return locator.evaluate(element => {
+    const style = getComputedStyle(element);
+    return [style.color, style.backgroundColor, style.borderColor, style.borderRadius, style.fontSize, style.padding];
+  });
+}
 
 async function storedVersion(page: Page, key = 'active') {
   return page.evaluate(async key => {
@@ -27,29 +35,53 @@ test('search works before phase two; island materials reach gathering and other 
   await setupTest(page, () => page.route('**/game-data/sources.*', async route => { await hold; await route.fallback(); }));
   await page.locator('#item-name').fill('無人島備料測試');
   await searchAndSelectItem(page, '找尋物品...', 'Cozy Cabin', 'Cozy Cabin I');
+  await expect(page.getByTestId('game-data-status')).toHaveCount(0);
   release();
   await page.getByText('好，把這些放上備料台！').click();
   await expect(page.locator('.item-card', { hasText: 'Cozy Cabin I' })).toBeVisible();
+  await expect(page.locator('.item-card', { hasText: 'Cozy Cabin I' }).getByText('開拓建造', { exact: true }).first()).toBeVisible();
   const log = page.locator('.item-card').filter({ has: page.getByRole('heading', { name: '無人島棕櫚原木', exact: true }) });
   const garnet = page.locator('.item-card').filter({ has: page.getByRole('heading', { name: '無人島石榴石原石', exact: true }) });
   await expect(log).toBeVisible(); await expect(garnet).toBeVisible();
+  const granaryBadge = garnet.getByText('屯貨倉庫', { exact: true });
+  await expect(granaryBadge).toBeVisible();
+  expect(await badgeStyle(granaryBadge)).toEqual(await badgeStyle(log.getByText('開拓採集', { exact: true }).first()));
   await expect(log.locator('input[type=number]').nth(2)).toHaveValue('10');
   await expect(garnet.locator('input[type=number]').nth(3)).toHaveValue('3');
-  await expect(garnet).toContainText('無人島其他來源');
+  await expect(page.getByText('無人島其他來源', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('僅計算所選階段，不包含前置建設或解鎖需求。', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('時間估算不包含無人島建設、製作與採集。', { exact: true })).toHaveCount(0);
   for (const index of [0, 1, 2]) await expect(garnet.locator('input[type=number]').nth(index)).toBeDisabled();
   // Production previews show analytics consent; dismiss it before using the bottom action bar.
   const rejectAnalytics = page.getByRole('button', { name: '拒絕', exact: true });
   if (await rejectAnalytics.isVisible()) await rejectAnalytics.click();
   await page.getByRole('button', { name: /待辦/ }).click();
   await expect(page).toHaveURL(/#todo/);
+  await expect(page.getByText('開拓建造', { exact: true }).filter({ visible: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: '無人島石榴石原石', exact: true })).toBeVisible();
-  await expect(page.getByText('無人島採集', { exact: true }).filter({ visible: true })).toBeVisible();
+  await expect(page.getByText('無人島其他來源', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('開拓採集', { exact: true }).filter({ visible: true })).toBeVisible();
   await expect(page.getByText('X:18.4 Y:24.3', { exact: true }).filter({ visible: true })).toBeVisible();
-  await page.screenshot({ path: `.cache/game-data/island-todo-${test.info().project.name.replace(/ /g, '-')}.png`, fullPage: true });
+  const todoGranary = page.getByText('屯貨倉庫', { exact: true }).filter({ visible: true });
+  const todoGathering = page.getByText('開拓採集', { exact: true }).filter({ visible: true });
+  await expect(todoGranary).toBeVisible();
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+    expect(await badgeStyle(todoGranary)).toEqual(await badgeStyle(todoGathering));
+    await page.screenshot({ path: '.cache/game-data/island-todo-' + test.info().project.name.replace(/ /g, '-') + (dark ? '-dark' : '') + '.png', fullPage: true, animations: 'disabled' });
+  }
+  await page.locator('button').filter({ has: page.locator('i.pi-download') }).click();
+  const downloading = page.waitForEvent('download');
+  await page.getByRole('button', { name: /確認下載 HTML/ }).click();
+  const html = await readFile((await (await downloading).path())!, 'utf8');
+  expect(html).toContain('屯貨倉庫');
+  expect(html).toContain('開拓建造');
+  expect(html).not.toContain('無人島其他來源');
 });
 test('warm startup only checks the manifest and makes no upstream requests', async ({ page }) => {
   await setupTest(page);
   await expect.poll(() => storedVersion(page)).toBe(mockGamePackages().manifest.version);
+  await expect(page.getByTestId('game-data-status')).toHaveCount(0);
   const requests: string[] = [];
   page.on('request', request => requests.push(request.url()));
   await page.reload();
@@ -87,6 +119,7 @@ for (const activate of [false, true]) test(`complete update is ${activate ? 'con
     await dialog.getByRole('button', { name: '套用並重新整理', exact: true }).click();
   } else {
     await page.getByRole('button', { name: '下次開啟再套用', exact: true }).click();
+    await expect(page.getByTestId('game-data-status')).toHaveCount(0);
     await expect(page.locator('#item-name')).toHaveValue('尚未儲存的草稿');
     expect(await storedVersion(page)).toBe(old.manifest.version);
     await page.reload();

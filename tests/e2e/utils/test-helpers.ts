@@ -23,7 +23,7 @@ export function mockGamePackages(ingotName = '鐵錠') {
     'items.json': { ...mockEnItems, 37561: { en: 'Island Palm Log' }, 37579: { en: 'Raw Island Garnet' } },
     'tw/tw-items.json': { ...mockTwItems, 5057: ingotName, 37561: '無人島棕櫚原木', 37579: '無人島石榴石原石' },
     'item-icons.json': mockItemIcons,
-    'recipes.json': [...mockRecipes, { id: 'island-1', result: -10000, yields: 1, job: -10, lvl: 1, ingredients: [{ id: 37561, amount: 10 }, { id: 37579, amount: 3 }] }],
+    'recipes.json': [...mockRecipes, { id: 'mji-building-0.0', result: -10000, yields: 1, job: -10, lvl: 1, ingredients: [{ id: 37561, amount: 10 }, { id: 37579, amount: 3 }] }],
     'places.json': mockPlaces, 'maps.json': mockMaps,
     'gathering-items.json': { 1: { itemId: 5106, level: 15, stars: 0 }, 2: { itemId: 5107, level: 10, stars: 0 } },
     'nodes.json': {

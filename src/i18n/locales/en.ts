@@ -1,8 +1,8 @@
 export default {
   gameData: {
+    islandGranary: 'Granary',
     cancel: 'Cancel',
     repairConfirm: 'Download again and reload',
-    islandTimeHint: 'Time estimates exclude Island Sanctuary construction, crafting and gathering.',
     title: 'Cached Game Data',
     version: 'Current data version',
     cacheDescription: 'Game data is cached on this device to avoid repeat downloads. Updates are checked when you open the page.',
@@ -15,12 +15,9 @@ export default {
     later: 'Use on next visit',
     retry: 'Retry',
     loadingCatalog: 'Loading item data…',
-    loadingCore: 'Item search is ready. Preparing recipes and material sources…',
     error_catalog: 'Item data could not be loaded. Please retry.',
     error_core: 'Recipes or material sources could not be loaded. Material planning is unavailable until you retry.',
-    error_update: 'Your current data is still usable, but checking or downloading updates failed.',
-    islandOther: 'Other island sources',
-    islandStage: 'Materials for the selected stage only; prerequisites and unlock requirements are not included.'
+    error_update: 'Your current data is still usable, but checking or downloading updates failed.'
   },
   app: {
     title: "Frozen Rabbit's Workshop",
@@ -275,12 +272,14 @@ export default {
     alarmMacroCopied: 'Macro Copied!'
   },
   jobs: {
-    islandGathering: 'Island gathering',
+    islandGathering: 'Sanctuary Gathering',
     crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
     lwr: 'Leatherworker', wvr: 'Weaver', alc: 'Alchemist', cul: 'Culinarian',
     min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering',
     battle: 'Battle',
     companyCrafting: 'Company Crafting',
+    islandConstruction: 'Sanctuary Construction',
+    islandWorkshop: 'Workshop',
     islandCrafting: 'Sanctuary Crafting'
   },
   settings: {

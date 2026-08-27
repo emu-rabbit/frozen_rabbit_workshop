@@ -176,7 +176,7 @@ const handleExportHtml = (includeMarket: boolean) => {
             title: t('todo.title'),
             progress: t('todo.progress', { n: '{n}', total: '{total}' }),
             sectionOther: t('todo.section.other'),
-            islandOther: t('gameData.islandOther'),
+            islandGranary: t('gameData.islandGranary'),
             sectionHunt: t('todo.section.hunt'),
             sectionBuy: t('todo.section.buy'),
             sectionGather: t('todo.section.gather'),
@@ -350,7 +350,6 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                     </button>
                                                 </div>
                                                 
-                                                <p v-if="item.islandOther" class="text-xs text-slate-500 dark:text-slate-400">{{ t('gameData.islandOther') }}</p>
                                                 <!-- Compact Metadata for Mobile -->
                                                 <div class="flex flex-wrap items-center gap-2">
                                                     <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[9px] md:text-[10px] font-black bg-soft-green-100 dark:bg-soft-green-950/40 text-soft-green-600 dark:text-soft-green-400 px-1.5 py-0.5 rounded-full uppercase tracking-tighter shrink-0">Done</span>
@@ -358,7 +357,8 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                         <span class="text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 shrink-0">#{{ item.id }}</span>
                                                         
                                                         <!-- Mobile Only Metadata -->
-                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400" :class="section.key === 'gather' || section.key === 'craft' ? 'basis-full' : ''">
+                                                        <div class="md:hidden flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400" :class="section.key === 'gather' || section.key === 'craft' || item.islandGranary ? 'basis-full' : ''">
+                                                            <span v-if="item.islandGranary" class="self-start text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t('gameData.islandGranary') }}</span>
                                                             <template v-if="section.key === 'buy'">
                                                                 <div class="flex flex-col gap-0.5">
                                                                     <span class="text-orange-600 dark:text-orange-400 font-black">{{ formatMoney(item.marketPrice) }}</span>
@@ -407,6 +407,7 @@ const handleExportHtml = (includeMarket: boolean) => {
 
                                         <!-- INFO: Metadata column (Visible on md+ screens) -->
                                         <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
+                                            <span v-if="item.islandGranary" class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 shadow-sm leading-none whitespace-nowrap">{{ t('gameData.islandGranary') }}</span>
                                             <!-- Buy: Price -->
                                             <template v-if="section.key === 'buy'">
                                                 <span class="text-[12px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">{{ t('todo.targetPrice') }}</span>

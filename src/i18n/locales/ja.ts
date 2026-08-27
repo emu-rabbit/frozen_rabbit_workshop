@@ -1,8 +1,8 @@
 export default {
   gameData: {
+    islandGranary: 'グラナリーオフィス',
     cancel: 'キャンセル',
     repairConfirm: '再取得して再読み込み',
-    islandTimeHint: '所要時間の見積もりに無人島の建設・製作・採集は含まれません。',
     title: 'ゲームデータのキャッシュ',
     version: '使用中のデータバージョン',
     cacheDescription: '再ダウンロードを減らすため、この端末にデータを保存します。ページを開くたびに更新を確認します。',
@@ -15,12 +15,9 @@ export default {
     later: '次回開いたときに適用',
     retry: '再試行',
     loadingCatalog: 'アイテムデータを読み込み中…',
-    loadingCore: 'アイテム検索が利用できます。レシピと素材の入手先を準備中…',
     error_catalog: 'アイテムデータを読み込めませんでした。再試行してください。',
     error_core: 'レシピまたは素材の入手先を読み込めませんでした。再試行するまで素材準備を利用できません。',
-    error_update: '現在のデータは使用できますが、更新の確認またはダウンロードに失敗しました。',
-    islandOther: '無人島のその他の入手先',
-    islandStage: '選択した段階の素材のみです。前提となる建築や開放条件は含みません。'
+    error_update: '現在のデータは使用できますが、更新の確認またはダウンロードに失敗しました。'
   },
   app: {
     title: '冷凍ラビットの工房',
@@ -275,12 +272,14 @@ export default {
     alarmMacroCopied: 'マクロをコピーしました！'
   },
   jobs: {
-    islandGathering: '無人島採集',
+    islandGathering: '開拓採集',
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
     lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
     min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集',
     battle: '戦闘',
     companyCrafting: 'カンパニークラフト',
+    islandConstruction: '開拓建築',
+    islandWorkshop: '開拓工房',
     islandCrafting: '開拓製作'
   },
   settings: {

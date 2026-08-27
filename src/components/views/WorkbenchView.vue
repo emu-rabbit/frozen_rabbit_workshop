@@ -251,7 +251,6 @@ const copyToClipboard = (id: string, text: string) => {
             </div>
         </transition>
 
-        <p v-if="activeItemIds.some(id => workbenchItems[id]?.island)" class="text-xs text-slate-500 dark:text-slate-400">{{ t('gameData.islandTimeHint') }}</p>
         <TransitionGroup name="list">
           <div 
             v-for="id in activeItemIds" 
@@ -297,8 +296,6 @@ const copyToClipboard = (id: string, text: string) => {
                             <span v-if="!workbenchItems[id]?.island" class="text-[12px] md:text-[14px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50 dark:border-slate-700">
                                 {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
-                            <span v-if="workbenchItems[id]?.islandOther" class="text-xs text-slate-500 dark:text-slate-400">{{ t('gameData.islandOther') }}</span>
-                            <span v-if="id < 0" class="text-xs text-slate-500 dark:text-slate-400">{{ t('gameData.islandStage') }}</span>
                             <!-- Battle Drop Badge -->
                             <span v-if="workbenchItems[id]?.canHunt && workbenchItems[id]?.monsterDropLevel" class="text-[12px] md:text-[14px] bg-violet-50 dark:bg-violet-950/30 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded-md font-bold border border-violet-100 dark:border-violet-900/50">
                                 {{ t('jobs.battle') }} Lv.{{ workbenchItems[id]?.monsterDropLevel }}
@@ -308,6 +305,9 @@ const copyToClipboard = (id: string, text: string) => {
                                 {{ t(workbenchItems[id]?.crafting?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.crafting?.level }}</template>{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
                             </span>
                             <!-- Gathering Badge -->
+                            <span v-if="workbenchItems[id]?.islandGranary" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
+                                {{ t('gameData.islandGranary') }}
+                            </span>
                             <span v-if="workbenchItems[id]?.gathering" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
                                 {{ t(workbenchItems[id]?.gathering?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.gathering?.level }}</template>{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
                             </span>

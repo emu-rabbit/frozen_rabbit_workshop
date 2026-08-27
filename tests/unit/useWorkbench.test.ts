@@ -5,6 +5,7 @@ const mocks = vi.hoisted(() => ({
     activeWorkbenchNote: { value: null as any },
     fetchItemPrices: vi.fn(),
     recipesCache: { value: [] as any[] },
+    getDictionaryItem: vi.fn(),
     getGatheringInfo: vi.fn(),
     getMonsterDropInfo: vi.fn()
 }));
@@ -20,11 +21,7 @@ vi.mock('../../src/services/dictionary', () => ({
     globalRecipesCache: mocks.recipesCache,
     setDictionaryLanguage: vi.fn(),
     ensureWorkbenchDataLoaded: vi.fn(),
-    getDictionaryItem: vi.fn((id: number) => ({
-        kind: 'item',
-        name: `Item ${id}`,
-        icon: `/icons/${id}.png`
-    })),
+    getDictionaryItem: mocks.getDictionaryItem,
     CRYSTAL_IDS: new Set()
 }));
 
@@ -59,6 +56,8 @@ vi.mock('vue-i18n', () => ({
 
 describe('Workbench Service Logic', () => {
     beforeEach(() => {
+        mocks.getDictionaryItem.mockReset();
+        mocks.getDictionaryItem.mockImplementation((id: number) => ({ kind: 'item', name: `Item ${id}`, icon: `/icons/${id}.png` }));
         mocks.activeWorkbenchNote.value = null;
         mocks.recipesCache.value = [];
         mocks.fetchItemPrices.mockReset();
@@ -127,18 +126,43 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
     });
 
-    it('uses one display label for all island sanctuary recipe jobs', async () => {
+    it('distinguishes island construction, workshop production and player crafting', async () => {
         const { canRecipeCraftHq, getCraftJobName } = await import('../../src/composables/useWorkbench');
 
         expect(getCraftJobName({ id: 'mji-8', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandWorkshop');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandConstruction');
+        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandConstruction');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: 8 })).toBe('jobs.crp');
         expect(getCraftJobName({ id: 'fc539', job: 0 })).toBe('jobs.companyCrafting');
         expect(getCraftJobName({ id: 123, job: 8 })).toBe('jobs.crp');
         expect(canRecipeCraftHq({ job: -10 })).toBe(false);
         expect(canRecipeCraftHq({ job: 0 })).toBe(false);
         expect(canRecipeCraftHq({ job: 8 })).toBe(true);
+    });
+
+    it('labels only granary expedition materials and keeps them in other todos', async () => {
+        const granaryIds = [37578, 37579, 37580, 37581, 37582, 39894];
+        const otherIds = [37593, 37603, 37561, 100]; // Crop, pasture, gathering, ordinary item.
+        mocks.activeWorkbenchNote.value = { id: 'granary', items: [...granaryIds, ...otherIds].map(id => ({ id, quantity: 2 })) };
+        mocks.getDictionaryItem.mockImplementation((id: number) => ({ kind: id === 100 ? 'item' : 'islandItem', name: String(id), icon: '' }));
+        mocks.getGatheringInfo.mockImplementation((id: number) => id === 37561 ? { island: true, jobName: 'jobs.islandGathering', level: 0 } : null);
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            for (const id of granaryIds) {
+                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandGranary: true, canCraft: false, canGather: false, canHunt: false });
+                expect(workbench.decisions[String(id)]).toMatchObject({ other: 2, gather: 0, craft: 0, buy: 0 });
+            }
+            for (const id of otherIds) expect(workbench.workbenchItems.value[id].islandGranary).toBe(false);
+            const others = workbench.generateTodoSections.value.find(section => section.key === 'other')!;
+            expect(others.items.filter(item => item.islandGranary).map(item => item.id).sort()).toEqual(granaryIds.sort());
+        } finally {
+            scope.stop();
+        }
     });
 
     it('should be importable and initialized', async () => {

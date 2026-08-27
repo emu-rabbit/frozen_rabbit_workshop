@@ -21,6 +21,10 @@ import { sanitizeNoteItems } from '../utils/noteItems';
 
 type MarketPriceMode = 'all' | 'hq';
 
+// Rare expedition materials; crops and pasture products are not granary sources.
+// https://ffxiv.consolegameswiki.com/wiki/Island_Granary
+const ISLAND_GRANARY_ITEM_IDS = new Set([37578, 37579, 37580, 37581, 37582, 39894]);
+
 interface MarketPriceSnapshot {
   priceFetched: boolean;
   lastUploadTime?: number;
@@ -40,7 +44,7 @@ export interface CraftingInfo {
 export interface WorkbenchItem {
   id: number;
   island: boolean;
-  islandOther: boolean;
+  islandGranary: boolean;
   name: string;
   icon: string;
   canCraft: boolean;
@@ -82,13 +86,13 @@ export interface ItemDecision {
 }
 
 export interface TodoItem {
+  islandGranary?: boolean;
   sectionKey: 'other' | 'hunt' | 'buy' | 'gather' | 'craft';
   id: number;
   quantity: number;
   name: any;
   icon: string;
   marketPrice: number | null;
-  islandOther?: boolean;
   purchaseInfo?: PurchaseInfo;
   gathering?: any;
   monsterDrops?: MonsterDropInfo[] | null;
@@ -191,6 +195,13 @@ const CRAFT_JOB_NAMES: Record<number, string> = {
 
 export function getCraftJobName(recipe: Pick<Recipe, 'id' | 'job'>): string {
   if (recipe.job === -10) {
+    const recipeId = String(recipe.id);
+    if (recipeId.startsWith('mji-building-') || recipeId.startsWith('mji-landmark-')) {
+      return 'jobs.islandConstruction';
+    }
+    if (recipeId.startsWith('mji-craftworks-')) {
+      return 'jobs.islandWorkshop';
+    }
     return 'jobs.islandCrafting';
   }
 
@@ -281,7 +292,7 @@ const refreshItemsData = (ids: number[]) => {
     workbenchItems.value[id] = {
       id,
       island: itemInfo.kind !== 'item',
-      islandOther: itemInfo.kind === 'islandItem' && !recipe && !gather,
+      islandGranary: itemInfo.kind === 'islandItem' && ISLAND_GRANARY_ITEM_IDS.has(id),
       name: itemInfo.name,
       icon: itemInfo.icon,
       canCraft: !!recipe,
@@ -590,7 +601,8 @@ const generateTodoSections = computed(() => {
     if (d.other > 0) {
       sections.other.push({
         sectionKey: 'other', id, quantity: d.other,
-        name: item.name, icon: item.icon, marketPrice: null, islandOther: item.islandOther
+        islandGranary: item.islandGranary,
+        name: item.name, icon: item.icon, marketPrice: null
       });
     }
 
