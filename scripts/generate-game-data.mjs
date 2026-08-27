@@ -1,8 +1,11 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
+import { readFile } from 'node:fs/promises';
+import { gunzipSync } from 'node:zlib';
 import { downloadSnapshot, readSnapshot } from './game-data/source.mjs';
 import { createPackages, verifyPackages, writePackages } from './game-data/package.mjs';
+import { readNamePatches, verifyNamePatchCatalog } from './game-data/name-patches.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -28,6 +31,11 @@ export function parseOptions(args) {
 function printSummary(manifest) {
   console.log(`Data version: ${manifest.version}`);
   console.log(`Source commit: ${manifest.source.commit}`);
+  if (manifest.patches) console.log(`Name patches: ${manifest.patches.ids.join(', ')} (${manifest.patches.sha256})`);
+  if (manifest.diagnostics.namePatches) {
+    console.log(`Names patched: ${manifest.diagnostics.namePatches.applied.length}`);
+    for (const entry of manifest.diagnostics.namePatches.upstreamResolved) console.warn(`Upstream resolved; patch can be retired: ${entry}`);
+  }
   console.table(Object.entries(manifest.bundles).map(([name, entry]) => ({
     bundle: name,
     records: entry.records,
@@ -53,8 +61,12 @@ See docs/game-data.md for the manual staging and production workflow.`);
     return;
   }
   const output = options.output ? path.resolve(options.output) : path.join(ROOT, 'public/game-data');
+  const namePatches = await readNamePatches();
   if (options.verify) {
-    printSummary(await verifyPackages(output));
+    const manifest = await verifyPackages(output);
+    const catalog = JSON.parse(gunzipSync(await readFile(path.join(output, manifest.bundles.catalog.file))).toString('utf8'));
+    verifyNamePatchCatalog(manifest, catalog, namePatches);
+    printSummary(manifest);
     console.log('Package verification passed.');
     return;
   }
@@ -65,7 +77,7 @@ See docs/game-data.md for the manual staging and production workflow.`);
       cacheRoot: path.join(ROOT, '.cache/game-data'),
       token: process.env.GITHUB_TOKEN,
     });
-  const packages = createPackages(snapshot);
+  const packages = createPackages(snapshot, namePatches);
   await writePackages(output, packages);
   printSummary(packages.manifest);
   console.log(`Written and verified: ${output}`);

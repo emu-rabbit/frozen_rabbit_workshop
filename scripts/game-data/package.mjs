@@ -4,16 +4,21 @@ import path from 'node:path';
 import { gzipSync, gunzipSync } from 'node:zlib';
 import { FORMAT_VERSION, projectGameData } from './project.mjs';
 import { HASH_PATTERN, REPOSITORY, SHA_PATTERN, sha256 } from './source.mjs';
+import { applyNamePatches, describeNamePatches, validateNamePatches } from './name-patches.mjs';
 
 export const GENERATOR = 'frozen-rabbit-workshop-game-data';
 const BUNDLE_NAMES = ['catalog', 'recipes', 'sources'];
 const GENERATED_FILE = /^(catalog|recipes|sources|NOTICE)\.[a-f0-9]{64}\.(bin|txt)$/;
 
-export function createPackages({ sources, metadata }) {
+export function createPackages({ sources, metadata }, namePatches = []) {
+  namePatches = validateNamePatches(namePatches);
   if (metadata.repository !== REPOSITORY || !SHA_PATTERN.test(metadata.commit)) {
     throw new Error('Invalid source identity');
   }
-  const { bundles, diagnostics } = projectGameData(sources);
+  const projected = projectGameData(sources);
+  const { bundles, report } = applyNamePatches(projected.bundles, namePatches);
+  const patches = describeNamePatches(namePatches);
+  const diagnostics = { ...projected.diagnostics, ...(patches ? { namePatches: report } : {}) };
   const assets = new Map();
   const descriptors = {};
   for (const name of BUNDLE_NAMES) {
@@ -35,6 +40,7 @@ export function createPackages({ sources, metadata }) {
     'Frozen Rabbit Workshop game data',
     `Source: https://github.com/${REPOSITORY}/tree/${metadata.commit}`,
     'Modified: selected fields, canonical IDs, four-language normalization and gzip packaging.',
+    ...namePatches.map(patch => `Name patch ${patch.id}: https://github.com/${patch.source.repository}/tree/${patch.source.commit} (see data/game-data-patches for rows and checksums).`),
     'Game content and trademarks remain the property of their respective owners.',
     'FINAL FANTASY is a registered trademark of Square Enix Holdings Co., Ltd.',
     'Game content: © SQUARE ENIX',
@@ -51,6 +57,7 @@ export function createPackages({ sources, metadata }) {
     source: metadata,
     bundles: descriptors,
     notice: { file: noticeFile, bytes: notice.length, sha256: noticeHash },
+    ...(patches ? { patches } : {}),
   };
   const manifest = {
     generator: GENERATOR,
@@ -69,11 +76,16 @@ export async function verifyPackages(directory, suppliedManifest) {
   if (manifest.source?.repository !== REPOSITORY || !SHA_PATTERN.test(manifest.source?.commit)) {
     throw new Error('Invalid manifest source');
   }
+  if (manifest.patches !== undefined && (!manifest.patches || !HASH_PATTERN.test(manifest.patches.sha256)
+    || !Array.isArray(manifest.patches.ids) || !manifest.patches.ids.length
+    || !manifest.patches.ids.every(id => typeof id === 'string' && /^[a-z0-9-]+$/.test(id))
+    || new Set(manifest.patches.ids).size !== manifest.patches.ids.length)) throw new Error('Invalid name patch descriptor');
   const identity = {
     formatVersion: manifest.formatVersion,
     source: manifest.source,
     bundles: manifest.bundles,
     notice: manifest.notice,
+    ...(manifest.patches !== undefined ? { patches: manifest.patches } : {}),
   };
   if (sha256(Buffer.from(JSON.stringify(identity))) !== manifest.version) {
     throw new Error('Manifest version checksum mismatch');

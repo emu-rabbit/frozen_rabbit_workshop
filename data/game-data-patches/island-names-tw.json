@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "island-names-tw",
+  "locale": "tw",
+  "reason": "補齊 Teamcraft 無人島建築與地標缺少的繁中名稱；不變更配方或其他語言。",
+  "verifiedAt": "2026-08-27",
+  "teamcraftCommit": "28cd7763e23781cd17650a7ae7a336688815360a",
+  "source": {
+    "repository": "thewakingsands/ffxiv-datamining-tc",
+    "commit": "e203c7e46dd80fd2a967e5741b30e3c9fad0c767",
+    "files": {
+      "MJIBuilding.csv": "0931b72b09370ee3d68c1cae2d7421273495706d25783b52193a2aef5ebbfacd",
+      "MJILandmark.csv": "bfab9f44b3e8e7a07a1ba43539601ddcec7b9f86c0aaba606dca02d9fab9a279",
+      "MJIText.csv": "97870f4f619f829de4d6995f4b6cf0192364b89b189b2099b3d8711539ed6854"
+    }
+  },
+  "entries": [
+    { "itemId": -10000, "recipeId": "mji-building-0.0", "expectedEnglish": "Cozy Cabin I", "expected": null, "value": "小島木屋 I", "table": "MJIBuilding.csv", "row": "0.0", "textId": 2 },
+    { "itemId": -10010, "recipeId": "mji-building-0.1", "expectedEnglish": "Cozy Cabin II", "expected": null, "value": "小島木屋 II", "table": "MJIBuilding.csv", "row": "0.1", "textId": 3 },
+    { "itemId": -10020, "recipeId": "mji-building-0.2", "expectedEnglish": "Cozy Cabin III", "expected": null, "value": "小島木屋 III", "table": "MJIBuilding.csv", "row": "0.2", "textId": 4 },
+    { "itemId": -10030, "recipeId": "mji-building-0.3", "expectedEnglish": "Cozy Cabin IV", "expected": null, "value": "小島木屋 IV", "table": "MJIBuilding.csv", "row": "0.3", "textId": 73 },
+    { "itemId": -10040, "recipeId": "mji-building-0.4", "expectedEnglish": "Cozy Cabin V", "expected": null, "value": "小島木屋 V", "table": "MJIBuilding.csv", "row": "0.4", "textId": 87 },
+    { "itemId": -10100, "recipeId": "mji-building-1.0", "expectedEnglish": "Workshop I", "expected": null, "value": "開拓工坊 I", "table": "MJIBuilding.csv", "row": "1.0", "textId": 5 },
+    { "itemId": -10110, "recipeId": "mji-building-1.1", "expectedEnglish": "Workshop II", "expected": null, "value": "開拓工坊 II", "table": "MJIBuilding.csv", "row": "1.1", "textId": 6 },
+    { "itemId": -10120, "recipeId": "mji-building-1.2", "expectedEnglish": "Workshop III", "expected": null, "value": "開拓工坊 III", "table": "MJIBuilding.csv", "row": "1.2", "textId": 7 },
+    { "itemId": -10130, "recipeId": "mji-building-1.3", "expectedEnglish": "Workshop IV", "expected": null, "value": "開拓工坊 IV", "table": "MJIBuilding.csv", "row": "1.3", "textId": 75 },
+    { "itemId": -10140, "recipeId": "mji-building-1.4", "expectedEnglish": "Workshop V", "expected": null, "value": "開拓工坊 V", "table": "MJIBuilding.csv", "row": "1.4", "textId": 89 },
+    { "itemId": -10200, "recipeId": "mji-building-2.0", "expectedEnglish": "Granary I", "expected": null, "value": "屯貨倉庫 I", "table": "MJIBuilding.csv", "row": "2.0", "textId": 8 },
+    { "itemId": -10210, "recipeId": "mji-building-2.1", "expectedEnglish": "Granary II", "expected": null, "value": "屯貨倉庫 II", "table": "MJIBuilding.csv", "row": "2.1", "textId": 9 },
+    { "itemId": -10220, "recipeId": "mji-building-2.2", "expectedEnglish": "Granary III", "expected": null, "value": "屯貨倉庫 III", "table": "MJIBuilding.csv", "row": "2.2", "textId": 10 },
+    { "itemId": -10230, "recipeId": "mji-building-2.3", "expectedEnglish": "Granary IV", "expected": null, "value": "屯貨倉庫 IV", "table": "MJIBuilding.csv", "row": "2.3", "textId": 69 },
+    { "itemId": -10240, "recipeId": "mji-building-2.4", "expectedEnglish": "Granary V", "expected": null, "value": "屯貨倉庫 V", "table": "MJIBuilding.csv", "row": "2.4", "textId": 70 },
+    { "itemId": -11010, "recipeId": "mji-landmark-1", "expectedEnglish": "Quixotic Windmill", "expected": null, "value": "風車", "table": "MJILandmark.csv", "row": "1", "textId": 20 },
+    { "itemId": -11020, "recipeId": "mji-landmark-2", "expectedEnglish": "Towering Tree Fort", "expected": null, "value": "樹屋", "table": "MJILandmark.csv", "row": "2", "textId": 21 },
+    { "itemId": -11030, "recipeId": "mji-landmark-3", "expectedEnglish": "Boiling Bathhouse", "expected": null, "value": "溫泉小屋", "table": "MJILandmark.csv", "row": "3", "textId": 22 },
+    { "itemId": -11040, "recipeId": "mji-landmark-4", "expectedEnglish": "Lominsan Lighthouse", "expected": null, "value": "燈塔", "table": "MJILandmark.csv", "row": "4", "textId": 23 },
+    { "itemId": -11050, "recipeId": "mji-landmark-5", "expectedEnglish": "Water Otter Fountain", "expected": null, "value": "獺獺噴泉", "table": "MJILandmark.csv", "row": "5", "textId": 24 },
+    { "itemId": -11060, "recipeId": "mji-landmark-6", "expectedEnglish": "Gamboling Garden", "expected": null, "value": "小島庭園", "table": "MJILandmark.csv", "row": "6", "textId": 67 },
+    { "itemId": -11070, "recipeId": "mji-landmark-7", "expectedEnglish": "Uncharted Course", "expected": null, "value": "船景跳跳樂", "table": "MJILandmark.csv", "row": "7", "textId": 80 },
+    { "itemId": -11080, "recipeId": "mji-landmark-8", "expectedEnglish": "Quaint Clock Tower", "expected": null, "value": "小島發條鐘樓", "table": "MJILandmark.csv", "row": "8", "textId": 82 },
+    { "itemId": -11090, "recipeId": "mji-landmark-9", "expectedEnglish": "Aetherial Arbor", "expected": null, "value": "小島魔法樹", "table": "MJILandmark.csv", "row": "9", "textId": 91 },
+    { "itemId": -11100, "recipeId": "mji-landmark-10", "expectedEnglish": "Sanctuary Sanctuary", "expected": null, "value": "小島聖堂", "table": "MJILandmark.csv", "row": "10", "textId": 93 }
+  ]
+}

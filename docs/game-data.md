@@ -26,6 +26,24 @@ Teamcraft 原始資料只由 `scripts/generate-game-data.mjs` 在維護者產包
 
 目前快照 `28cd7763e23781cd17650a7ae7a336688815360a`：catalog 14,153 筆，recipes 14,188 筆（含 25 個負 ID 產物），sources 648 個普通採集節點。三包合計約 0.96 MB 壓縮／10.61 MB JSON；精確位元組與其餘診斷以 manifest 為準。
 
+## 本站名稱補丁
+
+`data/game-data-patches/*.json` 是正式簽入的名稱補丁；`scripts/game-data/name-patches.mjs` 負責驗證、套用與離線核對。第一版 schemaVersion 1 只支援無人島建築／地標的繁中名稱，不修改配方、材料、來源或一般物品，也不把介面語言當作遊戲版本。
+
+首批 `island-names-tw` 補齊 15 筆建築階段及 10 筆地標的繁中名稱。名稱依據為 `thewakingsands/ffxiv-datamining-tc` commit `e203c7e46dd80fd2a967e5741b30e3c9fad0c767`：由 `MJIBuilding.csv`／`MJILandmark.csv` 的 Name 欄位連到 `MJIText.csv`。JSON 保留原始 CSV 的 SHA-256、row、文字 ID、查證日期及 Teamcraft 基準 SHA；這是社群資料擷取來源，並非本次逐項遊戲內實測。`.cache/game-data/tc-name-audit` 只是查證暫存，產包與 CI 不依賴它或下載新的翻譯來源。
+
+名稱補丁在 Teamcraft 投影、同語言名稱合併完成後、壓縮前套用，只修改指定語言。每筆核對 catalog 的負 ID、英文名稱及配方 ID／產物／開拓職業。`expected: null` 代表該語言確實缺漏；上游值等於 expected 才套用，等於 value 則列為 upstreamResolved，其他值或目標消失一律停止產包。重複補丁 ID 或同物品／語言的重複目標也會停止。原始快照及未指定語言維持不變。
+
+補丁變更流程：
+
+1. 依固定版本來源查證名稱，新增或修改 JSON 的 value、expected 與證據；不要自行把簡中轉繁中代替查證。
+2. 使用現有 `--source-dir` 與 `--output` 命令預覽；檢查套用數量及 upstreamResolved 清單。上游已補齊的項目可刪除，整份無剩餘項目時刪除該補丁 JSON。衝突需重新查證，不能直接放寬 expected。
+3. 重建正式產物，執行 data:verify、unit、build 與相關 E2E，連同 JSON 一起提交。Teamcraft 基準 SHA 是查證紀錄，不鎖死未來版本；每次上游更新仍以逐項前置條件核對。
+
+manifest 的可選 `patches` 欄位記錄補丁集合 SHA-256 與 ID，參與資料版本雜湊；NOTICE 同時標示補丁來源。三包 formatVersion 仍為 2。新版程式可驗證未帶 patches 的舊 manifest／快取及上一版產物。更新前已開啟的舊版程式可能無法辨識新 manifest 的雜湊規則，需要重新整理頁面取得新版程式。
+
+`data:verify` 除了檢查包完整性，也核對**目前產物**與工作區補丁集合及最終名稱；只改 JSON 而未產包會失敗。上一版只驗證自己的 manifest／檔案，不套用今天的補丁檢查。沒有補丁時，底層 generator 的投影內容與既有輸出一致。
+
 ## 裝置快取與更新
 
 IndexedDB 預設啟用，不詢問占用空間；資料庫名含部署 BASE_URL，正式與 staging 分開。只存三包的壓縮 ArrayBuffer 與 manifest，不建逐物品資料庫索引。

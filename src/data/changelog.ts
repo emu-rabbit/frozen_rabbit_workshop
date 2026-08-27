@@ -34,6 +34,12 @@ export const changelogData: ChangelogEntry[] = [
         cn: '支持无人岛/开拓相关建筑及制作配方',
         en: 'Added support for Island Sanctuary buildings and crafting recipes',
         ja: '無人島開拓の建築と製作レシピに対応しました'
+      },
+      {
+        tw: '補齊無人島建築與地標的繁中名稱',
+        cn: '补全无人岛建筑与地标的繁体中文名称',
+        en: 'Added missing Traditional Chinese names for Island Sanctuary buildings and landmarks',
+        ja: '無人島開拓の建築とランドマークに不足していた繁体字中国語名を追加しました'
       }
     ]
   },

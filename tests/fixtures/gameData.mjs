@@ -37,6 +37,6 @@ export function sourceFixture() {
     LICENSE: 'MIT License\nFixture copyright notice\nPermission is hereby granted\n',
   });
 }
-export function fixturePackages(sources = sourceFixture()) {
-  return createPackages({ sources, metadata: { repository: REPOSITORY, commit: 'a'.repeat(40), files: {} } });
+export function fixturePackages(sources = sourceFixture(), namePatches = []) {
+  return createPackages({ sources, metadata: { repository: REPOSITORY, commit: 'a'.repeat(40), files: {} } }, namePatches);
 }

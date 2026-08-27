@@ -9,6 +9,14 @@ import { projectGameData, SOURCE_FILES } from '../../scripts/game-data/project.m
 import { downloadSnapshot, readSnapshot, REPOSITORY, SNAPSHOT_FILES } from '../../scripts/game-data/source.mjs';
 import { createPackages, verifyPackages, writePackages } from '../../scripts/game-data/package.mjs';
 import { parseOptions } from '../../scripts/generate-game-data.mjs';
+import { applyNamePatches, readNamePatches, validateNamePatches, verifyNamePatchCatalog } from '../../scripts/game-data/name-patches.mjs';
+
+const checkedInPatches = await readNamePatches();
+function cabinPatch() {
+  const patch = structuredClone(checkedInPatches[0]);
+  patch.entries = patch.entries.slice(0, 1);
+  return [patch];
+}
 
 const commit = 'a'.repeat(40);
 const temporaryDirectories: string[] = [];
@@ -87,6 +95,82 @@ describe('game data projection', () => {
     expect(() => projectGameData(negative)).toThrow('amount');
   });
 
+});
+
+describe('island name patches', () => {
+  it('changes only the requested locale after name merging without mutating the source', () => {
+    const sources = fixture();
+    const before = structuredClone(sources);
+    const projected = projectGameData(sources);
+    const patched = applyNamePatches(projected.bundles, cabinPatch());
+    const expected = structuredClone(projected.bundles);
+    expected.catalog.items.find((item: any) => item.id === -10000).names.tw = '小島木屋 I';
+    expect(patched.bundles).toEqual(expected);
+    expect(patched.report.applied).toEqual(['island-names-tw/-10000/tw']);
+    expect(sources).toEqual(before);
+    expect(projected.bundles.catalog.items[2].names).toEqual({ en: 'Cozy Cabin I' });
+    expect(applyNamePatches(projected.bundles, []).bundles).toEqual(projected.bundles);
+    expect(applyNamePatches(patched.bundles, cabinPatch()).report.upstreamResolved).toHaveLength(1);
+  });
+
+  it.each(['item discontinuity', 'recipe discontinuity', 'english rename', 'translation conflict'])('rejects %s before changing any input', scenario => {
+    const bundles = projectGameData(fixture()).bundles;
+    if (scenario === 'item discontinuity') bundles.catalog.items = bundles.catalog.items.filter((i: any) => i.id !== -10000);
+    if (scenario === 'recipe discontinuity') bundles.recipes.recipes[2].result = -10010;
+    if (scenario === 'english rename') bundles.catalog.items[2].names.en = 'Different building';
+    if (scenario === 'translation conflict') bundles.catalog.items[2].names.tw = '另一個名稱';
+    const before = structuredClone(bundles);
+    expect(() => applyNamePatches(bundles, cabinPatch())).toThrow(/Name patch/);
+    expect(bundles).toEqual(before);
+  });
+
+  it.each(['item-search.index', 'items.json', 'tw/tw-items.json'])('recognizes upstream translations from %s', file => {
+    const sources = fixture();
+    if (file === 'item-search.index') sources[file].find((i: any) => i.id === -10000).tw = '小島木屋 I';
+    else sources[file][-10000] = { tw: '小島木屋 I' };
+    const result = applyNamePatches(projectGameData(sources).bundles, cabinPatch());
+    expect(result.report.applied).toEqual([]);
+    expect(result.report.upstreamResolved).toEqual(['island-names-tw/-10000/tw']);
+  });
+
+  it('rejects duplicate targets and malformed provenance or entity mappings', () => {
+    const patches = cabinPatch();
+    expect(() => validateNamePatches([...patches, ...patches])).toThrow('Duplicate name patch ID');
+    const duplicate = structuredClone(patches[0]); duplicate.id = 'other';
+    expect(() => validateNamePatches([...patches, duplicate])).toThrow('Duplicate name patch target');
+    for (const mutate of [
+      (p: any) => { p.source.commit = 'missing'; },
+      (p: any) => { p.locale = 'en'; },
+      (p: any) => { p.entries[0].itemId = -10010; },
+      (p: any) => { p.entries[0].recipeId = 'mji-building-1.0'; },
+      (p: any) => { p.entries[0].value = ''; },
+      (p: any) => { delete p.entries[0].expected; },
+    ]) {
+      const invalid = cabinPatch(); mutate(invalid[0]);
+      expect(() => validateNamePatches(invalid)).toThrow('Invalid name patch');
+    }
+  });
+
+  it('versions patch content, verifies catalog values offline and retains an unpatched previous manifest', async () => {
+    const old = createPackages(snapshot());
+    const patches = cabinPatch();
+    const next = createPackages(snapshot(), patches);
+    expect(createPackages(snapshot(), patches)).toEqual(next);
+    expect(next.manifest.version).not.toBe(old.manifest.version);
+    expect(next.manifest.bundles.recipes).toEqual(old.manifest.bundles.recipes);
+    expect(next.manifest.bundles.sources).toEqual(old.manifest.bundles.sources);
+    const catalog = JSON.parse(gunzipSync(next.assets.get(next.manifest.bundles.catalog.file)).toString('utf8'));
+    expect(() => verifyNamePatchCatalog(next.manifest, catalog, patches)).not.toThrow();
+    const changed = cabinPatch(); changed[0].reason += ' Reviewed.';
+    expect(() => verifyNamePatchCatalog(next.manifest, catalog, changed)).toThrow('run data:generate');
+    expect(createPackages(snapshot(), changed).manifest.version).not.toBe(next.manifest.version);
+    delete catalog.items.find((i: any) => i.id === -10000).names.tw;
+    expect(() => verifyNamePatchCatalog(next.manifest, catalog, patches)).toThrow('Generated name patch missing');
+    const directory = await temporaryDirectory();
+    await writePackages(directory, old); await writePackages(directory, next);
+    expect(await verifyPackages(directory)).toEqual(next.manifest);
+    expect(JSON.parse(await readFile(path.join(directory, 'previous-manifest.json'), 'utf8'))).toEqual(old.manifest);
+  });
 });
 
 describe('snapshot downloads and package integrity', () => {

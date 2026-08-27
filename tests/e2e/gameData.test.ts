@@ -149,7 +149,10 @@ test('real checked-in packages load through the actual static server', async ({ 
   });
   await page.goto('./');
   await expect.poll(() => storedVersion(page)).toMatch(/^[a-f0-9]{64}$/);
-  await searchAndSelectItem(page, '找尋物品...', 'Cozy Cabin', 'Cozy Cabin I');
+  await page.locator('#item-name').fill('繁中建築補丁');
+  await searchAndSelectItem(page, '找尋物品...', '小島木屋', '小島木屋 I');
+  await page.getByText('好，把這些放上備料台！').click();
+  await expect(page.locator('.item-card', { hasText: '小島木屋 I' })).toBeVisible();
   expect(upstream).toEqual([]);
   await navigateTo(page, '工坊設置');
   await expect(page.getByRole('heading', { name: '遊戲快取資料', exact: true })).toBeVisible();

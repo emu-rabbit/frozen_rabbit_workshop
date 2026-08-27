@@ -36,7 +36,12 @@ export async function validateManifest(value: DataManifest): Promise<DataManifes
       || !Number.isSafeInteger(d.bytes) || d.bytes <= 0 || !Number.isSafeInteger(d.jsonBytes)
       || d.jsonBytes <= 0 || d.jsonBytes > 128 * 1024 * 1024) throw new Error('Invalid bundle descriptor');
   }
-  const identity = { formatVersion: value.formatVersion, source: value.source, bundles: value.bundles, notice: value.notice };
+  if (value.patches !== undefined && (!value.patches || !HASH.test(value.patches.sha256)
+    || !Array.isArray(value.patches.ids) || !value.patches.ids.length
+    || !value.patches.ids.every(id => typeof id === 'string' && /^[a-z0-9-]+$/.test(id))
+    || new Set(value.patches.ids).size !== value.patches.ids.length)) throw new Error('Invalid name patch descriptor');
+  const identity = { formatVersion: value.formatVersion, source: value.source, bundles: value.bundles, notice: value.notice,
+    ...(value.patches !== undefined ? { patches: value.patches } : {}) };
   if (await hash(new TextEncoder().encode(JSON.stringify(identity)).buffer) !== value.version) throw new Error('Manifest checksum mismatch');
   return value;
 }

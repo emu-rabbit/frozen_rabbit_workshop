@@ -11,6 +11,7 @@ export interface DataManifest {
   source: { repository: string; commit: string; files: Record<string, { bytes: number; sha256: string }> };
   bundles: Record<BundleName, BundleDescriptor>;
   notice: { file: string; sha256: string; bytes: number };
+  patches?: { sha256: string; ids: string[] };
 }
 export interface CatalogItem {
   id: number; names: DataNames; icon: string; craftable: boolean;

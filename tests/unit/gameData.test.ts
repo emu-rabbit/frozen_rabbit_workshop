@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { fixturePackages, sourceFixture } from '../fixtures/gameData.mjs';
+import { readNamePatches } from '../../scripts/game-data/name-patches.mjs';
 const cache = vi.hoisted(() => ({ read: vi.fn(), save: vi.fn(), clear: vi.fn() }));
 vi.mock('../../src/services/gameDataCache', () => ({ readCachedData: cache.read, saveCachedData: cache.save, clearCachedData: cache.clear }));
 function cached(packages: any) {
@@ -46,6 +47,31 @@ it('stages an entire update without changing the running catalog or recipes', as
   expect(data.pendingDataManifest.value?.version).toBe(next.manifest.version);
   expect(cache.save.mock.calls.at(-1)?.[0]).toBe('pending');
 });
+it('updates an old cache to name-patched data and searches the selected locale without changing recipes', async () => {
+  const [patch] = await readNamePatches(); patch.entries = patch.entries.slice(0, 1);
+  const old = fixturePackages(); const next = fixturePackages(sourceFixture(), [patch]);
+  cache.read.mockResolvedValue({ active: cached(old) }); vi.stubGlobal('fetch', network(next));
+  const data = await import('../../src/services/gameData');
+  await data.loadCoreData(); await data.checkForDataUpdate();
+  expect(data.currentDataManifest.value?.version).toBe(old.manifest.version);
+  expect(data.catalogData.value?.items[2].names.tw).toBeUndefined();
+  expect(data.pendingDataManifest.value?.version).toBe(next.manifest.version);
+  const tampered = structuredClone(next.manifest); tampered.patches.sha256 = '0'.repeat(64);
+  await expect(data.validateManifest(tampered)).rejects.toThrow('checksum');
+  cache.read.mockResolvedValue({ active: cached(old), pending: cached(next) });
+  vi.resetModules();
+  const reloaded = await import('../../src/services/gameData');
+  await reloaded.loadCoreData(); await reloaded.checkForDataUpdate();
+  expect(reloaded.currentDataManifest.value?.version).toBe(next.manifest.version);
+  const dictionary = await import('../../src/services/dictionary');
+  dictionary.setDictionaryLanguage('tw');
+  expect(await dictionary.searchItems('小島木屋')).toMatchObject([{ id: -10000, name: '小島木屋 I' }]);
+  expect(await dictionary.searchItems('Cozy Cabin')).toMatchObject([{ id: -10000, name: '小島木屋 I' }]);
+  dictionary.setDictionaryLanguage('cn');
+  expect(dictionary.getDictionaryItem(-10000).name).toBe('Cozy Cabin I');
+  expect(next.manifest.bundles.recipes).toEqual(old.manifest.bundles.recipes);
+});
+
 it('never stages a partial update and keeps the old complete data usable', async () => {
   const old = fixturePackages(); const sources = sourceFixture(); sources['recipes.json'][0].yields = 2;
   cache.read.mockResolvedValue({ active: cached(old) }); vi.stubGlobal('fetch', network(fixturePackages(sources), 'sources.'));
