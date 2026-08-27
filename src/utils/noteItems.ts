@@ -1,7 +1,9 @@
 import type { NoteItem } from '../types/note'
 
 export const isValidItemId = (id: unknown): id is number => {
-  return typeof id === 'number' && Number.isInteger(id) && id > 0
+  // Preserve persisted IDs, including Teamcraft's island buildings and unknown items.
+  // Search eligibility is owned by the catalog, not by the sign of an ID.
+  return typeof id === 'number' && Number.isSafeInteger(id) && id !== 0
 }
 
 export const normalizeItemId = (id: unknown): number | null => {

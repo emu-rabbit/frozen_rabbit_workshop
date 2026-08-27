@@ -1,13 +1,5 @@
-import { ensurePlacesLoaded, getPlaceName, ensureMapsLoaded, getMapData, getCurrentLanguage } from './dictionary';
-
-const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
-const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
-const DROP_SOURCES_URL = `${BASE_URL}/drop-sources.json`;
-const MONSTERS_URL = `${BASE_URL}/monsters.json`;
-const MOBS_URL = `${BASE_URL}/mobs.json`;
-const TW_MOBS_URL = `${BASE_URL}/tw/tw-mobs.json`;
-const ZH_MOBS_URL = `${BASE_URL}/zh/zh-mobs.json`;
-
+import { getPlaceName, getMapData, localizeData } from './dictionary';
+import { sourceData } from './gameData';
 interface MonsterPositionRaw {
   map?: number;
   zoneid?: number;
@@ -19,18 +11,6 @@ interface MonsterPositionRaw {
   z?: number;
 }
 
-interface MonsterRaw {
-  baseid?: number;
-  positions?: MonsterPositionRaw[];
-}
-
-type LocalizedMobName = {
-  en?: string;
-  ja?: string;
-  tw?: string;
-  zh?: string;
-  [key: string]: string | undefined;
-};
 
 export interface MonsterDropPosition {
   mapId?: number;
@@ -57,13 +37,6 @@ export interface MonsterDropInfo {
   positions: MonsterDropPosition[];
 }
 
-let dropSourcesCache: Record<string, number[]> | null = null;
-let monstersCache: Record<string, MonsterRaw> | null = null;
-let mobsCache: Record<string, LocalizedMobName> | null = null;
-let twMobsCache: Record<string, LocalizedMobName> | null = null;
-let zhMobsCache: Record<string, LocalizedMobName> | null = null;
-let loadPromise: Promise<void> | null = null;
-
 function isKnownLevel(level: number | null | undefined): level is number {
   return typeof level === 'number' && Number.isFinite(level) && level > 0;
 }
@@ -81,73 +54,8 @@ function getLowestKnownLevel(positions: MonsterDropPosition[]): number {
   return levels.length > 0 ? Math.min(...levels) : 0;
 }
 
-export async function ensureMonsterDropDataLoaded(): Promise<void> {
-  await Promise.all([ensurePlacesLoaded(), ensureMapsLoaded()]);
-
-  if (dropSourcesCache !== null && monstersCache !== null && mobsCache !== null) return;
-  if (loadPromise) return loadPromise;
-
-  loadPromise = (async () => {
-    try {
-      console.log('[MonsterDrops] Loading monster drop data...');
-      const [dropRes, monstersRes, mobsRes, twMobsRes, zhMobsRes] = await Promise.all([
-        fetch(DROP_SOURCES_URL),
-        fetch(MONSTERS_URL),
-        fetch(MOBS_URL),
-        fetch(TW_MOBS_URL),
-        fetch(ZH_MOBS_URL),
-      ]);
-
-      if (!dropRes.ok || !monstersRes.ok || !mobsRes.ok) {
-        throw new Error('Failed to fetch monster drop data files');
-      }
-
-      const [dropSources, monsters, mobs, twMobs, zhMobs] = await Promise.all([
-        dropRes.json(),
-        monstersRes.json(),
-        mobsRes.json(),
-        twMobsRes.ok ? twMobsRes.json() : Promise.resolve({}),
-        zhMobsRes.ok ? zhMobsRes.json() : Promise.resolve({}),
-      ]);
-
-      dropSourcesCache = dropSources;
-      monstersCache = monsters;
-      mobsCache = mobs;
-      twMobsCache = twMobs;
-      zhMobsCache = zhMobs;
-      console.log('[MonsterDrops] Monster drop data loaded.');
-    } catch (err) {
-      console.error('[MonsterDrops] Failed to load monster drop data:', err);
-      dropSourcesCache = {};
-      monstersCache = {};
-      mobsCache = {};
-      twMobsCache = {};
-      zhMobsCache = {};
-    } finally {
-      loadPromise = null;
-    }
-  })();
-
-  return loadPromise;
-}
-
 function getMonsterName(monsterId: number): string {
-  const key = String(monsterId);
-  const lang = getCurrentLanguage();
-
-  if (lang === 'tw') {
-    return twMobsCache?.[key]?.tw || mobsCache?.[key]?.en || `Monster #${monsterId}`;
-  }
-
-  if (lang === 'cn') {
-    return zhMobsCache?.[key]?.zh || mobsCache?.[key]?.en || `Monster #${monsterId}`;
-  }
-
-  if (lang === 'ja') {
-    return mobsCache?.[key]?.ja || mobsCache?.[key]?.en || `Monster #${monsterId}`;
-  }
-
-  return mobsCache?.[key]?.en || `Monster #${monsterId}`;
+  return localizeData(sourceData.value?.mobs[monsterId], 'Monster #' + monsterId);
 }
 
 function resolvePosition(position: MonsterPositionRaw): MonsterDropPosition {
@@ -203,13 +111,13 @@ function sortDrops(a: MonsterDropInfo, b: MonsterDropInfo): number {
 }
 
 export function getMonsterDropInfo(itemId: number): MonsterDropInfo[] | null {
-  if (!dropSourcesCache || !monstersCache || !mobsCache) return null;
+  if (!sourceData.value) return null;
 
-  const monsterIds = dropSourcesCache[String(itemId)];
+  const monsterIds = sourceData.value.drops[itemId];
   if (!monsterIds || monsterIds.length === 0) return null;
 
   const drops = monsterIds.map(monsterId => {
-    const monster = monstersCache?.[String(monsterId)];
+    const monster = sourceData.value?.monsters[monsterId];
     const positions = (monster?.positions || [])
       .map(resolvePosition)
       .sort(sortPositions);

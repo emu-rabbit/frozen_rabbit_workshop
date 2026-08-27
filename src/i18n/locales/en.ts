@@ -1,4 +1,27 @@
 export default {
+  gameData: {
+    cancel: 'Cancel',
+    repairConfirm: 'Download again and reload',
+    islandTimeHint: 'Time estimates exclude Island Sanctuary construction, crafting and gathering.',
+    title: 'Cached Game Data',
+    version: 'Current data version',
+    cacheDescription: 'Game data is cached on this device to avoid repeat downloads. Updates are checked when you open the page.',
+    cacheUnavailable: 'Device caching is unavailable. Online data is being used; your notes and favorites are unaffected.',
+    repair: 'Clear game data cache and download again',
+    repairWarning: 'Only the game data cache will be cleared, not your saved notes, favorites or settings. The page will reload and unsaved edits and material allocations will be lost. Continue?',
+    reloadWarning: 'Apply the new data and reload? Unsaved edits and material allocations will be lost. Saved notes and favorites will not be affected.',
+    updateReady: 'New game data is ready.',
+    apply: 'Apply and reload',
+    later: 'Use on next visit',
+    retry: 'Retry',
+    loadingCatalog: 'Loading item data…',
+    loadingCore: 'Item search is ready. Preparing recipes and material sources…',
+    error_catalog: 'Item data could not be loaded. Please retry.',
+    error_core: 'Recipes or material sources could not be loaded. Material planning is unavailable until you retry.',
+    error_update: 'Your current data is still usable, but checking or downloading updates failed.',
+    islandOther: 'Other island sources',
+    islandStage: 'Materials for the selected stage only; prerequisites and unlock requirements are not included.'
+  },
   app: {
     title: "Frozen Rabbit's Workshop",
     subtitle: 'A cozy crafting notebook'
@@ -252,6 +275,7 @@ export default {
     alarmMacroCopied: 'Macro Copied!'
   },
   jobs: {
+    islandGathering: 'Island gathering',
     crp: 'Carpenter', bsm: 'Blacksmith', arm: 'Armorer', gsm: 'Goldsmith',
     lwr: 'Leatherworker', wvr: 'Weaver', alc: 'Alchemist', cul: 'Culinarian',
     min: 'Miner', btn: 'Botanist', fsh: 'Fisher', gather: 'Gathering',
@@ -303,7 +327,7 @@ export default {
       teamcraft: 'Teamcraft - Source for item, recipe, and gathering data',
       xivapi: 'XIVAPI - FFXIV icon and item API support'
     },
-    changelogTitle: 'System Updates',
+    changelogTitle: 'Changelog',
     changelogDesc: 'Learn about the latest features and version updates of the workshop',
     changelogLink: 'View Workshop Update History'
   },

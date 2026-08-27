@@ -1,4 +1,27 @@
 export default {
+  gameData: {
+    cancel: 'キャンセル',
+    repairConfirm: '再取得して再読み込み',
+    islandTimeHint: '所要時間の見積もりに無人島の建設・製作・採集は含まれません。',
+    title: 'ゲームデータのキャッシュ',
+    version: '使用中のデータバージョン',
+    cacheDescription: '再ダウンロードを減らすため、この端末にデータを保存します。ページを開くたびに更新を確認します。',
+    cacheUnavailable: '端末へのキャッシュ保存ができないため、オンラインデータを使用しています。メモやお気に入りには影響しません。',
+    repair: 'ゲームデータのキャッシュを削除して再取得',
+    repairWarning: 'ゲームデータのキャッシュのみを削除します。保存済みのメモ、お気に入り、設定は削除しません。ページを再読み込みすると、未保存の編集と素材の割り当てが失われます。続行しますか？',
+    reloadWarning: '新しいデータを適用してページを再読み込みしますか？未保存の編集と素材の割り当てが失われます。保存済みのメモとお気に入りには影響しません。',
+    updateReady: '新しいゲームデータの準備ができました。',
+    apply: '適用して再読み込み',
+    later: '次回開いたときに適用',
+    retry: '再試行',
+    loadingCatalog: 'アイテムデータを読み込み中…',
+    loadingCore: 'アイテム検索が利用できます。レシピと素材の入手先を準備中…',
+    error_catalog: 'アイテムデータを読み込めませんでした。再試行してください。',
+    error_core: 'レシピまたは素材の入手先を読み込めませんでした。再試行するまで素材準備を利用できません。',
+    error_update: '現在のデータは使用できますが、更新の確認またはダウンロードに失敗しました。',
+    islandOther: '無人島のその他の入手先',
+    islandStage: '選択した段階の素材のみです。前提となる建築や開放条件は含みません。'
+  },
   app: {
     title: '冷凍ラビットの工房',
     subtitle: 'うさぎさん専用の制作ノート'
@@ -252,6 +275,7 @@ export default {
     alarmMacroCopied: 'マクロをコピーしました！'
   },
   jobs: {
+    islandGathering: '無人島採集',
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
     lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
     min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集',
@@ -303,7 +327,7 @@ export default {
       teamcraft: 'Teamcraft - アイテム、レシピ、採集データのソース',
       xivapi: 'XIVAPI - アイコンとアイテムの API サポート'
     },
-    changelogTitle: 'システムアップデート',
+    changelogTitle: '更新履歴',
     changelogDesc: '本サイトの最新機能やアップデート履歴を確認できます',
     changelogLink: 'アップデート履歴を見る'
   },

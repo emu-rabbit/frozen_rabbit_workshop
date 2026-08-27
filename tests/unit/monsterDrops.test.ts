@@ -1,10 +1,11 @@
+import { sourceFixture } from '../fixtures/gameData.mjs';
+import { projectGameData } from '../../scripts/game-data/project.mjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let currentLanguage = 'tw';
 
 vi.mock('../../src/services/dictionary', () => ({
-    ensurePlacesLoaded: vi.fn(),
-    ensureMapsLoaded: vi.fn(),
+    localizeData: (names: any, fallback: string) => names?.[currentLanguage] || names?.en || fallback,
     getPlaceName: vi.fn((id: number) => {
         if (id === 3711) return '嘆息海';
         if (id === 3704) return '星外天域';
@@ -27,10 +28,10 @@ const fulfill = (body: unknown) => Promise.resolve({
 } as Response);
 
 describe('monsterDrops service', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.resetModules();
         currentLanguage = 'tw';
-        vi.stubGlobal('fetch', vi.fn((url: string) => {
+        const fixtureResponse = (url: string) => {
             if (url.endsWith('/drop-sources.json')) {
                 return fulfill({
                     '36257': [10471],
@@ -88,13 +89,19 @@ describe('monsterDrops service', () => {
                 });
             }
             return fulfill({});
-        }));
+        };
+        const sources = sourceFixture();
+        const files = ["drop-sources.json","monsters.json","mobs.json","tw/tw-mobs.json","zh/zh-mobs.json"];
+        for (const file of files) sources[file] = await (await fixtureResponse('/' + file)).json();
+        const ids = [36257,5310];
+        sources['recipes.json'] = ids.map(id => ({ id, result: id, job: 8, lvl: 1, yields: 1, ingredients: [] }));
+        sources['items.json'] = Object.fromEntries(ids.map(id => [id, { en: 'Item' }]));
+        const { sourceData } = await import('../../src/services/gameData');
+        sourceData.value = projectGameData(sources).bundles.sources;
     });
 
     it('maps an item to localized monster, level, zone, and coordinates', async () => {
-        const { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } = await import('../../src/services/monsterDrops');
-
-        await ensureMonsterDropDataLoaded();
+        const { getMonsterDropInfo, getMonsterDropPreferredLevel } = await import('../../src/services/monsterDrops');
         const drops = getMonsterDropInfo(36257);
 
         expect(drops).toHaveLength(1);
@@ -116,17 +123,13 @@ describe('monsterDrops service', () => {
 
     it('falls back to English names when the current locale has no monster translation', async () => {
         currentLanguage = 'en';
-        const { ensureMonsterDropDataLoaded, getMonsterDropInfo } = await import('../../src/services/monsterDrops');
-
-        await ensureMonsterDropDataLoaded();
+        const { getMonsterDropInfo } = await import('../../src/services/monsterDrops');
 
         expect(getMonsterDropInfo(36257)?.[0].monsterName).toBe('mousse');
     });
 
     it('uses the lowest known-level source before unknown-level sources for preview data', async () => {
-        const { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } = await import('../../src/services/monsterDrops');
-
-        await ensureMonsterDropDataLoaded();
+        const { getMonsterDropInfo, getMonsterDropPreferredLevel } = await import('../../src/services/monsterDrops');
         const drops = getMonsterDropInfo(5310);
 
         expect(drops?.map(drop => drop.monsterId)).toEqual([411, 130, 412]);

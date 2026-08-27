@@ -176,6 +176,7 @@ const handleExportHtml = (includeMarket: boolean) => {
             title: t('todo.title'),
             progress: t('todo.progress', { n: '{n}', total: '{total}' }),
             sectionOther: t('todo.section.other'),
+            islandOther: t('gameData.islandOther'),
             sectionHunt: t('todo.section.hunt'),
             sectionBuy: t('todo.section.buy'),
             sectionGather: t('todo.section.gather'),
@@ -349,6 +350,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                     </button>
                                                 </div>
                                                 
+                                                <p v-if="item.islandOther" class="text-xs text-slate-500 dark:text-slate-400">{{ t('gameData.islandOther') }}</p>
                                                 <!-- Compact Metadata for Mobile -->
                                                 <div class="flex flex-wrap items-center gap-2">
                                                     <span v-if="todoChecked[`${section.key}_${item.id}`]" class="text-[9px] md:text-[10px] font-black bg-soft-green-100 dark:bg-soft-green-950/40 text-soft-green-600 dark:text-soft-green-400 px-1.5 py-0.5 rounded-full uppercase tracking-tighter shrink-0">Done</span>
@@ -390,11 +392,12 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                             <template v-if="section.key === 'gather' && item.gathering">
                                                                 <div class="flex flex-col gap-0.5 min-w-0">
                                                                     <span class="truncate max-w-[150px]">{{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}</span>
-                                                                    <span class="self-start text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ t(item.gathering.jobName).substring(0, 2) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}</span>
+                                                        <span v-if="item.gathering.island" class="text-xs font-mono text-slate-500 dark:text-slate-400">X:{{ item.gathering.x?.toFixed(1) }} Y:{{ item.gathering.y?.toFixed(1) }}</span>
+                                                                    <span class="self-start text-[9px] text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">{{ item.gathering.island ? t(item.gathering.jobName) : t(item.gathering.jobName).substring(0, 2) }} <template v-if="!item.gathering.island">Lv.{{ item.gathering.level }}</template>{{ renderStars(item.gathering.stars) }}</span>
                                                                 </div>
                                                             </template>
                                                             <template v-if="section.key === 'craft' && item.crafting">
-                                                                <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ t(item.crafting.jobName).substring(0, 2) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</span>
+                                                                <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ item.crafting.job === -10 ? t(item.crafting.jobName) : t(item.crafting.jobName).substring(0, 2) }} <template v-if="item.crafting.job !== -10">Lv.{{ item.crafting.level }}</template>{{ renderStars(item.crafting.stars) }}</span>
                                                             </template>
                                                         </div>
                                                     </template>
@@ -457,6 +460,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                             <span class="text-[15px] md:text-[17px] font-black tracking-tight leading-none truncate max-w-[150px]">
                                                                 {{ item.gathering.parentZoneName || getLocalizedName(item.gathering.zoneName) }}
                                                             </span>
+                                                        <span v-if="item.gathering.island" class="text-xs font-mono text-slate-500 dark:text-slate-400">X:{{ item.gathering.x?.toFixed(1) }} Y:{{ item.gathering.y?.toFixed(1) }}</span>
                                                         </div>
                                                         <div v-if="item.gathering.isLimited" class="mt-1 flex items-center gap-1 text-[9px] md:text-[11px] font-black text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40 shadow-sm">
                                                             <i class="pi pi-clock text-[9px]"></i>
@@ -464,7 +468,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                         </div>
                                                     </div>
                                                     <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 shadow-sm leading-none whitespace-nowrap">
-                                                        {{ t(item.gathering.jobName) }} Lv.{{ item.gathering.level }}{{ renderStars(item.gathering.stars) }}
+                                                        {{ t(item.gathering.jobName) }} <template v-if="!item.gathering.island">Lv.{{ item.gathering.level }}</template>{{ renderStars(item.gathering.stars) }}
                                                     </span>
                                                 </div>
                                             </template>
@@ -473,7 +477,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             <template v-if="section.key === 'craft' && item.crafting">
                                                 <div class="flex flex-col items-end">
                                                      <span class="text-[10px] md:text-sm font-black bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40 shadow-sm leading-none whitespace-nowrap">
-                                                        {{ t(item.crafting.jobName) }} Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}
+                                                        {{ t(item.crafting.jobName) }} <template v-if="item.crafting.job !== -10">Lv.{{ item.crafting.level }}</template>{{ renderStars(item.crafting.stars) }}
                                                     </span>
                                                 </div>
                                             </template>

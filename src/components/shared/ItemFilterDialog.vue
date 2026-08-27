@@ -8,7 +8,7 @@ import {
   getSearchableItems,
   isDictionaryLoading,
   type ItemCategoryGroup,
-  type MockItem
+  type DictionaryItem
 } from '../../services/dictionary'
 import { vFfivClean } from '../../utils/inputUtils'
 
@@ -18,7 +18,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   close: []
-  select: [item: MockItem]
+  select: [item: DictionaryItem]
 }>()
 
 const { t } = useI18n()
@@ -30,10 +30,11 @@ const equipLevelMin = ref<number | null>(null)
 const equipLevelMax = ref<number | null>(null)
 const selectedJob = ref('')
 const selectedCategory = ref<ItemCategoryGroup | 'all'>('all')
-const selectedItem = ref<MockItem | null>(null)
-const results = ref<MockItem[]>([])
-const allItems = ref<MockItem[]>([])
+const selectedItem = ref<DictionaryItem | null>(null)
+const results = ref<DictionaryItem[]>([])
+const allItems = ref<DictionaryItem[]>([])
 const isFiltering = ref(false)
+const loadFailed = ref(false)
 
 let filterSequence = 0
 
@@ -63,7 +64,7 @@ const getJobLabel = (job: string) => {
   return translated === `newNote.filter.jobs.${job}` ? job : translated
 }
 
-const getCategoryLabel = (item: MockItem) => {
+const getCategoryLabel = (item: DictionaryItem) => {
   return t(`newNote.filter.categories.${getItemCategoryGroup(item)}`)
 }
 
@@ -80,23 +81,29 @@ const hasActiveFilters = computed(() => {
 const runFilter = async () => {
   const sequence = ++filterSequence
   isFiltering.value = true
+  loadFailed.value = false
+  try {
+    allItems.value = await getSearchableItems()
+    const filtered = await filterSearchableItems({
+      query: query.value,
+      ilvlMin: ilvlMin.value,
+      ilvlMax: ilvlMax.value,
+      equipLevelMin: equipLevelMin.value,
+      equipLevelMax: equipLevelMax.value,
+      job: selectedJob.value,
+      categoryGroup: selectedCategory.value,
+    })
 
-  const filtered = await filterSearchableItems({
-    query: query.value,
-    ilvlMin: ilvlMin.value,
-    ilvlMax: ilvlMax.value,
-    equipLevelMin: equipLevelMin.value,
-    equipLevelMax: equipLevelMax.value,
-    job: selectedJob.value,
-    categoryGroup: selectedCategory.value,
-  })
-
-  if (sequence === filterSequence) {
-    results.value = filtered
-    if (selectedItem.value && !filtered.some(item => item.id === selectedItem.value?.id)) {
-      selectedItem.value = null
+    if (sequence === filterSequence) {
+      results.value = filtered
+      if (selectedItem.value && !filtered.some(item => item.id === selectedItem.value?.id)) {
+        selectedItem.value = null
+      }
     }
-    isFiltering.value = false
+  } catch {
+    if (sequence === filterSequence) { loadFailed.value = true; results.value = []; selectedItem.value = null }
+  } finally {
+    if (sequence === filterSequence) isFiltering.value = false
   }
 }
 
@@ -110,7 +117,7 @@ const clearFilters = () => {
   selectedCategory.value = 'all'
 }
 
-const chooseItem = (item: MockItem) => {
+const chooseItem = (item: DictionaryItem) => {
   selectedItem.value = item
 }
 
@@ -124,8 +131,6 @@ watch(() => props.visible, async (visible) => {
   if (!visible) return
 
   selectedItem.value = null
-  isFiltering.value = true
-  allItems.value = await getSearchableItems()
   await runFilter()
 })
 
@@ -248,7 +253,11 @@ watch([query, ilvlMin, ilvlMax, equipLevelMin, equipLevelMax, selectedJob, selec
               <i v-if="selectedItem?.id === item.id" class="pi pi-check text-soft-green-600 dark:text-soft-green-400"></i>
             </button>
 
-            <div v-if="!isFiltering && results.length === 0" class="min-h-[360px] flex flex-col items-center justify-center p-6 text-center text-slate-500 dark:text-slate-400">
+            <div v-if="loadFailed" role="alert" class="p-6 text-amber-700 dark:text-amber-300">
+              <p>{{ t('gameData.error_catalog') }}</p>
+              <button class="mt-3 underline" @click="runFilter">{{ t('gameData.retry') }}</button>
+            </div>
+            <div v-else-if="!isFiltering && results.length === 0" class="min-h-[360px] flex flex-col items-center justify-center p-6 text-center text-slate-500 dark:text-slate-400">
               <i class="pi pi-search text-3xl text-slate-300 dark:text-slate-700 mb-3"></i>
               <p class="font-bold">{{ t('newNote.filter.emptyTitle') }}</p>
               <p class="text-sm mt-1">{{ t('newNote.filter.emptyDescription') }}</p>

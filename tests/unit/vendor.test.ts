@@ -1,7 +1,9 @@
+import { sourceFixture } from '../fixtures/gameData.mjs';
+import { projectGameData } from '../../scripts/game-data/project.mjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../src/services/dictionary', () => ({
-    ensurePlacesLoaded: vi.fn(() => Promise.resolve()),
+    localizeData: (names: any, fallback: string) => names?.tw || names?.en || fallback,
     getCurrentLanguage: vi.fn(() => 'tw'),
     getPlaceName: vi.fn((id: number) => {
         if (id === 53) return '格里達尼亞舊街';
@@ -18,9 +20,9 @@ const fulfill = (body: unknown) => Promise.resolve({
 } as Response);
 
 describe('vendor service', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.resetModules();
-        vi.stubGlobal('fetch', vi.fn((url: string) => {
+        const fixtureResponse = (url: string) => {
             if (url.endsWith('/shops.json')) {
                 return fulfill([
                     {
@@ -107,13 +109,19 @@ describe('vendor service', () => {
             }
 
             return fulfill({});
-        }));
+        };
+        const sources = sourceFixture();
+        const files = ["shops.json","npcs.json","tw/tw-npcs.json"];
+        for (const file of files) sources[file] = await (await fixtureResponse('/' + file)).json();
+        const ids = [1925,99,27087];
+        sources['recipes.json'] = ids.map(id => ({ id, result: id, job: 8, lvl: 1, yields: 1, ingredients: [] }));
+        sources['items.json'] = Object.fromEntries(ids.map(id => [id, { en: 'Item' }]));
+        const { sourceData } = await import('../../src/services/gameData');
+        sourceData.value = projectGameData(sources).bundles.sources;
     });
 
     it('uses NPC position.zoneid as the vendor display place', async () => {
-        const { ensureVendorDataLoaded, getBestVendor, getVendors } = await import('../../src/services/vendor');
-
-        await ensureVendorDataLoaded();
+        const { getBestVendor, getVendors } = await import('../../src/services/vendor');
         const vendor = getBestVendor(1925);
 
         expect(vendor).toMatchObject({
@@ -133,17 +141,13 @@ describe('vendor service', () => {
     });
 
     it('does not reinterpret unknown NPC zone ids through maps data', async () => {
-        const { ensureVendorDataLoaded, getBestVendor } = await import('../../src/services/vendor');
-
-        await ensureVendorDataLoaded();
+        const { getBestVendor } = await import('../../src/services/vendor');
 
         expect(getBestVendor(99)?.zoneName).toBe('Zone #999');
     });
 
     it('merges vendor rows that resolve to the same displayed information', async () => {
-        const { ensureVendorDataLoaded, getVendors } = await import('../../src/services/vendor');
-
-        await ensureVendorDataLoaded();
+        const { getVendors } = await import('../../src/services/vendor');
 
         const vendors = getVendors(27087);
 

@@ -1,20 +1,19 @@
 import { ref, computed, watch, reactive } from 'vue';
 import { useNotes } from './useNotes';
 import { 
-  ensureDictionaryLoaded, 
+  ensureWorkbenchDataLoaded,
   globalRecipesCache, 
   getDictionaryItem,
-  getRawItemData,
   setDictionaryLanguage
 } from '../services/dictionary';
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateMarketStats } from '../utils/marketPricing';
-import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
-import { ensureVendorDataLoaded, getVendors } from '../services/vendor';
+import { getGatheringInfo } from '../services/gathering';
+import { getVendors } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
-import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
+import { getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
 import type { MonsterDropInfo } from '../services/monsterDrops';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
@@ -40,6 +39,8 @@ export interface CraftingInfo {
 
 export interface WorkbenchItem {
   id: number;
+  island: boolean;
+  islandOther: boolean;
   name: string;
   icon: string;
   canCraft: boolean;
@@ -87,6 +88,7 @@ export interface TodoItem {
   name: any;
   icon: string;
   marketPrice: number | null;
+  islandOther?: boolean;
   purchaseInfo?: PurchaseInfo;
   gathering?: any;
   monsterDrops?: MonsterDropInfo[] | null;
@@ -221,6 +223,10 @@ const initSingleItemDecision = (id: number, demand: number, isRoot: boolean = fa
   if (CRYSTAL_IDS.has(id)) {
       // 水晶類選擇庫存 (other)
       decisions[String(id)] = { buy: 0, craft: 0, gather: 0, other: demand };
+  } else if (getDictionaryItem(id).kind !== 'item') {
+      const recipe = globalRecipesCache.value?.find(r => r.result === id);
+      const gather = getGatheringInfo(id);
+      decisions[String(id)] = { buy: 0, craft: recipe ? demand : 0, gather: !recipe && gather ? demand : 0, other: !recipe && !gather ? demand : 0 };
   } else if (isRoot) {
       // 成品優先選擇製作
       if (itemData?.canCraft) {
@@ -260,7 +266,7 @@ const refreshItemsData = async (ids: number[]) => {
       stars: recipe.stars || 0,
       yields: recipe.yields || 1,
       ingredients: (Array.isArray(recipe.ingredients) ? recipe.ingredients : []).map((ing: any) => {
-        const ingInfo = getDictionaryItem(ing.id) ?? getRawItemData(ing.id);
+        const ingInfo = getDictionaryItem(ing.id);
         return {
           id: ing.id,
           amount: ing.amount,
@@ -270,10 +276,12 @@ const refreshItemsData = async (ids: number[]) => {
       })
     } : null;
 
-    const itemInfo = getDictionaryItem(id) ?? getRawItemData(id);
+    const itemInfo = getDictionaryItem(id);
 
     workbenchItems.value[id] = {
       id,
+      island: itemInfo.kind !== 'item',
+      islandOther: itemInfo.kind === 'islandItem' && !recipe && !gather,
       name: itemInfo.name,
       icon: itemInfo.icon,
       canCraft: !!recipe,
@@ -356,6 +364,8 @@ const setItemPendingPrice = (item: WorkbenchItem) => {
 };
 
 const fetchPricesForMode = async (ids: number[], mode: MarketPriceMode) => {
+  ids = ids.filter(id => id > 0 && !workbenchItems.value[id]?.island);
+  if (!ids.length) return;
   const currentMarketSource = selectedDC.value;
   const prices = mode === 'hq' ? await fetchItemPrices(ids, { hqOnly: true }) : await fetchItemPrices(ids);
   
@@ -580,7 +590,7 @@ const generateTodoSections = computed(() => {
     if (d.other > 0) {
       sections.other.push({
         sectionKey: 'other', id, quantity: d.other,
-        name: item.name, icon: item.icon, marketPrice: null
+        name: item.name, icon: item.icon, marketPrice: null, islandOther: item.islandOther
       });
     }
 
@@ -745,12 +755,7 @@ export function useWorkbench() {
 
     isLoading.value = true;
     try {
-      await Promise.all([
-        ensureDictionaryLoaded(),
-        ensureGatheringDataLoaded(),
-        ensureMonsterDropDataLoaded(),
-        ensureVendorDataLoaded()
-      ]);
+      await ensureWorkbenchDataLoaded();
 
       if (isNewNote || force) {
           // 情況 A：切換新筆記或強制重設 -> 全量重設決策與緩存

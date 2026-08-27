@@ -3,6 +3,7 @@ export interface ExportContext {
     title: string;
     progress: string;
     sectionOther: string;
+    islandOther: string;
     sectionHunt: string;
     sectionBuy: string;
     sectionGather: string;
@@ -102,9 +103,10 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                       ${item.gathering.parentZoneName || ctx.getLocalizedName(item.gathering.zoneName)}
                   </span>
               </div>
+              ${item.gathering.island ? '<span class="text-xs font-mono">X:' + item.gathering.x?.toFixed(1) + ' Y:' + item.gathering.y?.toFixed(1) + '</span>' : ''}
               ${etDisplay}
               <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none shadow-sm whitespace-nowrap">
-                  ${ctx.getJobName(item.gathering.jobName)} Lv.${item.gathering.level}${ctx.renderStars(item.gathering.stars)}
+                  ${ctx.getJobName(item.gathering.jobName)}${item.gathering.island ? '' : ' Lv.' + item.gathering.level}${ctx.renderStars(item.gathering.stars)}
               </span>
             </div>
           </div>
@@ -139,7 +141,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         infoColumnHtml = `
           <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
              <span class="text-[10px] md:text-sm font-black bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40 leading-none whitespace-nowrap">
-                ${ctx.getJobName(item.crafting.jobName)} Lv.${item.crafting.level}${ctx.renderStars(item.crafting.stars)}
+                ${ctx.getJobName(item.crafting.jobName)}${item.crafting.job === -10 ? '' : ' Lv.' + item.crafting.level}${ctx.renderStars(item.crafting.stars)}
             </span>
           </div>
         `;
@@ -185,6 +187,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                     <div class="flex items-center gap-2 mt-1">
                       <span class="text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 shrink-0">#${item.id}</span>
                     </div>
+                    ${item.islandOther ? '<p class="text-xs text-slate-500">' + ctx.translations.islandOther + '</p>' : ''}
                 </div>
             </div>
  

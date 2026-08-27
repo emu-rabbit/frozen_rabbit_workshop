@@ -1,12 +1,12 @@
 import { reactive } from 'vue'
-import type { MockItem } from '../services/dictionary'
+import type { DictionaryItem } from '../services/dictionary'
 
 interface SearchRow {
   id: string
   query: string
-  selectedItem: MockItem | null
+  selectedItem: DictionaryItem | null
   quantity: number
-  suggestions: MockItem[]
+  suggestions: DictionaryItem[]
   searching: boolean
   searchedEmpty: boolean
 }

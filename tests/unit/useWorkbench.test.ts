@@ -19,12 +19,9 @@ vi.mock('../../src/composables/useNotes', () => ({
 vi.mock('../../src/services/dictionary', () => ({
     globalRecipesCache: mocks.recipesCache,
     setDictionaryLanguage: vi.fn(),
-    ensureDictionaryLoaded: vi.fn(),
+    ensureWorkbenchDataLoaded: vi.fn(),
     getDictionaryItem: vi.fn((id: number) => ({
-        name: `Item ${id}`,
-        icon: `/icons/${id}.png`
-    })),
-    getRawItemData: vi.fn((id: number) => ({
+        kind: 'item',
         name: `Item ${id}`,
         icon: `/icons/${id}.png`
     })),
@@ -37,12 +34,10 @@ vi.mock('../../src/services/universalis', () => ({
 }));
 
 vi.mock('../../src/services/gathering', () => ({
-    ensureGatheringDataLoaded: vi.fn(),
     getGatheringInfo: mocks.getGatheringInfo
 }));
 
 vi.mock('../../src/services/monsterDrops', () => ({
-    ensureMonsterDropDataLoaded: vi.fn(),
     getMonsterDropInfo: mocks.getMonsterDropInfo,
     getMonsterDropPreferredLevel: vi.fn((drops: any[] | null | undefined) => {
         if (!drops || drops.length === 0) return null;
@@ -52,7 +47,6 @@ vi.mock('../../src/services/monsterDrops', () => ({
 }));
 
 vi.mock('../../src/services/vendor', () => ({
-    ensureVendorDataLoaded: vi.fn(),
     getVendors: vi.fn(() => [])
 }));
 
