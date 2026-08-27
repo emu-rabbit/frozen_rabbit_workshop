@@ -45,8 +45,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          VITE_TEAMCRAFT_BRANCH: ${{ vars.VITE_TEAMCRAFT_BRANCH || 'staging' }}
 
       - name: Run E2E Tests
         run: npx playwright test
@@ -104,7 +102,6 @@ jobs:
         env:
           PRODUCTION_BRANCH: ${{ steps.branches.outputs.production }}
           HAS_STAGING: ${{ steps.branches.outputs.has_staging }}
-          TEAMCRAFT_BRANCH: ${{ vars.VITE_TEAMCRAFT_BRANCH || 'staging' }}
         run: |
           set -euo pipefail
 
@@ -114,7 +111,7 @@ jobs:
           git worktree add ../production-site "origin/${PRODUCTION_BRANCH}"
           pushd ../production-site
           npm ci
-          VITE_BASE_PATH="${SITE_BASE_PATH}" VITE_TEAMCRAFT_BRANCH="${TEAMCRAFT_BRANCH}" npm run build
+          VITE_BASE_PATH="${SITE_BASE_PATH}" npm run build
           popd
           cp -a ../production-site/dist/. ../pages-site/
 
@@ -122,7 +119,7 @@ jobs:
             git worktree add ../staging-site origin/staging
             pushd ../staging-site
             npm ci
-            VITE_BASE_PATH="${STAGING_BASE_PATH}" VITE_TEAMCRAFT_BRANCH="${TEAMCRAFT_BRANCH}" npm run build
+            VITE_BASE_PATH="${STAGING_BASE_PATH}" npm run build
             popd
             mkdir -p ../pages-site/staging
             cp -a ../staging-site/dist/. ../pages-site/staging/

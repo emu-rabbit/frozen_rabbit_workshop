@@ -1,4 +1,26 @@
 export default {
+  gameData: {
+    islandGranary: 'グラナリーオフィス',
+    islandFarming: '開拓耕作',
+    islandPasture: '開拓飼育',
+    cancel: 'キャンセル',
+    repairConfirm: '再取得して再読み込み',
+    title: 'ゲームデータのキャッシュ',
+    version: '使用中のデータバージョン',
+    cacheDescription: '再ダウンロードを減らすため、この端末にデータを保存します。ページを開くたびに更新を確認します。',
+    cacheUnavailable: '端末へのキャッシュ保存ができないため、オンラインデータを使用しています。メモやお気に入りには影響しません。',
+    repair: 'ゲームデータのキャッシュを削除して再取得',
+    repairWarning: 'ゲームデータのキャッシュのみを削除します。保存済みのメモ、お気に入り、設定は削除しません。ページを再読み込みすると、未保存の編集と素材の割り当てが失われます。続行しますか？',
+    reloadWarning: '新しいゲームデータのダウンロードが完了し、利用できるようになりました。適用するタイミングを選べます。',
+    updateReady: '新しいゲームデータの更新が見つかりました',
+    apply: '今すぐ適用して再読み込み',
+    later: '次回適用',
+    retry: '再試行',
+    loadingCatalog: 'アイテムデータを読み込み中…',
+    error_catalog: 'アイテムデータを読み込めませんでした。再試行してください。',
+    error_core: 'レシピまたは素材の入手先を読み込めませんでした。再試行するまで素材準備を利用できません。',
+    error_update: '現在のデータは使用できますが、更新の確認またはダウンロードに失敗しました。'
+  },
   app: {
     title: '冷凍ラビットの工房',
     subtitle: 'うさぎさん専用の制作ノート'
@@ -252,11 +274,14 @@ export default {
     alarmMacroCopied: 'マクロをコピーしました！'
   },
   jobs: {
+    islandGathering: '開拓採集',
     crp: '木工師', bsm: '鍛冶師', arm: '甲冑師', gsm: '彫金師',
     lwr: '革細工師', wvr: '裁縫師', alc: '錬金術師', cul: '調理師',
     min: '採掘師', btn: '園芸師', fsh: '漁師', gather: '採集',
     battle: '戦闘',
     companyCrafting: 'カンパニークラフト',
+    islandConstruction: '開拓建築',
+    islandWorkshop: '開拓工房',
     islandCrafting: '開拓製作'
   },
   settings: {
@@ -303,7 +328,7 @@ export default {
       teamcraft: 'Teamcraft - アイテム、レシピ、採集データのソース',
       xivapi: 'XIVAPI - アイコンとアイテムの API サポート'
     },
-    changelogTitle: 'システムアップデート',
+    changelogTitle: '更新履歴',
     changelogDesc: '本サイトの最新機能やアップデート履歴を確認できます',
     changelogLink: 'アップデート履歴を見る'
   },

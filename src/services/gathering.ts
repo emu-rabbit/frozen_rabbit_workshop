@@ -1,11 +1,8 @@
-import { ensurePlacesLoaded, getPlaceName, ensureMapsLoaded, getMapData } from './dictionary';
-
-const TEAMCRAFT_BRANCH = import.meta.env.VITE_TEAMCRAFT_BRANCH ?? 'staging';
-const BASE_URL = `https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/${TEAMCRAFT_BRANCH}/libs/data/src/lib/json`;
-const GATHERING_ITEMS_URL = `${BASE_URL}/gathering-items.json`;
-const NODES_URL = `${BASE_URL}/nodes.json`;
-
+import { getPlaceName, getMapData, localizeData } from './dictionary';
+import { sourceData } from './gameData';
+import type { SourceBundle } from '../types/gameData';
 export interface GatheringInfo {
+  island?: boolean;
   type: number;        // 0=採礦工, 1=園藝工, 2=釣魚人
   jobName: string;
   level: number;
@@ -20,19 +17,10 @@ export interface GatheringInfo {
   duration: number;    // 持續時間 (艾俄澤亞分鐘)
 }
 
-let gatheringItemsCache: Record<number, number[]> | null = null; // itemId -> [nodeId1, nodeId2]
-let nodesCache: Record<number, any> | null = null; // nodeId -> details
-/** 
- * 全量反向索引: itemId -> nodeId[] 
- * 透過遍歷 nodes.json 建立，用於涵蓋碎晶、礦石等基礎素材
- */
+
+let indexed: SourceBundle | null = null;
 let fullItemToNodesMap: Record<number, number[]> = {};
-/** Item-specific gathering data (level, stars) */
-let itemToGatheringData: Record<number, { level: number, stars: number }> = {};
-
-let isLoading = false;
-let loadPromise: Promise<void> | null = null;
-
+let itemToGatheringData: Record<number, { level: number; stars: number }> = {};
 const GATHER_JOB_NAMES: Record<number, string> = {
   0: 'jobs.min',
   1: 'jobs.min',
@@ -41,100 +29,33 @@ const GATHER_JOB_NAMES: Record<number, string> = {
   4: 'jobs.fsh',
 };
 
-/**
- * 確保採集資料已載入
- */
-export async function ensureGatheringDataLoaded(): Promise<void> {
-  // 必須確保子依賴地名與地圖快取隨時更新（特別是語言切換後）
-  await Promise.all([
-    ensurePlacesLoaded(),
-    ensureMapsLoaded()
-  ]);
 
-  if (gatheringItemsCache !== null && nodesCache !== null) return;
-  if (loadPromise) return loadPromise;
-
-  isLoading = true;
-  loadPromise = (async () => {
-    try {
-      console.log('[Gathering] Loading gathering data...');
-      const [itemsRes, nodesRes] = await Promise.all([
-        fetch(GATHERING_ITEMS_URL),
-        fetch(NODES_URL),
-        ensurePlacesLoaded(), // 同步載入地名
-        ensureMapsLoaded(),   // 同步載入地圖元資料 (用於階層)
-      ]);
-
-      if (!itemsRes.ok || !nodesRes.ok) {
-        throw new Error('Failed to fetch gathering data files');
-      }
-
-      gatheringItemsCache = await itemsRes.json();
-      nodesCache = await nodesRes.json();
-
-      // 建立全量反向索引 與 項目特定資料
-      fullItemToNodesMap = {};
-      itemToGatheringData = {};
-      
-      Object.entries(gatheringItemsCache || {}).forEach(([_, entry]: [any, any]) => {
-          if (entry.itemId) {
-              itemToGatheringData[entry.itemId] = {
-                  level: entry.level || 0,
-                  stars: entry.stars || 0
-              };
-          }
-      });
-
-      Object.entries(nodesCache || {}).forEach(([nodeIdStr, node]) => {
-          const nodeId = parseInt(nodeIdStr, 10);
-          const itemIds: number[] = node.items || [];
-          const hiddenIds: number[] = node.hiddenItems || [];
-          
-          [...itemIds, ...hiddenIds].forEach(itemId => {
-              if (!fullItemToNodesMap[itemId]) fullItemToNodesMap[itemId] = [];
-              if (!fullItemToNodesMap[itemId].includes(nodeId)) {
-                  fullItemToNodesMap[itemId].push(nodeId);
-              }
-          });
-      });
-
-      console.log('[Gathering] Data loaded and index built.');
-    } catch (err) {
-      console.error('[Gathering] Failed to load gathering data:', err);
-      gatheringItemsCache = {};
-      nodesCache = {};
-    } finally {
-      isLoading = false;
-      loadPromise = null;
+export function getGatheringInfo(itemId: number): GatheringInfo | null {
+  const data = sourceData.value;
+  if (!data) return null;
+  const island = data.islandGathering[itemId];
+  if (island) return { island: true, type: -10, jobName: 'jobs.islandGathering', level: 0, stars: 0,
+    zoneName: localizeData({ tw: '無人島', cn: '无人岛', en: 'Island Sanctuary', ja: '無人島' }),
+    x: island.x, y: island.y, isLimited: false, spawns: [], duration: 0 };
+  if (indexed !== data) {
+    indexed = data; fullItemToNodesMap = {}; itemToGatheringData = {};
+    for (const entry of Object.values(data.gatheringItems)) itemToGatheringData[entry.itemId] = entry;
+    for (const [key, node] of Object.entries(data.nodes)) for (const id of [...node.items, ...node.hiddenItems]) {
+      (fullItemToNodesMap[id] ||= []).push(Number(key));
     }
-  })();
-
-  return loadPromise;
-}
-
-/**
- * 根據物品 ID 取得採集資訊
- */
-export function getGatheringInfo(itemId: number, locale: string = 'tw'): GatheringInfo | null {
-  if (!nodesCache) return null;
-
-  // 1. 優先從全量索引中找 nodeIds (涵蓋範圍最廣)
-  // 2. 若無，則嘗試從 gatheringItemsCache (Teamcraft 預設映射) 中找
-  let nodeIds = fullItemToNodesMap[itemId];
-  if (!nodeIds || nodeIds.length === 0) {
-      nodeIds = (gatheringItemsCache || {})[itemId];
   }
-  
+  const nodesCache = data.nodes;
+
+  // 使用完整反向索引，並保留上游節點順序與既有第一個來源的選擇方式。
+  const nodeIds = fullItemToNodesMap[itemId];
   if (!nodeIds || nodeIds.length === 0) return null;
 
-  // 排序節點：優先選擇有坐標的、等級最接近的 (這裡簡單取第一個，或篩選合法節點)
-  let nodeId = nodeIds[0];
-  let node = nodesCache[nodeId];
+  const node = nodesCache[nodeIds[0]];
 
   if (!node) return null;
 
   // 映射地名
-  const zoneName = getPlaceName(node.zoneid, node.mapName);
+  const zoneName = node.zoneid ? getPlaceName(node.zoneid, node.mapName) : node.mapName;
   
   // 映射階層地名 (Parent & Region)
   let parentZoneName: string | undefined;
@@ -167,7 +88,7 @@ export function getGatheringInfo(itemId: number, locale: string = 'tw'): Gatheri
     regionName,
     x: node.x,
     y: node.y,
-    isLimited: !!node.limited || (node.spawns && node.spawns.length > 0),
+    isLimited: !!node.limited || !!node.spawns?.length,
     spawns: node.spawns || [],
     duration: node.duration || 0,
   };

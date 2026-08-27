@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { isDictionaryLoading, searchItems, ensureDictionaryLoaded, getDictionaryItem } from '../../services/dictionary'
-import type { MockItem } from '../../services/dictionary'
+import { isDictionaryLoading, searchItems, ensureCatalogLoaded, getDictionaryItem } from '../../services/dictionary'
+import type { DictionaryItem } from '../../services/dictionary'
 import { useDrafts } from '../../composables/useDrafts'
 import { vFfivClean } from '../../utils/inputUtils'
 import { normalizeItemId, sanitizeNoteItems } from '../../utils/noteItems'
@@ -39,7 +39,7 @@ const handleLoadJson = async (append = false) => {
       throw new Error('Invalid format')
     }
 
-    await ensureDictionaryLoaded()
+    await ensureCatalogLoaded()
 
     if (!append) {
       editorDraft.noteTitle = data.name || t('editor.defaultMergedName')
@@ -87,11 +87,17 @@ const onSearch = async (event: any, index: number) => {
   row.searching = true
   row.searchedEmpty = false
   row.query = event.query || ''
-  const results = await searchItems(row.query)
-  row.suggestions = results
-  row.searching = false
-  if (results.length === 0 && row.query.trim() !== '') {
-    row.searchedEmpty = true
+  const query = row.query
+  try {
+    const results = await searchItems(query)
+    if (row.query !== query) return
+    row.suggestions = results
+    row.searchedEmpty = results.length === 0 && query.trim() !== ''
+  } catch {
+    // The shared data status displays the error and retry action.
+    if (row.query === query) row.suggestions = []
+  } finally {
+    if (row.query === query) row.searching = false
   }
 }
 
@@ -122,7 +128,7 @@ const closeFilterDialog = () => {
   filterDialogRowIndex.value = null
 }
 
-const handleFilterSelect = (item: MockItem) => {
+const handleFilterSelect = (item: DictionaryItem) => {
   if (filterDialogRowIndex.value === null) return
 
   const row = editorDraft.searchRows[filterDialogRowIndex.value]
@@ -141,21 +147,21 @@ const canAddRow = computed(() => {
   return isValidSelectedItem(lastRow.selectedItem)
 })
 
-const isValidSelectedItem = (item: unknown): item is MockItem => {
-  return typeof item === 'object' && item !== null && normalizeItemId((item as MockItem).id) !== null
+const isValidSelectedItem = (item: unknown): item is DictionaryItem => {
+  return typeof item === 'object' && item !== null && normalizeItemId((item as DictionaryItem).id) !== null
 }
 
-const getRowDraftText = (row: { query: string, selectedItem: MockItem | string | null }) => {
+const getRowDraftText = (row: { query: string, selectedItem: DictionaryItem | string | null }) => {
   if (isValidSelectedItem(row.selectedItem)) return ''
   if (typeof row.selectedItem === 'string') return row.selectedItem
   return row.query
 }
 
-const hasInvalidSearchRow = (row: { query: string, selectedItem: MockItem | string | null }) => {
+const hasInvalidSearchRow = (row: { query: string, selectedItem: DictionaryItem | string | null }) => {
   return getRowDraftText(row).trim().length > 0
 }
 
-const getSearchInputClass = (row: { query: string, selectedItem: MockItem | string | null }) => {
+const getSearchInputClass = (row: { query: string, selectedItem: DictionaryItem | string | null }) => {
   const baseClass = 'min-w-0 !w-full !max-w-full bg-white dark:!bg-slate-950 text-slate-900 dark:!text-white focus:!border-soft-green-500 !ring-soft-green-500 rounded-l-xl rounded-r-none py-2 px-3 placeholder:dark:text-slate-600'
   return hasInvalidSearchRow(row)
     ? `${baseClass} !border-red-400 dark:!border-red-500 focus:!border-red-500 !ring-red-400`

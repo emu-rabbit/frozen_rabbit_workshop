@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { computed, ref, watch, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, defineAsyncComponent, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from './composables/useNotes'
 import { useSettings } from './composables/useSettings'
 import { 
-  ensureSearchIndexLoaded,
-  preloadWorkbenchData,
+  ensureCatalogLoaded,
+  ensureWorkbenchDataLoaded,
   setDictionaryLanguage,
 } from './services/dictionary'
-import { ensureGatheringDataLoaded } from './services/gathering'
-import { ensureVendorDataLoaded } from './services/vendor'
+import { catalogData, coreDataReady } from './services/gameData'
+import GameDataStatus from './components/shared/GameDataStatus.vue'
 import { loadLocaleMessages } from './i18n'
 import type { LocalizedString, Note } from './types/note'
 import { sanitizeNoteItems } from './utils/noteItems'
@@ -78,14 +78,12 @@ const i18nReady = ref(false)
  
 // Sync i18n locale and dictionary language with settings
 watch(language, async (newLang) => {
-  // Always ensure fallback is also loaded if needed, 
-  // but for simplicity we just load the requested one
   await loadLocaleMessages(newLang)
+  if (language.value !== newLang) return
   locale.value = newLang
   setDictionaryLanguage(newLang)
   setAnalyticsLanguage(newLang)
-  ensureSearchIndexLoaded()
-  preloadWorkbenchData([ensureGatheringDataLoaded, ensureVendorDataLoaded])
+  void ensureCatalogLoaded().catch(() => {})
   i18nReady.value = true
   
   // Update document title based on locale
@@ -98,6 +96,13 @@ watch(language, async (newLang) => {
   }
   document.title = baseTitle + (suffixMap[newLang] || suffixMap['en'])
   initializeAnalytics()
+}, { immediate: true })
+
+// Start phase two whenever catalog becomes available, including a successful search retry.
+watch(catalogData, async (catalog) => {
+  if (!catalog) return
+  await nextTick()
+  requestAnimationFrame(() => { setTimeout(() => { void ensureWorkbenchDataLoaded().catch(() => {}) }, 0) })
 }, { immediate: true })
 
 // State for navigation
@@ -264,6 +269,7 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
 
     <!-- Main Content -->
     <main ref="mainContainer" class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
+      <GameDataStatus />
       <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 dark:bg-soft-green-900/20 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->
@@ -293,7 +299,7 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
       />
       
       <WorkbenchView 
-        v-if="currentTab === 'workbench'" 
+        v-if="currentTab === 'workbench' && coreDataReady"
         @generate-todo="handleGenerateTodo"
       />
 

@@ -5,6 +5,7 @@ import SelectButton from 'primevue/selectbutton'
 import Dropdown from 'primevue/dropdown'
 import { useSettings } from '../../composables/useSettings'
 import { dataCenters, ensureDataCentersLoaded, setSelectedDC } from '../../services/universalis'
+import GameDataSettings from '../shared/GameDataSettings.vue'
 
 const { t } = useI18n()
 const { language, debugMode, marketRegion, marketDC, marketCostStrategy, isDarkMode } = useSettings()
@@ -224,6 +225,8 @@ watch(marketDC, (newVal) => {
         <div v-if="false" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 hover:shadow-md transition-shadow">
           <!-- ... existing debug toggle ... -->
         </div>
+
+        <GameDataSettings />
 
         <!-- About & Credits Section -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">

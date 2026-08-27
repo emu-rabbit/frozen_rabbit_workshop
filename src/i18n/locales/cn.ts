@@ -1,4 +1,26 @@
 export default {
+  gameData: {
+    islandGranary: '屯货仓库',
+    islandFarming: '开拓种植',
+    islandPasture: '开拓畜牧',
+    cancel: '取消',
+    repairConfirm: '重新下载并刷新',
+    title: '游戏缓存数据',
+    version: '当前数据版本',
+    cacheDescription: '数据会缓存在此设备，避免重复下载。每次打开页面会检查更新。',
+    cacheUnavailable: '无法保存设备缓存，目前使用在线数据；不影响笔记与收藏。',
+    repair: '清除游戏数据缓存并重新下载',
+    repairWarning: '只会清除游戏数据缓存，不会删除笔记、收藏或设置。页面将刷新，未保存的编辑与备料分配会丢失。是否继续？',
+    reloadWarning: '新游戏数据已下载完毕可供使用，你可以选择应用的时间。',
+    updateReady: '检测到新游戏数据更新',
+    apply: '现在应用并刷新',
+    later: '下次应用',
+    retry: '重试',
+    loadingCatalog: '正在加载物品数据…',
+    error_catalog: '物品数据加载失败，请重试。',
+    error_core: '配方或素材来源尚未加载完成，备料功能暂时无法使用。请重试。',
+    error_update: '当前数据仍可使用，但无法检查或下载更新。'
+  },
   app: {
     title: '冷冻兔肉的工坊',
     subtitle: '兔肉不私藏的好笔记本'
@@ -252,11 +274,14 @@ export default {
     alarmMacroCopied: '已复制宏！'
   },
   jobs: {
+    islandGathering: '开拓采集',
     crp: '木工匠', bsm: '锻铁匠', arm: '铸甲匠', gsm: '雕金匠',
     lwr: '制革匠', wvr: '裁缝匠', alc: '炼金术士', cul: '烹调师',
     min: '采矿工', btn: '园艺工', fsh: '捕鱼人', gather: '采集',
     battle: '战斗',
     companyCrafting: '部队合建',
+    islandConstruction: '开拓建造',
+    islandWorkshop: '开拓工房',
     islandCrafting: '开拓制作'
   },
   settings: {
@@ -303,7 +328,7 @@ export default {
       teamcraft: 'Teamcraft - 物品、配方与采集数据来源',
       xivapi: 'XIVAPI - 提供游戏内图标与物品 API 支持'
     },
-    changelogTitle: '系统更新',
+    changelogTitle: '更新记录',
     changelogDesc: '了解本站的最新功能与版本更新内容',
     changelogLink: '查看本站版本更新记录'
   },

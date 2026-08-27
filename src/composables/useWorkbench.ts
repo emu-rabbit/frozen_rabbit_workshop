@@ -1,24 +1,24 @@
 import { ref, computed, watch, reactive } from 'vue';
 import { useNotes } from './useNotes';
 import { 
-  ensureDictionaryLoaded, 
+  ensureWorkbenchDataLoaded,
   globalRecipesCache, 
   getDictionaryItem,
-  getRawItemData,
   setDictionaryLanguage
 } from '../services/dictionary';
 import type { Recipe } from '../services/dictionary';
 import { fetchItemPrices, selectedDC } from '../services/universalis';
 import type { MarketListing } from '../services/universalis';
 import { calculateMarketStats } from '../utils/marketPricing';
-import { ensureGatheringDataLoaded, getGatheringInfo } from '../services/gathering';
-import { ensureVendorDataLoaded, getVendors } from '../services/vendor';
+import { getGatheringInfo } from '../services/gathering';
+import { getVendors } from '../services/vendor';
 import type { VendorInfo } from '../services/vendor';
-import { ensureMonsterDropDataLoaded, getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
+import { getMonsterDropInfo, getMonsterDropPreferredLevel } from '../services/monsterDrops';
 import type { MonsterDropInfo } from '../services/monsterDrops';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
 import { sanitizeNoteItems } from '../utils/noteItems';
+import { getIslandOtherSource, type IslandOtherSource } from '../services/islandSources';
 
 type MarketPriceMode = 'all' | 'hq';
 
@@ -40,6 +40,8 @@ export interface CraftingInfo {
 
 export interface WorkbenchItem {
   id: number;
+  island: boolean;
+  islandSource: IslandOtherSource | null;
   name: string;
   icon: string;
   canCraft: boolean;
@@ -81,6 +83,7 @@ export interface ItemDecision {
 }
 
 export interface TodoItem {
+  islandSource?: IslandOtherSource | null;
   sectionKey: 'other' | 'hunt' | 'buy' | 'gather' | 'craft';
   id: number;
   quantity: number;
@@ -189,6 +192,13 @@ const CRAFT_JOB_NAMES: Record<number, string> = {
 
 export function getCraftJobName(recipe: Pick<Recipe, 'id' | 'job'>): string {
   if (recipe.job === -10) {
+    const recipeId = String(recipe.id);
+    if (recipeId.startsWith('mji-building-') || recipeId.startsWith('mji-landmark-')) {
+      return 'jobs.islandConstruction';
+    }
+    if (recipeId.startsWith('mji-craftworks-')) {
+      return 'jobs.islandWorkshop';
+    }
     return 'jobs.islandCrafting';
   }
 
@@ -221,6 +231,10 @@ const initSingleItemDecision = (id: number, demand: number, isRoot: boolean = fa
   if (CRYSTAL_IDS.has(id)) {
       // 水晶類選擇庫存 (other)
       decisions[String(id)] = { buy: 0, craft: 0, gather: 0, other: demand };
+  } else if (getDictionaryItem(id).kind !== 'item') {
+      const recipe = globalRecipesCache.value?.find(r => r.result === id);
+      const gather = getGatheringInfo(id);
+      decisions[String(id)] = { buy: 0, craft: recipe ? demand : 0, gather: !recipe && gather ? demand : 0, other: !recipe && !gather ? demand : 0 };
   } else if (isRoot) {
       // 成品優先選擇製作
       if (itemData?.canCraft) {
@@ -241,7 +255,7 @@ const initSingleItemDecision = (id: number, demand: number, isRoot: boolean = fa
 /**
  * 刷新物品詳細資料 (Recipe, Gathering)
  */
-const refreshItemsData = async (ids: number[]) => {
+const refreshItemsData = (ids: number[]) => {
   for (const id of ids) {
     if (workbenchItems.value[id]) continue;
 
@@ -260,7 +274,7 @@ const refreshItemsData = async (ids: number[]) => {
       stars: recipe.stars || 0,
       yields: recipe.yields || 1,
       ingredients: (Array.isArray(recipe.ingredients) ? recipe.ingredients : []).map((ing: any) => {
-        const ingInfo = getDictionaryItem(ing.id) ?? getRawItemData(ing.id);
+        const ingInfo = getDictionaryItem(ing.id);
         return {
           id: ing.id,
           amount: ing.amount,
@@ -270,10 +284,12 @@ const refreshItemsData = async (ids: number[]) => {
       })
     } : null;
 
-    const itemInfo = getDictionaryItem(id) ?? getRawItemData(id);
+    const itemInfo = getDictionaryItem(id);
 
     workbenchItems.value[id] = {
       id,
+      island: itemInfo.kind !== 'item',
+      islandSource: itemInfo.kind === 'islandItem' ? getIslandOtherSource(id) : null,
       name: itemInfo.name,
       icon: itemInfo.icon,
       canCraft: !!recipe,
@@ -356,6 +372,8 @@ const setItemPendingPrice = (item: WorkbenchItem) => {
 };
 
 const fetchPricesForMode = async (ids: number[], mode: MarketPriceMode) => {
+  ids = ids.filter(id => id > 0 && !workbenchItems.value[id]?.island);
+  if (!ids.length) return;
   const currentMarketSource = selectedDC.value;
   const prices = mode === 'hq' ? await fetchItemPrices(ids, { hqOnly: true }) : await fetchItemPrices(ids);
   
@@ -580,6 +598,7 @@ const generateTodoSections = computed(() => {
     if (d.other > 0) {
       sections.other.push({
         sectionKey: 'other', id, quantity: d.other,
+        islandSource: item.islandSource,
         name: item.name, icon: item.icon, marketPrice: null
       });
     }
@@ -745,12 +764,7 @@ export function useWorkbench() {
 
     isLoading.value = true;
     try {
-      await Promise.all([
-        ensureDictionaryLoaded(),
-        ensureGatheringDataLoaded(),
-        ensureMonsterDropDataLoaded(),
-        ensureVendorDataLoaded()
-      ]);
+      await ensureWorkbenchDataLoaded();
 
       if (isNewNote || force) {
           // 情況 A：切換新筆記或強制重設 -> 全量重設決策與緩存
@@ -787,7 +801,7 @@ export function useWorkbench() {
       // 2. 獲取初始項目資料
       const rootNoteItems = sanitizeNoteItems(activeWorkbenchNote.value.items);
       const rootIds = rootNoteItems.map(i => i.id);
-      await refreshItemsData(rootIds);
+      refreshItemsData(rootIds);
 
       // 3. 初始分配根節點決策 (僅在切換新筆記或是強制重設時需要在此執行)
       if (isNewNote || force) {
@@ -802,7 +816,7 @@ export function useWorkbench() {
           initSingleItemDecision(id, totalDemands.value[id] || 0, isRoot);
       });
 
-      await refreshItemsData(activeItemIds.value);
+      refreshItemsData(activeItemIds.value);
       
       // 5. 發起價格抓取 (fetchPrices 內部已有版本校驗)
       try {
@@ -831,12 +845,16 @@ export function useWorkbench() {
   /**
    * 當新材料被展開時，確保其資料、價格以及決策物件被初始化
    */
-  watch(activeItemIds, async (newIds) => {
-    if (isLoading.value) return; 
+  // Price and metadata updates may reorder the cards; only membership changes need a lookup.
+  watch(() => [...activeItemIds.value].sort((a, b) => a - b).join(','), async () => {
+    if (isLoading.value || lastNoteId.value !== activeWorkbenchNote.value?.id
+      || lastMarketSource.value !== selectedDC.value || lastLocale.value !== locale.value) return;
+
+    const newIds = activeItemIds.value;
     
     const missingDataIds = newIds.filter(id => !workbenchItems.value[id]);
     if (missingDataIds.length > 0) {
-      await refreshItemsData(missingDataIds);
+      refreshItemsData(missingDataIds);
     }
 
     newIds.forEach(id => {
@@ -852,7 +870,7 @@ export function useWorkbench() {
         console.warn('[Workbench] fetchPrices error (watch):', err);
       }
     }
-  }, { immediate: true, deep: true });
+  });
 
   /**
    * 監聽總需求變化，動態更新模擬購買成本

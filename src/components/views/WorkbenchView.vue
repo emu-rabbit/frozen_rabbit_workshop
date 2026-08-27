@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import { useWorkbench } from '../../composables/useWorkbench'
+import { hasCraftingLevel } from '../../utils/craftingDisplay'
 import { formatLastUpdate, isPriceError, isRetrying, abortPriceFetch } from '../../services/universalis'
 
 const { t, locale } = useI18n()
@@ -77,16 +78,16 @@ const summary = computed(() => {
         }
         
         // 2. 時間成本與職業清單
-        if (d.craft > 0 && item.crafting) {
+        if (d.craft > 0 && item.crafting && !item.island) {
             const current = maxCraft.get(item.crafting.jobName)
-            if (!current || item.crafting.level > current.level || (item.crafting.level === current.level && item.crafting.stars > current.stars)) {
+            if (hasCraftingLevel(item.crafting.job) && (!current || item.crafting.level > current.level || (item.crafting.level === current.level && item.crafting.stars > current.stars))) {
                 maxCraft.set(item.crafting.jobName, { level: item.crafting.level, stars: item.crafting.stars })
             }
             const craftCount = Math.ceil(d.craft / item.crafting.yields)
             totalTime += craftCount * (item.crafting.stars > 0 ? 60 : 30)
         }
         
-        if (d.gather > 0 && item.gathering) {
+        if (d.gather > 0 && item.gathering && !item.island) {
             const current = maxGather.get(item.gathering.jobName)
             if (!current || item.gathering.level > current.level || (item.gathering.level === current.level && item.gathering.stars > current.stars)) {
                 maxGather.set(item.gathering.jobName, { level: item.gathering.level, stars: item.gathering.stars })
@@ -105,7 +106,7 @@ const summary = computed(() => {
 })
 
 const updateDecision = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', delta: number) => {
-    if (!decisions[String(id)]) return
+    if (!decisions[String(id)] || (key === 'buy' && workbenchItems.value[id]?.island)) return
     if (delta > 0) {
         // 全量投入 (Max)：歸零其他，設定此項為需求總額
         const total = totalDemands.value[id] || 0
@@ -121,7 +122,7 @@ const updateDecision = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', d
 }
 
 const setDecisionRaw = (id: number, key: 'buy' | 'craft' | 'gather' | 'other', val: number) => {
-    if (!decisions[String(id)]) return
+    if (!decisions[String(id)] || (key === 'buy' && workbenchItems.value[id]?.island)) return
     ;(decisions[String(id)] as any)[key] = Math.max(0, isNaN(val) ? 0 : val)
 }
 
@@ -293,7 +294,7 @@ const copyToClipboard = (id: string, text: string) => {
                         </div>
                         <div class="flex flex-wrap gap-1.5 mt-1">
                             <!-- Price Badge -->
-                            <span class="text-[12px] md:text-[14px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50 dark:border-slate-700">
+                            <span v-if="!workbenchItems[id]?.island" class="text-[12px] md:text-[14px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded-md font-bold border border-slate-200/50 dark:border-slate-700">
                                 {{ formatMoney(workbenchItems[id]?.marketPrice) }} {{ t('workbench.view.status.priceSuffix') }}
                             </span>
                             <!-- Battle Drop Badge -->
@@ -302,11 +303,14 @@ const copyToClipboard = (id: string, text: string) => {
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100 dark:border-indigo-900/50">
-                                {{ t(workbenchItems[id]?.crafting?.jobName) }} Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
+                                {{ t(workbenchItems[id]?.crafting?.jobName) }} <template v-if="hasCraftingLevel(workbenchItems[id]?.crafting?.job)">Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}</template>
                             </span>
                             <!-- Gathering Badge -->
+                            <span v-if="workbenchItems[id]?.islandSource" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
+                                {{ t(`gameData.${workbenchItems[id].islandSource}`) }}
+                            </span>
                             <span v-if="workbenchItems[id]?.gathering" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
-                                {{ t(workbenchItems[id]?.gathering?.jobName) }} Lv.{{ workbenchItems[id]?.gathering?.level }}{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
+                                {{ t(workbenchItems[id]?.gathering?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.gathering?.level }}</template>{{ renderStars(workbenchItems[id]?.gathering?.stars) }}
                             </span>
                         </div>
                     </div>
@@ -321,12 +325,12 @@ const copyToClipboard = (id: string, text: string) => {
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3">
                          <!-- BUY -->
                         <div class="p-2 md:p-3 rounded-xl md:rounded-2xl border flex flex-col items-center gap-1.5 md:gap-2 transition-all duration-200"
-                             :class="decisions[String(id)]?.buy > 0 ? 'bg-slate-100 dark:bg-slate-800 border-slate-400 dark:border-slate-600 ring-2 ring-slate-100 dark:ring-slate-800 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'">
+                             :class="workbenchItems[id]?.island ? 'opacity-30 pointer-events-none' : decisions[String(id)]?.buy > 0 ? 'bg-slate-100 dark:bg-slate-800 border-slate-400 dark:border-slate-600 ring-2 ring-slate-100 dark:ring-slate-800 shadow-sm' : 'bg-slate-50/80 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'">
                            <span class="text-[11px] md:text-[13px] font-black uppercase tracking-tighter text-center leading-none" :class="decisions[String(id)]?.buy > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 dark:text-slate-500'">{{ t('workbench.view.source.buy') }}</span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
-                               <button @click="updateDecision(id, 'buy', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-slate-500 dark:hover:border-slate-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].buy" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
-                               <button @click="updateDecision(id, 'buy', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-slate-500 dark:hover:border-slate-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button :disabled="workbenchItems[id]?.island" @click="updateDecision(id, 'buy', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-slate-500 dark:hover:border-slate-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].buy" :disabled="workbenchItems[id]?.island" @blur="setDecisionRaw(id, 'buy', decisions[String(id)].buy)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
+                               <button :disabled="workbenchItems[id]?.island" @click="updateDecision(id, 'buy', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-slate-500 dark:hover:border-slate-400 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -337,9 +341,9 @@ const copyToClipboard = (id: string, text: string) => {
                                {{ !workbenchItems[id]?.canCraft ? t('workbench.view.source.cannotCraft') : t('workbench.view.source.craft') }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
-                               <button @click="updateDecision(id, 'craft', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].craft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
-                               <button @click="updateDecision(id, 'craft', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button :disabled="!workbenchItems[id]?.canCraft" @click="updateDecision(id, 'craft', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].craft" :disabled="!workbenchItems[id]?.canCraft" @blur="setDecisionRaw(id, 'craft', decisions[String(id)].craft)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
+                               <button :disabled="!workbenchItems[id]?.canCraft" @click="updateDecision(id, 'craft', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:border-indigo-400 dark:hover:border-indigo-500 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -350,9 +354,9 @@ const copyToClipboard = (id: string, text: string) => {
                                {{ getMaterialSourceLabel(id) }}
                            </span>
                            <div v-if="decisions[String(id)]" class="flex items-center gap-1.5 md:gap-2">
-                               <button @click="updateDecision(id, 'gather', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-left scale-75"></i></button>
-                               <input type="number" v-model.number="decisions[String(id)].gather" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
-                               <button @click="updateDecision(id, 'gather', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-right scale-75"></i></button>
+                               <button :disabled="!getMaterialSource(id)" @click="updateDecision(id, 'gather', -1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-left scale-75"></i></button>
+                               <input type="number" v-model.number="decisions[String(id)].gather" :disabled="!getMaterialSource(id)" @blur="setDecisionRaw(id, 'gather', decisions[String(id)].gather)" class="w-8 md:w-10 h-6 md:h-7 text-center text-xs md:text-sm font-black focus:outline-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-md dark:text-white" />
+                               <button :disabled="!getMaterialSource(id)" @click="updateDecision(id, 'gather', 1)" class="w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 flex items-center justify-center font-bold text-xs transition-colors shadow-sm dark:text-slate-200" :class="getMaterialSource(id) === 'hunt' ? 'hover:border-violet-400 dark:hover:border-violet-500' : 'hover:border-amber-400 dark:hover:border-amber-500'"><i class="pi pi-angle-double-right scale-75"></i></button>
                            </div>
                         </div>
 
@@ -493,7 +497,7 @@ const copyToClipboard = (id: string, text: string) => {
                             </div>
 
                             <div class="flex items-center justify-between text-xs px-1">
-                                <span class="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">{{ t(workbenchItems[id].gathering.jobName) }} Lv.{{ workbenchItems[id].gathering.level }}{{ renderStars(workbenchItems[id].gathering.stars) }}</span>
+                                <span class="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-tighter">{{ t(workbenchItems[id].gathering.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id].gathering.level }}</template>{{ renderStars(workbenchItems[id].gathering.stars) }}</span>
                                 <span v-if="workbenchItems[id].gathering.x" class="text-soft-green-600 dark:text-soft-green-500 font-black font-mono">({{ workbenchItems[id].gathering.x.toFixed(1) }}, {{ workbenchItems[id].gathering.y.toFixed(1) }})</span>
                             </div>
 
@@ -560,7 +564,7 @@ const copyToClipboard = (id: string, text: string) => {
                             <div class="flex-1 min-w-0">
                                 <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.craftTitle') }}</span>
                                 <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">
-                                    {{ t(workbenchItems[id].crafting.jobName) }} Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}
+                                    {{ t(workbenchItems[id].crafting.jobName) }} <template v-if="hasCraftingLevel(workbenchItems[id].crafting.job)">Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}</template>
                                 </span>
                             </div>
                             <div class="flex flex-col items-end shrink-0">

@@ -14,6 +14,15 @@ import { MARKET_DATA_CENTERS, type DataCenter } from '../data/marketServers';
 
 const UNIVERSALIS_BASE = 'https://universalis.app/api/v2';
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const REQUEST_TIMEOUT_MS = 10_000;
+// Keep the fields consumed by parseItemPrice, without limiting the listing sample.
+const PRICE_FIELDS = [
+  'lastUploadTime', 'minPriceNQ', 'minPriceHQ',
+  'currentAveragePrice', 'currentAveragePriceNQ', 'currentAveragePriceHQ',
+  'worldName', 'dcName',
+  'listings.pricePerUnit', 'listings.quantity', 'listings.hq',
+  'listings.worldName', 'listings.worldID'
+];
 
 /** DEBUG: 暫時用來模擬 Universalis API 掛掉時的情境。設置為 true 即可觸發假性 CORS 網路阻擋錯誤。 */
 export const DEBUG_SIMULATE_API_ERROR = false;
@@ -98,6 +107,7 @@ export const isPriceError = readonly(_isPriceError);
 export const isRetrying = readonly(_isRetrying);
 
 const activeAbortControllers = new Set<AbortController>();
+const retryingControllers = new Set<AbortController>();
 
 export function abortPriceFetch() {
   for (const ac of activeAbortControllers) {
@@ -171,6 +181,9 @@ export async function fetchItemPrices(
 
   const toFetch: number[] = [];
   const awaitingInflight: { id: number; promise: Promise<ItemPrice> }[] = [];
+  const ownedRequests = new Map<number, Promise<ItemPrice>>();
+  const resolvers: Record<number, (val: ItemPrice) => void> = {};
+  const rejecters: Record<number, (reason: unknown) => void> = {};
 
   for (const id of uniqueIds) {
     const cached = getCached(dc, id, options);
@@ -186,33 +199,44 @@ export async function fetchItemPrices(
     }
 
     toFetch.push(id);
+    // Reserve every missing item before yielding, including items in later batches.
+    const promise = new Promise<ItemPrice>((resolve, reject) => {
+      resolvers[id] = resolve;
+      rejecters[id] = reject;
+    });
+    promise.catch(() => undefined);
+    ownedRequests.set(id, promise);
+    inflightRequests.set(cacheKey(dc, id, options), promise);
   }
 
-
-  if (awaitingInflight.length > 0) {
-    try {
-      const prices = await Promise.all(awaitingInflight.map(a => a.promise));
-      awaitingInflight.forEach((a, index) => {
-        result.set(a.id, prices[index]);
-      });
-    } catch (err: any) {
-      // Inflight requests were rejected (e.g. by another call being aborted).
-      // This is expected during cancellation - treat it as a soft failure and continue.
-      // If toFetch is empty, we'll return a partial result below.
-      console.warn('[Universalis] Inflight request failed or was cancelled:', err?.message);
-      if (!toFetch.length) {
-        // All items were inflight and they got cancelled - mark as error and bail out gracefully
+  const collectInflight = async () => {
+    const prices = await Promise.allSettled(awaitingInflight.map(item => item.promise));
+    prices.forEach((price, index) => {
+      if (price.status === 'fulfilled') {
+        result.set(awaitingInflight[index].id, price.value);
+      } else {
         _isPriceError.value = true;
-        return result;
+        console.warn('[Universalis] Inflight request failed or was cancelled:', price.reason?.message);
       }
+    });
+  };
+
+  const releaseReservations = (ids: number[], reason: Error) => {
+    for (const id of ids) {
+      const key = cacheKey(dc, id, options);
+      // A source reset may have replaced this entry with a newer request.
+      if (inflightRequests.get(key) === ownedRequests.get(id)) inflightRequests.delete(key);
+      rejecters[id](reason); // No-op for items already resolved successfully.
     }
+  };
+
+  if (!toFetch.length) {
+    await collectInflight();
+    return result;
   }
 
-  if (!toFetch.length) return result;
-
+  if (activeAbortControllers.size === 0) _isPriceError.value = false;
   _isFetchingPrices.value = true;
-  _isPriceError.value = false;
-  _isRetrying.value = false;
 
   const localAbortController = new AbortController();
   activeAbortControllers.add(localAbortController);
@@ -221,19 +245,6 @@ export async function fetchItemPrices(
     const BATCH_SIZE = 100;
     for (let i = 0; i < toFetch.length; i += BATCH_SIZE) {
       const batch = toFetch.slice(i, i + BATCH_SIZE);
-
-      // Create deferred promises for this batch to track in inflightRequests
-      const resolvers: Record<number, (val: ItemPrice) => void> = {};
-      const rejecters: Record<number, (reason: any) => void> = {};
-
-      batch.forEach(id => {
-        const promise = new Promise<ItemPrice>((resolve, reject) => {
-          resolvers[id] = resolve;
-          rejecters[id] = reject;
-        });
-        promise.catch(() => undefined);
-        inflightRequests.set(cacheKey(dc, id, options), promise);
-      });
 
       try {
         let attempt = 0;
@@ -253,6 +264,9 @@ export async function fetchItemPrices(
 
             const encodedDC = encodeURIComponent(dc);
             const query = new URLSearchParams();
+            query.set('entries', '0');
+            // Multi-item responses nest each price under items; single-item responses do not.
+            query.set('fields', PRICE_FIELDS.map(field => batch.length > 1 ? `items.${field}` : field).join(','));
             if (options?.hqOnly) {
               query.set('hq', 'true');
             }
@@ -260,15 +274,18 @@ export async function fetchItemPrices(
             const url = `${UNIVERSALIS_BASE}/${encodedDC}/${batch.join(',')}${queryString ? `?${queryString}` : ''}`;
 
             const timeoutController = new AbortController();
-            const timeoutId = setTimeout(() => timeoutController.abort(), 5000); // 5 seconds
+            const timeoutId = setTimeout(() => timeoutController.abort(), REQUEST_TIMEOUT_MS);
 
             // Link the global abort controller with the timeout controller
             const abortHandler = () => timeoutController.abort('UserCancelled');
             localAbortController.signal.addEventListener('abort', abortHandler);
 
             let resp: Response;
+            let json: any;
             try {
               resp = await fetch(url, { signal: timeoutController.signal });
+              // Keep timeout and user cancellation active until the response body is read.
+              if (resp.ok) json = await resp.json();
             } finally {
               clearTimeout(timeoutId);
               localAbortController.signal.removeEventListener('abort', abortHandler);
@@ -288,8 +305,6 @@ export async function fetchItemPrices(
               }
               throw new Error(`Universalis returned ${resp.status}`);
             }
-
-            const json = await resp.json();
 
             if (batch.length === 1) {
               const price = parseItemPrice(batch[0], json, options);
@@ -320,11 +335,15 @@ export async function fetchItemPrices(
               throw err;
             }
 
+            retryingControllers.add(localAbortController);
             _isRetrying.value = true;
             console.warn(`[Universalis] API fetch failed, retrying in ${delays[attempt]}ms (attempt ${attempt + 1}/3)...`, err);
 
             await new Promise<void>((resolve, reject) => {
-              const timer = setTimeout(resolve, delays[attempt]);
+              const timer = setTimeout(() => {
+                localAbortController.signal.removeEventListener('abort', onAbort);
+                resolve();
+              }, delays[attempt]);
               const onAbort = () => {
                 clearTimeout(timer);
                 reject(new Error('UserCancelled'));
@@ -340,10 +359,7 @@ export async function fetchItemPrices(
         const fallbackRejection = localAbortController.signal.aborted
           ? new Error('UserCancelled')
           : new Error('Price request ended before resolving item data');
-        batch.forEach(id => {
-          inflightRequests.delete(cacheKey(dc, id, options));
-          try { rejecters[id](fallbackRejection); } catch { }
-        });
+        releaseReservations(batch, fallbackRejection);
       }
     }
   } catch (err: any) {
@@ -354,11 +370,16 @@ export async function fetchItemPrices(
     }
     _isPriceError.value = true;
   } finally {
-    _isFetchingPrices.value = false;
-    _isRetrying.value = false;
+    // Also settle batches that never started after an earlier failure or cancellation.
+    releaseReservations(toFetch, new Error(localAbortController.signal.aborted
+      ? 'UserCancelled' : 'Price request ended before resolving item data'));
     activeAbortControllers.delete(localAbortController);
+    retryingControllers.delete(localAbortController);
+    _isFetchingPrices.value = activeAbortControllers.size > 0;
+    _isRetrying.value = retryingControllers.size > 0;
   }
 
+  await collectInflight();
   return result;
 }
 

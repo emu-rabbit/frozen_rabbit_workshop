@@ -1,14 +1,18 @@
+import { catalogData } from '../../src/services/gameData';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, normalizeIconUrl, searchItems } from '../../src/services/dictionary';
+import { getDictionaryItem, setDictionaryLanguage, filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, searchItems } from '../../src/services/dictionary';
+
+function setItems(items: any[]) {
+  catalogData.value = { formatVersion: 2, jobNames: {}, categories: {}, items: items.map(({ name, enName, ...item }) => ({ kind: 'item', craftable: false, ...item, names: { tw: name, en: enName } })) };
+}
 
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
-        globalDictionaryCache.value = [
+        setItems([
             { id: 1, name: '白金塊', enName: 'Platinum Ingot', icon: 'icon1' },
             { id: 2, name: '青金塊', enName: 'Electrum Ingot', icon: 'icon2' },
             { id: 3, name: '鐵礦', enName: 'Iron Ore', icon: 'icon3' },
-        ];
-        globalRecipesCache.value = [];
+        ]);
     });
 
     it('should find items by partial name match', () => {
@@ -28,24 +32,21 @@ describe('Dictionary Search & Logic', () => {
     });
 
     it('only returns craftable items from searchItems', async () => {
-        globalDictionaryCache.value = [
+        setItems([
             { id: 1, name: 'Iron Sword', enName: 'Iron Sword', icon: 'icon1', craftable: true },
             { id: 2, name: 'Iron Token', enName: 'Iron Token', icon: 'icon2', craftable: false },
-        ];
+        ]);
 
         const results = await searchItems('Iron');
 
         expect(results.map(item => item.id)).toEqual([1]);
     });
 
-    it('treats recipe results as searchable even when Teamcraft search marks them non-craftable', async () => {
-        globalDictionaryCache.value = [
-            { id: 22527, name: 'Whale-class Bridge', enName: 'Whale-class Bridge', icon: 'icon1', craftable: false },
+    it('uses generator-projected craftability without loading recipes', async () => {
+        setItems([
+            { id: 22527, name: 'Whale-class Bridge', enName: 'Whale-class Bridge', icon: 'icon1', craftable: true },
             { id: 22528, name: 'Whale-class Pressure Hull', enName: 'Whale-class Pressure Hull', icon: 'icon2', craftable: false },
-        ];
-        globalRecipesCache.value = [
-            { id: 'fc539', result: 22527, yields: 1, ingredients: [], job: 0, lvl: 1 },
-        ];
+        ]);
 
         const results = await searchItems('Whale');
         const searchable = await getSearchableItems();
@@ -55,7 +56,7 @@ describe('Dictionary Search & Logic', () => {
     });
 
     it('filters the local searchable list by item level, equip level, job, and category group', async () => {
-        globalDictionaryCache.value = [
+        setItems([
             {
                 id: 1,
                 name: 'Sky Armor',
@@ -87,7 +88,7 @@ describe('Dictionary Search & Logic', () => {
                 equipJobs: ['PLD'],
                 category: 35,
             },
-        ];
+        ]);
 
         const results = await filterSearchableItems({
             ilvlMin: 700,
@@ -117,15 +118,20 @@ describe('Dictionary Search & Logic', () => {
         expect(jobs).toEqual(['GLA', 'PLD', 'GNB', 'CNJ', 'PCT', 'CRP', 'WVR', 'MIN']);
     });
 
-    it('routes XIVAPI asset icon URLs through the v2 asset host', () => {
-        const assetPath = '/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png';
+});
 
-        expect(normalizeIconUrl(assetPath)).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
-        expect(normalizeIconUrl(`https://xivapi.com${assetPath}`)).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
-        expect(normalizeIconUrl('api/asset?path=ui/icon/040000/040176_hr1.tex&format=png')).toBe('https://v2.xivapi.com/api/asset?path=ui/icon/040000/040176_hr1.tex&format=png');
-    });
-
-    it('keeps non-asset icon paths on the legacy icon host', () => {
-        expect(normalizeIconUrl('/i/020000/020751.png')).toBe('https://xivapi.com/i/020000/020751.png');
-    });
+describe('catalog language and historical item fallback', () => {
+  it('uses only the selected language then English, and preserves unknown IDs', () => {
+    setItems([{ id: 99, name: '繁中', enName: 'English', icon: '' }]);
+    catalogData.value!.items[0].names.cn = '简中';
+    setDictionaryLanguage('ja'); expect(getDictionaryItem(99).name).toBe('English');
+    delete catalogData.value!.items[0].names.en;
+    // Replace the shallow-ref value after changing a test fixture.
+    catalogData.value = { ...catalogData.value! };
+    expect(getDictionaryItem(99).name).toBe('不明なアイテム');
+    for (const [lang, name] of [['tw','未知的物品'],['cn','未知的物品'],['en','Unknown item'],['ja','不明なアイテム']]) {
+      setDictionaryLanguage(lang); expect(getDictionaryItem(-999999)).toMatchObject({ id: -999999, name });
+    }
+    setDictionaryLanguage('tw');
+  });
 });

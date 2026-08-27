@@ -39,6 +39,8 @@ test.describe('E2E Flow: Recursive Calculation and Reset', () => {
 
     // 5. 測試重設（i18n: workbench.view.button.reset = '重設'）
     //    重設後回到預設值：鐵錠 → 製作，展開回 3 張
+    const rejectAnalytics = page.getByRole('button', { name: '拒絕', exact: true });
+    if (await rejectAnalytics.isVisible()) await rejectAnalytics.click();
     await page.getByText('重設').click();
     await expect(page.locator('.item-card')).toHaveCount(3, { timeout: 8000 });
     await expect(page.getByRole('heading', { name: '鐵礦' })).toBeVisible();

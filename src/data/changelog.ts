@@ -8,6 +8,42 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.3.0',
+    date: '2026-08-27',
+    changes: [
+      {
+        tw: '採用遊戲資料快取方式，提升載入效能',
+        cn: '采用游戏数据缓存方式，提升加载性能',
+        en: 'Added game data caching to improve loading performance',
+        ja: 'ゲームデータのキャッシュを導入し、読み込み性能を改善しました'
+      },
+      {
+        tw: '修正背景重複查價 API 導致的效能問題',
+        cn: '修正后台重复查价 API 请求导致的性能问题',
+        en: 'Fixed performance issues caused by duplicate background price API requests',
+        ja: 'バックグラウンドでの価格取得 API リクエストの重複によるパフォーマンスの問題を修正しました'
+      },
+      {
+        tw: '改善 Universalis 查價逾時問題',
+        cn: '改善 Universalis 查价超时问题',
+        en: 'Improved timeout handling for Universalis price queries',
+        ja: 'Universalis の価格取得時のタイムアウト処理を改善しました'
+      },
+      {
+        tw: '支援無人島/開拓相關建築及製作配方',
+        cn: '支持无人岛/开拓相关建筑及制作配方',
+        en: 'Added support for Island Sanctuary buildings and crafting recipes',
+        ja: '無人島開拓の建築と製作レシピに対応しました'
+      },
+      {
+        tw: '補齊無人島建築與地標的繁中名稱',
+        cn: '补全无人岛建筑与地标的繁体中文名称',
+        en: 'Added missing Traditional Chinese names for Island Sanctuary buildings and landmarks',
+        ja: '無人島開拓の建築とランドマークに不足していた繁体字中国語名を追加しました'
+      }
+    ]
+  },
+  {
     version: '1.2.1',
     date: '2026-05-30',
     changes: [

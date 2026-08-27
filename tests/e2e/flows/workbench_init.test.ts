@@ -7,6 +7,13 @@ test.describe('E2E Flow: Workbench Initialization and Detail Drawing', () => {
   });
 
   test('should initialize workbench with items and display detail drawers', async ({ page }) => {
+    const priceRequests: number[][] = [];
+    page.on('request', request => {
+      const url = new URL(request.url());
+      if (url.hostname === 'universalis.app' && /\/api\/v2\/[^/]+\/[\d,]+$/.test(url.pathname)) {
+        priceRequests.push(url.pathname.split('/').pop()!.split(',').map(Number).sort((a, b) => a - b));
+      }
+    });
     // 1. 填入筆記名稱
     await page.locator('#item-name').fill('數據初始化測試');
 
@@ -32,5 +39,7 @@ test.describe('E2E Flow: Workbench Initialization and Detail Drawing', () => {
     // 配方中應包含 鐵礦（mock 配方：鐵礦 x4 + 風之碎晶 x1）
     // 使用 heading role 避免 strict mode（detail drawer 內的物品名稱以 h4 顯示）
     await expect(page.getByRole('heading', { name: '鐵礦' })).toBeVisible();
+    // Initialization owns one combined root/material lookup; opening details must not duplicate it.
+    expect(priceRequests).toEqual([[12, 5057, 5106]]);
   });
 });

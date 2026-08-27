@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-import { deflateSync } from 'node:zlib';
+import { sourceFixture, fixturePackages } from '../../fixtures/gameData.mjs';
 import {
   mockTwItems,
   mockEnItems,
@@ -14,76 +14,38 @@ import {
 } from '../data/mock-dictionary';
 
 
-/**
- * 攔截字典服務的外部網路請求，改用 mock 資料。
- * 這讓測試不依賴 GitHub Raw 的網路速度，確保即時響應。
- * 必須在 page.goto() 之前呼叫。
- *
- * 對應 dictionary.ts 中的 URL 常數：
- *   BASE_URL = https://raw.githubusercontent.com/ffxiv-teamcraft/ffxiv-teamcraft/master/libs/data/src/lib/json
- *   BASE_URL_STAGING = ...staging/...
- */
+/** Same-site packages are built with the production generator, never upstream runtime mocks. */
+export function mockGamePackages(ingotName = '鐵錠') {
+  const sources = sourceFixture();
+  Object.assign(sources, {
+    'item-search.index': [...mockItemSearchIndex, { id: -10000, en: 'Cozy Cabin I', data: { itemId: -10000, icon: '/api/asset?path=cabin' } }],
+    'equipment.json': { 1: {}, ...mockEquipment }, 'job-name.json': mockJobNames, 'item-category.json': mockSearchCategories,
+    'items.json': { ...mockEnItems, 37561: { en: 'Island Palm Log' }, 37579: { en: 'Raw Island Garnet' } },
+    'tw/tw-items.json': { ...mockTwItems, 5057: ingotName, 37561: '無人島棕櫚原木', 37579: '無人島石榴石原石' },
+    'item-icons.json': mockItemIcons,
+    'recipes.json': [...mockRecipes, { id: 'mji-building-0.0', result: -10000, yields: 1, job: -10, lvl: 1, ingredients: [{ id: 37561, amount: 10 }, { id: 37579, amount: 3 }] }],
+    'places.json': mockPlaces, 'maps.json': mockMaps,
+    'gathering-items.json': { 1: { itemId: 5106, level: 15, stars: 0 }, 2: { itemId: 5107, level: 10, stars: 0 } },
+    'nodes.json': {
+      11: { items: [5106], level: 15, type: 2, zoneid: 134, map: 16, x: 22, y: 18 },
+      12: { items: [5107], level: 10, type: 2, zoneid: 134, map: 16, x: 20, y: 16 }
+    },
+    'island-gathering-items.json': { 37561: { itemId: 37561, x: 18.39, y: 24.26 } }
+  });
+  return fixturePackages(sources);
+}
 export async function setupDictionaryMocks(page: Page) {
-  const fulfill = (body: unknown) => ({
-    contentType: 'application/json',
-    body: JSON.stringify(body),
+  const packages = mockGamePackages();
+  await page.route('**/game-data/**', route => {
+    const file = new URL(route.request().url()).pathname.split('/').pop()!;
+    if (file === 'manifest.json') return route.fulfill({ json: packages.manifest });
+    const body = packages.assets.get(file);
+    return body ? route.fulfill({ contentType: 'application/octet-stream', body }) : route.fulfill({ status: 404 });
   });
-  const fulfillDeflatedJson = (body: unknown) => ({
-    contentType: 'application/octet-stream',
-    body: deflateSync(Buffer.from(JSON.stringify(body))),
-  });
-
-  // ── 字典服務（dictionary.ts）─────────────────────────────────────────────
-  await page.route('**/item-search.index', route => route.fulfill(fulfillDeflatedJson(mockItemSearchIndex)));
-  await page.route('**/equipment.json', route => route.fulfill(fulfill(mockEquipment)));
-  await page.route('**/job-name.json', route => route.fulfill(fulfill(mockJobNames)));
-  await page.route('**/item-category.json', route => route.fulfill(fulfill(mockSearchCategories)));
-  await page.route('**/tw/tw-items.json', route => route.fulfill(fulfill(mockTwItems)));
-  await page.route('**/zh/zh-items.json', route => route.fulfill(fulfill(mockEnItems)));
-  await page.route('**/ffxiv-teamcraft/**json/items.json', route => route.fulfill(fulfill(mockEnItems)));
-  await page.route('**/item-icons.json', route => route.fulfill(fulfill(mockItemIcons)));
-  await page.route('**/recipes.json', route => route.fulfill(fulfill(mockRecipes)));
-  await page.route('**/tw/tw-places.json', route => route.fulfill(fulfill(mockPlaces)));
-  await page.route('**/ffxiv-teamcraft/**json/places.json', route => route.fulfill(fulfill(mockPlaces)));
-  await page.route('**/maps.json', route => route.fulfill(fulfill(mockMaps)));
-
-  // ── 採集服務（gathering.ts）───────────────────────────────────────────────
-  // gathering-items.json: { [gatheringItemId]: { itemId, level, stars } }
-  await page.route('**/gathering-items.json', route => route.fulfill(fulfill({
-    '1': { itemId: 5106, level: 15, stars: 0 },
-    '2': { itemId: 5107, level: 10, stars: 0 },
-  })));
-  // nodes.json: { [nodeId]: { items: [itemId...], type, level, zoneid, map, ... } }
-  await page.route('**/nodes.json', route => route.fulfill(fulfill({
-    '11': { items: [5106], level: 15, type: 2, limited: false, spawns: [], duration: 0, zoneid: 134, map: 16, x: 22, y: 18 },
-    '12': { items: [5107], level: 10, type: 2, limited: false, spawns: [], duration: 0, zoneid: 134, map: 16, x: 20, y: 16 },
-  })));
-  await page.route('**/gathering-search-index.json', route => route.fulfill(fulfill({})));
-
-  // ── 怪物掉落服務（monsterDrops.ts）───────────────────────────────────────
-  await page.route('**/drop-sources.json', route => route.fulfill(fulfill({})));
-  await page.route('**/monsters.json', route => route.fulfill(fulfill({})));
-  await page.route('**/ffxiv-teamcraft/**json/mobs.json', route => route.fulfill(fulfill({})));
-  await page.route('**/tw/tw-mobs.json', route => route.fulfill(fulfill({})));
-  await page.route('**/zh/zh-mobs.json', route => route.fulfill(fulfill({})));
-
-  // ── 販售 NPC 服務（vendor.ts）─────────────────────────────────────────────
-  // shops.json: NPCshop array
-  await page.route('**/shops.json', route => route.fulfill(fulfill([])));
-  // npcs.json: { npcId: { en: 'name', position: {...} } }
-  await page.route('**/ffxiv-teamcraft/**json/npcs.json', route => route.fulfill(fulfill({})));
-  // tw-npcs.json: { npcId: { tw: 'name' } }
-  await page.route('**/tw/tw-npcs.json', route => route.fulfill(fulfill({})));
-
-  // ── Universalis 市場價格 API（universalis.ts）─────────────────────────────
-  // 批次價格查詢 /{dc}/{ids} 回傳 { items: {} }（代表沒有市場資料，但不會 crash）
-  await page.route('**/universalis.app/api/v2/**', route =>
-    route.fulfill(fulfill({ items: {}, lastUploadTime: 0 }))
-  );
-  // 資料中心清單改由本地靜態維護，E2E 不應再依賴 runtime list API。
+  await page.route('**/raw.githubusercontent.com/**', route => route.abort());
+  await page.route('**/universalis.app/api/v2/**', route => route.fulfill({ json: { items: {}, lastUploadTime: 0 } }));
   await page.route('**/universalis.app/api/v2/data-centers', route => route.abort());
 }
-
 
 /**
  * 在 PrimeVue AutoComplete 中搜尋並選取物品。
@@ -152,7 +114,7 @@ export async function navigateTo(page: Page, tabName: string) {
  * 通用基礎設定：跳過啟動視窗、設定語系、禁用動畫、mock 字典請求。
  * 所有 flow tests 的 beforeEach 都應呼叫此函式。
  */
-export async function setupTest(page: Page) {
+export async function setupTest(page: Page, beforeGoto?: () => Promise<void>) {
   // 1. 設定 localStorage（繞過 language selection modal）
   await page.addInitScript(() => {
     window.localStorage.setItem('frozen-rabbit-initialized', 'true');
@@ -164,6 +126,7 @@ export async function setupTest(page: Page) {
 
   // 3. Mock 字典網路請求（必須在 goto 之前設定）
   await setupDictionaryMocks(page);
+  await beforeGoto?.();
 
   // 4. 載入頁面
   await page.goto('./');

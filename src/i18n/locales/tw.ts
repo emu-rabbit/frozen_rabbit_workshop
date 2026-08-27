@@ -1,4 +1,26 @@
 export default {
+  gameData: {
+    islandGranary: '屯貨倉庫',
+    islandFarming: '開拓種植',
+    islandPasture: '開拓畜牧',
+    cancel: '取消',
+    repairConfirm: '重新下載並重新整理',
+    title: '遊戲快取資料',
+    version: '目前資料版本',
+    cacheDescription: '資料會快取在此裝置，避免重複下載。每次開頁會檢查更新。',
+    cacheUnavailable: '無法保存裝置快取，目前使用線上資料；不影響筆記與收藏。',
+    repair: '清除遊戲資料快取並重新下載',
+    repairWarning: '只會清除遊戲資料快取，不會刪除筆記、收藏或設定。頁面將重新整理，未保存的編輯與備料分配會遺失。要繼續嗎？',
+    reloadWarning: '新遊戲資料已下載完畢可供使用，你可以選擇套用的時間點。',
+    updateReady: '檢測到新遊戲資料更新',
+    apply: '現在套用並重新整理',
+    later: '下次套用',
+    retry: '重試',
+    loadingCatalog: '正在載入物品資料…',
+    error_catalog: '物品資料載入失敗，請重試。',
+    error_core: '配方或素材來源尚未載入完成，備料功能暫時無法使用。請重試。',
+    error_update: '目前資料仍可使用，但無法檢查或下載更新。'
+  },
   app: {
     title: '冷凍兔肉的工坊',
     subtitle: '兔肉不私藏的好筆記本'
@@ -252,11 +274,14 @@ export default {
     alarmMacroCopied: '已複製巨集！'
   },
   jobs: {
+    islandGathering: '開拓採集',
     crp: '木工師', bsm: '鍛造師', arm: '甲冑師', gsm: '金工師',
     lwr: '皮革師', wvr: '裁縫師', alc: '鍊金術師', cul: '烹調師',
     min: '採掘師', btn: '園藝師', fsh: '漁師', gather: '採集',
     battle: '戰鬥',
     companyCrafting: '公會合建',
+    islandConstruction: '開拓建造',
+    islandWorkshop: '開拓工坊',
     islandCrafting: '開拓製作'
   },
   settings: {
@@ -303,7 +328,7 @@ export default {
       teamcraft: 'Teamcraft - 物品、配方與採集資料來源',
       xivapi: 'XIVAPI - 提供遊戲內圖示與物品 API 支援'
     },
-    changelogTitle: '系統更新',
+    changelogTitle: '更新紀錄',
     changelogDesc: '了解本站的最新功能與版本更新內容',
     changelogLink: '查看本站版本更新紀錄'
   },

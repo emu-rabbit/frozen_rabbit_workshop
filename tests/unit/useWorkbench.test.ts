@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ref } from 'vue';
+import { effectScope, nextTick, ref } from 'vue';
 
 const mocks = vi.hoisted(() => ({
     activeWorkbenchNote: { value: null as any },
     fetchItemPrices: vi.fn(),
     recipesCache: { value: [] as any[] },
+    getDictionaryItem: vi.fn(),
     getGatheringInfo: vi.fn(),
     getMonsterDropInfo: vi.fn()
 }));
@@ -19,15 +20,8 @@ vi.mock('../../src/composables/useNotes', () => ({
 vi.mock('../../src/services/dictionary', () => ({
     globalRecipesCache: mocks.recipesCache,
     setDictionaryLanguage: vi.fn(),
-    ensureDictionaryLoaded: vi.fn(),
-    getDictionaryItem: vi.fn((id: number) => ({
-        name: `Item ${id}`,
-        icon: `/icons/${id}.png`
-    })),
-    getRawItemData: vi.fn((id: number) => ({
-        name: `Item ${id}`,
-        icon: `/icons/${id}.png`
-    })),
+    ensureWorkbenchDataLoaded: vi.fn(),
+    getDictionaryItem: mocks.getDictionaryItem,
     CRYSTAL_IDS: new Set()
 }));
 
@@ -37,12 +31,10 @@ vi.mock('../../src/services/universalis', () => ({
 }));
 
 vi.mock('../../src/services/gathering', () => ({
-    ensureGatheringDataLoaded: vi.fn(),
     getGatheringInfo: mocks.getGatheringInfo
 }));
 
 vi.mock('../../src/services/monsterDrops', () => ({
-    ensureMonsterDropDataLoaded: vi.fn(),
     getMonsterDropInfo: mocks.getMonsterDropInfo,
     getMonsterDropPreferredLevel: vi.fn((drops: any[] | null | undefined) => {
         if (!drops || drops.length === 0) return null;
@@ -52,7 +44,6 @@ vi.mock('../../src/services/monsterDrops', () => ({
 }));
 
 vi.mock('../../src/services/vendor', () => ({
-    ensureVendorDataLoaded: vi.fn(),
     getVendors: vi.fn(() => [])
 }));
 
@@ -65,6 +56,8 @@ vi.mock('vue-i18n', () => ({
 
 describe('Workbench Service Logic', () => {
     beforeEach(() => {
+        mocks.getDictionaryItem.mockReset();
+        mocks.getDictionaryItem.mockImplementation((id: number) => ({ kind: 'item', name: `Item ${id}`, icon: `/icons/${id}.png` }));
         mocks.activeWorkbenchNote.value = null;
         mocks.recipesCache.value = [];
         mocks.fetchItemPrices.mockReset();
@@ -133,18 +126,52 @@ describe('Workbench Service Logic', () => {
         expect(sorted.map(item => item.id)).toEqual([5056, 5099, 5079]);
     });
 
-    it('uses one display label for all island sanctuary recipe jobs', async () => {
+    it('distinguishes island construction, workshop production and player crafting', async () => {
         const { canRecipeCraftHq, getCraftJobName } = await import('../../src/composables/useWorkbench');
 
         expect(getCraftJobName({ id: 'mji-8', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandCrafting');
-        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandCrafting');
+        expect(getCraftJobName({ id: 'mji-craftworks-9', job: -10 })).toBe('jobs.islandWorkshop');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: -10 })).toBe('jobs.islandConstruction');
+        expect(getCraftJobName({ id: 'mji-landmark-10', job: -10 })).toBe('jobs.islandConstruction');
+        expect(getCraftJobName({ id: 'mji-building-2.4', job: 8 })).toBe('jobs.crp');
         expect(getCraftJobName({ id: 'fc539', job: 0 })).toBe('jobs.companyCrafting');
         expect(getCraftJobName({ id: 123, job: 8 })).toBe('jobs.crp');
         expect(canRecipeCraftHq({ job: -10 })).toBe(false);
         expect(canRecipeCraftHq({ job: 0 })).toBe(false);
         expect(canRecipeCraftHq({ job: 8 })).toBe(true);
+    });
+
+    it('distinguishes granary, crops and pasture and keeps them in other todos', async () => {
+        const granaryIds = [37578, 37579, 37580, 37581, 37582, 39894];
+        const otherIds = [37593, 37596, 37603, 37561, 100]; // Crops, pasture, gathering, ordinary item.
+        mocks.activeWorkbenchNote.value = { id: 'granary', items: [...granaryIds, ...otherIds].map(id => ({ id, quantity: 2 })) };
+        mocks.getDictionaryItem.mockImplementation((id: number) => ({ kind: id === 100 ? 'item' : 'islandItem', name: String(id), icon: '' }));
+        mocks.getGatheringInfo.mockImplementation((id: number) => id === 37561 ? { island: true, jobName: 'jobs.islandGathering', level: 0 } : null);
+        vi.resetModules();
+        const { sourceData } = await import('../../src/services/gameData');
+        sourceData.value = { islandProduction: { 37593: 'crop', 37596: 'crop', 37603: 'pasture' } } as any;
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            for (const id of granaryIds) {
+                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandSource: 'islandGranary', canCraft: false, canGather: false, canHunt: false });
+                expect(workbench.decisions[String(id)]).toMatchObject({ other: 2, gather: 0, craft: 0, buy: 0 });
+            }
+            for (const id of otherIds) expect(workbench.workbenchItems.value[id].islandSource).not.toBe('islandGranary');
+            const others = workbench.generateTodoSections.value.find(section => section.key === 'other')!;
+            expect(others.items.filter(item => item.islandSource === 'islandGranary').map(item => item.id).sort()).toEqual(granaryIds.sort());
+            for (const [id, islandSource] of [[37593, 'islandFarming'], [37596, 'islandFarming'], [37603, 'islandPasture']] as const) {
+                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandSource, canCraft: false, canGather: false, canHunt: false });
+                expect(workbench.decisions[String(id)]).toEqual({ other: 2, gather: 0, craft: 0, buy: 0 });
+                expect(others.items.find(item => item.id === id)).toMatchObject({ islandSource });
+            }
+            expect(workbench.workbenchItems.value[37561].islandSource).toBeNull();
+            expect(workbench.workbenchItems.value[100].islandSource).toBeNull();
+        } finally {
+            scope.stop();
+        }
     });
 
     it('should be importable and initialized', async () => {
@@ -295,6 +322,32 @@ describe('Workbench Service Logic', () => {
             marketPriceMode: 'all',
             crafting: { canCraftHq: false }
         });
+    });
+
+    it('lets initialization alone fetch roots and first-level materials, then only fetches new expansions', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'single-price-owner', items: [{ id: 100, quantity: 1 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 1 }] },
+            { result: 200, job: 8, lvl: 80, yields: 1, ingredients: [{ id: 300, amount: 1 }] }
+        ];
+        const prices = (ids: number[]) => new Map(ids.map(itemId => [itemId, { itemId, listings: [], lastUploadTime: 0 }]));
+        mocks.fetchItemPrices.mockImplementation(async (ids: number[]) => prices(ids));
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            expect(mocks.fetchItemPrices.mock.calls.map(([ids]) => ids)).toEqual([[100, 200]]);
+
+            mocks.fetchItemPrices.mockClear();
+            workbench.decisions['200'] = { craft: 1, buy: 0, gather: 0, other: 0 };
+            await vi.waitFor(() => expect(workbench.workbenchItems.value[300]?.priceFetched).toBe(true));
+            expect(mocks.fetchItemPrices.mock.calls.map(([ids]) => ids)).toEqual([[300]]);
+        } finally {
+            scope.stop();
+        }
     });
 
     it('routes root items with monster drops into the hunting todo section', async () => {

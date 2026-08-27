@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoading } from '../../services/dictionary'
+import { isDictionaryLoading } from '../../services/dictionary'
 import { useNotes } from '../../composables/useNotes'
 import NoteCard from '../shared/NoteCard.vue'
 import draggable from 'vuedraggable'
@@ -29,9 +29,7 @@ const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource) => {
   emit('open-workbench', note, source)
 }
 
-onMounted(() => {
-  ensureDisplayMetadataLoaded()
-})
+
 </script>
 
 <template>
@@ -51,7 +49,7 @@ onMounted(() => {
     </div>
 
     <div v-else class="flex flex-col gap-4">
-      <div v-if="isDictionaryLoading || isDisplayMetadataLoading" class="flex justify-center items-center py-8">
+      <div v-if="isDictionaryLoading" class="flex justify-center items-center py-8">
           <i class="pi pi-spinner pi-spin text-soft-green-500 text-3xl"></i>
           <span class="ml-3 text-soft-green-700">{{ t('history.syncing') }}</span>
       </div>

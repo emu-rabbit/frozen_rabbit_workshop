@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import NoteCard from '../shared/NoteCard.vue'
 import InputText from 'primevue/inputtext'
 import Paginator from 'primevue/paginator'
-import { ensureDisplayMetadataLoaded, isDictionaryLoading, isDisplayMetadataLoading } from '../../services/dictionary'
+import { isDictionaryLoading } from '../../services/dictionary'
 import type { LocalizedString } from '../../types/note'
 import { useDebounceFn } from '@vueuse/core'
 import { vFfivClean } from '../../utils/inputUtils'
@@ -77,9 +77,7 @@ const handleSearchInput = (event: Event) => {
   // Now handled by directive
 };
 
-onMounted(() => {
-  ensureDisplayMetadataLoaded()
-})
+
 </script>
 
 <template>
@@ -112,7 +110,7 @@ onMounted(() => {
     </div>
 
     <div v-else class="flex flex-col gap-4">
-      <div v-if="isDictionaryLoading || isDisplayMetadataLoading" class="flex justify-center items-center py-8">
+      <div v-if="isDictionaryLoading" class="flex justify-center items-center py-8">
           <i class="pi pi-spinner pi-spin text-soft-green-500 text-3xl"></i>
           <span class="ml-3 text-soft-green-700">{{ t('history.syncing') }}</span>
       </div>
