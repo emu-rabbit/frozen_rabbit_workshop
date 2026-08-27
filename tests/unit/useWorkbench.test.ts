@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ref } from 'vue';
+import { effectScope, nextTick, ref } from 'vue';
 
 const mocks = vi.hoisted(() => ({
     activeWorkbenchNote: { value: null as any },
@@ -289,6 +289,32 @@ describe('Workbench Service Logic', () => {
             marketPriceMode: 'all',
             crafting: { canCraftHq: false }
         });
+    });
+
+    it('lets initialization alone fetch roots and first-level materials, then only fetches new expansions', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'single-price-owner', items: [{ id: 100, quantity: 1 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 1 }] },
+            { result: 200, job: 8, lvl: 80, yields: 1, ingredients: [{ id: 300, amount: 1 }] }
+        ];
+        const prices = (ids: number[]) => new Map(ids.map(itemId => [itemId, { itemId, listings: [], lastUploadTime: 0 }]));
+        mocks.fetchItemPrices.mockImplementation(async (ids: number[]) => prices(ids));
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            expect(mocks.fetchItemPrices.mock.calls.map(([ids]) => ids)).toEqual([[100, 200]]);
+
+            mocks.fetchItemPrices.mockClear();
+            workbench.decisions['200'] = { craft: 1, buy: 0, gather: 0, other: 0 };
+            await vi.waitFor(() => expect(workbench.workbenchItems.value[300]?.priceFetched).toBe(true));
+            expect(mocks.fetchItemPrices.mock.calls.map(([ids]) => ids)).toEqual([[300]]);
+        } finally {
+            scope.stop();
+        }
     });
 
     it('routes root items with monster drops into the hunting todo section', async () => {

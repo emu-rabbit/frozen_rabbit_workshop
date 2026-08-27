@@ -247,7 +247,7 @@ const initSingleItemDecision = (id: number, demand: number, isRoot: boolean = fa
 /**
  * 刷新物品詳細資料 (Recipe, Gathering)
  */
-const refreshItemsData = async (ids: number[]) => {
+const refreshItemsData = (ids: number[]) => {
   for (const id of ids) {
     if (workbenchItems.value[id]) continue;
 
@@ -792,7 +792,7 @@ export function useWorkbench() {
       // 2. 獲取初始項目資料
       const rootNoteItems = sanitizeNoteItems(activeWorkbenchNote.value.items);
       const rootIds = rootNoteItems.map(i => i.id);
-      await refreshItemsData(rootIds);
+      refreshItemsData(rootIds);
 
       // 3. 初始分配根節點決策 (僅在切換新筆記或是強制重設時需要在此執行)
       if (isNewNote || force) {
@@ -807,7 +807,7 @@ export function useWorkbench() {
           initSingleItemDecision(id, totalDemands.value[id] || 0, isRoot);
       });
 
-      await refreshItemsData(activeItemIds.value);
+      refreshItemsData(activeItemIds.value);
       
       // 5. 發起價格抓取 (fetchPrices 內部已有版本校驗)
       try {
@@ -836,12 +836,16 @@ export function useWorkbench() {
   /**
    * 當新材料被展開時，確保其資料、價格以及決策物件被初始化
    */
-  watch(activeItemIds, async (newIds) => {
-    if (isLoading.value) return; 
+  // Price and metadata updates may reorder the cards; only membership changes need a lookup.
+  watch(() => [...activeItemIds.value].sort((a, b) => a - b).join(','), async () => {
+    if (isLoading.value || lastNoteId.value !== activeWorkbenchNote.value?.id
+      || lastMarketSource.value !== selectedDC.value || lastLocale.value !== locale.value) return;
+
+    const newIds = activeItemIds.value;
     
     const missingDataIds = newIds.filter(id => !workbenchItems.value[id]);
     if (missingDataIds.length > 0) {
-      await refreshItemsData(missingDataIds);
+      refreshItemsData(missingDataIds);
     }
 
     newIds.forEach(id => {
@@ -857,7 +861,7 @@ export function useWorkbench() {
         console.warn('[Workbench] fetchPrices error (watch):', err);
       }
     }
-  }, { immediate: true, deep: true });
+  });
 
   /**
    * 監聽總需求變化，動態更新模擬購買成本
