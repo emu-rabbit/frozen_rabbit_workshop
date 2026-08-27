@@ -28,6 +28,12 @@ export const changelogData: ChangelogEntry[] = [
         cn: '改善 Universalis 查价超时问题',
         en: 'Improved timeout handling for Universalis price queries',
         ja: 'Universalis の価格取得時のタイムアウト処理を改善しました'
+      },
+      {
+        tw: '支援無人島/開拓相關建築及製作配方',
+        cn: '支持无人岛/开拓相关建筑及制作配方',
+        en: 'Added support for Island Sanctuary buildings and crafting recipes',
+        ja: '無人島開拓の建築と製作レシピに対応しました'
       }
     ]
   },
