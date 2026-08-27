@@ -36,8 +36,10 @@ test('search works before phase two; island materials reach gathering and other 
   await page.locator('#item-name').fill('無人島備料測試');
   await searchAndSelectItem(page, '找尋物品...', 'Cozy Cabin', 'Cozy Cabin I');
   await expect(page.getByTestId('game-data-status')).toHaveCount(0);
-  release();
   await page.getByText('好，把這些放上備料台！').click();
+  await expect(page).toHaveURL(/#workbench/);
+  await expect(page.locator('.item-card')).toHaveCount(0);
+  release();
   await expect(page.locator('.item-card', { hasText: 'Cozy Cabin I' })).toBeVisible();
   await expect(page.locator('.item-card', { hasText: 'Cozy Cabin I' }).getByText('開拓建造', { exact: true }).first()).toBeVisible();
   const log = page.locator('.item-card').filter({ has: page.getByRole('heading', { name: '無人島棕櫚原木', exact: true }) });
@@ -156,11 +158,47 @@ test('a failed core download offers retry and never saves an incomplete cache', 
   await page.route('**/game-data/sources.*', route => fail ? route.fulfill({ status: 503 }) : route.fallback());
   await page.reload();
   await expect(page.getByRole('alert')).toContainText('配方或素材來源');
+  await expect(page.getByRole('alert')).toHaveAccessibleName('備料資料尚未就緒');
   fail = false;
   await page.getByRole('button', { name: '重試', exact: true }).click();
   await expect(page.getByRole('alert')).toHaveCount(0);
   await navigateTo(page, '工坊設置');
   await expect(page.getByText('無法保存裝置快取，目前使用線上資料；不影響筆記與收藏。')).toBeVisible();
+});
+
+test('catalog loading stays silent while search waits for real data', async ({ page }) => {
+  let release!: () => void;
+  const hold = new Promise<void>(resolve => { release = resolve; });
+  await setupTest(page, () => page.route('**/game-data/catalog.*', async route => { await hold; await route.fallback(); }));
+  await expect(page.getByTestId('game-data-status')).toHaveCount(0);
+  const input = page.getByPlaceholder('找尋物品...');
+  await input.pressSequentially('鐵錠');
+  await expect(page.locator('.p-autocomplete-loader')).toBeVisible();
+  await expect(page.getByRole('option')).toHaveCount(0);
+  await expect(page.getByTestId('game-data-status')).toHaveCount(0);
+  release();
+  await expect(page.getByRole('option', { name: '鐵錠', exact: true })).toBeVisible();
+});
+
+test('catalog failure retry keeps the draft and shows a busy action until recovery', async ({ page }) => {
+  let fail = true;
+  let release!: () => void;
+  const hold = new Promise<void>(resolve => { release = resolve; });
+  await setupTest(page, () => page.route('**/game-data/catalog.*', async route => {
+    if (fail) return route.fulfill({ status: 503 });
+    await hold;
+    await route.fallback();
+  }));
+  await page.locator('#item-name').fill('保留這張筆記');
+  await expect(page.getByRole('alert')).toHaveAccessibleName('暫時無法搜尋物品');
+  fail = false;
+  await page.getByRole('button', { name: '重試', exact: true }).click();
+  await expect(page.getByRole('button', { name: '重試中…', exact: true })).toBeDisabled();
+  await expect(page.getByRole('alert')).toHaveAttribute('aria-busy', 'true');
+  release();
+  await expect(page.getByRole('alert')).toHaveCount(0);
+  await expect(page.locator('#item-name')).toHaveValue('保留這張筆記');
+  await searchAndSelectItem(page, '找尋物品...', '鐵錠', '鐵錠');
 });
 test('real checked-in packages load through the actual static server', async ({ page }) => {
   const upstream: string[] = [];

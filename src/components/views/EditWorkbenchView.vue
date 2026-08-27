@@ -305,7 +305,8 @@ const confirmMerge = () => {
                     <AutoComplete 
                       v-ffiv-clean
                       v-model="row.selectedItem" 
-                      :suggestions="row.suggestions" 
+                      :suggestions="row.suggestions"
+                      :loading="row.searching || isDictionaryLoading"
                       @complete="onSearch($event, index)"
                       @clear="handleSearchClear(index)"
                       completeOnFocus

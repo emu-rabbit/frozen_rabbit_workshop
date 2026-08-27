@@ -12,6 +12,8 @@ Teamcraft 原始資料只由 `scripts/generate-game-data.mjs` 在維護者產包
 
 `App.vue` 啟動兩階段載入；`services/gameData.ts` 唯一負責 manifest、下載、驗證、更新狀態；`gameDataCache.ts` 只負責 IndexedDB。`dictionary.ts`、`gathering.ts`、`vendor.ts`、`monsterDrops.ts` 從共用資料解讀顯示與來源，不各自下載原始檔。
 
+正常載入與背景下載不顯示全頁載入文字；物品搜尋沿用欄位內的等待與轉圈狀態。載入失敗才由 `GameDataStatus.vue` 顯示共用錯誤卡片，區分搜尋、備料及更新失敗，提供不重新整理頁面的重試按鈕與重試中狀態。備料台仍等第二階段完整後才掛載、展開配方及查市價；更新下載完成後的套用確認維持下述流程。
+
 資料格式為 `src/types/gameData.ts` 的 formatVersion 2。每個壓縮包為 `<name>.<sha256>.bin`，內文是 gzip；副檔名不用 `.gz`，避免靜態伺服器自動解壓後破壞位元組驗證。瀏覽器驗證 SHA-256、大小與格式後以 DecompressionStream 解壓。
 
 ### 投影規則

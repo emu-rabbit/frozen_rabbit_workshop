@@ -16,7 +16,10 @@ export default {
     apply: '现在应用并刷新',
     later: '下次应用',
     retry: '重试',
-    loadingCatalog: '正在加载物品数据…',
+    retrying: '重试中…',
+    errorTitle_catalog: '暂时无法搜索物品',
+    errorTitle_core: '备料数据尚未就绪',
+    errorTitle_update: '暂时无法获取更新',
     error_catalog: '物品数据加载失败，请重试。',
     error_core: '配方或素材来源尚未加载完成，备料功能暂时无法使用。请重试。',
     error_update: '当前数据仍可使用，但无法检查或下载更新。'
