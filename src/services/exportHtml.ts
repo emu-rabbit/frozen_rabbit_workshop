@@ -1,3 +1,5 @@
+import { hasCraftingLevel } from '../utils/craftingDisplay';
+
 export interface ExportContext {
   translations: {
     title: string;
@@ -152,7 +154,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
         infoColumnHtml = `
           <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
              <span class="text-[10px] md:text-sm font-black bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40 leading-none whitespace-nowrap">
-                ${ctx.getJobName(item.crafting.jobName)}${item.crafting.job === -10 ? '' : ' Lv.' + item.crafting.level}${ctx.renderStars(item.crafting.stars)}
+                ${ctx.getJobName(item.crafting.jobName)}${hasCraftingLevel(item.crafting.job) ? ' Lv.' + item.crafting.level + ctx.renderStars(item.crafting.stars) : ''}
             </span>
           </div>
         `;

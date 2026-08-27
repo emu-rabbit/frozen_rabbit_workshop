@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import draggable from 'vuedraggable';
 import { useWorkbench } from '../../composables/useWorkbench';
+import { hasCraftingLevel } from '../../utils/craftingDisplay';
 import { useNotes } from '../../composables/useNotes';
 import { useSettings } from '../../composables/useSettings';
 import ExportTodoModal from '../modals/ExportTodoModal.vue';
@@ -399,7 +400,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                                                 </div>
                                                             </template>
                                                             <template v-if="section.key === 'craft' && item.crafting">
-                                                                <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ item.crafting.job === -10 ? t(item.crafting.jobName) : t(item.crafting.jobName).substring(0, 2) }} <template v-if="item.crafting.job !== -10">Lv.{{ item.crafting.level }}</template>{{ renderStars(item.crafting.stars) }}</span>
+                                                                <span class="text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-900/40">{{ hasCraftingLevel(item.crafting.job) ? t(item.crafting.jobName).substring(0, 2) : t(item.crafting.jobName) }} <template v-if="hasCraftingLevel(item.crafting.job)">Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</template></span>
                                                             </template>
                                                         </div>
                                                     </template>
@@ -480,7 +481,7 @@ const handleExportHtml = (includeMarket: boolean) => {
                                             <template v-if="section.key === 'craft' && item.crafting">
                                                 <div class="flex flex-col items-end">
                                                      <span class="text-[10px] md:text-sm font-black bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full border border-indigo-100 dark:border-indigo-900/40 shadow-sm leading-none whitespace-nowrap">
-                                                        {{ t(item.crafting.jobName) }} <template v-if="item.crafting.job !== -10">Lv.{{ item.crafting.level }}</template>{{ renderStars(item.crafting.stars) }}
+                                                        {{ t(item.crafting.jobName) }} <template v-if="hasCraftingLevel(item.crafting.job)">Lv.{{ item.crafting.level }}{{ renderStars(item.crafting.stars) }}</template>
                                                     </span>
                                                 </div>
                                             </template>

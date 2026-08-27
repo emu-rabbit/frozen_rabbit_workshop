@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
 import { useWorkbench } from '../../composables/useWorkbench'
+import { hasCraftingLevel } from '../../utils/craftingDisplay'
 import { formatLastUpdate, isPriceError, isRetrying, abortPriceFetch } from '../../services/universalis'
 
 const { t, locale } = useI18n()
@@ -79,7 +80,7 @@ const summary = computed(() => {
         // 2. 時間成本與職業清單
         if (d.craft > 0 && item.crafting && !item.island) {
             const current = maxCraft.get(item.crafting.jobName)
-            if (!current || item.crafting.level > current.level || (item.crafting.level === current.level && item.crafting.stars > current.stars)) {
+            if (hasCraftingLevel(item.crafting.job) && (!current || item.crafting.level > current.level || (item.crafting.level === current.level && item.crafting.stars > current.stars))) {
                 maxCraft.set(item.crafting.jobName, { level: item.crafting.level, stars: item.crafting.stars })
             }
             const craftCount = Math.ceil(d.craft / item.crafting.yields)
@@ -302,7 +303,7 @@ const copyToClipboard = (id: string, text: string) => {
                             </span>
                             <!-- Crafting Badge -->
                             <span v-if="workbenchItems[id]?.crafting" class="text-[12px] md:text-[14px] bg-indigo-50 dark:bg-indigo-950/30 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-md font-bold border border-indigo-100 dark:border-indigo-900/50">
-                                {{ t(workbenchItems[id]?.crafting?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.crafting?.level }}</template>{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
+                                {{ t(workbenchItems[id]?.crafting?.jobName) }} <template v-if="hasCraftingLevel(workbenchItems[id]?.crafting?.job)">Lv.{{ workbenchItems[id]?.crafting?.level }}{{ renderStars(workbenchItems[id]?.crafting?.stars) }}</template>
                             </span>
                             <!-- Gathering Badge -->
                             <span v-if="workbenchItems[id]?.islandSource" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
@@ -563,7 +564,7 @@ const copyToClipboard = (id: string, text: string) => {
                             <div class="flex-1 min-w-0">
                                 <span class="text-[11px] font-black text-slate-400 dark:text-slate-500 block uppercase tracking-wider mb-0.5">{{ t('workbench.view.details.craftTitle') }}</span>
                                 <span class="text-[14px] font-bold text-slate-700 dark:text-slate-300 truncate block">
-                                    {{ t(workbenchItems[id].crafting.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id].crafting.level }}</template>{{ renderStars(workbenchItems[id].crafting.stars) }}
+                                    {{ t(workbenchItems[id].crafting.jobName) }} <template v-if="hasCraftingLevel(workbenchItems[id].crafting.job)">Lv.{{ workbenchItems[id].crafting.level }}{{ renderStars(workbenchItems[id].crafting.stars) }}</template>
                                 </span>
                             </div>
                             <div class="flex flex-col items-end shrink-0">
