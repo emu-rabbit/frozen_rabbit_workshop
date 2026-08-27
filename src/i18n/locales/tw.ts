@@ -16,7 +16,10 @@ export default {
     apply: '現在套用並重新整理',
     later: '下次套用',
     retry: '重試',
-    loadingCatalog: '正在載入物品資料…',
+    retrying: '重試中…',
+    errorTitle_catalog: '暫時無法搜尋物品',
+    errorTitle_core: '備料資料尚未就緒',
+    errorTitle_update: '暫時無法取得更新',
     error_catalog: '物品資料載入失敗，請重試。',
     error_core: '配方或素材來源尚未載入完成，備料功能暫時無法使用。請重試。',
     error_update: '目前資料仍可使用，但無法檢查或下載更新。'

@@ -16,7 +16,10 @@ export default {
     apply: 'Apply now and refresh',
     later: 'Apply next time',
     retry: 'Retry',
-    loadingCatalog: 'Loading item data…',
+    retrying: 'Retrying…',
+    errorTitle_catalog: 'Item search is unavailable',
+    errorTitle_core: 'Material planning data is not ready',
+    errorTitle_update: 'Updates are unavailable',
     error_catalog: 'Item data could not be loaded. Please retry.',
     error_core: 'Recipes or material sources could not be loaded. Material planning is unavailable until you retry.',
     error_update: 'Your current data is still usable, but checking or downloading updates failed.'

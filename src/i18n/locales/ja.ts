@@ -16,7 +16,10 @@ export default {
     apply: '今すぐ適用して再読み込み',
     later: '次回適用',
     retry: '再試行',
-    loadingCatalog: 'アイテムデータを読み込み中…',
+    retrying: '再試行中…',
+    errorTitle_catalog: 'アイテムを検索できません',
+    errorTitle_core: '素材準備のデータが揃っていません',
+    errorTitle_update: '更新を取得できません',
     error_catalog: 'アイテムデータを読み込めませんでした。再試行してください。',
     error_core: 'レシピまたは素材の入手先を読み込めませんでした。再試行するまで素材準備を利用できません。',
     error_update: '現在のデータは使用できますが、更新の確認またはダウンロードに失敗しました。'
