@@ -2,6 +2,8 @@
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { fixturePackages, sourceFixture } from '../fixtures/gameData.mjs';
 import { readNamePatches } from '../../scripts/game-data/name-patches.mjs';
+import { gzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 const cache = vi.hoisted(() => ({ read: vi.fn(), save: vi.fn(), clear: vi.fn() }));
 vi.mock('../../src/services/gameDataCache', () => ({ readCachedData: cache.read, saveCachedData: cache.save, clearCachedData: cache.clear }));
 function cached(packages: any) {
@@ -18,6 +20,20 @@ function network(packages: any, fail?: string) {
 }
 beforeEach(() => { vi.resetModules(); cache.read.mockReset().mockResolvedValue(null); cache.save.mockReset().mockResolvedValue(true); cache.clear.mockReset().mockResolvedValue(true); });
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+it('accepts old source bundles but rejects malformed island production metadata', async () => {
+  const { decodeBundle } = await import('../../src/services/gameData');
+  for (const [production, valid] of [[undefined, true], [{ 37596: 'crop', 37603: 'pasture' }, true],
+    [null, false], [[], false], [{ 0: 'crop' }, false], [{ 37596: 'gather' }, false]] as const) {
+    const packages = fixturePackages();
+    const json = Buffer.from(JSON.stringify({ formatVersion: 2, nodes: { 1: {} }, islandProduction: production }));
+    const bytes = gzipSync(json);
+    Object.assign(packages.manifest.bundles.sources, { bytes: bytes.length, jsonBytes: json.length,
+      sha256: createHash('sha256').update(bytes).digest('hex'), records: 1 });
+    const result = decodeBundle(packages.manifest, 'sources', Uint8Array.from(bytes).buffer);
+    if (valid) await expect(result).resolves.toHaveProperty('nodes');
+    else await expect(result).rejects.toThrow('invalid island production');
+  }
+});
 it('loads only catalog for phase one, then deduplicates and persists a complete version', async () => {
   const packages = fixturePackages(); const fetch = network(packages); vi.stubGlobal('fetch', fetch);
   const data = await import('../../src/services/gameData');

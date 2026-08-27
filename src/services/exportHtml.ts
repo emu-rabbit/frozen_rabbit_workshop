@@ -4,6 +4,8 @@ export interface ExportContext {
     progress: string;
     sectionOther: string;
     islandGranary: string;
+    islandFarming: string;
+    islandPasture: string;
     sectionHunt: string;
     sectionBuy: string;
     sectionGather: string;
@@ -62,6 +64,9 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
     // Generate items
     const itemsHtml = section.items.map((item: any) => {
       let infoColumnHtml = '';
+      const islandSourceLabel = item.islandSource === 'islandFarming' ? ctx.translations.islandFarming
+        : item.islandSource === 'islandPasture' ? ctx.translations.islandPasture
+        : item.islandSource === 'islandGranary' ? ctx.translations.islandGranary : '';
       
       const itemIdId = `${section.key}_${item.id}`;
 
@@ -86,10 +91,10 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
             ` : ''}
           </div>
         `;
-      } else if (section.key === 'other' && item.islandGranary) {
+      } else if (section.key === 'other' && islandSourceLabel) {
         infoColumnHtml = `
           <div class="hidden md:flex flex-col items-end justify-center px-4 md:px-8 border-r border-slate-100 dark:border-slate-800 min-w-0 md:min-w-[220px]">
-            <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none shadow-sm whitespace-nowrap">${ctx.translations.islandGranary}</span>
+            <span class="text-[10px] md:text-sm font-black bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 px-3 py-1 rounded-full border border-amber-100 dark:border-amber-900/40 leading-none shadow-sm whitespace-nowrap">${islandSourceLabel}</span>
           </div>
         `;
       } else if (section.key === 'gather' && item.gathering) {
@@ -193,7 +198,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
                     <div class="flex items-center gap-2 mt-1">
                       <span class="text-[9px] md:text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest opacity-60 shrink-0">#${item.id}</span>
                     </div>
-                    ${item.islandGranary ? `<span class="md:hidden self-start mt-1 text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">${ctx.translations.islandGranary}</span>` : ''}
+                    ${islandSourceLabel ? `<span class="md:hidden self-start mt-1 text-[9px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-100 dark:border-amber-900/40">${islandSourceLabel}</span>` : ''}
                 </div>
             </div>
  

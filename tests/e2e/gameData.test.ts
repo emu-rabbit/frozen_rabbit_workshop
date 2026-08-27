@@ -180,6 +180,48 @@ test('real checked-in packages load through the actual static server', async ({ 
   await page.screenshot({ path: `.cache/game-data/settings-${test.info().project.name.replace(/ /g, '-')}.png`, fullPage: true });
 });
 
+test('real island crops and pasture labels reach workbench, todos and export', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('frozen-rabbit-initialized', 'true');
+    localStorage.setItem('frozen-rabbit-lang', 'tw');
+  });
+  const market: string[] = [];
+  page.on('request', request => { if (request.url().includes('universalis.app/api')) market.push(request.url()); });
+  await page.goto('./');
+  await page.locator('#item-name').fill('開拓來源標記測試');
+  await searchAndSelectItem(page, '找尋物品...', '開拓工坊南瓜布丁', '開拓工坊南瓜布丁');
+  await page.getByText('好，把這些放上備料台！').click();
+  for (const [name, label] of [['海島南瓜', '開拓種植'], ['牧場動物的鳥蛋', '開拓畜牧'], ['牧場動物的乳汁', '開拓畜牧']]) {
+    const card = page.locator('.item-card').filter({ has: page.getByRole('heading', { name, exact: true }) });
+    await expect(card.getByText(label, { exact: true })).toBeVisible();
+    for (const index of [0, 1, 2]) await expect(card.locator('input[type=number]').nth(index)).toBeDisabled();
+  }
+  const rejectAnalytics = page.getByRole('button', { name: '拒絕', exact: true });
+  if (await rejectAnalytics.isVisible()) await rejectAnalytics.click();
+  await page.getByRole('button', { name: /待辦/ }).click();
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+    for (const label of ['開拓種植', '開拓畜牧']) {
+      const badges = page.getByText(label, { exact: true }).filter({ visible: true });
+      await expect(badges).toHaveCount(label === '開拓種植' ? 1 : 2);
+      for (const badge of await badges.all()) {
+        const box = await badge.boundingBox();
+        expect(box!.x).toBeGreaterThanOrEqual(0);
+        expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+      }
+    }
+    await page.screenshot({ path: `.cache/game-data/island-production-${test.info().project.name.replace(/ /g, '-')}-${dark ? 'dark' : 'light'}.png`, fullPage: true });
+  }
+  await page.locator('button').filter({ has: page.locator('i.pi-download') }).click();
+  const downloading = page.waitForEvent('download');
+  await page.getByRole('button', { name: /確認下載 HTML/ }).click();
+  const html = await readFile((await (await downloading).path())!, 'utf8');
+  expect(html).toContain('開拓種植');
+  expect(html).toContain('開拓畜牧');
+  expect(html).not.toContain('屯貨倉庫');
+  expect(market).toEqual([]);
+});
+
 test('repair redownloads game data without removing notes, favorites or settings', async ({ page }) => {
   const note = { id: 'preserved', name: '保留的筆記', items: [{ id: 5057, quantity: 2 }], createdAt: '2026-08-27T00:00:00Z' };
   await setupTest(page);

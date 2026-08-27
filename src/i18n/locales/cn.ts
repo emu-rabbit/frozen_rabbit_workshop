@@ -1,6 +1,8 @@
 export default {
   gameData: {
     islandGranary: '屯货仓库',
+    islandFarming: '开拓种植',
+    islandPasture: '开拓畜牧',
     cancel: '取消',
     repairConfirm: '重新下载并刷新',
     title: '游戏缓存数据',

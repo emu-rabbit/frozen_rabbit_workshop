@@ -34,6 +34,8 @@ export function sourceFixture() {
     'monsters.json': { 1: { positions: [{ map: 1, zoneid: 1, level: 1, hp: 999, x: 1, y: 2 }] } },
     'mobs.json': { 1: { en: 'Monster', ja: 'モンスター' } },
     'island-gathering-items.json': { 20: { itemId: 20, x: 10, y: 20 } },
+    'island-crops.json': { 37596: { seed: 37586 } },
+    'island-animals.json': { 1: { rewards: [37603, 37611] } },
     LICENSE: 'MIT License\nFixture copyright notice\nPermission is hereby granted\n',
   });
 }

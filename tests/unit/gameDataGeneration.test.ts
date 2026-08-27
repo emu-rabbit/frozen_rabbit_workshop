@@ -58,6 +58,22 @@ function mockFetch(sources = fixture(), failFile?: string) {
 }
 
 describe('game data projection', () => {
+  it('projects crop IDs and both animal rewards without classifying seeds or unrelated items', () => {
+    const sources = fixture();
+    sources['recipes.json'][2].ingredients.push(...[37596, 37603, 37611, 37586].map(id => ({ id, amount: 1 })));
+    for (const id of [37596, 37603, 37611, 37586]) sources['items.json'][id] = { en: String(id) };
+    const { bundles } = projectGameData(sources);
+    expect(bundles.sources.islandProduction).toEqual({ 37596: 'crop', 37603: 'pasture', 37611: 'pasture' });
+    expect(bundles.catalog.items.find((i: any) => i.id === 37596).kind).toBe('islandItem');
+    expect(bundles.sources.islandProduction[37586]).toBeUndefined();
+    const conflict = fixture();
+    conflict['island-animals.json'][1].rewards.push(37596);
+    expect(() => projectGameData(conflict)).toThrow('Conflicting island source');
+    const malformed = fixture();
+    malformed['island-animals.json'][1].rewards = [0];
+    expect(() => projectGameData(malformed)).toThrow('island animal reward');
+  });
+
   it('keeps the crafting closure, canonical IDs, true locale names and valid island recipes', () => {
     const sources = fixture(); const before = structuredClone(sources);
     const { bundles, diagnostics } = projectGameData(sources);

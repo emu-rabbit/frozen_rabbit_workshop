@@ -6,7 +6,7 @@ export const SOURCE_FILES = [
   'gathering-items.json', 'nodes.json', 'maps.json', 'places.json', 'tw/tw-places.json', 'zh/zh-places.json',
   'shops.json', 'npcs.json', 'tw/tw-npcs.json', 'zh/zh-npcs.json',
   'drop-sources.json', 'monsters.json', 'mobs.json', 'tw/tw-mobs.json', 'zh/zh-mobs.json',
-  'island-gathering-items.json',
+  'island-gathering-items.json', 'island-crops.json', 'island-animals.json',
 ];
 export const LOCALES = ['tw', 'cn', 'en', 'ja'];
 
@@ -97,6 +97,21 @@ export function projectGameData(sources) {
   const diagnostics = { excludedZeroRecipes: [], removedZeroAmountIngredients: 0, missingRecipeItemIds: [] };
   const seen = new Set();
   const islandIds = new Set(Object.keys(sources['island-gathering-items.json']).map(Number));
+  const islandProduction = {};
+  for (const [key, crop] of Object.entries(sources['island-crops.json'])) {
+    const itemId = number(Number(key), 'island crop', { min: 1 });
+    number(crop.seed, 'island crop seed', { min: 1 });
+    islandProduction[itemId] = 'crop';
+    islandIds.add(itemId);
+  }
+  for (const animal of Object.values(sources['island-animals.json'])) {
+    for (const reward of array(animal.rewards, 'island animal rewards', true)) {
+      const itemId = number(reward, 'island animal reward', { min: 1 });
+      if (islandProduction[itemId] === 'crop') throw new Error(`Conflicting island source: ${itemId}`);
+      islandProduction[itemId] = 'pasture';
+      islandIds.add(itemId);
+    }
+  }
   const recipes = [];
   for (const r of sources['recipes.json']) {
     if (!['number', 'string'].includes(typeof r.id) || !String(r.id)) throw new Error('Invalid recipe ID');
@@ -211,6 +226,7 @@ export function projectGameData(sources) {
       places: mergedNames(placeIds, 'places.json', 'places'), vendors,
       npcs: mergedNames(npcIds, 'npcs.json', 'npcs'), drops, monsters,
       mobs: mergedNames(monsterIds, 'mobs.json', 'mobs'),
-      islandGathering: Object.fromEntries(Object.entries(sources['island-gathering-items.json']).filter(([key]) => wanted.has(Number(key)))) },
+      islandGathering: Object.fromEntries(Object.entries(sources['island-gathering-items.json']).filter(([key]) => wanted.has(Number(key)))),
+      islandProduction: Object.fromEntries(Object.entries(islandProduction).filter(([key]) => wanted.has(Number(key)))) },
   }, diagnostics };
 }

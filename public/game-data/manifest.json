@@ -1,6 +1,6 @@
 {
   "generator": "frozen-rabbit-workshop-game-data",
-  "version": "15e1ba898d8ebe88cdbcbf8678c6a03fd9f47e5130d4937386ad6c6a21982e34",
+  "version": "5e31616f25a317fd01745437b26eccd2369bb860f8672a0587c8df064efc7054",
   "formatVersion": 2,
   "source": {
     "repository": "ffxiv-teamcraft/ffxiv-teamcraft",
@@ -109,6 +109,14 @@
       "island-gathering-items.json": {
         "bytes": 4807,
         "sha256": "fb5ff92030077c293b7e5a384054be0321805ca8e00e123d3591487960bc7324"
+      },
+      "island-crops.json": {
+        "bytes": 722,
+        "sha256": "ba1d133f5656f123581d8d6f921af58aabc32404125fd8a4e962f6f2bdac87f8"
+      },
+      "island-animals.json": {
+        "bytes": 8983,
+        "sha256": "7efe23e0b50c0e8bd697b06b49d898c7dd48eede60847b208df0e84bb09bf1d2"
       }
     }
   },
@@ -130,10 +138,10 @@
       "records": 14188
     },
     "sources": {
-      "file": "sources.0a32dc24b0319165d8ef6bc60a218dff09df866bfcf3c034646293cad4f11649.bin",
-      "sha256": "0a32dc24b0319165d8ef6bc60a218dff09df866bfcf3c034646293cad4f11649",
-      "bytes": 194727,
-      "jsonBytes": 3175524,
+      "file": "sources.a97eb53e0b1b11c13d26bf839be839cadb5eae212bcb4b0c140fad28dcb99578.bin",
+      "sha256": "a97eb53e0b1b11c13d26bf839be839cadb5eae212bcb4b0c140fad28dcb99578",
+      "bytes": 194852,
+      "jsonBytes": 3176007,
       "encoding": "gzip",
       "records": 648
     }

@@ -305,8 +305,8 @@ const copyToClipboard = (id: string, text: string) => {
                                 {{ t(workbenchItems[id]?.crafting?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.crafting?.level }}</template>{{ renderStars(workbenchItems[id]?.crafting?.stars) }}
                             </span>
                             <!-- Gathering Badge -->
-                            <span v-if="workbenchItems[id]?.islandGranary" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
-                                {{ t('gameData.islandGranary') }}
+                            <span v-if="workbenchItems[id]?.islandSource" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
+                                {{ t(`gameData.${workbenchItems[id].islandSource}`) }}
                             </span>
                             <span v-if="workbenchItems[id]?.gathering" class="text-[12px] md:text-[14px] bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded-md font-bold border border-amber-100 dark:border-amber-900/50">
                                 {{ t(workbenchItems[id]?.gathering?.jobName) }} <template v-if="!workbenchItems[id]?.island">Lv.{{ workbenchItems[id]?.gathering?.level }}</template>{{ renderStars(workbenchItems[id]?.gathering?.stars) }}

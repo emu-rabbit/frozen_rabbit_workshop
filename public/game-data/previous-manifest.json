@@ -1,6 +1,6 @@
 {
   "generator": "frozen-rabbit-workshop-game-data",
-  "version": "8d88bcd1300c4f15843ca630515063e92d5cb8eacebbf13cee51da5c923a0da7",
+  "version": "15e1ba898d8ebe88cdbcbf8678c6a03fd9f47e5130d4937386ad6c6a21982e34",
   "formatVersion": 2,
   "source": {
     "repository": "ffxiv-teamcraft/ffxiv-teamcraft",
@@ -114,10 +114,10 @@
   },
   "bundles": {
     "catalog": {
-      "file": "catalog.7d931d214e48aa674cf4665fdcd18a45a08e31a102deb5ead4d6680038fc1947.bin",
-      "sha256": "7d931d214e48aa674cf4665fdcd18a45a08e31a102deb5ead4d6680038fc1947",
-      "bytes": 585526,
-      "jsonBytes": 4693649,
+      "file": "catalog.6a650ef61868f627fa0c0c0a6e8b3fefd063e165ddd72552e71fd218ae2142a8.bin",
+      "sha256": "6a650ef61868f627fa0c0c0a6e8b3fefd063e165ddd72552e71fd218ae2142a8",
+      "bytes": 585672,
+      "jsonBytes": 4694185,
       "encoding": "gzip",
       "records": 14153
     },
@@ -139,9 +139,15 @@
     }
   },
   "notice": {
-    "file": "NOTICE.7c07b796f0b084e67b60172c390bb99d80f7c4bea4ec55a72e284b486b518072.txt",
-    "bytes": 1516,
-    "sha256": "7c07b796f0b084e67b60172c390bb99d80f7c4bea4ec55a72e284b486b518072"
+    "file": "NOTICE.536a25c465f2868f91f0b25777ea70a9f94252de9f07d75c3a21225ae73e334b.txt",
+    "bytes": 1697,
+    "sha256": "536a25c465f2868f91f0b25777ea70a9f94252de9f07d75c3a21225ae73e334b"
+  },
+  "patches": {
+    "sha256": "f127a5113d5005d2061a58736435f5ea73cef23356a55e98e3fd2f88fc5cf9ba",
+    "ids": [
+      "island-names-tw"
+    ]
   },
   "diagnostics": {
     "excludedZeroRecipes": [
@@ -431,6 +437,36 @@
       "fc40"
     ],
     "removedZeroAmountIngredients": 37,
-    "missingRecipeItemIds": []
+    "missingRecipeItemIds": [],
+    "namePatches": {
+      "applied": [
+        "island-names-tw/-10000/tw",
+        "island-names-tw/-10010/tw",
+        "island-names-tw/-10020/tw",
+        "island-names-tw/-10030/tw",
+        "island-names-tw/-10040/tw",
+        "island-names-tw/-10100/tw",
+        "island-names-tw/-10110/tw",
+        "island-names-tw/-10120/tw",
+        "island-names-tw/-10130/tw",
+        "island-names-tw/-10140/tw",
+        "island-names-tw/-10200/tw",
+        "island-names-tw/-10210/tw",
+        "island-names-tw/-10220/tw",
+        "island-names-tw/-10230/tw",
+        "island-names-tw/-10240/tw",
+        "island-names-tw/-11010/tw",
+        "island-names-tw/-11020/tw",
+        "island-names-tw/-11030/tw",
+        "island-names-tw/-11040/tw",
+        "island-names-tw/-11050/tw",
+        "island-names-tw/-11060/tw",
+        "island-names-tw/-11070/tw",
+        "island-names-tw/-11080/tw",
+        "island-names-tw/-11090/tw",
+        "island-names-tw/-11100/tw"
+      ],
+      "upstreamResolved": []
+    }
   }
 }

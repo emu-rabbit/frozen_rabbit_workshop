@@ -141,25 +141,34 @@ describe('Workbench Service Logic', () => {
         expect(canRecipeCraftHq({ job: 8 })).toBe(true);
     });
 
-    it('labels only granary expedition materials and keeps them in other todos', async () => {
+    it('distinguishes granary, crops and pasture and keeps them in other todos', async () => {
         const granaryIds = [37578, 37579, 37580, 37581, 37582, 39894];
-        const otherIds = [37593, 37603, 37561, 100]; // Crop, pasture, gathering, ordinary item.
+        const otherIds = [37593, 37596, 37603, 37561, 100]; // Crops, pasture, gathering, ordinary item.
         mocks.activeWorkbenchNote.value = { id: 'granary', items: [...granaryIds, ...otherIds].map(id => ({ id, quantity: 2 })) };
         mocks.getDictionaryItem.mockImplementation((id: number) => ({ kind: id === 100 ? 'item' : 'islandItem', name: String(id), icon: '' }));
         mocks.getGatheringInfo.mockImplementation((id: number) => id === 37561 ? { island: true, jobName: 'jobs.islandGathering', level: 0 } : null);
         vi.resetModules();
+        const { sourceData } = await import('../../src/services/gameData');
+        sourceData.value = { islandProduction: { 37593: 'crop', 37596: 'crop', 37603: 'pasture' } } as any;
         const { useWorkbench } = await import('../../src/composables/useWorkbench');
         const scope = effectScope();
         const workbench = scope.run(() => useWorkbench())!;
         try {
             await workbench.initialize(true);
             for (const id of granaryIds) {
-                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandGranary: true, canCraft: false, canGather: false, canHunt: false });
+                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandSource: 'islandGranary', canCraft: false, canGather: false, canHunt: false });
                 expect(workbench.decisions[String(id)]).toMatchObject({ other: 2, gather: 0, craft: 0, buy: 0 });
             }
-            for (const id of otherIds) expect(workbench.workbenchItems.value[id].islandGranary).toBe(false);
+            for (const id of otherIds) expect(workbench.workbenchItems.value[id].islandSource).not.toBe('islandGranary');
             const others = workbench.generateTodoSections.value.find(section => section.key === 'other')!;
-            expect(others.items.filter(item => item.islandGranary).map(item => item.id).sort()).toEqual(granaryIds.sort());
+            expect(others.items.filter(item => item.islandSource === 'islandGranary').map(item => item.id).sort()).toEqual(granaryIds.sort());
+            for (const [id, islandSource] of [[37593, 'islandFarming'], [37596, 'islandFarming'], [37603, 'islandPasture']] as const) {
+                expect(workbench.workbenchItems.value[id]).toMatchObject({ islandSource, canCraft: false, canGather: false, canHunt: false });
+                expect(workbench.decisions[String(id)]).toEqual({ other: 2, gather: 0, craft: 0, buy: 0 });
+                expect(others.items.find(item => item.id === id)).toMatchObject({ islandSource });
+            }
+            expect(workbench.workbenchItems.value[37561].islandSource).toBeNull();
+            expect(workbench.workbenchItems.value[100].islandSource).toBeNull();
         } finally {
             scope.stop();
         }

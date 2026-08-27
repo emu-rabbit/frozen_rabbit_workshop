@@ -18,12 +18,9 @@ import type { MonsterDropInfo } from '../services/monsterDrops';
 import { useI18n } from 'vue-i18n';
 import { useSettings } from './useSettings';
 import { sanitizeNoteItems } from '../utils/noteItems';
+import { getIslandOtherSource, type IslandOtherSource } from '../services/islandSources';
 
 type MarketPriceMode = 'all' | 'hq';
-
-// Rare expedition materials; crops and pasture products are not granary sources.
-// https://ffxiv.consolegameswiki.com/wiki/Island_Granary
-const ISLAND_GRANARY_ITEM_IDS = new Set([37578, 37579, 37580, 37581, 37582, 39894]);
 
 interface MarketPriceSnapshot {
   priceFetched: boolean;
@@ -44,7 +41,7 @@ export interface CraftingInfo {
 export interface WorkbenchItem {
   id: number;
   island: boolean;
-  islandGranary: boolean;
+  islandSource: IslandOtherSource | null;
   name: string;
   icon: string;
   canCraft: boolean;
@@ -86,7 +83,7 @@ export interface ItemDecision {
 }
 
 export interface TodoItem {
-  islandGranary?: boolean;
+  islandSource?: IslandOtherSource | null;
   sectionKey: 'other' | 'hunt' | 'buy' | 'gather' | 'craft';
   id: number;
   quantity: number;
@@ -292,7 +289,7 @@ const refreshItemsData = (ids: number[]) => {
     workbenchItems.value[id] = {
       id,
       island: itemInfo.kind !== 'item',
-      islandGranary: itemInfo.kind === 'islandItem' && ISLAND_GRANARY_ITEM_IDS.has(id),
+      islandSource: itemInfo.kind === 'islandItem' ? getIslandOtherSource(id) : null,
       name: itemInfo.name,
       icon: itemInfo.icon,
       canCraft: !!recipe,
@@ -601,7 +598,7 @@ const generateTodoSections = computed(() => {
     if (d.other > 0) {
       sections.other.push({
         sectionKey: 'other', id, quantity: d.other,
-        islandGranary: item.islandGranary,
+        islandSource: item.islandSource,
         name: item.name, icon: item.icon, marketPrice: null
       });
     }

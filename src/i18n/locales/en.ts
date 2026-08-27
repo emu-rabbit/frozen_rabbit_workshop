@@ -1,6 +1,8 @@
 export default {
   gameData: {
     islandGranary: 'Granary',
+    islandFarming: 'Sanctuary Farming',
+    islandPasture: 'Sanctuary Pasture',
     cancel: 'Cancel',
     repairConfirm: 'Download again and reload',
     title: 'Cached Game Data',

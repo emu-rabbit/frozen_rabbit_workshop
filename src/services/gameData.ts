@@ -60,6 +60,12 @@ export async function decodeBundle<K extends BundleName>(manifest: DataManifest,
   if (value.formatVersion !== DATA_FORMAT) throw new Error(`${name}: incompatible format`);
   const records = name === 'catalog' ? value.items : name === 'recipes' ? value.recipes : value.nodes && Object.values(value.nodes);
   if (!Array.isArray(records) || records.length !== d.records) throw new Error(`${name}: invalid records`);
+  if (name === 'sources' && value.islandProduction !== undefined) {
+    const production = value.islandProduction;
+    if (!production || typeof production !== 'object' || Array.isArray(production)
+      || Object.entries(production).some(([id, type]) => !/^[1-9]\d*$/.test(id) || !Number.isSafeInteger(Number(id))
+        || (type !== 'crop' && type !== 'pasture'))) throw new Error('sources: invalid island production');
+  }
   return value;
 }
 async function download(manifest: DataManifest, name: BundleName): Promise<ArrayBuffer> {

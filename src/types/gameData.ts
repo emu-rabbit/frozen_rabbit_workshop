@@ -43,6 +43,8 @@ export interface SourceBundle {
   npcs: Record<string, DataNames>; drops: Record<string, number[]>;
   monsters: Record<string, { positions: MonsterPosition[] }>; mobs: Record<string, DataNames>;
   islandGathering: Record<string, { itemId: number; x: number; y: number; z?: number; radius?: number }>;
+  // Optional for previously cached formatVersion 2 bundles.
+  islandProduction?: Record<string, 'crop' | 'pasture'>;
 }
 export interface BundleData {
   catalog: CatalogBundle;

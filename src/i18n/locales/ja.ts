@@ -1,6 +1,8 @@
 export default {
   gameData: {
     islandGranary: 'グラナリーオフィス',
+    islandFarming: '開拓耕作',
+    islandPasture: '開拓飼育',
     cancel: 'キャンセル',
     repairConfirm: '再取得して再読み込み',
     title: 'ゲームデータのキャッシュ',
