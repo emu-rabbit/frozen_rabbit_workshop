@@ -1,4 +1,30 @@
 export default {
+  migration: {
+  "title": "We've moved",
+  "description": "Your old data won't move automatically. Download a backup and import it here.",
+  "settingsTitle": "Import data from the old site",
+  "instructions": "Use your original browser to download a Workshop backup, then return here to import it.",
+  "link": "Download a backup from The Gleaner’s Commission",
+  "choose": "Choose a backup file",
+  "historyLimit": "Only the 20 newest history notes will be kept.",
+  "summary": "{notes} history notes · {favorites} favorites · {settings} settings",
+  "policy": "{conflicts} entries differ. Which copy should we keep?",
+  "keep": "Keep data on this site",
+  "backup": "Use backup data",
+  "reloadWarning": "Unsaved edits and material allocations will be lost.",
+  "import": "Import and reload",
+  "dismiss": "Don't show again",
+  "later": "Maybe later",
+  "errors": {
+    "invalid": "Incomplete or invalid data: {detail}. Nothing was imported. Please check the backup.",
+    "format": "Choose a Workshop v1 backup from The Gleaner’s Commission. Tome and individual note files are not supported.",
+    "tooLarge": "This file exceeds the 10 MB limit.",
+    "storage": "Browser storage could not be written. Original data was restored. Check storage permissions and free space, then retry.",
+    "rollback": "Import failed and some original data could not be restored. Keep your backup, stop editing and check browser storage.",
+    "changed": "Data changed after the preview. Select the file again to review current conflicts.",
+    "preference": "Could not save this preference. Check browser storage permissions."
+  }
+},
   gameData: {
     islandGranary: 'Granary',
     islandFarming: 'Sanctuary Farming',

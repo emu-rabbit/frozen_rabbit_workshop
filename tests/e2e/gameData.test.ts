@@ -205,6 +205,7 @@ test('real checked-in packages load through the actual static server', async ({ 
   page.on('request', request => { if (request.url().includes('raw.githubusercontent.com')) upstream.push(request.url()); });
   await page.addInitScript(() => {
     localStorage.setItem('frozen-rabbit-initialized', 'true'); localStorage.setItem('frozen-rabbit-lang', 'tw');
+    localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
   });
   await page.goto('./');
   await expect.poll(() => storedVersion(page)).toMatch(/^[a-f0-9]{64}$/);
@@ -221,6 +222,7 @@ test('real checked-in packages load through the actual static server', async ({ 
 test('real island crops and pasture labels reach workbench, todos and export', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('frozen-rabbit-initialized', 'true');
+    localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
     localStorage.setItem('frozen-rabbit-lang', 'tw');
   });
   const market: string[] = [];

@@ -118,6 +118,7 @@ export async function setupTest(page: Page, beforeGoto?: () => Promise<void>) {
   // 1. 設定 localStorage（繞過 language selection modal）
   await page.addInitScript(() => {
     window.localStorage.setItem('frozen-rabbit-initialized', 'true');
+    window.localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
     window.localStorage.setItem('frozen-rabbit-lang', 'tw');
   });
 

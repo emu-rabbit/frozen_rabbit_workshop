@@ -6,6 +6,7 @@ import Dropdown from 'primevue/dropdown'
 import { useSettings } from '../../composables/useSettings'
 import { dataCenters, ensureDataCentersLoaded, setSelectedDC } from '../../services/universalis'
 import GameDataSettings from '../shared/GameDataSettings.vue'
+import MigrationImport from '../shared/MigrationImport.vue'
 
 const { t } = useI18n()
 const { language, debugMode, marketRegion, marketDC, marketCostStrategy, isDarkMode } = useSettings()
@@ -225,6 +226,14 @@ watch(marketDC, (newVal) => {
         <div v-if="false" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-8 hover:shadow-md transition-shadow">
           <!-- ... existing debug toggle ... -->
         </div>
+
+        <section aria-labelledby="migration-heading" class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-soft-green-100 dark:border-slate-800 p-5 md:p-8 hover:shadow-md transition-shadow">
+          <div class="mb-4 flex items-center gap-3 text-soft-green-900 dark:text-soft-green-400">
+            <i class="pi pi-file-import text-xl" aria-hidden="true"></i>
+            <h3 id="migration-heading" class="text-lg font-bold">{{ t('migration.settingsTitle') }}</h3>
+          </div>
+          <MigrationImport />
+        </section>
 
         <GameDataSettings />
 

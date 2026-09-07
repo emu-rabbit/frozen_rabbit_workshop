@@ -1,4 +1,30 @@
 export default {
+  migration: {
+  "title": "我们搬家了",
+  "description": "旧站数据不会自动搬过来，请下载备份后导入。",
+  "settingsTitle": "导入旧站数据",
+  "instructions": "用原来的浏览器下载工坊备份，再回来导入。",
+  "link": "前往「拾穗人的委托」下载备份",
+  "choose": "选择备份文件",
+  "historyLimit": "历史只保留最新 20 条。",
+  "summary": "历史笔记 {notes} 条 · 收藏 {favorites} 条 · 设置 {settings} 项",
+  "policy": "有 {conflicts} 项数据不同，要保留哪一份？",
+  "keep": "保留新站数据",
+  "backup": "采用备份数据",
+  "reloadWarning": "未保存的编辑与备料分配将丢失。",
+  "import": "导入并重新加载",
+  "dismiss": "不再显示",
+  "later": "稍后再说",
+  "errors": {
+    "invalid": "数据格式不完整或无效：{detail}。未导入任何数据，请检查备份。",
+    "format": "请选择「拾穗人的委托」导出的工坊 v1 备份，不支持秘笈或单条笔记文件。",
+    "tooLarge": "文件超过 10 MB，无法导入。",
+    "storage": "无法写入浏览器存储空间，已恢复原数据。请确认存储权限及剩余空间后重试。",
+    "rollback": "导入失败，且部分原数据无法恢复。请保留备份并停止编辑，检查浏览器存储空间。",
+    "changed": "预览后数据已变动，请重新选择文件以确认最新冲突。",
+    "preference": "无法保存「不再显示」偏好，请检查浏览器存储权限。"
+  }
+},
   gameData: {
     islandGranary: '屯货仓库',
     islandFarming: '开拓种植',
