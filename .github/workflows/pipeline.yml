@@ -11,6 +11,10 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: pages-${{ github.event_name == 'push' && 'deploy' || github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-and-test:
     name: Build and Test
@@ -46,8 +50,19 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify production artifact
+        run: node scripts/verify-deployment.mjs
+
       - name: Run E2E Tests
         run: npx playwright test
+
+      - name: Build and verify staging
+        env:
+          VITE_BASE_PATH: /staging/
+        run: |
+          npm run build
+          node scripts/verify-deployment.mjs
+          npx playwright test
 
       - name: Upload Playwright Report
         uses: actions/upload-artifact@v7
@@ -64,8 +79,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      SITE_BASE_PATH: /frozen_rabbit_workshop/
-      STAGING_BASE_PATH: /frozen_rabbit_workshop/staging/
+      SITE_BASE_PATH: /
+      STAGING_BASE_PATH: /staging/
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -113,6 +128,7 @@ jobs:
           npm ci
           VITE_BASE_PATH="${SITE_BASE_PATH}" npm run build
           popd
+          VITE_BASE_PATH="${SITE_BASE_PATH}" node scripts/verify-deployment.mjs ../production-site/dist
           cp -a ../production-site/dist/. ../pages-site/
 
           if [ "${HAS_STAGING}" = "true" ]; then
@@ -121,6 +137,7 @@ jobs:
             npm ci
             VITE_BASE_PATH="${STAGING_BASE_PATH}" npm run build
             popd
+            VITE_BASE_PATH="${STAGING_BASE_PATH}" node scripts/verify-deployment.mjs ../staging-site/dist
             mkdir -p ../pages-site/staging
             cp -a ../staging-site/dist/. ../pages-site/staging/
           fi

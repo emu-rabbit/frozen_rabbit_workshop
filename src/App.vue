@@ -275,7 +275,7 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
 
     <!-- Main Content -->
     <main ref="mainContainer" class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
-      <GameDataStatus />
+      <GameDataStatus :paused="isMigrationOpen" />
       <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 dark:bg-soft-green-900/20 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->

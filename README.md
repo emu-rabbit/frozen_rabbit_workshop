@@ -42,6 +42,12 @@ Frozen Rabbit Workshop provides localized terminology for:
 - **Internationalization**: Vue I18n
 - **Icons**: PrimeIcons
 
+## Deployment
+
+Production target: [Frozen Rabbit Workshop](https://workshop.frozenrabbit.com/). Staging uses `/staging/`.
+Build before running browser tests (`npm run build`, then `npm run test:e2e`).
+See [domain migration and release checks](docs/domain-migration.md) for both build paths and the separate Pages/DNS cutover.
+
 ## Credits and Open Source Notice
 
 This project is supported by data and tooling from community projects:

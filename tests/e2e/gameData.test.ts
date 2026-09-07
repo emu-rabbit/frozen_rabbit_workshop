@@ -1,6 +1,6 @@
 import { test, expect, type Page, type Locator } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import { mockGamePackages, setupTest, searchAndSelectItem, navigateTo } from './utils/test-helpers';
+import { mockGamePackages, setupTest, searchAndSelectItem, navigateTo, dismissAnalyticsPrompt } from './utils/test-helpers';
 
 async function badgeStyle(locator: Locator) {
   return locator.evaluate(element => {
@@ -12,7 +12,7 @@ async function badgeStyle(locator: Locator) {
 async function storedVersion(page: Page, key = 'active') {
   return page.evaluate(async key => {
     return new Promise<string | null>((resolve, reject) => {
-      const open = indexedDB.open('frozen-rabbit-workshop:data:/frozen_rabbit_workshop/', 1);
+      const open = indexedDB.open(`frozen-rabbit-workshop:data:${window.location.pathname}`, 1);
       // Inspection must not create an empty DB before the application's schema upgrade.
       open.onupgradeneeded = () => { open.transaction?.abort(); resolve(null); };
       open.onerror = () => open.error?.name === 'AbortError' ? resolve(null) : reject(open.error);
@@ -201,6 +201,7 @@ test('catalog failure retry keeps the draft and shows a busy action until recove
   await searchAndSelectItem(page, '找尋物品...', '鐵錠', '鐵錠');
 });
 test('real checked-in packages load through the actual static server', async ({ page }) => {
+  await dismissAnalyticsPrompt(page);
   const upstream: string[] = [];
   page.on('request', request => { if (request.url().includes('raw.githubusercontent.com')) upstream.push(request.url()); });
   await page.addInitScript(() => {
@@ -220,6 +221,7 @@ test('real checked-in packages load through the actual static server', async ({ 
 });
 
 test('real island crops and pasture labels reach workbench, todos and export', async ({ page }) => {
+  await dismissAnalyticsPrompt(page);
   await page.addInitScript(() => {
     localStorage.setItem('frozen-rabbit-initialized', 'true');
     localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');

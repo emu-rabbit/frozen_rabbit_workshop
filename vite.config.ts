@@ -1,10 +1,27 @@
 import { defineConfig } from 'vitest/config'
 import vue from '@vitejs/plugin-vue'
+import { resolve } from 'node:path'
+import { rmSync, writeFileSync } from 'node:fs'
+
+const base = process.env.VITE_BASE_PATH || '/'
+let outputDir = ''
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/frozen_rabbit_workshop/',
-  plugins: [vue()],
+  base,
+  plugins: [vue(), {
+    name: 'staging-search-metadata',
+    apply: 'build',
+    configResolved(config) { outputDir = resolve(config.root, config.build.outDir) },
+    transformIndexHtml(html) {
+      return base === '/staging/' ? html.replace('content="index, follow"', 'content="noindex, follow"') : html
+    },
+    closeBundle() {
+      if (base !== '/staging/') return
+      writeFileSync(resolve(outputDir, 'robots.txt'), 'User-agent: *\nDisallow: /\n')
+      rmSync(resolve(outputDir, 'sitemap.xml'), { force: true })
+    }
+  }],
   server: {
     port: 3000,
   },

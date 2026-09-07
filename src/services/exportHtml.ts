@@ -258,7 +258,7 @@ export function generateTodoExportHtml(sections: any[], ctx: ExportContext): str
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${ctx.pageTitle}</title>
-    <link rel="icon" type="image/png" href="https://emu-rabbit.github.io/frozen_rabbit_workshop/logo.png" />
+    <link rel="icon" type="image/png" href="https://workshop.frozenrabbit.com/logo.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/primeicons/primeicons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
