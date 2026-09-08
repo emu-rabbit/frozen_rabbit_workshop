@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { getRouteNameFromPagePath, getWorkbenchItemCountBucket } from './analytics'
 
 describe('getRouteNameFromPagePath', () => {
-  it('uses the hash route as a stable GA route dimension', () => {
-    expect(getRouteNameFromPagePath('/frozen_rabbit_workshop/#recommended')).toBe('recommended')
-    expect(getRouteNameFromPagePath('/frozen_rabbit_workshop/#settings?debug=true')).toBe('settings')
+  it.each(['/', '/staging/', '/frozen_rabbit_workshop/'])('uses the hash route under %s', base => {
+    expect(getRouteNameFromPagePath(`${base}#recommended`)).toBe('recommended')
+    expect(getRouteNameFromPagePath(`${base}#settings?debug=true`)).toBe('settings')
   })
 
   it('falls back to the default new-note route when no hash is present', () => {

@@ -35,6 +35,8 @@ export function mockGamePackages(ingotName = '鐵錠') {
   return fixturePackages(sources);
 }
 export async function setupDictionaryMocks(page: Page) {
+  await page.route('**/*.googletagmanager.com/**', route => route.abort());
+  await page.route('**/*.google-analytics.com/**', route => route.abort());
   const packages = mockGamePackages();
   await page.route('**/game-data/**', route => {
     const file = new URL(route.request().url()).pathname.split('/').pop()!;
@@ -115,9 +117,11 @@ export async function navigateTo(page: Page, tabName: string) {
  * 所有 flow tests 的 beforeEach 都應呼叫此函式。
  */
 export async function setupTest(page: Page, beforeGoto?: () => Promise<void>) {
+  await dismissAnalyticsPrompt(page);
   // 1. 設定 localStorage（繞過 language selection modal）
   await page.addInitScript(() => {
     window.localStorage.setItem('frozen-rabbit-initialized', 'true');
+    window.localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
     window.localStorage.setItem('frozen-rabbit-lang', 'tw');
   });
 
@@ -135,4 +139,13 @@ export async function setupTest(page: Page, beforeGoto?: () => Promise<void>) {
   await expect(
     page.getByText('冷凍兔肉的工坊').filter({ visible: true }).first()
   ).toBeVisible({ timeout: 10000 });
+}
+
+export async function dismissAnalyticsPrompt(page: Page) {
+  // A refusal intentionally lasts only for one page session, so handle reloads too.
+  await page.addLocatorHandler(page.getByRole('button', { name: '拒絕', exact: true }), async button => {
+    await button.click();
+  });
+  await page.route('**/*.googletagmanager.com/**', route => route.abort());
+  await page.route('**/*.google-analytics.com/**', route => route.abort());
 }

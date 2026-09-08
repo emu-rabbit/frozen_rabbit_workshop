@@ -17,6 +17,8 @@ import { sanitizeNoteItems } from './utils/noteItems'
 // Layout
 import Sidebar from './components/layout/Sidebar.vue'
 import SponsorModal from './components/modals/SponsorModal.vue'
+import MigrationModal from './components/modals/MigrationModal.vue'
+import { MIGRATION_DISMISSED_KEY } from './services/migration'
 import LanguageSelectModal from './components/modals/LanguageSelectModal.vue'
 import MarketSetupReminderModal from './components/modals/MarketSetupReminderModal.vue'
 import AnalyticsConsentBanner from './components/shared/AnalyticsConsentBanner.vue'
@@ -110,11 +112,15 @@ const currentTab = ref('new') // 'new' | 'editor' | 'history' | 'settings' | 'fa
 const mainContainer = ref<HTMLElement | null>(null)
 const isMobileMenuOpen = ref(false)
 const isSponsorModalOpen = ref(false)
+const isMigrationOpen = ref((() => {
+  try { return localStorage.getItem(MIGRATION_DISMISSED_KEY) !== 'true' }
+  catch { return true }
+})())
 const isLanguageModalOpen = ref(!initialized.value)
 const isMarketSetupReminderOpen = ref(false)
 const isMarketSetupStepActive = ref(false)
 const shouldPauseAnalyticsConsent = computed(() =>
-  isLanguageModalOpen.value || isMarketSetupReminderOpen.value || isMarketSetupStepActive.value
+  isMigrationOpen.value || isLanguageModalOpen.value || isMarketSetupReminderOpen.value || isMarketSetupStepActive.value
 )
 
 // URL Hash Sync
@@ -269,7 +275,7 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
 
     <!-- Main Content -->
     <main ref="mainContainer" class="flex-1 flex flex-col overflow-y-auto relative pt-16 lg:pt-0">
-      <GameDataStatus />
+      <GameDataStatus :paused="isMigrationOpen" />
       <div class="absolute top-0 right-0 w-96 h-96 bg-lime-green-100 dark:bg-soft-green-900/20 rounded-bl-full opacity-50 -z-10 blur-3xl pointer-events-none"></div>
 
       <!-- Views via v-if to preserve simple typings without dynamic components casting -->
@@ -324,13 +330,16 @@ const handleMarketSetupReminderVisibility = (val: boolean) => {
     </main>
 
     <!-- Global Modals -->
-    <SponsorModal v-model:visible="isSponsorModalOpen" />
+    <MigrationModal v-model:visible="isMigrationOpen" />
+    <SponsorModal v-if="!isMigrationOpen" v-model:visible="isSponsorModalOpen" />
     <LanguageSelectModal 
+      v-if="!isMigrationOpen"
       v-model:visible="isLanguageModalOpen" 
       @preview-language="handleLanguageUpdate"
       @select="handleLanguageSelect"
     />
     <MarketSetupReminderModal
+      v-if="!isMigrationOpen"
       :visible="isMarketSetupReminderOpen"
       @update:visible="handleMarketSetupReminderVisibility"
     />

@@ -1,7 +1,7 @@
 # robots.txt for Frozen Rabbit's Workshop
-# https://emu-rabbit.github.io/frozen_rabbit_workshop/
+# https://workshop.frozenrabbit.com/
 
 User-agent: *
 Allow: /
 
-Sitemap: https://emu-rabbit.github.io/frozen_rabbit_workshop/sitemap.xml
+Sitemap: https://workshop.frozenrabbit.com/sitemap.xml
