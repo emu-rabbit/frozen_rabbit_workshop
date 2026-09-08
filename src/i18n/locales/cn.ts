@@ -11,7 +11,6 @@ export default {
   "policy": "有 {conflicts} 项数据不同，要保留哪一份？",
   "keep": "保留新站数据",
   "backup": "采用备份数据",
-  "reloadWarning": "未保存的编辑与备料分配将丢失。",
   "import": "导入并重新加载",
   "dismiss": "不再显示",
   "later": "稍后再说",

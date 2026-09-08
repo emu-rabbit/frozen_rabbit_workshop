@@ -68,7 +68,6 @@ function restore() {
           <option value="backup">{{ t('migration.backup') }}</option>
         </select>
       </label>
-      <p class="text-xs leading-relaxed">{{ t('migration.reloadWarning') }}</p>
       <button type="button" class="w-full rounded-xl bg-soft-green-600 px-4 py-3 font-bold text-white hover:bg-soft-green-700" :disabled="busy" @click="restore">{{ t('migration.import') }}</button>
     </div>
   </div>

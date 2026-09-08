@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { useSettings } from '../../src/composables/useSettings'
 import { parseBackup, prepareImport, commitImport, MigrationError, MIGRATION_DISMISSED_KEY } from '../../src/services/migration'
 
 const key = 'frozen-rabbit-notes'
@@ -10,6 +11,47 @@ function storage(initial: Record<string, string> = {}): Storage {
 }
 
 describe('Gleaner Workshop v1 import', () => {
+  it.each(['keep', 'backup'] as const)('replaces actual startup defaults without conflicts under %s', policy => {
+    localStorage.clear()
+    useSettings()
+    const data = parseBackup(backup({
+      'frozen-rabbit-notes': JSON.stringify([note()]),
+      'frozen-rabbit-favorites-data': JSON.stringify([note()]),
+      'frozen-rabbit-lang': 'en',
+      'frozen-rabbit-market-region': 'Japan',
+      'frozen-rabbit-market-dc': 'Mana',
+      'frozen-rabbit-market-strategy': 'aggressive',
+      'frozen-rabbit-dark-mode': 'true'
+    }))
+    try {
+      const plan = prepareImport(data, localStorage, policy)
+      expect(plan.counts).toEqual({ notes: 1, favorites: 1, settings: 5, conflicts: 0 })
+      commitImport(plan, localStorage)
+      for (const [key, raw] of Object.entries(data)) expect(localStorage.getItem(key)).toBe(raw)
+    } finally { localStorage.clear() }
+  })
+  it.each(['keep', 'backup'] as const)('still treats non-default settings as conflicts under %s', policy => {
+    const current = {
+      'frozen-rabbit-lang': 'ja',
+      'frozen-rabbit-market-region': 'Europe',
+      'frozen-rabbit-market-dc': 'Light',
+      'frozen-rabbit-market-strategy': 'conservative',
+      'frozen-rabbit-dark-mode': 'true'
+    }
+    const data = parseBackup(backup({
+      'frozen-rabbit-lang': 'en',
+      'frozen-rabbit-market-region': 'Japan',
+      'frozen-rabbit-market-dc': 'Mana',
+      'frozen-rabbit-market-strategy': 'aggressive',
+      'frozen-rabbit-dark-mode': 'false'
+    }))
+    const store = storage(current)
+    const plan = prepareImport(data, store, policy)
+    expect(plan.counts.conflicts).toBe(5)
+    commitImport(plan, store)
+    for (const [key, raw] of Object.entries(policy === 'keep' ? current : data)) expect(store.getItem(key)).toBe(raw)
+    expect(prepareImport(data, storage(data), 'keep').counts.conflicts).toBe(0)
+  })
   it('reads raw serializers and normalizes historical string item IDs without dropping fields', () => {
     const old = { ...note(), extra: 'preserved', items: [{ id: '-10000', quantity: '2' }] }
     const data = parseBackup(backup({ [key]: JSON.stringify([old]), 'frozen-rabbit-lang': 'en', 'frozen-rabbit-dark-mode': 'false' }))
@@ -82,6 +124,18 @@ describe('Gleaner Workshop v1 import', () => {
     store.setItem(key, 'invalid')
     expect(() => commitImport(plan, store)).toThrow('changed')
     expect(() => prepareImport(data, store, 'keep')).toThrow('invalid')
+  })
+  it('replaces defaults while retaining modified settings, and rejects edits after preview', () => {
+    const store = storage({ 'frozen-rabbit-lang': 'tw', 'frozen-rabbit-market-strategy': 'conservative' })
+    const data = parseBackup(backup({ 'frozen-rabbit-lang': 'en', 'frozen-rabbit-market-strategy': 'aggressive' }))
+    const plan = prepareImport(data, store, 'keep')
+    expect(plan.counts.conflicts).toBe(1)
+    expect(plan.writes['frozen-rabbit-lang']).toBe('en')
+    expect(plan.writes['frozen-rabbit-market-strategy']).toBe('conservative')
+    store.setItem('frozen-rabbit-lang', 'ja')
+    expect(() => commitImport(plan, store)).toThrow('changed')
+    expect(store.getItem('frozen-rabbit-lang')).toBe('ja')
+    expect(store.getItem(MIGRATION_DISMISSED_KEY)).toBeNull()
   })
   it('rolls back all completed writes when quota fails', () => {
     const store = storage({ [key]: JSON.stringify([note('existing')]) })

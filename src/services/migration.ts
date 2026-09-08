@@ -1,4 +1,5 @@
 import { normalizeItemId } from '../utils/noteItems'
+import { DEFAULT_MARKET_DATA_CENTER, DEFAULT_MARKET_REGION } from '../data/marketServers'
 
 export const GLEANER_URL = 'https://emu-rabbit.github.io/gleaner/'
 export const MIGRATION_DISMISSED_KEY = 'frozen-rabbit-migration-dismissed'
@@ -7,6 +8,14 @@ const prefix = 'frozen-rabbit-'
 const collections = ['notes', 'favorites-data']
 const settings = ['lang', 'market-region', 'market-dc', 'market-strategy', 'dark-mode']
 const keys = [...collections, ...settings].map(key => prefix + key)
+// Match the values persisted by useSettings on a fresh visit.
+const defaultSettings: Record<string, string> = {
+  [prefix + 'lang']: 'tw',
+  [prefix + 'market-region']: DEFAULT_MARKET_REGION,
+  [prefix + 'market-dc']: DEFAULT_MARKET_DATA_CENTER,
+  [prefix + 'market-strategy']: 'balanced',
+  [prefix + 'dark-mode']: 'false'
+}
 type RecordValue = Record<string, unknown>
 export type BackupData = Record<string, string>
 export type ConflictPolicy = 'keep' | 'backup'
@@ -98,8 +107,9 @@ export function prepareImport(data: BackupData, storage: Storage, policy: Confli
       writes[key] = JSON.stringify(entries)
     } else {
       counts.settings++
-      if (existing !== null && existing !== raw) counts.conflicts++
-      writes[key] = policy === 'keep' && existing !== null ? existing : raw
+      const hasCurrentValue = existing !== null && existing !== defaultSettings[key]
+      if (hasCurrentValue && existing !== raw) counts.conflicts++
+      writes[key] = policy === 'keep' && hasCurrentValue ? existing : raw
     }
   }
   // Imported settings complete onboarding; privacy consent remains independent.
