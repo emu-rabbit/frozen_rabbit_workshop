@@ -15,8 +15,9 @@ export function createNoteSearch(
       aliases.get(note.id) ?? '',
     ].join(' ')),
   })).sort((a, b) => (priorities.get(a.note.id) ?? 1) - (priorities.get(b.note.id) ?? 1));
+  const orderedNotes = index.map(entry => entry.note);
   return (query: string): Note[] => {
     const tokens = normalize(query).trim().split(/\s+/).filter(Boolean);
-    return tokens.length ? index.filter(entry => tokens.every(token => entry.text.includes(token))).map(entry => entry.note) : notes;
+    return tokens.length ? index.filter(entry => tokens.every(token => entry.text.includes(token))).map(entry => entry.note) : orderedNotes;
   };
 }

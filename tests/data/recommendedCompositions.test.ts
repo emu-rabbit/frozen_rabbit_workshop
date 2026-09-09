@@ -29,7 +29,7 @@ describe('ready-to-use recommended sets', () => {
 
   it('puts composed job and tool sets before shared gear in searches, preserving order within each group', () => {
     const baseIds = new Set(baseRecommendedNotes.map(note => note.id));
-    for (const query of ['100', '710', '巧匠 750', '大地 720+690']) {
+    for (const query of ['', '   ', '100', '710', '巧匠 750', '大地 720+690']) {
       const results = searchRecommendedNotes(query);
       const expected = notes.filter(note => results.includes(note));
       expect(results).toEqual([
@@ -39,7 +39,7 @@ describe('ready-to-use recommended sets', () => {
       expect(results.some(note => baseIds.has(note.id))).toBe(true);
       expect(results.some(note => !baseIds.has(note.id))).toBe(true);
     }
-    expect(searchRecommendedNotes('')).toBe(notes);
+    expect(searchRecommendedNotes('')).toBe(searchRecommendedNotes('   '));
   });
 
   it('uses Chinese piece counts and consistent level prefixes in every recommended title', () => {
@@ -140,7 +140,7 @@ describe('ready-to-use recommended sets', () => {
     expect(find('木工師 12 720+690').id).toBe(find('Carpenter 720+690').id);
     expect(find('ナイト 710').id).toBe(find('騎士十二 710').id);
     expect(searchRecommendedNotes('不存在的職業')).toHaveLength(0);
-    expect(searchRecommendedNotes('')).toBe(notes);
+    expect(searchRecommendedNotes('')).toHaveLength(notes.length);
     const unread: Note = { id: 'lazy', name: 'Lazy note', createdAt: '', get items() { throw new Error('Search expanded items'); } };
     expect(createNoteSearch([unread])('lazy')).toEqual([unread]);
   });
