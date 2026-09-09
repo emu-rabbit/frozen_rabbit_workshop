@@ -8,6 +8,24 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.3.1',
+    date: '2026-09-09',
+    changes: [
+      {
+        tw: '新增包含主副手的341項最愛筆記',
+        cn: '新增包含主副手的341项最爱笔记',
+        en: 'Added 341 favorite notes, including main-hand and off-hand equipment',
+        ja: 'メインアーム・サブアームを含む341件のお気に入りノートを追加しました'
+      },
+      {
+        tw: '修正錯置的最愛筆記內容',
+        cn: '修正错置的最爱笔记内容',
+        en: 'Fixed misplaced content in favorite notes',
+        ja: 'お気に入りノートに誤って配置されていた内容を修正しました'
+      }
+    ]
+  },
+  {
     version: '1.3.0',
     date: '2026-08-27',
     changes: [
