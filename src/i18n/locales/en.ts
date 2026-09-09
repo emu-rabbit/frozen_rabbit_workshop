@@ -78,7 +78,7 @@ export default {
   },
   recommended: {
     title: 'Rabbit\'s Picks',
-    description: 'Practical lists compiled by the rabbit. Use spaces to link search criteria. If a note is missing the weapon or item you want, feel free to use the Note Workbench to modify it.',
+    description: 'Search by job and item level for ready-to-use sets with weapons or tools. Shared gear without weapons or tools, and separate tool sets, are still available. The i720 + i690 sets include accessories. Separate search terms with spaces.',
     searchPlaceholder: 'Search...',
     emptyTitle: 'No Matching Notes Found',
     emptyDescription: 'Try a different keyword!'

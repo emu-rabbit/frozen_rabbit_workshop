@@ -1,4 +1,7 @@
 import type { Note } from '../../types/note';
+import { composeNotes } from './compose';
+import compositions from './generated/compositions.json';
+import { createNoteSearch } from '../../utils/noteSearch';
 
 import lv100_ilv690 from './lv100_ilv690.json';
 import lv100_ilv710 from './lv100_ilv710.json';
@@ -22,7 +25,7 @@ import lv90_ilv620 from './lv90_ilv620.json';
 import lv90_ilv640 from './lv90_ilv640.json';
 import lv90_ilv645 from './lv90_ilv645.json';
 
-const allRecommendedNotes: Note[] = [
+export const baseRecommendedNotes: Note[] = [
   ...(lv100_ilv690 as Note[]),
   ...(lv100_ilv710 as Note[]),
   ...(lv100_ilv720 as Note[]),
@@ -44,6 +47,11 @@ const allRecommendedNotes: Note[] = [
   ...(lv90_ilv620 as Note[]),
   ...(lv90_ilv640 as Note[]),
   ...(lv90_ilv645 as Note[]),
+];
+
+const allRecommendedNotes: Note[] = [
+  ...baseRecommendedNotes,
+  ...composeNotes(baseRecommendedNotes, compositions.groups, compositions.jobs),
 ].sort((a, b) => {
   const getILv = (n: Note) => {
     const name = typeof n.name === "string" ? n.name : n.name.tw;
@@ -52,5 +60,15 @@ const allRecommendedNotes: Note[] = [
   };
   return getILv(a) - getILv(b);
 });
+
+const aliases = new Map<string, string>();
+const searchPriorities = new Map<string, number>();
+for (const group of compositions.groups) {
+  for (const job of [...Object.keys(group.variants), 'all']) {
+    aliases.set(`recommend_${group.base}_${job.toLowerCase()}`, job === 'all' ? Object.keys(group.variants).join(' ') : job);
+    searchPriorities.set(`recommend_${group.base}_${job.toLowerCase()}`, 0);
+  }
+}
+export const searchRecommendedNotes = createNoteSearch(allRecommendedNotes, aliases, searchPriorities);
 
 export default allRecommendedNotes;

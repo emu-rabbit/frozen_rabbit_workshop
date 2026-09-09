@@ -10,6 +10,8 @@
 - 執行或更新 `.agents/workflows/process-recommended.md`。
 
 ## 資料結構
+職業含武器／工具套裝採「原有共用筆記＋組合定義」，詳細規則與來源見 `docs/recommended-notes.md`。先讀該文件再修改 `scripts/generate-recommended.mjs`、`generated/compositions.json` 或 `compose.ts`；新組合使用 `npm run notes:generate` 產生，不為每個職業複製完整 JSON。下列結構仍適用於原始人工筆記，以及 runtime／收藏／匯出的完整筆記。
+
 每筆推薦筆記應符合：
 
 ```json
