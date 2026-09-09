@@ -1,0 +1,66 @@
+[
+  {
+    "id": "recommend_lv61_ilv180_crafting",
+    "name": {
+      "tw": "Lv.61 iLv180 巧匠五件套裝",
+      "cn": "Lv.61 iLv180 巧匠五件套装",
+      "en": "Lv.61 iLv180 Crafting 5-piece Set",
+      "ja": "Lv.61 iLv180 クラフター5点セット"
+    },
+    "items": [
+      {
+        "id": 19612,
+        "quantity": 1
+      },
+      {
+        "id": 19613,
+        "quantity": 1
+      },
+      {
+        "id": 19614,
+        "quantity": 1
+      },
+      {
+        "id": 19615,
+        "quantity": 1
+      },
+      {
+        "id": 19616,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_lv61_ilv180_gathering",
+    "name": {
+      "tw": "Lv.61 iLv180 大地五件套裝",
+      "cn": "Lv.61 iLv180 大地五件套装",
+      "en": "Lv.61 iLv180 Gathering 5-piece Set",
+      "ja": "Lv.61 iLv180 ギャザラー5点セット"
+    },
+    "items": [
+      {
+        "id": 19617,
+        "quantity": 1
+      },
+      {
+        "id": 19618,
+        "quantity": 1
+      },
+      {
+        "id": 19619,
+        "quantity": 1
+      },
+      {
+        "id": 19620,
+        "quantity": 1
+      },
+      {
+        "id": 19621,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  }
+]

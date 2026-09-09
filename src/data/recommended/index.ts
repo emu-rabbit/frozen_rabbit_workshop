@@ -24,6 +24,11 @@ import lv80_ilv515 from './lv80_ilv515.json';
 import lv90_ilv620 from './lv90_ilv620.json';
 import lv90_ilv640 from './lv90_ilv640.json';
 import lv90_ilv645 from './lv90_ilv645.json';
+import lv51_ilv65 from './lv51_ilv65.json';
+import lv61_ilv180 from './lv61_ilv180.json';
+import lv71_ilv330 from './lv71_ilv330.json';
+import lv81_ilv480 from './lv81_ilv480.json';
+import lv91_ilv610 from './lv91_ilv610.json';
 
 export const baseRecommendedNotes: Note[] = [
   ...(lv100_ilv690 as Note[]),
@@ -47,19 +52,24 @@ export const baseRecommendedNotes: Note[] = [
   ...(lv90_ilv620 as Note[]),
   ...(lv90_ilv640 as Note[]),
   ...(lv90_ilv645 as Note[]),
+  ...(lv51_ilv65 as Note[]),
+  ...(lv61_ilv180 as Note[]),
+  ...(lv71_ilv330 as Note[]),
+  ...(lv81_ilv480 as Note[]),
+  ...(lv91_ilv610 as Note[]),
 ];
 
 const allRecommendedNotes: Note[] = [
   ...baseRecommendedNotes,
   ...composeNotes(baseRecommendedNotes, compositions.groups, compositions.jobs),
-].sort((a, b) => {
-  const getILv = (n: Note) => {
-    const name = typeof n.name === "string" ? n.name : n.name.tw;
-    const match = name.match(/iLv(\d+)/i);
-    return match ? parseInt(match[1]) : 0;
-  };
-  return getILv(a) - getILv(b);
-});
+].map(note => {
+  // Parse once without materializing items; mixed sets sort by their highest listed grade.
+  const name = typeof note.name === 'string' ? note.name : note.name.tw;
+  const level = Number(name.match(/^Lv\.(\d+)/i)?.[1] ?? 0);
+  const grades = name.match(/iLv(\d+(?:\+\d+)*)/i)?.[1];
+  const ilvl = grades ? Math.max(...grades.split('+').map(Number)) : 0;
+  return { note, level, ilvl };
+}).sort((a, b) => a.level - b.level || a.ilvl - b.ilvl).map(entry => entry.note);
 
 const aliases = new Map<string, string>();
 const searchPriorities = new Map<string, number>();

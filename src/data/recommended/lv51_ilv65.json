@@ -1,0 +1,66 @@
+[
+  {
+    "id": "recommend_lv51_ilv65_crafting",
+    "name": {
+      "tw": "Lv.51 iLv65 巧匠五件套裝",
+      "cn": "Lv.51 iLv65 巧匠五件套装",
+      "en": "Lv.51 iLv65 Crafting 5-piece Set",
+      "ja": "Lv.51 iLv65 クラフター5点セット"
+    },
+    "items": [
+      {
+        "id": 11955,
+        "quantity": 1
+      },
+      {
+        "id": 11960,
+        "quantity": 1
+      },
+      {
+        "id": 11965,
+        "quantity": 1
+      },
+      {
+        "id": 11973,
+        "quantity": 1
+      },
+      {
+        "id": 11978,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_lv51_ilv65_gathering",
+    "name": {
+      "tw": "Lv.51 iLv65 大地五件套裝",
+      "cn": "Lv.51 iLv65 大地五件套装",
+      "en": "Lv.51 iLv65 Gathering 5-piece Set",
+      "ja": "Lv.51 iLv65 ギャザラー5点セット"
+    },
+    "items": [
+      {
+        "id": 11983,
+        "quantity": 1
+      },
+      {
+        "id": 11988,
+        "quantity": 1
+      },
+      {
+        "id": 11993,
+        "quantity": 1
+      },
+      {
+        "id": 12001,
+        "quantity": 1
+      },
+      {
+        "id": 12006,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  }
+]

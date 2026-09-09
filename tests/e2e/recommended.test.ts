@@ -73,3 +73,34 @@ test('profession mixed sets and official names work in all locales and themes', 
   await page.getByTestId('recommended-notes').getByRole('textbox').fill('大地十五 720+690');
   await expect(page.getByTestId('note-card')).toHaveCount(1);
 });
+
+test('leveling professions keep armor-only tiers separate and save complete collective equipment', async ({ page }) => {
+  await start(page);
+  const view = page.getByTestId('recommended-notes');
+  for (const level of [51, 61]) {
+    await view.getByRole('textbox').fill(`Lv.${level}`);
+    await expect(view.getByTestId('note-card')).toHaveCount(2);
+    for (const card of await view.getByTestId('note-card').all()) {
+      await expect(card.getByRole('heading')).toContainText('五件套裝');
+      await expect(card).toContainText('這張筆記裡面有 (5)');
+    }
+  }
+  for (const level of [71, 81, 91]) {
+    await view.getByRole('textbox').fill(`Lv.${level}`);
+    await expect(view.getByTestId('note-card')).toHaveCount(15);
+    await expect(view.getByTestId('note-card').first().getByRole('heading')).toContainText('十二件套裝');
+  }
+  await view.getByRole('textbox').fill('Lv.91 巧匠二十六');
+  const card = view.getByTestId('note-card');
+  await expect(card).toHaveCount(1);
+  await expect(card).toContainText('這張筆記裡面有 (26)');
+  await card.getByRole('button', { name: '加入我的收藏' }).click();
+  await page.reload();
+  await navigateTo(page, '收藏的小筆記');
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('frozen-rabbit-favorites-data')!)[0]);
+  expect(saved.items.reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0)).toBe(26);
+  await page.getByTestId('note-card').getByRole('button', { name: /備料台/ }).click();
+  await expect(page).toHaveURL(/#workbench/);
+  await expect(page.locator('.item-card').first()).toBeVisible();
+  await expect(page.getByRole('heading', { name: '奧闊鉻鐵手鋸', exact: true })).toBeVisible();
+});
