@@ -1,6 +1,6 @@
 import { catalogData } from '../../src/services/gameData';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getDictionaryItem, setDictionaryLanguage, filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, globalDictionaryCache, globalRecipesCache, searchItems } from '../../src/services/dictionary';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { getDictionaryItem, setDictionaryLanguage, filterSearchableItems, getItemCategoryGroup, getOrderedEquipmentJobs, getSearchableItems, searchItems } from '../../src/services/dictionary';
 
 function setItems(items: any[]) {
   catalogData.value = { formatVersion: 2, jobNames: {}, categories: {}, items: items.map(({ name, enName, ...item }) => ({ kind: 'item', craftable: false, ...item, names: { tw: name, en: enName } })) };
@@ -9,24 +9,20 @@ function setItems(items: any[]) {
 describe('Dictionary Search & Logic', () => {
     beforeEach(() => {
         setItems([
-            { id: 1, name: '白金塊', enName: 'Platinum Ingot', icon: 'icon1' },
-            { id: 2, name: '青金塊', enName: 'Electrum Ingot', icon: 'icon2' },
-            { id: 3, name: '鐵礦', enName: 'Iron Ore', icon: 'icon3' },
+            { id: 1, name: '白金塊', enName: 'Platinum Ingot', icon: 'icon1', craftable: true },
+            { id: 2, name: '青金塊', enName: 'Electrum Ingot', icon: 'icon2', craftable: true },
+            { id: 3, name: '鐵錠', enName: 'Iron Ingot', icon: 'icon3', craftable: true },
         ]);
     });
 
-    it('should find items by partial name match', () => {
-        const results = globalDictionaryCache.value?.filter(i => i.name.includes('金塊'));
+    it('should find items by partial name match', async () => {
+        const results = await searchItems('金塊');
         expect(results?.length).toBe(2);
         expect(results?.[0].id).toBe(1);
     });
 
-    it('should find items by English name (cross-language search)', () => {
-        const query = 'Iron'.toLowerCase();
-        const results = globalDictionaryCache.value?.filter(i => 
-            i.name.toLowerCase().includes(query) || 
-            (i.enName && i.enName.toLowerCase().includes(query))
-        );
+    it('should find items by English name (cross-language search)', async () => {
+        const results = await searchItems('iRoN');
         expect(results?.length).toBe(1);
         expect(results?.[0].id).toBe(3);
     });

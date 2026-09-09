@@ -78,7 +78,7 @@ export default {
   },
   recommended: {
     title: '兔肉私心筆記',
-    description: '這些是站長整理出來實用的清單。可以用空白鍵串聯檢索條件。如果筆記缺少你想要的武器或物品，歡迎前往筆記工作台修改筆記。',
+    description: '搜尋職業與品級，就能找到含武器或主副手、可直接備料的套裝。也保留不含武器／工具的共用裝備與單獨工具筆記；i720＋i690 合裝已搭配飾品。多個條件請用空白分隔。',
     searchPlaceholder: '搜尋...',
     emptyTitle: '找不到相符的筆記',
     emptyDescription: '換個關鍵字試試看吧！'

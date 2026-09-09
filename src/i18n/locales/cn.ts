@@ -78,7 +78,7 @@ export default {
   },
   recommended: {
     title: '兔肉私心笔记',
-    description: '这些是站长整理出来实用的清单。可以用空格键串联检索条件。如果笔记缺少你想要的武器或物品，欢迎前往笔记工作台修改笔记。',
+    description: '搜索职业与品级，就能找到含武器或主副手、可直接备料的套装。也保留不含武器／工具的通用装备与单独工具笔记；i720＋i690 混搭已包含首饰。多个条件请用空格分隔。',
     searchPlaceholder: '搜索...',
     emptyTitle: '找不到相符的笔记',
     emptyDescription: '换个关键字试试看吧！'

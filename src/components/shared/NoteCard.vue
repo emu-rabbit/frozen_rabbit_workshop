@@ -56,6 +56,7 @@ const formattedDate = computed(() => {
 })
 
 const validItems = computed(() => sanitizeNoteItems(props.note?.items))
+const totalQuantity = computed(() => validItems.value.reduce((sum, item) => sum + item.quantity, 0))
 
 // --- Methods ---
 
@@ -84,6 +85,7 @@ const handleExportJson = () => {
 
 <template>
   <div 
+    data-testid="note-card"
     class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border p-4 md:p-6 flex flex-col gap-4 md:gap-5 hover:shadow-md transition-shadow relative overflow-hidden group"
     :class="!note ? 'border-red-100 dark:border-red-950/30 bg-red-50/30 dark:bg-red-950/10' : 'border-soft-green-100 dark:border-slate-800'"
   >
@@ -126,7 +128,7 @@ const handleExportJson = () => {
         <div v-if="note" class="flex-1 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100/50 dark:border-slate-700/50 min-w-0">
             <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 mb-3 uppercase tracking-[0.1em] flex items-center gap-2">
                <i class="pi pi-box text-[10px]"></i>
-               {{ t('history.itemsCount') }} ({{ validItems.length }})
+               {{ t('history.itemsCount') }} ({{ totalQuantity }})
             </div>
             
             <div v-if="validItems.length === 0" class="text-slate-400 text-sm italic py-2">
@@ -163,6 +165,7 @@ const handleExportJson = () => {
             class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-orange-50 dark:hover:bg-orange-900/20 shrink-0"
             :class="isFavorite ? 'text-orange-400' : 'text-slate-400 dark:text-slate-600 hover:text-orange-300 dark:hover:text-orange-500'"
             :title="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
+            :aria-label="isFavorite ? t('noteCard.removeFavorite') : t('noteCard.addFavorite')"
           >
             <i class="pi text-lg md:text-xl" :class="isFavorite ? 'pi-star-fill' : 'pi-star'"></i>
           </button>
@@ -172,6 +175,7 @@ const handleExportJson = () => {
             @click="handleExportJson" 
             class="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center transition-all duration-300 transform active:scale-90 rounded-full hover:bg-soft-green-50 dark:hover:bg-soft-green-900/20 text-slate-400 dark:text-slate-600 hover:text-soft-green-500 dark:hover:text-soft-green-400 shrink-0"
             :title="t('noteCard.exportNote')"
+            :aria-label="t('noteCard.exportNote')"
           >
             <transition name="scale" mode="out-in">
               <i v-if="isCopied" class="pi pi-check text-lg md:text-xl text-soft-green-500 dark:text-soft-green-400"></i>

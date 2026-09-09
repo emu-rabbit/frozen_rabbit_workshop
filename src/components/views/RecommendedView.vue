@@ -6,14 +6,13 @@ import NoteCard from '../shared/NoteCard.vue'
 import InputText from 'primevue/inputtext'
 import Paginator from 'primevue/paginator'
 import { isDictionaryLoading } from '../../services/dictionary'
-import type { LocalizedString } from '../../types/note'
-import { useDebounceFn } from '@vueuse/core'
+import { searchRecommendedNotes } from '../../data/recommended'
 import { vFfivClean } from '../../utils/inputUtils'
 import type { Note } from '../../types/note'
 import type { WorkbenchNoteSource } from '../../services/analytics'
 
 const { t } = useI18n()
-const { recommendedNotes, toggleFavorite, isFavorite } = useNotes()
+const { toggleFavorite, isFavorite } = useNotes()
 
 const emit = defineEmits<{
   'open-workbench': [note: Note, source: WorkbenchNoteSource]
@@ -28,60 +27,22 @@ const first = ref(0)
 const rows = ref(20)
 
 
-const filteredNotes = computed(() => {
-  const rawQuery = searchQuery.value.trim().toLowerCase()
-  if (!rawQuery) return recommendedNotes
-
-  // Split query into tokens by whitespace
-  const tokens = rawQuery.split(/\s+/).filter(t => t.length > 0)
-
-  return recommendedNotes.filter(note => {
-    // Collect all available text for this note to search against
-    const searchableTexts: string[] = []
-    if (typeof note.name === 'string') {
-      searchableTexts.push(note.name.toLowerCase())
-    } else {
-      const loc = note.name as LocalizedString
-      if (loc.tw) searchableTexts.push(loc.tw.toLowerCase())
-      if (loc.cn) searchableTexts.push(loc.cn.toLowerCase())
-      if (loc.en) searchableTexts.push(loc.en.toLowerCase())
-      if (loc.ja) searchableTexts.push(loc.ja.toLowerCase())
-    }
-    
-    // Requirement: EVERY token must be found in AT LEAST ONE of the translations
-    return tokens.every(token => 
-      searchableTexts.some(text => text.includes(token))
-    )
-  })
-})
+const filteredNotes = computed(() => searchRecommendedNotes(searchQuery.value))
 
 const pagedNotes = computed(() => {
   return filteredNotes.value.slice(first.value, first.value + rows.value)
 })
 
-// Debounce search intentionally to let user type before resetting page
-const onSearchInput = useDebounceFn(() => {
-  first.value = 0 // Reset to page 1 on new search
-}, 300)
-
 const onSearchValueUpdate = (val: string | undefined) => {
+  first.value = 0
   searchQuery.value = val || ''
-  onSearchInput()
 }
-
-const handleSearchPaste = (event: ClipboardEvent) => {
-  // Now handled by directive
-};
-
-const handleSearchInput = (event: Event) => {
-  // Now handled by directive
-};
 
 
 </script>
 
 <template>
-  <div class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
+  <div data-testid="recommended-notes" class="px-4 py-8 md:p-8 max-w-4xl w-full mx-auto pb-24">
     <header class="mb-6">
       <div class="flex items-center gap-3 mb-2 text-soft-green-800 dark:text-soft-green-400">
         <i class="pi pi-thumbs-up-fill text-xl md:text-2xl"></i>

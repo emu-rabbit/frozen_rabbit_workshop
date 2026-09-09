@@ -174,15 +174,6 @@ describe('Workbench Service Logic', () => {
         }
     });
 
-    it('should be importable and initialized', async () => {
-        // Dynamic import to ensure mocks are in place
-        const { useWorkbench } = await import('../../src/composables/useWorkbench');
-        const { totalDemands, workbenchItems } = useWorkbench();
-
-        expect(totalDemands).toBeDefined();
-        expect(workbenchItems).toBeDefined();
-    });
-
     it('ignores malformed note items without a valid item id', async () => {
         mocks.activeWorkbenchNote.value = {
             id: 'note-with-invalid-item',
