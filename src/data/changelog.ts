@@ -12,10 +12,10 @@ export const changelogData: ChangelogEntry[] = [
     date: '2026-09-09',
     changes: [
       {
-        tw: '新增包含主副手的341項最愛筆記',
-        cn: '新增包含主副手的341项最爱笔记',
-        en: 'Added 341 favorite notes, including main-hand and off-hand equipment',
-        ja: 'メインアーム・サブアームを含む341件のお気に入りノートを追加しました'
+        tw: '新增390項最愛筆記，包含主副手套裝',
+        cn: '新增390项最爱笔记，包含主副手套装',
+        en: 'Added 390 favorite notes, including sets with main-hand and off-hand equipment',
+        ja: 'メインアーム・サブアームを含むセットなど、390件のお気に入りノートを追加しました'
       },
       {
         tw: '修正錯置的最愛筆記內容',
