@@ -16,7 +16,7 @@ async function start(page: Page) {
   await expect(page.getByTestId('recommended-notes').getByTestId('note-card')).toHaveCount(20);
 }
 
-test('search after paging, save a complete paladin set, reload and open the workbench', async ({ page }) => {
+test('search after paging, save a complete paladin set, reload and open the workbench', { tag: '@deployment' }, async ({ page }) => {
   await start(page);
   const view = page.getByTestId('recommended-notes');
   await view.locator('.p-paginator-next').click();
@@ -63,12 +63,9 @@ test('profession mixed sets and official names work in all locales and themes', 
       await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       await page.locator('main').evaluate(element => { element.scrollTop = 0; });
-      const path = `.cache/game-data/recommended/${test.info().project.name}-${locale}-${dark ? 'dark' : 'light'}`;
-      await page.screenshot({ path: `${path}-top.png` });
       const open = view.getByTestId('note-card').getByRole('button').last();
       await open.scrollIntoViewIfNeeded();
       await expect(open).toBeVisible();
-      await page.screenshot({ path: `${path}-bottom.png` });
     }
   }
   await page.getByTestId('recommended-notes').getByRole('textbox').fill('巧匠二十六 720+690');

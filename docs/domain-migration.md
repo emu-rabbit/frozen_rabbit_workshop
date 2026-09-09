@@ -25,11 +25,11 @@ npm run test:e2e -- --workers 3
 $env:VITE_BASE_PATH = '/staging/'
 npm run build
 node scripts/verify-deployment.mjs
-npm run test:e2e -- --workers 3
+npm run test:e2e:smoke
 Remove-Item Env:VITE_BASE_PATH
 ```
 
-CI 執行相同的兩種 base 驗證；部署前另外驗證實際要組合的正式／staging 分支產物。驗證包含本地資源路徑、SEO、測試站索引規則與遊戲資料包 SHA-256。
+CI 在正式路徑執行三種瀏覽器／裝置的完整 E2E，staging 則執行 Chromium 部署驗收；分工見 [測試範圍](../tests/README.md)。部署前另外驗證實際要組合的正式／staging 分支產物。驗證包含本地資源路徑、SEO、測試站索引規則與遊戲資料包 SHA-256。
 
 ## 發佈與站外切換
 

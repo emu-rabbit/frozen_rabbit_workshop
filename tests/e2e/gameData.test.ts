@@ -70,7 +70,6 @@ test('search works before phase two; island materials reach gathering and other 
   for (const dark of [false, true]) {
     await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
     expect(await badgeStyle(todoGranary)).toEqual(await badgeStyle(todoGathering));
-    await page.screenshot({ path: '.cache/game-data/island-todo-' + test.info().project.name.replace(/ /g, '-') + (dark ? '-dark' : '') + '.png', fullPage: true, animations: 'disabled' });
   }
   await page.locator('button').filter({ has: page.locator('i.pi-download') }).click();
   const downloading = page.waitForEvent('download');
@@ -94,7 +93,8 @@ test('warm startup only checks the manifest and makes no upstream requests', asy
   expect(requests.filter(url => /\/game-data\/.*\.bin$/.test(url))).toHaveLength(0);
   expect(requests.filter(url => url.includes('raw.githubusercontent.com'))).toHaveLength(0);
 });
-for (const action of ['apply', 'later', 'escape', 'close', 'mask']) test(`complete update popup handles ${action}`, async ({ page }) => {
+// Other dismissal gestures are covered by the real dialog component test.
+for (const action of ['apply', 'later']) test(`complete update popup handles ${action}`, async ({ page }) => {
   await setupTest(page);
   const old = mockGamePackages(); const next = mockGamePackages('新版鐵錠');
   await expect.poll(() => storedVersion(page)).toBe(old.manifest.version);
@@ -127,15 +127,12 @@ for (const action of ['apply', 'later', 'escape', 'close', 'mask']) test(`comple
       expect(bounds!.y).toBeGreaterThanOrEqual(0);
       expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(viewport.width);
       expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(viewport.height);
-      await page.screenshot({ path: `.cache/game-data/update-popup-${test.info().project.name.replace(/ /g, '-')}${dark ? '-dark' : ''}.png`, fullPage: true });
     }
   }
   if (action === 'apply') {
     await dialog.getByRole('button', { name: '現在套用並重新整理', exact: true }).click();
   } else {
-    if (action === 'escape') await page.keyboard.press('Escape');
-    else if (action === 'mask') await page.locator('.p-dialog-mask').click({ position: { x: 4, y: 4 } });
-    else await dialog.getByRole('button', { name: '下次套用', exact: true })[action === 'close' ? 'first' : 'last']().click();
+    await dialog.getByRole('button', { name: '下次套用', exact: true }).last().click();
     await expect(dialog).toHaveCount(0);
     await expect(page.locator('#item-name')).toHaveValue('尚未儲存的草稿');
     expect(await storedVersion(page)).toBe(old.manifest.version);
@@ -200,16 +197,26 @@ test('catalog failure retry keeps the draft and shows a busy action until recove
   await expect(page.locator('#item-name')).toHaveValue('保留這張筆記');
   await searchAndSelectItem(page, '找尋物品...', '鐵錠', '鐵錠');
 });
-test('real checked-in packages load through the actual static server', async ({ page }) => {
+test('real checked-in packages load through the actual static server', { tag: '@deployment' }, async ({ page }) => {
   await dismissAnalyticsPrompt(page);
   const upstream: string[] = [];
+  const packageRequests: string[] = [];
   page.on('request', request => { if (request.url().includes('raw.githubusercontent.com')) upstream.push(request.url()); });
+  page.on('request', request => { if (request.url().includes('/game-data/')) packageRequests.push(new URL(request.url()).pathname); });
   await page.addInitScript(() => {
     localStorage.setItem('frozen-rabbit-initialized', 'true'); localStorage.setItem('frozen-rabbit-lang', 'tw');
     localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
   });
   await page.goto('./');
   await expect.poll(() => storedVersion(page)).toMatch(/^[a-f0-9]{64}$/);
+  const basePath = new URL(page.url()).pathname;
+  expect(packageRequests.some(path => path.endsWith('.bin'))).toBe(true);
+  expect(packageRequests.every(path => path.startsWith(`${basePath}game-data/`))).toBe(true);
+  const version = await storedVersion(page);
+  packageRequests.length = 0;
+  await page.reload();
+  await expect.poll(() => packageRequests.filter(path => path.endsWith('/manifest.json')).length).toBe(1);
+  await expect.poll(() => storedVersion(page)).toBe(version);
   await page.locator('#item-name').fill('繁中建築補丁');
   await searchAndSelectItem(page, '找尋物品...', '小島木屋', '小島木屋 I');
   await page.getByText('好，把這些放上備料台！').click();
@@ -217,10 +224,10 @@ test('real checked-in packages load through the actual static server', async ({ 
   expect(upstream).toEqual([]);
   await navigateTo(page, '工坊設置');
   await expect(page.getByRole('heading', { name: '遊戲快取資料', exact: true })).toBeVisible();
-  await page.screenshot({ path: `.cache/game-data/settings-${test.info().project.name.replace(/ /g, '-')}.png`, fullPage: true });
+  expect(packageRequests.filter(path => path.endsWith('.bin'))).toEqual([]);
 });
 
-test('real island crops and pasture labels reach workbench, todos and export', async ({ page }) => {
+test('real island crops and pasture labels reach workbench, todos and export', { tag: '@deployment' }, async ({ page }) => {
   await dismissAnalyticsPrompt(page);
   await page.addInitScript(() => {
     localStorage.setItem('frozen-rabbit-initialized', 'true');
@@ -252,7 +259,6 @@ test('real island crops and pasture labels reach workbench, todos and export', a
         expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
       }
     }
-    await page.screenshot({ path: `.cache/game-data/island-production-${test.info().project.name.replace(/ /g, '-')}-${dark ? 'dark' : 'light'}.png`, fullPage: true });
   }
   await page.locator('button').filter({ has: page.locator('i.pi-download') }).click();
   const downloading = page.waitForEvent('download');
@@ -291,7 +297,6 @@ test('repair redownloads game data without removing notes, favorites or settings
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
   await repairButton.click();
-  await page.screenshot({ path: `.cache/game-data/repair-dialog-${test.info().project.name.replace(/ /g, '-')}.png`, fullPage: true });
   await dialog.getByRole('button', { name: '重新下載並重新整理', exact: true }).click();
   await expect.poll(() => requests.filter(url => /\/game-data\/.*\.bin$/.test(url)).length).toBe(3);
   await expect.poll(() => storedVersion(page)).toBe(mockGamePackages().manifest.version);

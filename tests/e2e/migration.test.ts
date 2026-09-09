@@ -26,10 +26,16 @@ test('moving notice precedes onboarding and dismissal persists only when checked
   await expect(page.getByText('Traditional Chinese', { exact: true })).toBeVisible()
 })
 
-test('imports in the notice, skips onboarding and supports repeat imports in settings', async ({ page }) => {
+test('rejects a damaged file, then imports and supports repeat imports in settings', { tag: '@deployment' }, async ({ page }) => {
   await page.goto('./')
   const dialog = page.getByRole('dialog')
+  await expect(dialog).toBeVisible()
+  const notesBeforeImport = await page.evaluate(() => localStorage.getItem('frozen-rabbit-notes'))
+  await dialog.locator('input[type=file]').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{}') })
+  await expect(dialog.getByRole('alert')).toBeVisible()
+  expect(await page.evaluate(() => localStorage.getItem('frozen-rabbit-notes'))).toBe(notesBeforeImport)
   await dialog.locator('input[type=file]').setInputFiles(file)
+  await expect(dialog.getByRole('alert')).toBeHidden()
   await expect(dialog.getByRole('status')).toContainText('歷史筆記 1 筆')
   await expect(dialog.locator('input[type=file]')).toHaveValue(/workshop\.json$/)
   await expect(dialog.getByRole('combobox')).toBeHidden()
@@ -55,7 +61,7 @@ test('imports in the notice, skips onboarding and supports repeat imports in set
 })
 
 for (const lang of ['tw', 'cn', 'en', 'ja']) {
-  test(`notice fits the viewport in ${lang} dark mode and rejects damaged files`, async ({ page }, testInfo) => {
+  test(`notice fits the viewport in ${lang} dark mode`, async ({ page }) => {
     await page.addInitScript(lang => {
       localStorage.setItem('frozen-rabbit-lang', lang)
       localStorage.setItem('frozen-rabbit-dark-mode', 'true')
@@ -63,12 +69,9 @@ for (const lang of ['tw', 'cn', 'en', 'ja']) {
     await page.goto('./')
     const dialog = page.getByRole('dialog')
     await expect(dialog).toBeVisible()
-    await dialog.locator('input[type=file]').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{}') })
-    await expect(dialog.getByRole('alert')).toBeVisible()
     const box = await dialog.boundingBox()
     expect(box!.x).toBeGreaterThanOrEqual(0)
     expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width)
-    await page.screenshot({ path: testInfo.outputPath(`migration-${lang}.png`) })
     expect(await page.evaluate(() => localStorage.getItem('frozen-rabbit-initialized'))).not.toBe('true')
   })
 }

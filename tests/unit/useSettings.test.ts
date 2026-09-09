@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useSettings } from '../../src/composables/useSettings';
+import { effectScope, nextTick } from 'vue';
 
 describe('Settings Persistence', () => {
     beforeEach(() => {
@@ -8,10 +9,17 @@ describe('Settings Persistence', () => {
         vi.clearAllMocks();
     });
 
-    it('should save language changes to reactive state', () => {
-        const { language } = useSettings();
-        language.value = 'ja';
-        expect(language.value).toBe('ja');
+    it('persists language changes for a fresh settings instance', async () => {
+        const scope = effectScope();
+        try {
+            const settings = scope.run(() => useSettings())!;
+            settings.language.value = 'ja';
+            await nextTick();
+            expect(localStorage.getItem('frozen-rabbit-lang')).toBe('ja');
+            expect(scope.run(() => useSettings())!.language.value).toBe('ja');
+        } finally {
+            scope.stop();
+        }
     });
 
     it('should initialize with values from localStorage', () => {

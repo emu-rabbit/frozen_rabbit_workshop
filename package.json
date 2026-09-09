@@ -14,6 +14,7 @@
     "notes:verify": "node scripts/generate-recommended.mjs --verify",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:smoke": "playwright test --project=chromium --grep @deployment",
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 const base = process.env.VITE_BASE_PATH || '/';
-const baseURL = `http://localhost:4173${base}`;
+const port = Number(process.env.PLAYWRIGHT_PORT || 4173);
+const baseURL = `http://localhost:${port}${base}`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -21,7 +22,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['list'], ['html', { open: 'never' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -52,7 +53,7 @@ export default defineConfig({
 
   /* Serve the previously built production artifact before starting the tests */
   webServer: {
-    command: 'npm run preview -- --port 4173 --strictPort',
+    command: `npm run preview -- --port ${port} --strictPort`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 120 * 1000,
