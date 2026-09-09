@@ -56,10 +56,80 @@ describe('ready-to-use recommended sets', () => {
   it('retains every existing note with stable and unique new identities', () => {
     const originals = readdirSync('src/data/recommended').filter(file => file.endsWith('.json'))
       .flatMap(file => JSON.parse(readFileSync('src/data/recommended/' + file, 'utf8')));
-    expect(baseRecommendedNotes).toHaveLength(113);
-    expect(notes).toHaveLength(454);
+    expect(baseRecommendedNotes).toHaveLength(123);
+    expect(notes).toHaveLength(503);
     expect(new Set(notes.map(note => note.id)).size).toBe(notes.length);
     for (const original of originals) expect(notes.find(note => note.id === original.id)).toEqual(original);
+  });
+
+  it('orders each priority group by equipment level, then highest item level, in default and searched lists', () => {
+    const baseIds = new Set(baseRecommendedNotes.map(note => note.id));
+    const key = (note: Note) => {
+      if (typeof note.name === 'string') throw new Error('Expected localized recommended name');
+      const [level, grades] = note.name.tw.split(' ');
+      return [baseIds.has(note.id) ? 1 : 0, Number(level!.slice(3)), Math.max(...grades!.slice(3).split('+').map(Number))];
+    };
+    for (const query of ['', '   ', '巧匠', '大地', 'Lv.60']) {
+      const results = searchRecommendedNotes(query);
+      for (let i = 1; i < results.length; i++) {
+        const previous = key(results[i - 1]!);
+        const current = key(results[i]!);
+        const firstDifference = current.map((value, index) => value - previous[index]!).find(value => value !== 0);
+        expect(firstDifference ?? 0, `${query}: ${results[i - 1]!.id} -> ${results[i]!.id}`).toBeGreaterThanOrEqual(0);
+      }
+    }
+    // A newer leveling tier can have a lower iLv than the preceding endgame tier.
+    const crafting = searchRecommendedNotes('巧匠二十六');
+    expect(crafting.indexOf(find('Lv.80 巧匠二十六'))).toBeLessThan(crafting.indexOf(find('Lv.81 巧匠二十六')));
+    const sharedArmor = searchRecommendedNotes('巧匠');
+    expect(sharedArmor.indexOf(find('Lv.60 巧匠十件'))).toBeLessThan(sharedArmor.indexOf(find('Lv.61 巧匠五件')));
+    // i190+195 must sort after the standalone i190 base in the underlying level/grade order.
+    expect(notes.indexOf(find('Lv.60 巧匠十件'))).toBeLessThan(notes.indexOf(find('Lv.60 巧匠二十六')));
+  });
+
+  it('keeps level 51 and 61 professions as five armor pieces without tool or accessory compositions', () => {
+    for (const [level, ilvl] of [[51, 65], [61, 180]]) {
+      const tier = notes.filter(note => typeof note.name !== 'string' && note.name.tw.startsWith(`Lv.${level} `));
+      expect(tier).toHaveLength(2);
+      for (const note of tier) {
+        expect(quantity(note)).toBe(5);
+        expect(note.name).toMatchObject({ tw: expect.stringContaining('五件套裝') });
+        expect(note.items.map(item => byId.get(item.id)!.equipSlotCategory)).toEqual([3, 4, 5, 7, 8]);
+        expect(definitions.groups.some(group => group.base === note.id)).toBe(false);
+        for (const item of note.items) {
+          expect(byId.get(item.id)).toMatchObject({ craftable: true, equipLevel: level, ilvl });
+          expect(item.quantity).toBe(1);
+        }
+      }
+    }
+    // Level 51 gear permits every class, so class eligibility cannot distinguish its intended use.
+    expect(find('Lv.51 巧匠').items.map(item => item.id)).toEqual([11955, 11960, 11965, 11973, 11978]);
+    expect(find('Lv.51 大地').items.map(item => item.id)).toEqual([11983, 11988, 11993, 12001, 12006]);
+  });
+
+  it('offers complete same-tier leveling equipment for all eleven professions and both collectives', () => {
+    const jobs = ['CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'WVR', 'ALC', 'CUL', 'MIN', 'BTN', 'FSH'];
+    for (const [level, ilvl] of [[71, 330], [81, 480], [91, 610]]) {
+      const tier = notes.filter(note => typeof note.name !== 'string' && note.name.tw.startsWith(`Lv.${level} `));
+      expect(tier).toHaveLength(15);
+      for (const note of tier) {
+        for (const item of note.items) expect(byId.get(item.id)).toMatchObject({ craftable: true, equipLevel: level, ilvl });
+        expect(note.items.filter(item => byId.get(item.id)!.equipSlotCategory === 12)).toEqual([
+          { id: expect.any(Number), quantity: 2 },
+        ]);
+      }
+      for (const job of jobs) {
+        const note = tier.find(note => note.id.endsWith(`_${job.toLowerCase()}`))!;
+        expect(note, `${level}/${job}`).toBeDefined();
+        expect(quantity(note)).toBe(job === 'FSH' ? 11 : 12);
+      }
+      expect(quantity(find(`Lv.${level} 巧匠二十六`))).toBe(26);
+      expect(quantity(find(`Lv.${level} 大地十五`))).toBe(15);
+      for (const role of ['巧匠', '大地']) expect(quantity(find(`Lv.${level} ${role}十件`))).toBe(10);
+      const results = searchRecommendedNotes(`Lv.${level}`);
+      expect(results.slice(0, 13).every(note => !baseRecommendedNotes.includes(note))).toBe(true);
+      expect(results.slice(13).every(note => baseRecommendedNotes.includes(note))).toBe(true);
+    }
   });
 
   it('has craftable, compatible equipment in the right slots for every generated job set', () => {

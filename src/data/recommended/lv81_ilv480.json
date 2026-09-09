@@ -1,0 +1,98 @@
+[
+  {
+    "id": "recommend_lv81_ilv480_crafting",
+    "name": {
+      "tw": "Lv.81 iLv480 巧匠十件套裝",
+      "cn": "Lv.81 iLv480 巧匠十件套装",
+      "en": "Lv.81 iLv480 Crafting 10-piece Set",
+      "ja": "Lv.81 iLv480 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 35404,
+        "quantity": 1
+      },
+      {
+        "id": 35405,
+        "quantity": 1
+      },
+      {
+        "id": 35406,
+        "quantity": 1
+      },
+      {
+        "id": 35407,
+        "quantity": 1
+      },
+      {
+        "id": 35408,
+        "quantity": 1
+      },
+      {
+        "id": 35444,
+        "quantity": 1
+      },
+      {
+        "id": 35445,
+        "quantity": 1
+      },
+      {
+        "id": 35446,
+        "quantity": 1
+      },
+      {
+        "id": 35447,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_lv81_ilv480_gathering",
+    "name": {
+      "tw": "Lv.81 iLv480 大地十件套裝",
+      "cn": "Lv.81 iLv480 大地十件套装",
+      "en": "Lv.81 iLv480 Gathering 10-piece Set",
+      "ja": "Lv.81 iLv480 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 35409,
+        "quantity": 1
+      },
+      {
+        "id": 35410,
+        "quantity": 1
+      },
+      {
+        "id": 35411,
+        "quantity": 1
+      },
+      {
+        "id": 35412,
+        "quantity": 1
+      },
+      {
+        "id": 35413,
+        "quantity": 1
+      },
+      {
+        "id": 35448,
+        "quantity": 1
+      },
+      {
+        "id": 35449,
+        "quantity": 1
+      },
+      {
+        "id": 35450,
+        "quantity": 1
+      },
+      {
+        "id": 35451,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  }
+]

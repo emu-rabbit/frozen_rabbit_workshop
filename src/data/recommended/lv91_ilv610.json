@@ -1,0 +1,98 @@
+[
+  {
+    "id": "recommend_lv91_ilv610_crafting",
+    "name": {
+      "tw": "Lv.91 iLv610 巧匠十件套裝",
+      "cn": "Lv.91 iLv610 巧匠十件套装",
+      "en": "Lv.91 iLv610 Crafting 10-piece Set",
+      "ja": "Lv.91 iLv610 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 43284,
+        "quantity": 1
+      },
+      {
+        "id": 43285,
+        "quantity": 1
+      },
+      {
+        "id": 43286,
+        "quantity": 1
+      },
+      {
+        "id": 43287,
+        "quantity": 1
+      },
+      {
+        "id": 43288,
+        "quantity": 1
+      },
+      {
+        "id": 43324,
+        "quantity": 1
+      },
+      {
+        "id": 43325,
+        "quantity": 1
+      },
+      {
+        "id": 43326,
+        "quantity": 1
+      },
+      {
+        "id": 43327,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_lv91_ilv610_gathering",
+    "name": {
+      "tw": "Lv.91 iLv610 大地十件套裝",
+      "cn": "Lv.91 iLv610 大地十件套装",
+      "en": "Lv.91 iLv610 Gathering 10-piece Set",
+      "ja": "Lv.91 iLv610 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 43289,
+        "quantity": 1
+      },
+      {
+        "id": 43290,
+        "quantity": 1
+      },
+      {
+        "id": 43291,
+        "quantity": 1
+      },
+      {
+        "id": 43292,
+        "quantity": 1
+      },
+      {
+        "id": 43293,
+        "quantity": 1
+      },
+      {
+        "id": 43328,
+        "quantity": 1
+      },
+      {
+        "id": 43329,
+        "quantity": 1
+      },
+      {
+        "id": 43330,
+        "quantity": 1
+      },
+      {
+        "id": 43331,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "recommend_lv71_ilv330_crafting",
+    "name": {
+      "tw": "Lv.71 iLv330 巧匠十件套裝",
+      "cn": "Lv.71 iLv330 巧匠十件套装",
+      "en": "Lv.71 iLv330 Crafting 10-piece Set",
+      "ja": "Lv.71 iLv330 クラフター10点セット"
+    },
+    "items": [
+      {
+        "id": 27161,
+        "quantity": 1
+      },
+      {
+        "id": 27162,
+        "quantity": 1
+      },
+      {
+        "id": 27163,
+        "quantity": 1
+      },
+      {
+        "id": 27164,
+        "quantity": 1
+      },
+      {
+        "id": 27165,
+        "quantity": 1
+      },
+      {
+        "id": 27202,
+        "quantity": 1
+      },
+      {
+        "id": 27203,
+        "quantity": 1
+      },
+      {
+        "id": 27204,
+        "quantity": 1
+      },
+      {
+        "id": 27205,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_lv71_ilv330_gathering",
+    "name": {
+      "tw": "Lv.71 iLv330 大地十件套裝",
+      "cn": "Lv.71 iLv330 大地十件套装",
+      "en": "Lv.71 iLv330 Gathering 10-piece Set",
+      "ja": "Lv.71 iLv330 ギャザラー10点セット"
+    },
+    "items": [
+      {
+        "id": 27166,
+        "quantity": 1
+      },
+      {
+        "id": 27167,
+        "quantity": 1
+      },
+      {
+        "id": 27168,
+        "quantity": 1
+      },
+      {
+        "id": 27169,
+        "quantity": 1
+      },
+      {
+        "id": 27170,
+        "quantity": 1
+      },
+      {
+        "id": 27207,
+        "quantity": 1
+      },
+      {
+        "id": 27208,
+        "quantity": 1
+      },
+      {
+        "id": 27209,
+        "quantity": 1
+      },
+      {
+        "id": 27210,
+        "quantity": 2
+      }
+    ],
+    "createdAt": "2026-09-09T00:00:00.000Z"
+  }
+]

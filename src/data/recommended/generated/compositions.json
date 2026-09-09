@@ -1516,6 +1516,63 @@
       "prefix": "Lv.70 iLv385"
     },
     {
+      "base": "recommend_lv71_ilv330_crafting",
+      "role": "Crafting",
+      "variants": {
+        "CRP": [
+          27077,
+          27088
+        ],
+        "BSM": [
+          27078,
+          27089
+        ],
+        "ARM": [
+          27079,
+          27090
+        ],
+        "GSM": [
+          27080,
+          27091
+        ],
+        "LTW": [
+          27081,
+          27092
+        ],
+        "WVR": [
+          27082,
+          27093
+        ],
+        "ALC": [
+          27083,
+          27094
+        ],
+        "CUL": [
+          27084,
+          27095
+        ]
+      },
+      "prefix": "Lv.71 iLv330"
+    },
+    {
+      "base": "recommend_lv71_ilv330_gathering",
+      "role": "Gathering",
+      "variants": {
+        "MIN": [
+          27085,
+          27096
+        ],
+        "BTN": [
+          27086,
+          27097
+        ],
+        "FSH": [
+          27087
+        ]
+      },
+      "prefix": "Lv.71 iLv330"
+    },
+    {
       "base": "d42e169f-be6e-4bd4-a913-52dd06c13d1a",
       "role": "Gathering",
       "variants": {
@@ -1779,6 +1836,63 @@
         ]
       },
       "prefix": "Lv.80 iLv515"
+    },
+    {
+      "base": "recommend_lv81_ilv480_crafting",
+      "role": "Crafting",
+      "variants": {
+        "CRP": [
+          35320,
+          35331
+        ],
+        "BSM": [
+          35321,
+          35332
+        ],
+        "ARM": [
+          35322,
+          35333
+        ],
+        "GSM": [
+          35323,
+          35334
+        ],
+        "LTW": [
+          35324,
+          35335
+        ],
+        "WVR": [
+          35325,
+          35336
+        ],
+        "ALC": [
+          35326,
+          35337
+        ],
+        "CUL": [
+          35327,
+          35338
+        ]
+      },
+      "prefix": "Lv.81 iLv480"
+    },
+    {
+      "base": "recommend_lv81_ilv480_gathering",
+      "role": "Gathering",
+      "variants": {
+        "MIN": [
+          35328,
+          35339
+        ],
+        "BTN": [
+          35329,
+          35340
+        ],
+        "FSH": [
+          35330
+        ]
+      },
+      "prefix": "Lv.81 iLv480"
     },
     {
       "base": "77ef49df-88f5-4624-8eea-5b364e67421a",
@@ -2056,6 +2170,63 @@
         ]
       },
       "prefix": "Lv.90 iLv645"
+    },
+    {
+      "base": "recommend_lv91_ilv610_crafting",
+      "role": "Crafting",
+      "variants": {
+        "CRP": [
+          43200,
+          43211
+        ],
+        "BSM": [
+          43201,
+          43212
+        ],
+        "ARM": [
+          43202,
+          43213
+        ],
+        "GSM": [
+          43203,
+          43214
+        ],
+        "LTW": [
+          43204,
+          43215
+        ],
+        "WVR": [
+          43205,
+          43216
+        ],
+        "ALC": [
+          43206,
+          43217
+        ],
+        "CUL": [
+          43207,
+          43218
+        ]
+      },
+      "prefix": "Lv.91 iLv610"
+    },
+    {
+      "base": "recommend_lv91_ilv610_gathering",
+      "role": "Gathering",
+      "variants": {
+        "MIN": [
+          43208,
+          43219
+        ],
+        "BTN": [
+          43209,
+          43220
+        ],
+        "FSH": [
+          43210
+        ]
+      },
+      "prefix": "Lv.91 iLv610"
     }
   ]
 }
