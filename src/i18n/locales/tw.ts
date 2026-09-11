@@ -59,6 +59,7 @@ export default {
     recommended: '兔肉私心筆記',
     history: '翻開舊筆記',
     settings: '工坊設置',
+    home: '前往兔肉小基地 (new)',
     sponsor: '贊助冷凍庫電費',
     github: '開源原始碼 (GitHub)',
     editor: '筆記工作台',

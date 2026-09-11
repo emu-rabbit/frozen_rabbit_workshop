@@ -59,6 +59,7 @@ export default {
     recommended: 'Rabbit\'s<br />Recommended',
     history: 'Open Past<br />Notes',
     settings: 'Settings',
+    home: "Visit Rabbit's Home (new)",
     sponsor: 'Sponsor the Freezer bill',
     github: 'Source Code (GitHub)',
     editor: 'Note Workbench',

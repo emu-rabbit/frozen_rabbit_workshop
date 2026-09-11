@@ -110,6 +110,16 @@ const activeTab = computed({
 
         <!-- External Links -->
         <div class="flex flex-col gap-2 px-1">
+          <a
+            href="https://frozenrabbit.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-soft-green-50 dark:bg-soft-green-950/30 border border-soft-green-200 dark:border-soft-green-900/60 text-soft-green-800 dark:text-soft-green-400 hover:bg-soft-green-100 dark:hover:bg-soft-green-950/60 dark:hover:border-soft-green-800/70 hover:scale-[1.02] transition-all duration-300 shadow-sm"
+          >
+            <i class="pi pi-home text-xs opacity-80 group-hover:scale-125 transition-transform"></i>
+            <span class="text-[11px] font-black tracking-tight whitespace-nowrap">{{ t('nav.home') }}</span>
+          </a>
+
           <button 
             @click="$emit('open-sponsor')"
             class="group flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-950/60 dark:hover:border-rose-800/70 hover:scale-[1.02] transition-all duration-300 shadow-sm"
@@ -117,20 +127,21 @@ const activeTab = computed({
             <i class="pi pi-heart-fill text-xs text-rose-400 dark:text-rose-500 group-hover:text-rose-400 group-hover:scale-125 transition-all"></i>
             <span class="text-[11px] font-black tracking-tight whitespace-nowrap">{{ t('nav.sponsor') }}</span>
           </button>
-
-          <a 
-            href="https://github.com/emu-rabbit/frozen_rabbit_workshop" 
-            target="_blank"
-            class="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-800 dark:hover:text-slate-200 transition-all duration-300"
-          >
-            <i class="pi pi-github text-xs opacity-70"></i>
-            <span class="text-[11px] font-bold tracking-tight">{{ t('nav.github') }}</span>
-          </a>
         </div>
       </div>
 
-      <div class="text-[10px] text-center font-black text-slate-400 dark:text-slate-500 tracking-widest uppercase opacity-60">
-        v{{ version }}
+      <div class="flex justify-center">
+        <a
+          href="https://github.com/emu-rabbit/frozen_rabbit_workshop"
+          target="_blank"
+          rel="noopener noreferrer"
+          :aria-label="`${t('nav.github')} v${version}`"
+          :title="t('nav.github')"
+          class="inline-flex items-center gap-1.5 text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-widest uppercase opacity-60 hover:opacity-100 hover:text-slate-600 dark:hover:text-slate-300 transition-all duration-300"
+        >
+          <i class="pi pi-github text-xs"></i>
+          <span>v{{ version }}</span>
+        </a>
       </div>
     </div>
   </aside>

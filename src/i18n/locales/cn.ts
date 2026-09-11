@@ -59,6 +59,7 @@ export default {
     recommended: '兔肉私心笔记',
     history: '翻开旧笔记',
     settings: '工坊设置',
+    home: '前往兔肉小基地 (new)',
     sponsor: '赞助冷冻库电费',
     github: '开源源代码 (GitHub)',
     editor: '笔记工作台',

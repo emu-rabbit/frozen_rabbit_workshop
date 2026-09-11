@@ -60,6 +60,7 @@ export default {
     history: '過去のノート',
     faq: 'よくある質問',
     settings: '設定',
+    home: 'うさぎ肉の拠点へ (new)',
     sponsor: '電気代を支援する',
     github: 'ソースコード (GitHub)',
     editor: '制作作業台'
