@@ -402,8 +402,8 @@ export default {
         a: 'No.'
       },
       {
-        q: 'Current status of the website',
-        a: 'The website is currently in an early alpha testing phase and many features are not yet stable. We are collecting feedback from all sources. If you encounter bugs or have suggestions, please let us know on <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>.'
+        q: 'I found a bug!',
+        a: 'If you encounter a bug or have questions about using the website, please let Rabbit know through <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a>!'
       }
     ],
     footer: 'Have more questions? Feel free to report on GitHub or email: {email}'

@@ -402,8 +402,8 @@ export default {
         a: 'ダメです。'
       },
       {
-        q: 'サイトの現在の状態について',
-        a: 'このサイトは現在アルファテスト段階にあり、多くの機能が不安定な状態です。現在、皆様からのフィードバックを募集しています。バグ報告や改善の提案がありましたら、お気軽に <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> までお寄せください！'
+        q: 'バグを見つけました！',
+        a: 'サイトでバグを見つけた場合や使い方について質問がある場合は、<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> から兔肉にお知らせください！'
       }
     ],
     footer: '他に質問がありますか？GitHubでの報告、またはメールでお問い合わせください：{email}'

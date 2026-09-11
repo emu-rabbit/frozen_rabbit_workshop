@@ -402,8 +402,8 @@ export default {
         a: '不可以'
       },
       {
-        q: '關於網站現在的狀態',
-        a: '網站現在在超先行測試運行中，很多東西還不是穩定狀態，但同時也在蒐集各方的意見，有Bug有任何意見歡迎前往 <a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">GitHub Issues</a> 告訴我唷'
+        q: '我遇到蟲蟲了！',
+        a: '倘若在網站中遇到Bug或是使用的疑問的話，歡迎前往<a href="https://github.com/emu-rabbit/frozen_rabbit_workshop/issues" target="_blank" class="text-soft-green-600 hover:text-soft-green-700 font-bold underline decoration-dotted underline-offset-4 transition-colors">Github Issue</a>告訴兔肉唷！'
       }
     ],
     footer: '還有其他疑問嗎？歡迎透過 GitHub 回報或來信聯繫：{email}'
