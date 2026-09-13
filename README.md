@@ -55,6 +55,15 @@ This project is supported by data and tooling from community projects:
 - **Teamcraft**: Item, recipe, and gathering details.
 - **XIVAPI**: In-game icons and item data APIs.
 
+## License
+
+The original source code in this project is released under the [MIT License](LICENSE).
+This license does not include the Frozen Rabbit / 冷凍兔肉 name, logos, other
+brand-identifying materials, project text or translations, illustrations,
+photographs, icons, screenshots, or other images and media. Third-party code,
+game data, APIs, and other referenced content remain subject to their own
+licenses and notices.
+
 ---
 
 ### FAQ
@@ -118,6 +127,13 @@ This project is supported by data and tooling from community projects:
 - **Universalis**: 提供全球市場資料。
 - **Teamcraft**: 提供物品、配方與採集細節。
 - **XIVAPI**: 提供遊戲內圖示與物品資料 API。
+
+## 📄 授權
+
+本專案的原始程式碼採用 [MIT License](LICENSE) 授權。此授權不包含
+Frozen Rabbit／冷凍兔肉的名稱、標誌、其他品牌辨識素材、專案文字或翻譯、
+插畫、照片、圖示、截圖及其他圖片與媒體。第三方程式碼、遊戲資料、API
+及其他引用內容仍受其各自的授權與聲明約束。
 
 ---
 
