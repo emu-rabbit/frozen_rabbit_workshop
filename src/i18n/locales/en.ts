@@ -79,7 +79,7 @@ export default {
   },
   recommended: {
     title: 'Rabbit\'s Picks',
-    description: 'Search by job and item level for ready-to-use sets with weapons or tools. Shared gear without weapons or tools, and separate tool sets, are still available. The i720 + i690 sets include accessories. Separate search terms with spaces.',
+    description: 'Search by job or item level to find your set. To edit a note, copy its JSON into the Note Workbench.',
     searchPlaceholder: 'Search...',
     emptyTitle: 'No Matching Notes Found',
     emptyDescription: 'Try a different keyword!'
@@ -375,7 +375,7 @@ export default {
       },
       {
         q: 'Can notes be edited and have items added or removed?',
-        a: 'That is exactly what the Note Workbench is for. Find the Copy JSON button on your note, then paste and import it in the workbench. From there, you can add items, remove items, change quantities, and even merge in another note.'
+        a: 'Yes! You can customize recommended notes too. Copy the note JSON, then paste and import it into the Note Workbench to add or remove items, change quantities, or merge in other notes.'
       },
       {
         q: 'Why do the estimated market costs seem inaccurate?',
