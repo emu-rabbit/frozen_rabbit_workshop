@@ -341,6 +341,123 @@ describe('Workbench Service Logic', () => {
         }
     });
 
+    it('keeps a manual 30 to 20 craft edit and follows the resulting material demand', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'split-stock-and-craft', items: [{ id: 100, quantity: 30 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 2 }] }
+        ];
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            expect(workbench.decisions['100']).toMatchObject({ craft: 30, other: 0 });
+            expect(workbench.decisions['200'].buy).toBe(60);
+
+            workbench.decisions['100'].craft = 20;
+            await nextTick();
+            expect(workbench.decisions['100'].craft).toBe(20);
+            expect(workbench.totalDemands.value[200]).toBe(40);
+            expect(workbench.decisions['200'].buy).toBe(40);
+
+            workbench.decisions['100'].other = 10;
+            await nextTick();
+            expect(workbench.decisions['100']).toMatchObject({ craft: 20, other: 10 });
+            expect(workbench.hasMismatch.value).toBe(false);
+        } finally {
+            scope.stop();
+        }
+    });
+
+    it('fills the only selected material source even when its prior amount was partial', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'partial-material', items: [{ id: 100, quantity: 30 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 2 }] }
+        ];
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            workbench.decisions['200'].buy = 50;
+            await nextTick();
+            expect(workbench.decisions['200'].buy).toBe(50);
+
+            workbench.decisions['100'].craft = 20;
+            await nextTick();
+            expect(workbench.totalDemands.value[200]).toBe(40);
+            expect(workbench.decisions['200'].buy).toBe(40);
+            workbench.decisions['100'].other = 10;
+            await nextTick();
+            expect(workbench.hasMismatch.value).toBe(false);
+        } finally {
+            scope.stop();
+        }
+    });
+
+    it('leaves a material split across two sources unchanged when upstream demand changes', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'split-material', items: [{ id: 100, quantity: 30 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 2 }] }
+        ];
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            workbench.decisions['200'].buy = 50;
+            workbench.decisions['200'].other = 10;
+            await nextTick();
+
+            workbench.decisions['100'].craft = 20;
+            workbench.decisions['100'].other = 10;
+            await nextTick();
+            expect(workbench.totalDemands.value[200]).toBe(40);
+            expect(workbench.decisions['200']).toMatchObject({ buy: 50, other: 10 });
+            expect(workbench.hasMismatch.value).toBe(true);
+        } finally {
+            scope.stop();
+        }
+    });
+
+    it('restores the prior single source when upstream demand disappears and returns', async () => {
+        mocks.activeWorkbenchNote.value = { id: 'returning-material', items: [{ id: 100, quantity: 30 }] };
+        mocks.recipesCache.value = [
+            { result: 100, job: 8, lvl: 90, yields: 1, ingredients: [{ id: 200, amount: 2 }] }
+        ];
+        vi.resetModules();
+        const { useWorkbench } = await import('../../src/composables/useWorkbench');
+        const scope = effectScope();
+        const workbench = scope.run(() => useWorkbench())!;
+        try {
+            await workbench.initialize(true);
+            await nextTick();
+            workbench.decisions['200'].buy = 0;
+            workbench.decisions['200'].other = 60;
+            await nextTick();
+
+            workbench.decisions['100'].craft = 0;
+            await nextTick();
+            expect(workbench.totalDemands.value[200]).toBeUndefined();
+            expect(workbench.decisions['200'].other).toBe(0);
+
+            workbench.decisions['100'].craft = 20;
+            workbench.decisions['100'].other = 10;
+            await nextTick();
+            expect(workbench.totalDemands.value[200]).toBe(40);
+            expect(workbench.decisions['200']).toMatchObject({ buy: 0, other: 40 });
+            expect(workbench.hasMismatch.value).toBe(false);
+        } finally {
+            scope.stop();
+        }
+    });
+
     it('routes root items with monster drops into the hunting todo section', async () => {
         mocks.activeWorkbenchNote.value = {
             id: 'note-hunt-source',

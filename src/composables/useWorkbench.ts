@@ -211,6 +211,7 @@ export function canRecipeCraftHq(recipe: Pick<Recipe, 'job'>): boolean {
 
 const workbenchItems = ref<Record<number, WorkbenchItem>>({});
 const decisions = reactive<Record<string, ItemDecision>>({});
+const lastSingleSource = new Map<string, keyof ItemDecision>();
 const isLoading = ref(false);
 const lastNoteId = ref<string | null>(null);
 const lastMarketSource = ref<string | null>(null);
@@ -772,6 +773,7 @@ export function useWorkbench() {
           else console.log(`[Workbench] Initializing new note: ${activeWorkbenchNote.value.id}`);
           
           Object.keys(decisions).forEach(k => delete decisions[k]);
+          lastSingleSource.clear();
           Object.keys(todoChecked).forEach(k => delete todoChecked[k]);
           Object.keys(todoOrder).forEach(k => delete todoOrder[k]);
           workbenchItems.value = {};
@@ -875,30 +877,31 @@ export function useWorkbench() {
   /**
    * 監聽總需求變化，動態更新模擬購買成本
    */
-  watch(totalDemands, (newDemands) => {
-    Object.keys(newDemands).forEach(idStr => {
+  watch(totalDemands, (newDemands, oldDemands) => {
+    const changedItemIds = new Set([...Object.keys(oldDemands), ...Object.keys(newDemands)]);
+    changedItemIds.forEach(idStr => {
       const id = Number(idStr);
       const item = workbenchItems.value[id];
       const newTotal = newDemands[id] || 0;
 
       // 1. 動態更新市場價格與獲取預估 (已移除模擬購買，現由 updateItemEffectivePrice 統一處理)
 
-      // 2. 智慧補位邏輯：如果使用者將此材料全量投入單一來源，則自動跟隨需求變動
+      // 2. 單一來源跟隨需求變動；同一物品的手動數量編輯不改變其需求。
       const d = decisions[idStr];
       if (d) {
         const categories: (keyof ItemDecision)[] = ['buy', 'craft', 'gather', 'other'];
         const activeCategories = categories.filter(cat => d[cat] > 0);
+        const oldTotal = oldDemands[id] || 0;
         
-        // 只有在原先恰好只有一個來源大於 0 的情況下才自動補位
-        if (activeCategories.length === 1) {
+        if (newTotal !== oldTotal && activeCategories.length === 1) {
           const activeCat = activeCategories[0];
-          if (d[activeCat] !== newTotal) {
-             d[activeCat] = newTotal;
-          }
-        } else if (activeCategories.length === 0 && newTotal > 0) {
-           // 特殊情況：如果原本是 0（可能是剛出現的新項目），則套用預設邏輯
-           const isRoot = sanitizeNoteItems(activeWorkbenchNote.value?.items).some(ri => ri.id === id);
-           initSingleItemDecision(id, newTotal, isRoot);
+          lastSingleSource.set(idStr, activeCat);
+          d[activeCat] = newTotal;
+        } else if (newTotal !== oldTotal && activeCategories.length === 0 && oldTotal === 0 && newTotal > 0) {
+          const previousSource = lastSingleSource.get(idStr);
+          if (previousSource) d[previousSource] = newTotal;
+        } else if (activeCategories.length > 1) {
+          lastSingleSource.delete(idStr);
         }
       }
 
