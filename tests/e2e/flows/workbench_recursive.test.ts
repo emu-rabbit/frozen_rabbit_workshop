@@ -46,4 +46,46 @@ test.describe('E2E Flow: Recursive Calculation and Reset', () => {
     await expect(page.getByRole('heading', { name: '鐵礦' })).toBeVisible();
     await expect(page.getByRole('heading', { name: '風之碎晶' })).toBeVisible();
   });
+
+  test('allows splitting a full craft allocation into craft and existing stock', async ({ page }) => {
+    await page.locator('#item-name').fill('庫存與製作分配測試');
+    await searchAndSelectItem(page, '找尋物品...', '鐵錠', '鐵錠');
+    await page.locator('input[type="number"]').fill('30');
+    await page.getByText('好，把這些放上備料台！').click();
+    await expect(page).toHaveURL(/.*workbench/);
+
+    const ingotCard = page.locator('.item-card').filter({ has: page.locator('h3').getByText('鐵錠', { exact: true }) });
+    const oreCard = page.locator('.item-card').filter({ has: page.locator('h3').getByText('鐵礦', { exact: true }) });
+    const craftInput = ingotCard.locator('.grid > div').nth(1).locator('input');
+    const stockInput = ingotCard.locator('.grid > div').nth(3).locator('input');
+    const oreBuyInput = oreCard.locator('input[type="number"]').first();
+    const oreStockInput = oreCard.locator('input[type="number"]').nth(3);
+    await expect(craftInput).toHaveValue('30');
+    await expect(oreBuyInput).toHaveValue('120');
+
+    await oreBuyInput.fill('100');
+    await oreBuyInput.blur();
+    await expect(oreBuyInput).toHaveValue('100');
+    await craftInput.fill('20');
+    await craftInput.blur();
+    await expect(craftInput).toHaveValue('20');
+    await expect(oreBuyInput).toHaveValue('80');
+    await stockInput.fill('10');
+    await stockInput.blur();
+    await expect(craftInput).toHaveValue('20');
+    await expect(stockInput).toHaveValue('10');
+    await expect(page.getByRole('button', { name: '生成待辦清單' })).toBeEnabled();
+
+    await oreBuyInput.fill('70');
+    await oreBuyInput.blur();
+    await oreStockInput.fill('10');
+    await oreStockInput.blur();
+    await craftInput.fill('10');
+    await craftInput.blur();
+    await stockInput.fill('20');
+    await stockInput.blur();
+    await expect(oreBuyInput).toHaveValue('70');
+    await expect(oreStockInput).toHaveValue('10');
+    await expect(page.getByRole('button', { name: '生成待辦清單' })).toBeDisabled();
+  });
 });
