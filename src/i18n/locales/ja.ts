@@ -167,6 +167,7 @@ export default {
         SGE: '賢者',
         VPR: 'ヴァイパー',
         PCT: 'ピクトマンサー',
+        BST: '魔獣使い',
         CRP: '木工師',
         BSM: '鍛冶師',
         ARM: '甲冑師',

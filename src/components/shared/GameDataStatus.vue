@@ -3,7 +3,11 @@ import { computed, ref, useId } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GameDataConfirmDialog from './GameDataConfirmDialog.vue'
 import { dataError, pendingDataManifest, updateDismissed, loadCoreData, checkForDataUpdate, activateDataUpdate } from '../../services/gameData'
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const updateSummary = computed(() => {
+  const summary = pendingDataManifest.value?.updateSummary
+  return summary?.[locale.value as keyof typeof summary] || summary?.en || []
+})
 defineProps<{ paused?: boolean }>()
 const busy = ref(false)
 const headingId = useId()
@@ -42,5 +46,5 @@ async function activate() {
       </button>
     </div>
   </section>
-  <GameDataConfirmDialog v-if="!paused" v-model:visible="showActivate" :title="t('gameData.updateReady')" :message="t('gameData.reloadWarning')" :confirm-label="t('gameData.apply')" :cancel-label="t('gameData.later')" :busy="busy" @confirm="activate" />
+  <GameDataConfirmDialog v-if="!paused" v-model:visible="showActivate" :title="t('gameData.updateReady')" :message="t('gameData.reloadWarning')" :details="updateSummary" :confirm-label="t('gameData.apply')" :cancel-label="t('gameData.later')" :busy="busy" @confirm="activate" />
 </template>

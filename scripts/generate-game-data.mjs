@@ -6,6 +6,7 @@ import { gunzipSync } from 'node:zlib';
 import { downloadSnapshot, readSnapshot } from './game-data/source.mjs';
 import { createPackages, verifyPackages, writePackages } from './game-data/package.mjs';
 import { readNamePatches, verifyNamePatchCatalog } from './game-data/name-patches.mjs';
+import { readUpdateSummary } from './game-data/update-summary.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -66,6 +67,8 @@ See docs/game-data.md for the manual staging and production workflow.`);
     const manifest = await verifyPackages(output);
     const catalog = JSON.parse(gunzipSync(await readFile(path.join(output, manifest.bundles.catalog.file))).toString('utf8'));
     verifyNamePatchCatalog(manifest, catalog, namePatches);
+    const summary = await readUpdateSummary(manifest.source.commit, false);
+    if (JSON.stringify(manifest.updateSummary) !== JSON.stringify(summary)) throw new Error('Generated update summary differs from data/game-data-updates.json; rebuild packages.');
     printSummary(manifest);
     console.log('Package verification passed.');
     return;
@@ -77,7 +80,8 @@ See docs/game-data.md for the manual staging and production workflow.`);
       cacheRoot: path.join(ROOT, '.cache/game-data'),
       token: process.env.GITHUB_TOKEN,
     });
-  const packages = createPackages(snapshot, namePatches);
+  const updateSummary = await readUpdateSummary(snapshot.metadata.commit);
+  const packages = createPackages(snapshot, namePatches, updateSummary);
   await writePackages(output, packages);
   printSummary(packages.manifest);
   console.log(`Written and verified: ${output}`);

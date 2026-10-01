@@ -96,7 +96,10 @@ test('warm startup only checks the manifest and makes no upstream requests', asy
 // Other dismissal gestures are covered by the real dialog component test.
 for (const action of ['apply', 'later']) test(`complete update popup handles ${action}`, async ({ page }) => {
   await setupTest(page);
-  const old = mockGamePackages(); const next = mockGamePackages('新版鐵錠');
+  const old = mockGamePackages(); const next = mockGamePackages('新版鐵錠', {
+    tw: ['新增7.56訓獸師資料'], cn: ['新增7.56驯兽师数据'],
+    en: ['Added patch 7.56 Beastmaster data'], ja: ['パッチ7.56の魔獣使いデータを追加']
+  });
   await expect.poll(() => storedVersion(page)).toBe(old.manifest.version);
   let release!: () => void;
   const hold = new Promise<void>(resolve => { release = resolve; });
@@ -114,6 +117,7 @@ for (const action of ['apply', 'later']) test(`complete update popup handles ${a
   const dialog = page.getByRole('dialog', { name: '檢測到新遊戲資料更新', exact: true });
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText('新遊戲資料已下載完畢可供使用，你可以選擇套用的時間點。');
+  await expect(dialog.locator('li')).toHaveText(['新增7.56訓獸師資料']);
   await expect(page.getByTestId('game-data-status')).toHaveCount(0);
   await expect.poll(() => storedVersion(page, 'pending')).toBe(next.manifest.version);
   expect(await storedVersion(page)).toBe(old.manifest.version);
@@ -304,6 +308,26 @@ test('repair redownloads game data without removing notes, favorites or settings
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('frozen-rabbit-favorites-data') || '[]'))).toEqual([note]);
   expect(await page.evaluate(() => localStorage.getItem('frozen-rabbit-lang'))).toBe('tw');
 });
+
+for (const [locale, label] of [['tw', '訓獸師'], ['cn', '驯兽师'], ['en', 'Beastmaster'], ['ja', '魔獣使い']]) {
+  test(`real Beastmaster filter uses the ${locale} name`, { tag: '@deployment' }, async ({ page }) => {
+    await dismissAnalyticsPrompt(page);
+    await page.addInitScript(locale => {
+      localStorage.setItem('frozen-rabbit-initialized', 'true');
+      localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
+      localStorage.setItem('frozen-rabbit-lang', locale);
+    }, locale);
+    await page.goto('./');
+    await page.locator('button').filter({ has: page.locator('i.pi-filter') }).click();
+    const dialog = page.locator('div.fixed.inset-0').filter({ has: page.locator('select') });
+    const jobs = dialog.locator('select').first();
+    await expect(jobs.locator('option[value="BST"]')).toHaveText(label);
+    await expect(jobs.locator('option[value="Unknown0"]')).toHaveCount(0);
+    await jobs.selectOption('BST');
+    await dialog.locator('input').first().fill('Round Shield');
+    await expect(dialog.getByText(/^ID 2228 ·/)).toBeVisible();
+  });
+}
 
 test('a successful search retry also starts phase two after an initial catalog failure', async ({ page }) => {
   let fail = true;

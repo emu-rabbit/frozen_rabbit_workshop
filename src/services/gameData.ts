@@ -41,7 +41,17 @@ export async function validateManifest(value: DataManifest): Promise<DataManifes
     || !value.patches.ids.every(id => typeof id === 'string' && /^[a-z0-9-]+$/.test(id))
     || new Set(value.patches.ids).size !== value.patches.ids.length)) throw new Error('Invalid name patch descriptor');
   const identity = { formatVersion: value.formatVersion, source: value.source, bundles: value.bundles, notice: value.notice,
-    ...(value.patches !== undefined ? { patches: value.patches } : {}) };
+    ...(value.patches !== undefined ? { patches: value.patches } : {}),
+    ...(value.updateSummary !== undefined ? { updateSummary: value.updateSummary } : {}) };
+  if (value.updateSummary !== undefined && (!value.updateSummary || typeof value.updateSummary !== 'object'
+    || Array.isArray(value.updateSummary) || Object.keys(value.updateSummary).length !== 4
+    || !['tw', 'cn', 'en', 'ja'].every(locale => {
+      const lines = value.updateSummary?.[locale as keyof typeof value.updateSummary];
+      return Array.isArray(lines) && lines.length > 0 && lines.length <= 10
+        && lines.every(line => typeof line === 'string' && line.trim().length > 0 && line.length <= 300);
+    }) || new Set(Object.values(value.updateSummary).map(lines => lines.length)).size !== 1)) {
+    throw new Error('Invalid game-data update summary');
+  }
   if (await hash(new TextEncoder().encode(JSON.stringify(identity)).buffer) !== value.version) throw new Error('Manifest checksum mismatch');
   return value;
 }

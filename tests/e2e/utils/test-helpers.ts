@@ -15,7 +15,7 @@ import {
 
 
 /** Same-site packages are built with the production generator, never upstream runtime mocks. */
-export function mockGamePackages(ingotName = '鐵錠') {
+export function mockGamePackages(ingotName = '鐵錠', updateSummary?: Record<'tw' | 'cn' | 'en' | 'ja', string[]>) {
   const sources = sourceFixture();
   Object.assign(sources, {
     'item-search.index': [...mockItemSearchIndex, { id: -10000, en: 'Cozy Cabin I', data: { itemId: -10000, icon: '/api/asset?path=cabin' } }],
@@ -32,7 +32,7 @@ export function mockGamePackages(ingotName = '鐵錠') {
     },
     'island-gathering-items.json': { 37561: { itemId: 37561, x: 18.39, y: 24.26 } }
   });
-  return fixturePackages(sources);
+  return fixturePackages(sources, [], updateSummary);
 }
 export async function setupDictionaryMocks(page: Page) {
   await page.route('**/*.googletagmanager.com/**', route => route.abort());

@@ -6,6 +6,8 @@
 
 ## 實作路由
 
+- 使用者詢問「有沒有新遊戲資料」時，依 `docs/game-data.md` 的「上游更新查核與回報」流程，以清洗後本站功能實際受到的影響為主；先驗證遊戲內名稱與機制，再報告，不以未識別代碼或上游改檔數當成結論。
+
 - 產包：`scripts/generate-game-data.mjs`、`scripts/game-data/{source,project,package}.mjs`。全部來源固定同一 Teamcraft SHA。
 - runtime：`src/services/gameData.ts` 唯一下載本站 catalog／recipes／sources；`gameDataCache.ts` 管理壓縮資料 IndexedDB。
 - 查詢：`dictionary.ts` 統一名稱／搜尋，`gathering.ts`、`vendor.ts`、`monsterDrops.ts` 解讀共用 sources。元件不得另抓 Teamcraft raw JSON，也沒有上游 fallback。

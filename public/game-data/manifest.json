@@ -1,34 +1,34 @@
 {
   "generator": "frozen-rabbit-workshop-game-data",
-  "version": "5e31616f25a317fd01745437b26eccd2369bb860f8672a0587c8df064efc7054",
+  "version": "0d5d6534146e60d8d70d31c93bfcbaae18bdc7927ecd4d6a8f71510675ae02e8",
   "formatVersion": 2,
   "source": {
     "repository": "ffxiv-teamcraft/ffxiv-teamcraft",
-    "commit": "28cd7763e23781cd17650a7ae7a336688815360a",
+    "commit": "acc77d406cc50a78caf0210f805ec7b069607af0",
     "files": {
       "item-search.index": {
-        "bytes": 4176767,
-        "sha256": "6f4dca0a31beb3a1ee9c95c74bc8021b02ac2ecc2154e92cc005f4ee4213306f"
+        "bytes": 4189135,
+        "sha256": "975c3be478f1f29ef6c608fe4fa0f317b3d1e7588ee112d53188c7d440cf12f9"
       },
       "equipment.json": {
-        "bytes": 6679941,
-        "sha256": "23fed5f967c61fbc58742752f902105bf01767fae5912dbceaecf9758b7493fc"
+        "bytes": 6769869,
+        "sha256": "236c4c0c905c17f2f69cf09eb7c4d67f28af27cc70361cd57bf0b3b526523487"
       },
       "job-name.json": {
         "bytes": 4682,
         "sha256": "ba23089e6e6d52f4392cb198098f7b2e13181979a745f09e5273a2629d713227"
       },
       "item-category.json": {
-        "bytes": 14833,
-        "sha256": "0f6ee8c9ffd8f9a563fd4dcb8913d2451babf1ee22fd1cbf1702fc531861509b"
+        "bytes": 14906,
+        "sha256": "f44ab69d88065f0cbf6fb00fc2249d313d1d8d2ed624a95d3d128be1b4ce44b0"
       },
       "recipes.json": {
         "bytes": 13587654,
         "sha256": "2b704958cecb2c0dfe346fcf1d344142d6feb5aee407d22bac93dccffa2e9849"
       },
       "items.json": {
-        "bytes": 9703488,
-        "sha256": "74e95f4a3c18846ab947d05fbf842f3fba7a7457d6ad45ebddf24652803b1673"
+        "bytes": 9715482,
+        "sha256": "369768ac85fc2982543cb02b6abd56b5de4fb580d6e709f721bcaecf7c412ecb"
       },
       "tw/tw-items.json": {
         "bytes": 2316809,
@@ -39,12 +39,8 @@
         "sha256": "366dd6521adb197c7a77a37fe0debf3a4189fd841ef331558e3a063c384574c1"
       },
       "item-icons.json": {
-        "bytes": 3624296,
-        "sha256": "2a54ac102af54335afa37fd67a6a15e41dc58dd53ef5c9c7667624e25c1938f7"
-      },
-      "LICENSE": {
-        "bytes": 1072,
-        "sha256": "554788ad7daa43165289212641a3ee29b4c8dd14f51e73a77e1ba40ecf86db0b"
+        "bytes": 3630288,
+        "sha256": "3bd0cd83e0a69babc685e5cfd4c45422038e330fd931f127548cb85a77ef8035"
       },
       "gathering-items.json": {
         "bytes": 286786,
@@ -55,12 +51,12 @@
         "sha256": "eea39cd13f8a927454f5fafd2b803906167912498c3658c0c53ba380bcc88c2d"
       },
       "maps.json": {
-        "bytes": 514908,
-        "sha256": "80b971988c63fe92457aaadc035afe9335a56443bbb7a39bd2d5a088509f82f8"
+        "bytes": 516006,
+        "sha256": "c6b56f3a564aca7cf3b98d7a169f8ef625240cbeaa3e18b73f1e42a6ad47213c"
       },
       "places.json": {
-        "bytes": 774568,
-        "sha256": "50d7c95a0a5564bb4bb89d838b14ae89d791459f588b9ab6f3c289788598be71"
+        "bytes": 775471,
+        "sha256": "9c7b3193f37a75727b0a315c72950a21b762e14c1c990c2fe47f8280e343d4af"
       },
       "tw/tw-places.json": {
         "bytes": 217184,
@@ -71,12 +67,12 @@
         "sha256": "8ec193c5861330c7260b4dab3a3a8ea046cdc425579e97cc80cb6793e09602f0"
       },
       "shops.json": {
-        "bytes": 9420150,
-        "sha256": "34fc1ee08cc09de65391656871bdbb75c3b92052113da5f8fdbc2e52a1dce8bc"
+        "bytes": 9451851,
+        "sha256": "e10047d796717f2c26bc5d0691fa212c497fd3221e989a0272f500c490b8ac16"
       },
       "npcs.json": {
-        "bytes": 17192524,
-        "sha256": "73bc150ca647880b4b65e9b5e6ec1391c38ef91877df2f32fc4550219b11c7ac"
+        "bytes": 17198081,
+        "sha256": "6cd33fe799fd506045ed7e2214e061be5e9f4f8f72e3c950c2977609ab13bd1a"
       },
       "tw/tw-npcs.json": {
         "bytes": 1346665,
@@ -95,8 +91,8 @@
         "sha256": "8544059e9e6838421dc0e41e73d58369dd062a5a9483c1d5e587811ac0e03a55"
       },
       "mobs.json": {
-        "bytes": 2145605,
-        "sha256": "b80a4823087211a2e110100628f39a6f84ad39223644b1bb90afe73f0b76ef3b"
+        "bytes": 2160683,
+        "sha256": "b8fc129416ccf5b259fdbc008d6dbd496a79af3ad975e690f67ca7c3e5c6a7fd"
       },
       "tw/tw-mobs.json": {
         "bytes": 615547,
@@ -117,15 +113,19 @@
       "island-animals.json": {
         "bytes": 8983,
         "sha256": "7efe23e0b50c0e8bd697b06b49d898c7dd48eede60847b208df0e84bb09bf1d2"
+      },
+      "LICENSE": {
+        "bytes": 1072,
+        "sha256": "554788ad7daa43165289212641a3ee29b4c8dd14f51e73a77e1ba40ecf86db0b"
       }
     }
   },
   "bundles": {
     "catalog": {
-      "file": "catalog.6a650ef61868f627fa0c0c0a6e8b3fefd063e165ddd72552e71fd218ae2142a8.bin",
-      "sha256": "6a650ef61868f627fa0c0c0a6e8b3fefd063e165ddd72552e71fd218ae2142a8",
-      "bytes": 585672,
-      "jsonBytes": 4694185,
+      "file": "catalog.a35de896eba4f6197c149867d92addd2fe93d6d658d6ed2a76172824a8d841a9.bin",
+      "sha256": "a35de896eba4f6197c149867d92addd2fe93d6d658d6ed2a76172824a8d841a9",
+      "bytes": 586040,
+      "jsonBytes": 4701678,
       "encoding": "gzip",
       "records": 14153
     },
@@ -147,14 +147,28 @@
     }
   },
   "notice": {
-    "file": "NOTICE.536a25c465f2868f91f0b25777ea70a9f94252de9f07d75c3a21225ae73e334b.txt",
+    "file": "NOTICE.1e1bbdbfcab258a04604a9812fe0ac5e095ca299a58fc8bc65d6928ec4f5f746.txt",
     "bytes": 1697,
-    "sha256": "536a25c465f2868f91f0b25777ea70a9f94252de9f07d75c3a21225ae73e334b"
+    "sha256": "1e1bbdbfcab258a04604a9812fe0ac5e095ca299a58fc8bc65d6928ec4f5f746"
   },
   "patches": {
     "sha256": "f127a5113d5005d2061a58736435f5ea73cef23356a55e98e3fd2f88fc5cf9ba",
     "ids": [
       "island-names-tw"
+    ]
+  },
+  "updateSummary": {
+    "tw": [
+      "新增7.56訓獸師資料"
+    ],
+    "cn": [
+      "新增7.56驯兽师数据"
+    ],
+    "en": [
+      "Added patch 7.56 Beastmaster data"
+    ],
+    "ja": [
+      "パッチ7.56の魔獣使いデータを追加"
     ]
   },
   "diagnostics": {

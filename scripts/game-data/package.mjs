@@ -5,12 +5,14 @@ import { gzipSync, gunzipSync } from 'node:zlib';
 import { FORMAT_VERSION, projectGameData } from './project.mjs';
 import { HASH_PATTERN, REPOSITORY, SHA_PATTERN, sha256 } from './source.mjs';
 import { applyNamePatches, describeNamePatches, validateNamePatches } from './name-patches.mjs';
+import { validateUpdateSummary } from './update-summary.mjs';
 
 export const GENERATOR = 'frozen-rabbit-workshop-game-data';
 const BUNDLE_NAMES = ['catalog', 'recipes', 'sources'];
 const GENERATED_FILE = /^(catalog|recipes|sources|NOTICE)\.[a-f0-9]{64}\.(bin|txt)$/;
 
-export function createPackages({ sources, metadata }, namePatches = []) {
+export function createPackages({ sources, metadata }, namePatches = [], updateSummary) {
+  if (updateSummary !== undefined) validateUpdateSummary(updateSummary);
   namePatches = validateNamePatches(namePatches);
   if (metadata.repository !== REPOSITORY || !SHA_PATTERN.test(metadata.commit)) {
     throw new Error('Invalid source identity');
@@ -58,6 +60,7 @@ export function createPackages({ sources, metadata }, namePatches = []) {
     bundles: descriptors,
     notice: { file: noticeFile, bytes: notice.length, sha256: noticeHash },
     ...(patches ? { patches } : {}),
+    ...(updateSummary !== undefined ? { updateSummary } : {}),
   };
   const manifest = {
     generator: GENERATOR,
@@ -86,6 +89,7 @@ export async function verifyPackages(directory, suppliedManifest) {
     bundles: manifest.bundles,
     notice: manifest.notice,
     ...(manifest.patches !== undefined ? { patches: manifest.patches } : {}),
+    ...(manifest.updateSummary !== undefined ? { updateSummary: validateUpdateSummary(manifest.updateSummary) } : {}),
   };
   if (sha256(Buffer.from(JSON.stringify(identity))) !== manifest.version) {
     throw new Error('Manifest version checksum mismatch');

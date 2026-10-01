@@ -154,9 +154,17 @@ export function projectGameData(sources) {
     }
     if (!Object.keys(entry.names).length) diagnostics.missingRecipeItemIds.push(itemId);
     const equipment = sources['equipment.json'][itemId];
+    let equipJobs = equipment?.jobs;
+    // Teamcraft's 7.56 ClassJobCategory field uses Unknown0 for Beastmaster (ClassJob 43).
+    if (equipJobs?.includes('Unknown0')) {
+      if (sources['job-name.json']['43']?.en?.toLowerCase() !== 'beastmaster') {
+        throw new Error('Unknown0 equipment job requires verified Beastmaster ClassJob 43 metadata');
+      }
+      equipJobs = [...new Set(equipJobs.map(job => job === 'Unknown0' ? 'BST' : job))];
+    }
     items.push({ ...entry, icon: normalizeIcon(sources['item-icons.json'][itemId] || '') || entry.icon,
       craftable: results.has(itemId), kind: itemId < 0 ? 'islandBuilding' : islandIds.has(itemId) ? 'islandItem' : 'item',
-      equipLevel: equipment?.level, equipJobs: equipment?.jobs, equipSlotCategory: equipment?.equipSlotCategory });
+      equipLevel: equipment?.level, equipJobs, equipSlotCategory: equipment?.equipSlotCategory });
   }
   if (diagnostics.missingRecipeItemIds.length) throw new Error(`Missing recipe item metadata: ${diagnostics.missingRecipeItemIds.join(', ')}`);
 

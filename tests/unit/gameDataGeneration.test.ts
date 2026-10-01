@@ -9,6 +9,7 @@ import { projectGameData, SOURCE_FILES } from '../../scripts/game-data/project.m
 import { downloadSnapshot, readSnapshot, REPOSITORY, SNAPSHOT_FILES } from '../../scripts/game-data/source.mjs';
 import { createPackages, verifyPackages, writePackages } from '../../scripts/game-data/package.mjs';
 import { parseOptions } from '../../scripts/generate-game-data.mjs';
+import { readUpdateSummary } from '../../scripts/game-data/update-summary.mjs';
 import { applyNamePatches, readNamePatches, validateNamePatches, verifyNamePatchCatalog } from '../../scripts/game-data/name-patches.mjs';
 
 const checkedInPatches = await readNamePatches();
@@ -42,6 +43,22 @@ afterEach(async () => {
 
 const fixture = sourceFixture;
 
+it('binds four-language summaries to the data version and requires a summary for future snapshots', async () => {
+  const summary = await readUpdateSummary('acc77d406cc50a78caf0210f805ec7b069607af0');
+  const old = createPackages(snapshot());
+  const next = createPackages(snapshot(), [], summary);
+  expect(next.manifest.version).not.toBe(old.manifest.version);
+  expect(next.assets).toEqual(old.assets);
+  const directory = await temporaryDirectory();
+  await writePackages(directory, next);
+  await expect(verifyPackages(directory)).resolves.toHaveProperty('updateSummary', summary);
+  const tampered = structuredClone(next.manifest);
+  tampered.updateSummary.tw[0] = 'Incorrect update';
+  await expect(verifyPackages(directory, tampered)).rejects.toThrow('checksum');
+  expect(() => createPackages(snapshot(), [], { ...summary, ja: [] })).toThrow('four-language');
+  await expect(readUpdateSummary('f'.repeat(40))).rejects.toThrow('before packaging');
+});
+
 function snapshot(sources = fixture()) {
   return { sources, metadata: { repository: REPOSITORY, commit, files: {} } };
 }
@@ -58,6 +75,16 @@ function mockFetch(sources = fixture(), failFile?: string) {
 }
 
 describe('game data projection', () => {
+  it('normalizes the verified Beastmaster alias, deduplicates BST and rejects unverified metadata', () => {
+    const sources = fixture();
+    sources['job-name.json'][43] = { en: 'beastmaster', ja: '魔獣使い' };
+    sources['equipment.json'][10].jobs = ['CRP', 'Unknown0', 'BST'];
+    expect(projectGameData(sources).bundles.catalog.items.find((item: any) => item.id === 10).equipJobs)
+      .toEqual(['CRP', 'BST']);
+    expect(sources['equipment.json'][10].jobs).toEqual(['CRP', 'Unknown0', 'BST']);
+    delete sources['job-name.json'][43];
+    expect(() => projectGameData(sources)).toThrow('verified Beastmaster');
+  });
   it('projects crop IDs and both animal rewards without classifying seeds or unrelated items', () => {
     const sources = fixture();
     sources['recipes.json'][2].ingredients.push(...[37596, 37603, 37611, 37586].map(id => ({ id, amount: 1 })));

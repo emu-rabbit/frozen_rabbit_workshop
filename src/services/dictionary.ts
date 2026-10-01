@@ -48,14 +48,14 @@ export interface ItemFilterCriteria {
 export const EQUIPMENT_JOB_ORDER = [
   'GLA', 'PLD', 'MRD', 'WAR', 'DRK', 'GNB',
   'CNJ', 'WHM', 'SCH', 'AST', 'SGE',
-  'PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM', 'RPR', 'VPR',
+  'PGL', 'MNK', 'LNC', 'DRG', 'ROG', 'NIN', 'SAM', 'RPR', 'VPR', 'BST',
   'ARC', 'BRD', 'MCH', 'DNC',
   'THM', 'BLM', 'ACN', 'SMN', 'RDM', 'BLU', 'PCT',
   'CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'LWR', 'WVR', 'ALC', 'CUL',
   'MIN', 'BTN', 'FSH',
 ] as const;
 
-const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV', 'BST']);
+const HIDDEN_EQUIPMENT_JOBS = new Set(['ADV']);
 const EQUIPMENT_JOB_ORDER_INDEX = new Map<string, number>(
   EQUIPMENT_JOB_ORDER.map((job, index) => [job, index])
 );
