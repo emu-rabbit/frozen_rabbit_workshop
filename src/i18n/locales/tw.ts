@@ -167,6 +167,7 @@ export default {
         SGE: '賢者',
         VPR: '毒蛇劍士',
         PCT: '繪靈法師',
+        BST: '訓獸師',
         CRP: '木工師',
         BSM: '鍛造師',
         ARM: '甲冑師',

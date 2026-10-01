@@ -29,7 +29,7 @@ Teamcraft 原始資料只由 `scripts/generate-game-data.mjs` 在維護者產包
 - 目前快照的開拓覆蓋檢查：44 採集、6 屯貨倉庫、20 種植、9 畜牧、28 製作、81 工坊產品、25 建築／地標，共 213 項，無未分類項目。範圍為本站配方產物與材料，不表示收錄遊戲全部無人島物品；`tests/unit/islandSources.test.ts` 驗證真實簽入包，更新快照時須檢視分類變化。
 - 缺資料的舊筆記仍保留 ID 與數量，顯示未知物品；不刪使用者資料。
 
-目前快照 `28cd7763e23781cd17650a7ae7a336688815360a`：catalog 14,153 筆，recipes 14,188 筆（含 25 個負 ID 產物），sources 648 個普通採集節點。三包合計約 0.96 MB 壓縮／10.61 MB JSON；精確位元組與其餘診斷以 manifest 為準。
+目前快照 `acc77d406cc50a78caf0210f805ec7b069607af0`：catalog 14,153 筆，recipes 14,188 筆（含 25 個負 ID 產物），sources 648 個普通採集節點。三包合計約 0.96 MB 壓縮／10.62 MB JSON；精確位元組與其餘診斷以 manifest 為準。相較前次快照，本次 recipes 與 sources 包內容相同；catalog 更新裝備適用職業與分類資料。
 
 ## 本站名稱補丁
 
@@ -65,6 +65,26 @@ IndexedDB 預設啟用，不詢問占用空間；資料庫名含部署 BASE_URL�
 執行環境需支援 Web Crypto、DecompressionStream、AbortSignal.timeout；IndexedDB 是可選的效能優化。這次不新增舊瀏覽器 polyfill 或離線網站 service worker。
 
 ## 手動更新與部署
+
+### 上游更新查核與回報
+
+使用者詢問有沒有新資料時，以 Workshop 本位回答。固定目前與上游 staging 的 SHA，先檢查來源差異，再依正式 generator 投影、去重與清洗規則比對 catalog／recipes／sources 的實際內容，追查變更欄位的 runtime 使用位置。不能以 SHA、上游檔案更新、索引重建或 patch 名稱直接宣稱本站有新資料。
+
+回報先說玩家會被更新什麼，例如「Teamcraft 更新了訓獸師資料，本站職業篩選新增訓獸師，現有可製作裝備可依此職業篩選」，並指出搜尋、配方、材料、來源、備料或待辦的具體影響。上游有新資料、但清洗後本站沒有使用或功能不受影響者，只放在後方簡短補充，不列為主要更新，也不需要為該次上游變更更新本站資料包。
+
+遇到未知代碼、占位欄位或新機制，必須先查上游產生程式、原始資料及官方資料，確認遊戲內的職業／物品／機制名稱與映射後再回報。不要把「有個 Unknown0」當成玩家能理解的結論；未能證實時明確列出查證缺口，不猜測或自動套用名稱。
+
+### 訓獸師職業正規化與名稱
+
+本次固定 Teamcraft SHA 的 `equipment.json` 將 Beastmaster 專用武器 47470（Beast Herder's Hand Axe）的唯一職業輸出為 `Unknown0`；同版 `job-name.json` 的 ClassJob 43 為 beastmaster，`job-abbr.json` 為 BST。上游 `items.extractor.ts` 直接取 ClassJobCategory 布林欄位名稱，故本站 generator 將已查證的 `Unknown0` 正規化為 `BST`，與已存在的 BST 去重，保留其他職業順序。若出現該別名而職業 43 名稱不再符合 beastmaster，停止產包重新查證；不修改原始快照。
+
+目前裝備職業只由物品篩選下拉的選項與篩選判斷使用。BST 排在近戰職業組末尾，不增加推薦套裝，也不改配方職業、材料或取得來源。本站支援範圍是現有可製作裝備的訓獸師適用職業篩選；本次上游 14 把訓獸師主手武器都不是配方產物或材料，未納入 catalog，不能宣稱本站已收錄其專用武器。英文 Beastmaster 與日文魔獣使い依[官方英文指南](https://na.finalfantasyxiv.com/jobguide/beastmaster/)及[日文指南](https://jp.finalfantasyxiv.com/jobguide/beastmaster/)；簡中驯兽师依[中國官方 7.5 專題](https://actff1.web.sdo.com/project/20240927dawntrail/patch75/index.html)。繁中暫依使用者指定使用「訓獸師」，不宣稱已驗證繁中官方譯名（查證日期 2026-10-01）。
+
+### 更新摘要
+
+`data/game-data-updates.json` 依 Teamcraft 完整 SHA 保存本次主要更新的 `tw`、`cn`、`en`、`ja` 條列內容；這是遊戲資料包的說明，不是網站版本更新紀錄。每次更新先比對上游與目前快照、查證內容，再新增該 SHA 的四語摘要。產包缺少摘要會停止，避免沿用上一批更新文案；四語條目數必須一致且不可空白。
+
+Generator 把摘要寫入 manifest 的可選 `updateSummary` 欄位，納入版本 checksum。`data:verify` 同時核對目前 manifest 與簽入摘要，修改摘要後必須重新產包。Popup 在三包完整就緒後依當前語言顯示待套用版本的摘要，切換語言不另抓資料。舊 manifest 沒有摘要仍可載入，不補上不屬於該版本的內容；上一版只驗證自己的摘要與 checksum。這次 manifest 雜湊規則增加摘要，更新前已開啟的舊程式需重新整理取得新版程式才能辨識。
 
 使用 Node.js 24；產包不需要新增相依套件。
 

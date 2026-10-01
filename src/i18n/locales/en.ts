@@ -167,6 +167,7 @@ export default {
         SGE: 'Sage',
         VPR: 'Viper',
         PCT: 'Pictomancer',
+        BST: 'Beastmaster',
         CRP: 'Carpenter',
         BSM: 'Blacksmith',
         ARM: 'Armorer',

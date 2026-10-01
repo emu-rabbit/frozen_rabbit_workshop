@@ -7,7 +7,7 @@ const { t } = useI18n()
 const headingId = useId()
 const messageId = useId()
 const visible = defineModel<boolean>('visible', { required: true })
-defineProps<{ title: string; message: string; confirmLabel: string; cancelLabel?: string; busy: boolean }>()
+defineProps<{ title: string; message: string; details?: string[]; confirmLabel: string; cancelLabel?: string; busy: boolean }>()
 defineEmits<{ confirm: [] }>()
 </script>
 
@@ -37,7 +37,12 @@ defineEmits<{ confirm: [] }>()
         <span>{{ title }}</span>
       </h3>
     </template>
-    <p :id="messageId" class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{{ message }}</p>
+    <div :id="messageId" class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+      <p>{{ message }}</p>
+      <ul v-if="details?.length" class="mt-3 list-disc space-y-1 pl-5 break-words">
+        <li v-for="(detail, index) in details" :key="index">{{ detail }}</li>
+      </ul>
+    </div>
     <template #footer>
       <button type="button" :disabled="busy" class="rounded-xl px-4 py-2.5 text-sm font-bold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 disabled:opacity-50 focus-visible:outline-soft-green-400/60 focus-visible:outline-offset-2" @click="visible = false">
         {{ cancelLabel || t('gameData.cancel') }}

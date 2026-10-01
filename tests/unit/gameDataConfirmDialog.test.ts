@@ -36,6 +36,14 @@ async function dismiss(action: string) {
   await flushPromises()
 }
 
+it('shows update bullets only when the caller supplies them', async () => {
+  await openDialog();
+  expect(document.querySelector('[role="dialog"] ul')).toBeNull();
+  await wrapper.setProps({ details: ['國際版 7.56 遊戲資料', '更新搜尋索引'] });
+  expect(Array.from(document.querySelectorAll('[role="dialog"] li')).map(node => node.textContent))
+    .toEqual(['國際版 7.56 遊戲資料', '更新搜尋索引']);
+});
+
 it.each(['escape', 'close', 'mask'])('dismisses with %s without applying data', async action => {
   await openDialog()
   await dismiss(action)

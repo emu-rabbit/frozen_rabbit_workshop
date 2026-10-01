@@ -12,6 +12,7 @@ export interface DataManifest {
   bundles: Record<BundleName, BundleDescriptor>;
   notice: { file: string; sha256: string; bytes: number };
   patches?: { sha256: string; ids: string[] };
+  updateSummary?: Record<DataLocale, string[]>;
 }
 export interface CatalogItem {
   id: number; names: DataNames; icon: string; craftable: boolean;

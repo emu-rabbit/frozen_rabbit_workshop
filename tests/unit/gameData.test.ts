@@ -19,6 +19,18 @@ function network(packages: any, fail?: string) {
   });
 }
 beforeEach(() => { vi.resetModules(); cache.read.mockReset().mockResolvedValue(null); cache.save.mockReset().mockResolvedValue(true); cache.clear.mockReset().mockResolvedValue(true); });
+it('validates localized update summaries and detects tampering while accepting old manifests', async () => {
+  const { validateManifest } = await import('../../src/services/gameData');
+  const summary = { tw: ['更新搜尋索引'], cn: ['更新搜索索引'], en: ['Updated search index'], ja: ['検索インデックスの更新'] };
+  const packages = fixturePackages(sourceFixture(), [], summary);
+  await expect(validateManifest(packages.manifest)).resolves.toHaveProperty('updateSummary', summary);
+  await expect(validateManifest(fixturePackages().manifest)).resolves.toBeDefined();
+  const tampered = structuredClone(packages.manifest);
+  tampered.updateSummary.tw[0] = 'Another update';
+  await expect(validateManifest(tampered)).rejects.toThrow('checksum');
+  delete tampered.updateSummary.ja;
+  await expect(validateManifest(tampered)).rejects.toThrow('update summary');
+});
 afterEach(() => { vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 it('accepts old source bundles but rejects malformed island production metadata', async () => {
   const { decodeBundle } = await import('../../src/services/gameData');
