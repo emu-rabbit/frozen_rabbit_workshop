@@ -9,27 +9,22 @@ const file = { name: 'workshop.json', mimeType: 'application/json', buffer: Buff
 
 test.beforeEach(async ({ page }) => { await setupDictionaryMocks(page) })
 
-test('moving notice precedes onboarding and dismissal persists only when checked', async ({ page }) => {
+test('new visitors see language onboarding without a moving notice', async ({ page }) => {
   await page.goto('./')
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toContainText('我們搬家了')
-  await expect(page.getByText('Traditional Chinese', { exact: true })).toBeHidden()
-  await expect(dialog.getByRole('link')).toHaveAttribute('href', 'https://emu-rabbit.github.io/gleaner/')
-  await dialog.getByRole('button', { name: '稍後再說' }).click()
+  await expect(page.getByRole('heading', { name: '我們搬家了', exact: true })).toBeHidden()
   await expect(page.getByText('Traditional Chinese', { exact: true })).toBeVisible()
   await page.reload()
-  await expect(dialog).toBeVisible()
-  await dialog.getByRole('checkbox').check()
-  await dialog.getByRole('button', { name: '稍後再說' }).click()
-  await page.reload()
-  await expect(dialog).toBeHidden()
+  await expect(page.getByRole('heading', { name: '我們搬家了', exact: true })).toBeHidden()
   await expect(page.getByText('Traditional Chinese', { exact: true })).toBeVisible()
 })
 
 test('rejects a damaged file, then imports and supports repeat imports in settings', { tag: '@deployment' }, async ({ page }) => {
-  await page.goto('./')
-  const dialog = page.getByRole('dialog')
-  await expect(dialog).toBeVisible()
+  await page.addInitScript(() => {
+    localStorage.setItem('frozen-rabbit-initialized', 'true')
+  })
+  await page.goto('./#settings')
+  const dialog = page.locator('section[aria-labelledby="migration-heading"]')
+  await expect(dialog.getByRole('link')).toHaveAttribute('href', 'https://emu-rabbit.github.io/gleaner/')
   const notesBeforeImport = await page.evaluate(() => localStorage.getItem('frozen-rabbit-notes'))
   await dialog.locator('input[type=file]').setInputFiles({ name: 'broken.json', mimeType: 'application/json', buffer: Buffer.from('{}') })
   await expect(dialog.getByRole('alert')).toBeVisible()
@@ -40,7 +35,6 @@ test('rejects a damaged file, then imports and supports repeat imports in settin
   await expect(dialog.locator('input[type=file]')).toHaveValue(/workshop\.json$/)
   await expect(dialog.getByRole('combobox')).toBeHidden()
   await expect(dialog.getByText('未儲存的編輯與備料分配將消失。')).toBeHidden()
-  await expect(dialog.getByRole('checkbox')).not.toBeChecked()
   await dialog.getByRole('button', { name: '匯入並重新載入' }).click()
   await expect(page).toHaveTitle(/Crafting Prep Tool/)
   await expect(page.locator('.p-dialog')).toBeHidden()
@@ -61,17 +55,15 @@ test('rejects a damaged file, then imports and supports repeat imports in settin
 })
 
 for (const lang of ['tw', 'cn', 'en', 'ja']) {
-  test(`notice fits the viewport in ${lang} dark mode`, async ({ page }) => {
+  test(`returning visitors have no moving notice in ${lang} dark mode`, async ({ page }) => {
     await page.addInitScript(lang => {
       localStorage.setItem('frozen-rabbit-lang', lang)
       localStorage.setItem('frozen-rabbit-dark-mode', 'true')
+      localStorage.setItem('frozen-rabbit-initialized', 'true')
     }, lang)
     await page.goto('./')
-    const dialog = page.getByRole('dialog')
-    await expect(dialog).toBeVisible()
-    const box = await dialog.boundingBox()
-    expect(box!.x).toBeGreaterThanOrEqual(0)
-    expect(box!.x + box!.width).toBeLessThanOrEqual(page.viewportSize()!.width)
-    expect(await page.evaluate(() => localStorage.getItem('frozen-rabbit-initialized'))).not.toBe('true')
+    const dialog = page.locator('.p-dialog')
+    await expect(page.locator('main')).toBeVisible()
+    await expect(dialog).toBeHidden()
   })
 }
