@@ -30,7 +30,6 @@ describe('App', () => {
     // Start on the new-note route without onboarding dialogs.
     localStorage.clear();
     localStorage.setItem('frozen-rabbit-initialized', 'true');
-    localStorage.setItem('frozen-rabbit-migration-dismissed', 'true');
     window.history.replaceState(null, '', '/');
 
     // 3. Create a synchronous i18n instance
