@@ -1,0 +1,718 @@
+[
+  {
+    "id": "recommend_class_quests_1_60_crp",
+    "name": {
+      "tw": "木工師職業任務需求道具",
+      "cn": "刻木匠职业任务需求道具",
+      "en": "Carpenter Class Quest Items",
+      "ja": "木工師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5361,
+        "quantity": 1
+      },
+      {
+        "id": 2219,
+        "quantity": 3
+      },
+      {
+        "id": 5364,
+        "quantity": 12
+      },
+      {
+        "id": 1823,
+        "quantity": 1
+      },
+      {
+        "id": 1895,
+        "quantity": 1
+      },
+      {
+        "id": 1827,
+        "quantity": 1
+      },
+      {
+        "id": 5371,
+        "quantity": 1
+      },
+      {
+        "id": 2015,
+        "quantity": 1
+      },
+      {
+        "id": 1917,
+        "quantity": 1
+      },
+      {
+        "id": 1925,
+        "quantity": 1
+      },
+      {
+        "id": 1862,
+        "quantity": 1
+      },
+      {
+        "id": 2039,
+        "quantity": 1
+      },
+      {
+        "id": 1937,
+        "quantity": 1
+      },
+      {
+        "id": 5376,
+        "quantity": 1
+      },
+      {
+        "id": 1942,
+        "quantity": 1
+      },
+      {
+        "id": 10611,
+        "quantity": 1
+      },
+      {
+        "id": 10636,
+        "quantity": 1
+      },
+      {
+        "id": 12583,
+        "quantity": 3
+      },
+      {
+        "id": 10609,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_bsm",
+    "name": {
+      "tw": "鍛造師職業任務需求道具",
+      "cn": "锻铁匠职业任务需求道具",
+      "en": "Blacksmith Class Quest Items",
+      "ja": "鍛冶師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5056,
+        "quantity": 1
+      },
+      {
+        "id": 2341,
+        "quantity": 3
+      },
+      {
+        "id": 5091,
+        "quantity": 12
+      },
+      {
+        "id": 1605,
+        "quantity": 1
+      },
+      {
+        "id": 1753,
+        "quantity": 1
+      },
+      {
+        "id": 2344,
+        "quantity": 1
+      },
+      {
+        "id": 5058,
+        "quantity": 1
+      },
+      {
+        "id": 2551,
+        "quantity": 1
+      },
+      {
+        "id": 1778,
+        "quantity": 1
+      },
+      {
+        "id": 2350,
+        "quantity": 1
+      },
+      {
+        "id": 1723,
+        "quantity": 1
+      },
+      {
+        "id": 1796,
+        "quantity": 1
+      },
+      {
+        "id": 1659,
+        "quantity": 1
+      },
+      {
+        "id": 1663,
+        "quantity": 1
+      },
+      {
+        "id": 12528,
+        "quantity": 3
+      },
+      {
+        "id": 10588,
+        "quantity": 1
+      },
+      {
+        "id": 11877,
+        "quantity": 1
+      },
+      {
+        "id": 10591,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_arm",
+    "name": {
+      "tw": "甲冑師職業任務需求道具",
+      "cn": "铸甲匠职业任务需求道具",
+      "en": "Armorer Class Quest Items",
+      "ja": "甲冑師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5056,
+        "quantity": 1
+      },
+      {
+        "id": 2226,
+        "quantity": 3
+      },
+      {
+        "id": 5071,
+        "quantity": 12
+      },
+      {
+        "id": 2680,
+        "quantity": 1
+      },
+      {
+        "id": 2231,
+        "quantity": 1
+      },
+      {
+        "id": 2236,
+        "quantity": 1
+      },
+      {
+        "id": 5058,
+        "quantity": 1
+      },
+      {
+        "id": 3096,
+        "quantity": 1
+      },
+      {
+        "id": 2502,
+        "quantity": 1
+      },
+      {
+        "id": 3149,
+        "quantity": 1
+      },
+      {
+        "id": 3861,
+        "quantity": 1
+      },
+      {
+        "id": 2830,
+        "quantity": 1
+      },
+      {
+        "id": 3868,
+        "quantity": 1
+      },
+      {
+        "id": 3203,
+        "quantity": 1
+      },
+      {
+        "id": 10756,
+        "quantity": 1
+      },
+      {
+        "id": 10721,
+        "quantity": 1
+      },
+      {
+        "id": 10667,
+        "quantity": 1
+      },
+      {
+        "id": 10682,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_gsm",
+    "name": {
+      "tw": "金工師職業任務需求道具",
+      "cn": "雕金匠职业任务需求道具",
+      "en": "Goldsmith Class Quest Items",
+      "ja": "彫金師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5062,
+        "quantity": 1
+      },
+      {
+        "id": 4305,
+        "quantity": 3
+      },
+      {
+        "id": 5086,
+        "quantity": 12
+      },
+      {
+        "id": 4204,
+        "quantity": 1
+      },
+      {
+        "id": 4309,
+        "quantity": 1
+      },
+      {
+        "id": 2111,
+        "quantity": 1
+      },
+      {
+        "id": 5064,
+        "quantity": 1
+      },
+      {
+        "id": 4218,
+        "quantity": 1
+      },
+      {
+        "id": 2078,
+        "quantity": 1
+      },
+      {
+        "id": 2125,
+        "quantity": 1
+      },
+      {
+        "id": 2876,
+        "quantity": 1
+      },
+      {
+        "id": 2878,
+        "quantity": 1
+      },
+      {
+        "id": 2872,
+        "quantity": 1
+      },
+      {
+        "id": 4514,
+        "quantity": 1
+      },
+      {
+        "id": 11068,
+        "quantity": 1
+      },
+      {
+        "id": 12521,
+        "quantity": 1
+      },
+      {
+        "id": 12644,
+        "quantity": 1
+      },
+      {
+        "id": 12108,
+        "quantity": 1
+      },
+      {
+        "id": 12109,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_ltw",
+    "name": {
+      "tw": "皮革師職業任務需求道具",
+      "cn": "制革匠职业任务需求道具",
+      "en": "Leatherworker Class Quest Items",
+      "ja": "革細工師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5275,
+        "quantity": 1
+      },
+      {
+        "id": 4304,
+        "quantity": 3
+      },
+      {
+        "id": 5276,
+        "quantity": 12
+      },
+      {
+        "id": 3772,
+        "quantity": 1
+      },
+      {
+        "id": 4308,
+        "quantity": 1
+      },
+      {
+        "id": 3784,
+        "quantity": 1
+      },
+      {
+        "id": 5280,
+        "quantity": 1
+      },
+      {
+        "id": 3100,
+        "quantity": 1
+      },
+      {
+        "id": 3616,
+        "quantity": 1
+      },
+      {
+        "id": 3639,
+        "quantity": 1
+      },
+      {
+        "id": 3651,
+        "quantity": 1
+      },
+      {
+        "id": 2270,
+        "quantity": 1
+      },
+      {
+        "id": 4360,
+        "quantity": 1
+      },
+      {
+        "id": 3206,
+        "quantity": 1
+      },
+      {
+        "id": 12007,
+        "quantity": 1
+      },
+      {
+        "id": 10875,
+        "quantity": 1
+      },
+      {
+        "id": 12024,
+        "quantity": 1
+      },
+      {
+        "id": 12999,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_wvr",
+    "name": {
+      "tw": "裁縫師職業任務需求道具",
+      "cn": "裁衣匠职业任务需求道具",
+      "en": "Weaver Class Quest Items",
+      "ja": "裁縫師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5333,
+        "quantity": 1
+      },
+      {
+        "id": 3274,
+        "quantity": 3
+      },
+      {
+        "id": 5324,
+        "quantity": 12
+      },
+      {
+        "id": 2670,
+        "quantity": 1
+      },
+      {
+        "id": 3322,
+        "quantity": 1
+      },
+      {
+        "id": 3039,
+        "quantity": 1
+      },
+      {
+        "id": 5326,
+        "quantity": 1
+      },
+      {
+        "id": 3823,
+        "quantity": 1
+      },
+      {
+        "id": 3125,
+        "quantity": 1
+      },
+      {
+        "id": 3413,
+        "quantity": 1
+      },
+      {
+        "id": 2829,
+        "quantity": 1
+      },
+      {
+        "id": 3176,
+        "quantity": 1
+      },
+      {
+        "id": 3429,
+        "quantity": 1
+      },
+      {
+        "id": 3475,
+        "quantity": 1
+      },
+      {
+        "id": 2895,
+        "quantity": 1
+      },
+      {
+        "id": 3215,
+        "quantity": 1
+      },
+      {
+        "id": 11966,
+        "quantity": 1
+      },
+      {
+        "id": 10881,
+        "quantity": 1
+      },
+      {
+        "id": 12596,
+        "quantity": 3
+      },
+      {
+        "id": 13001,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_alc",
+    "name": {
+      "tw": "鍊金術師職業任務需求道具",
+      "cn": "炼金术士职业任务需求道具",
+      "en": "Alchemist Class Quest Items",
+      "ja": "錬金術師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 5487,
+        "quantity": 1
+      },
+      {
+        "id": 4564,
+        "quantity": 3
+      },
+      {
+        "id": 5515,
+        "quantity": 12
+      },
+      {
+        "id": 4597,
+        "quantity": 1
+      },
+      {
+        "id": 4595,
+        "quantity": 1
+      },
+      {
+        "id": 2149,
+        "quantity": 1
+      },
+      {
+        "id": 5522,
+        "quantity": 1
+      },
+      {
+        "id": 4575,
+        "quantity": 3
+      },
+      {
+        "id": 4556,
+        "quantity": 1
+      },
+      {
+        "id": 4599,
+        "quantity": 3
+      },
+      {
+        "id": 4607,
+        "quantity": 1
+      },
+      {
+        "id": 4608,
+        "quantity": 1
+      },
+      {
+        "id": 4606,
+        "quantity": 1
+      },
+      {
+        "id": 1987,
+        "quantity": 1
+      },
+      {
+        "id": 12601,
+        "quantity": 3
+      },
+      {
+        "id": 12615,
+        "quantity": 3
+      },
+      {
+        "id": 12622,
+        "quantity": 1
+      },
+      {
+        "id": 10651,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_class_quests_1_60_cul",
+    "name": {
+      "tw": "烹調師職業任務需求道具",
+      "cn": "烹调师职业任务需求道具",
+      "en": "Culinarian Class Quest Items",
+      "ja": "調理師クラスクエスト納品アイテム"
+    },
+    "items": [
+      {
+        "id": 4849,
+        "quantity": 1
+      },
+      {
+        "id": 4660,
+        "quantity": 1
+      },
+      {
+        "id": 4640,
+        "quantity": 2
+      },
+      {
+        "id": 4642,
+        "quantity": 1
+      },
+      {
+        "id": 4730,
+        "quantity": 1
+      },
+      {
+        "id": 4644,
+        "quantity": 1
+      },
+      {
+        "id": 4645,
+        "quantity": 1
+      },
+      {
+        "id": 4677,
+        "quantity": 1
+      },
+      {
+        "id": 4712,
+        "quantity": 1
+      },
+      {
+        "id": 4733,
+        "quantity": 1
+      },
+      {
+        "id": 4749,
+        "quantity": 1
+      },
+      {
+        "id": 4679,
+        "quantity": 1
+      },
+      {
+        "id": 4647,
+        "quantity": 1
+      },
+      {
+        "id": 4678,
+        "quantity": 1
+      },
+      {
+        "id": 4715,
+        "quantity": 1
+      },
+      {
+        "id": 4713,
+        "quantity": 1
+      },
+      {
+        "id": 12842,
+        "quantity": 1
+      },
+      {
+        "id": 12846,
+        "quantity": 1
+      },
+      {
+        "id": 12849,
+        "quantity": 1
+      },
+      {
+        "id": 12862,
+        "quantity": 1
+      },
+      {
+        "id": 12855,
+        "quantity": 1
+      },
+      {
+        "id": 12858,
+        "quantity": 1
+      },
+      {
+        "id": 12854,
+        "quantity": 1
+      },
+      {
+        "id": 12860,
+        "quantity": 1
+      },
+      {
+        "id": 12847,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  }
+]

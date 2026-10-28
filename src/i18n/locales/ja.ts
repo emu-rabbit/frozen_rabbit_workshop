@@ -78,6 +78,12 @@ export default {
     emptyDescription: '「過去の記録」で星マークを押して追加してね！'
   },
   recommended: {
+    filter: {
+      title: 'ノートを絞り込む', jobs: '装備ジョブ', levels: '装備レベル', types: 'ノートの種類',
+      craftingGathering: 'クラフター・ギャザラー', combat: '戦闘ジョブ',
+      expandJobs: 'すべてのジョブを表示', collapseJobs: 'ジョブを折りたたむ',
+      combatEquipment: '戦闘ジョブ装備セット', professionEquipment: 'クラフター・ギャザラー装備セット', quest: 'クラフタークラスクエスト', apply: '適用',
+    },
     title: 'うさぎのオススメ',
     description: 'ジョブ名やアイテムレベルで、お目当てのセットを検索。ノートを編集するには、JSONを「ノート作業台」にコピーしてください。',
     searchPlaceholder: '検索...',

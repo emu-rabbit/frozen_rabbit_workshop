@@ -10,6 +10,9 @@ import { searchRecommendedNotes } from '../../data/recommended'
 import { vFfivClean } from '../../utils/inputUtils'
 import type { Note } from '../../types/note'
 import type { WorkbenchNoteSource } from '../../services/analytics'
+import RecommendedFilterDialog from '../shared/RecommendedFilterDialog.vue'
+import recommendedNotes from '../../data/recommended'
+import { createRecommendedFilter, emptyRecommendedFilters, type RecommendedFilters } from '../../data/recommended/filters'
 
 const { t } = useI18n()
 const { toggleFavorite, isFavorite } = useNotes()
@@ -27,7 +30,16 @@ const first = ref(0)
 const rows = ref(20)
 
 
-const filteredNotes = computed(() => searchRecommendedNotes(searchQuery.value))
+const filters = ref(emptyRecommendedFilters())
+const showFilters = ref(false)
+const filterNotes = createRecommendedFilter(recommendedNotes)
+const activeFilterCount = computed(() => filters.value.jobs.length + filters.value.levels.length + filters.value.types.length)
+const filteredNotes = computed(() => filterNotes(searchRecommendedNotes(searchQuery.value), filters.value))
+const applyFilters = (value: RecommendedFilters) => {
+  filters.value = value
+  first.value = 0
+  showFilters.value = false
+}
 
 const pagedNotes = computed(() => {
   return filteredNotes.value.slice(first.value, first.value + rows.value)
@@ -57,10 +69,14 @@ const onSearchValueUpdate = (val: string | undefined) => {
           :modelValue="searchQuery"
           @update:modelValue="onSearchValueUpdate"
           :placeholder="t('recommended.searchPlaceholder')" 
-          class="w-full !pl-11 !border-soft-green-200 dark:!border-slate-800 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl bg-white dark:bg-slate-900 shadow-sm dark:text-slate-100"
+          class="w-full !pl-11 !pr-24 !border-soft-green-200 dark:!border-slate-800 focus:!border-soft-green-500 !ring-soft-green-500 rounded-xl bg-white dark:bg-slate-900 shadow-sm dark:text-slate-100"
           size="large"
         />
-        <i v-if="searchQuery" @click="onSearchValueUpdate('')" class="pi pi-times absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 cursor-pointer p-2 -mr-2"></i>
+        <i v-if="searchQuery" @click="onSearchValueUpdate('')" class="pi pi-times absolute right-16 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-500 cursor-pointer p-2 -mr-2"></i>
+        <button type="button" :title="t('recommended.filter.title')" :aria-label="t('recommended.filter.title')" :aria-expanded="showFilters" aria-haspopup="dialog" :class="activeFilterCount ? 'bg-soft-green-100 dark:bg-soft-green-900/50' : ''" class="absolute right-1 top-1 bottom-1 w-11 rounded-lg text-soft-green-600 dark:text-soft-green-400 hover:bg-soft-green-50 dark:hover:bg-slate-800 flex items-center justify-center" @click="showFilters = true">
+          <i :class="activeFilterCount ? 'pi pi-filter-fill' : 'pi pi-filter'"></i>
+          <span v-if="activeFilterCount" class="absolute -top-1 -right-1 rounded-full bg-soft-green-600 text-white text-[10px] min-w-4 px-1">{{ activeFilterCount }}</span>
+        </button>
       </span>
     </header>
 
@@ -98,5 +114,6 @@ const onSearchValueUpdate = (val: string | undefined) => {
         />
       </div>
     </div>
+    <RecommendedFilterDialog v-if="showFilters" :filters="filters" @close="showFilters = false" @apply="applyFilters" />
   </div>
 </template>

@@ -78,6 +78,12 @@ export default {
     emptyDescription: '在“翻开旧纪录”中点击星星來收藏吧！'
   },
   recommended: {
+    filter: {
+      title: '筛选笔记', jobs: '装备职业', levels: '装备等级', types: '笔记类型',
+      craftingGathering: '能工巧匠与大地使者', combat: '战斗职业',
+      expandJobs: '展开全部职业', collapseJobs: '收起职业',
+      combatEquipment: '战斗职业套装', professionEquipment: '生产采集职业套装', quest: '巧匠职业任务', apply: '应用',
+    },
     title: '兔肉私心笔记',
     description: '搜索职业或品级，找到你要的套装。想修改笔记？复制 JSON 到「笔记工作台」就能编辑。',
     searchPlaceholder: '搜索...',

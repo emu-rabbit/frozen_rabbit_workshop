@@ -29,8 +29,10 @@ import lv61_ilv180 from './lv61_ilv180.json';
 import lv71_ilv330 from './lv71_ilv330.json';
 import lv81_ilv480 from './lv81_ilv480.json';
 import lv91_ilv610 from './lv91_ilv610.json';
+import classQuests1To60 from './class_quests_1_60.json';
 
 export const baseRecommendedNotes: Note[] = [
+  ...(classQuests1To60 as Note[]),
   ...(lv100_ilv690 as Note[]),
   ...(lv100_ilv710 as Note[]),
   ...(lv100_ilv720 as Note[]),
