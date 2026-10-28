@@ -4,6 +4,7 @@ import { gunzipSync, gzipSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import notes, { baseRecommendedNotes, searchRecommendedNotes } from '../../src/data/recommended';
 import definitions from '../../src/data/recommended/generated/compositions.json';
+import classQuests from '../../src/data/recommended/class_quests_1_60.json';
 import { composeNotes } from '../../src/data/recommended/compose';
 import { createNoteSearch } from '../../src/utils/noteSearch';
 import type { CatalogBundle } from '../../src/types/gameData';
@@ -20,6 +21,24 @@ const find = (query: string) => {
 const quantity = (note: Note) => note.items.reduce((sum, item) => sum + item.quantity, 0);
 
 describe('ready-to-use recommended sets', () => {
+  it('loads all eight class quest notes with searchable official job names and known craftable items', () => {
+    expect(classQuests).toHaveLength(8);
+    for (const job of ['CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'WVR', 'ALC', 'CUL'] as const) {
+      const note = classQuests.find(note => note.id === `recommend_class_quests_1_60_${job.toLowerCase()}`)!;
+      expect(notes).toContainEqual(note);
+      expect(note.name.tw).toBe(`${definitions.jobs[job].tw}職業任務需求道具`);
+      for (const locale of ['tw', 'cn', 'en', 'ja'] as const) {
+        expect(note.name[locale]).toContain(definitions.jobs[job][locale]);
+        expect(find(note.name[locale])).toEqual(note);
+      }
+      expect(new Set(note.items.map(item => item.id)).size).toBe(note.items.length);
+      for (const item of note.items) {
+        expect(byId.get(item.id), `${job}/${item.id}`).toMatchObject({ craftable: true });
+        expect(Number.isInteger(item.quantity) && item.quantity > 0).toBe(true);
+      }
+    }
+  });
+
   it('uses plain set names in all four locales', () => {
     for (const note of composeNotes(baseRecommendedNotes, definitions.groups, definitions.jobs)) {
       for (const name of Object.values(note.name)) expect(name).not.toMatch(/[（()）]/);
@@ -43,7 +62,7 @@ describe('ready-to-use recommended sets', () => {
   });
 
   it('uses Chinese piece counts and consistent level prefixes in every recommended title', () => {
-    for (const note of notes) {
+    for (const note of notes.filter(note => !note.id.startsWith('recommend_class_quests_'))) {
       if (typeof note.name === 'string') throw new Error('Expected localized recommended name');
       for (const name of Object.values(note.name)) expect(name).toMatch(/^Lv\.\d+ iLv\d+/);
       expect(note.name.tw).not.toMatch(/\d+件/);
@@ -56,8 +75,8 @@ describe('ready-to-use recommended sets', () => {
   it('retains every existing note with stable and unique new identities', () => {
     const originals = readdirSync('src/data/recommended').filter(file => file.endsWith('.json'))
       .flatMap(file => JSON.parse(readFileSync('src/data/recommended/' + file, 'utf8')));
-    expect(baseRecommendedNotes).toHaveLength(123);
-    expect(notes).toHaveLength(503);
+    expect(baseRecommendedNotes).toHaveLength(131);
+    expect(notes).toHaveLength(511);
     expect(new Set(notes.map(note => note.id)).size).toBe(notes.length);
     for (const original of originals) expect(notes.find(note => note.id === original.id)).toEqual(original);
   });
@@ -66,6 +85,7 @@ describe('ready-to-use recommended sets', () => {
     const baseIds = new Set(baseRecommendedNotes.map(note => note.id));
     const key = (note: Note) => {
       if (typeof note.name === 'string') throw new Error('Expected localized recommended name');
+      if (note.id.startsWith('recommend_class_quests_')) return [1, 0, 0];
       const [level, grades] = note.name.tw.split(' ');
       return [baseIds.has(note.id) ? 1 : 0, Number(level!.slice(3)), Math.max(...grades!.slice(3).split('+').map(Number))];
     };
