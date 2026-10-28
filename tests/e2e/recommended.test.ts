@@ -16,6 +16,73 @@ async function start(page: Page) {
   await expect(page.getByTestId('recommended-notes').getByTestId('note-card')).toHaveCount(20);
 }
 
+test('note filters apply, cancel and clear independently from keyword search', async ({ page }) => {
+  await start(page);
+  const view = page.getByTestId('recommended-notes');
+  const open = view.getByRole('button', { name: '篩選筆記' });
+  await view.locator('.p-paginator-next').click();
+  await open.click();
+  const dialog = page.getByRole('dialog', { name: '篩選筆記' });
+  await dialog.getByRole('checkbox', { name: '木工師', exact: true }).check();
+  await dialog.getByRole('checkbox', { name: '巧匠職業任務', exact: true }).check();
+  await dialog.getByRole('button', { name: '套用', exact: true }).click();
+  await expect(view.getByTestId('note-card')).toHaveCount(1);
+  await expect(view.getByRole('heading', { level: 3 })).toHaveText('木工師職業任務需求道具');
+  await open.click();
+  await dialog.getByRole('button', { name: '清除篩選' }).click();
+  await dialog.getByRole('button', { name: '取消', exact: true }).click();
+  await expect(view.getByTestId('note-card')).toHaveCount(1);
+  await open.click();
+  await expect(dialog.getByRole('checkbox', { name: '木工師', exact: true })).toBeChecked();
+  await dialog.getByRole('button', { name: '清除篩選' }).click();
+  await dialog.getByRole('button', { name: '展開全部職業' }).click();
+  await dialog.getByRole('checkbox', { name: '騎士', exact: true }).check();
+  await dialog.getByRole('checkbox', { name: '100', exact: true }).check();
+  await dialog.getByRole('checkbox', { name: '戰鬥職套裝', exact: true }).check();
+  await dialog.getByRole('button', { name: '套用', exact: true }).click();
+  await view.getByRole('textbox').fill('710');
+  await expect(view.getByTestId('note-card')).toHaveCount(2);
+  await view.getByRole('textbox').fill('no matching note');
+  await expect(view.getByTestId('note-card')).toHaveCount(0);
+  await open.click();
+  await dialog.getByRole('button', { name: '清除篩選' }).click();
+  await dialog.getByRole('button', { name: '套用', exact: true }).click();
+  await expect(view.getByRole('textbox')).toHaveValue('no matching note');
+  await view.getByRole('textbox').fill('');
+  await expect(view.getByTestId('note-card')).toHaveCount(20);
+});
+
+test('note filter dialog fits all locales in light and dark themes', async ({ page }) => {
+  await start(page);
+  for (const locale of ['tw', 'cn', 'en', 'ja']) {
+    await page.evaluate(locale => localStorage.setItem('frozen-rabbit-lang', locale), locale);
+    await page.reload();
+    await page.getByTestId('recommended-notes').getByRole('button', { name: /篩選筆記|筛选笔记|Filter Notes|ノートを絞り込む/ }).click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog.getByRole('checkbox')).toHaveCount(15);
+    const toggle = dialog.getByRole('button', { name: /展開全部職業|展开全部职业|Show All Jobs|すべてのジョブを表示/ });
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await toggle.click();
+    await expect(dialog.getByRole('checkbox')).toHaveCount(42);
+    const jobs = dialog.locator('fieldset').first();
+    await jobs.getByRole('checkbox').last().check();
+    await dialog.getByRole('button', { name: /收合職業|收起职业|Show Fewer Jobs|ジョブを折りたたむ/ }).click();
+    await expect(dialog.getByRole('checkbox')).toHaveCount(15);
+    await toggle.click();
+    await expect(jobs.getByRole('checkbox').last()).toBeChecked();
+    await dialog.getByRole('button', { name: /收合職業|收起职业|Show Fewer Jobs|ジョブを折りたたむ/ }).click();
+    for (const dark of [false, true]) {
+      await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+      expect(await dialog.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      await expect(dialog.getByRole('button').last()).toBeInViewport();
+    }
+    if (locale === 'tw') await page.screenshot({ path: `test-results/note-filters-${test.info().project.name}.png` });
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  }
+});
+
 test('search after paging, save a complete paladin set, reload and open the workbench', { tag: '@deployment' }, async ({ page }) => {
   await start(page);
   const view = page.getByTestId('recommended-notes');

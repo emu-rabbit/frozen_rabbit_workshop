@@ -78,6 +78,12 @@ export default {
     emptyDescription: '在「翻開舊紀錄」中點擊星星來收藏吧！'
   },
   recommended: {
+    filter: {
+      title: '篩選筆記', jobs: '裝備職業', levels: '裝備等級', types: '筆記類型',
+      craftingGathering: '能工巧匠與大地使者', combat: '戰鬥職業',
+      expandJobs: '展開全部職業', collapseJobs: '收合職業',
+      combatEquipment: '戰鬥職套裝', professionEquipment: '生活職套裝', quest: '巧匠職業任務', apply: '套用',
+    },
     title: '兔肉私心筆記',
     description: '搜尋職業或品級，找到你要的套裝。想修改筆記？複製 JSON 到「筆記工作台」就能編輯。',
     searchPlaceholder: '搜尋...',
