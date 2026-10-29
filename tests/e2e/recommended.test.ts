@@ -189,6 +189,46 @@ test('note filters apply, cancel and clear independently from keyword search', a
   await expect(view.getByTestId('note-card')).toHaveCount(20);
 });
 
+test('search and applied filters survive navigation but reset on reload', async ({ page }) => {
+  await start(page);
+  const view = page.getByTestId('recommended-notes');
+  const open = view.getByRole('button', { name: '篩選筆記' });
+  const dialog = page.getByRole('dialog', { name: '篩選筆記' });
+  await open.click();
+  await dialog.getByRole('button', { name: '展開全部職業' }).click();
+  for (const name of ['騎士', '100', '戰鬥職套裝']) {
+    await dialog.getByRole('checkbox', { name, exact: true }).check();
+  }
+  await dialog.getByRole('button', { name: '套用', exact: true }).click();
+  await view.getByRole('textbox').fill('710');
+  await expect(view.getByTestId('note-card')).toHaveCount(2);
+  const titles = await view.getByRole('heading', { level: 3 }).allTextContents();
+
+  await navigateTo(page, '收藏的小筆記');
+  await expect(view).toHaveCount(0);
+  await page.evaluate(() => { location.hash = 'recommended'; });
+  await expect(view.getByRole('textbox')).toHaveValue('710');
+  await expect(view.getByRole('heading', { level: 3 })).toHaveText(titles);
+  await open.click();
+  await dialog.getByRole('button', { name: '展開全部職業' }).click();
+  for (const name of ['騎士', '100', '戰鬥職套裝']) {
+    await expect(dialog.getByRole('checkbox', { name, exact: true })).toBeChecked();
+  }
+  await dialog.getByRole('button', { name: '清除篩選' }).click();
+  await dialog.getByRole('button', { name: '取消', exact: true }).click();
+  await navigateTo(page, '收藏的小筆記');
+  await expect(view).toHaveCount(0);
+  await page.evaluate(() => { location.hash = 'recommended'; });
+  await expect(view.getByRole('textbox')).toHaveValue('710');
+  await expect(view.getByRole('heading', { level: 3 })).toHaveText(titles);
+
+  await page.reload();
+  await expect(view.getByRole('textbox')).toHaveValue('');
+  await expect(view.getByTestId('note-card')).toHaveCount(20);
+  await open.click();
+  await expect(dialog.getByRole('checkbox', { checked: true })).toHaveCount(0);
+});
+
 test('note filter dialog fits all locales in light and dark themes', async ({ page }) => {
   await start(page);
   for (const locale of ['tw', 'cn', 'en', 'ja']) {

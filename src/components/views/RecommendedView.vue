@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotes } from '../../composables/useNotes'
+import { useRecommendedViewState } from '../../composables/useRecommendedViewState'
 import NoteCard from '../shared/NoteCard.vue'
 import InputText from 'primevue/inputtext'
 import Paginator from 'primevue/paginator'
@@ -12,7 +13,7 @@ import type { Note } from '../../types/note'
 import type { WorkbenchNoteSource } from '../../services/analytics'
 import RecommendedFilterDialog from '../shared/RecommendedFilterDialog.vue'
 import recommendedNotes from '../../data/recommended'
-import { createRecommendedFilter, emptyRecommendedFilters, type RecommendedFilters } from '../../data/recommended/filters'
+import { createRecommendedFilter, type RecommendedFilters } from '../../data/recommended/filters'
 
 const { t } = useI18n()
 const { toggleFavorite, isFavorite } = useNotes()
@@ -25,12 +26,11 @@ const handleOpenWorkbench = (note: Note, source: WorkbenchNoteSource) => {
   emit('open-workbench', note, source)
 }
 
-const searchQuery = ref('')
+const { searchQuery, filters } = useRecommendedViewState()
 const first = ref(0)
 const rows = ref(20)
 
 
-const filters = ref(emptyRecommendedFilters())
 const showFilters = ref(false)
 const filterNotes = createRecommendedFilter(recommendedNotes)
 const activeFilterCount = computed(() => filters.value.jobs.length + filters.value.levels.length + filters.value.types.length)
