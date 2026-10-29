@@ -82,7 +82,7 @@ export default {
       title: 'Filter Notes', jobs: 'Equipment Jobs', levels: 'Equip Level', types: 'Note Type',
       craftingGathering: 'Crafting & Gathering', combat: 'Combat Jobs',
       expandJobs: 'Show All Jobs', collapseJobs: 'Show Fewer Jobs',
-      combatEquipment: 'Combat Job Sets', professionEquipment: 'Crafting & Gathering Sets', quest: 'Crafting Class Quests', apply: 'Apply',
+      combatEquipment: 'Combat Job Sets', professionEquipment: 'Crafting & Gathering Sets', quest: 'Crafting Class Quests', glamour: 'Glamour', apply: 'Apply',
     },
     title: 'Rabbit\'s Picks',
     description: 'Search by job or item level to find your set. To edit a note, copy its JSON into the Note Workbench.',

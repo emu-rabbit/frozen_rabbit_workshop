@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { dismissAnalyticsPrompt, navigateTo } from './utils/test-helpers';
+import glamourNotes from '../../src/data/recommended/glamour.json' with { type: 'json' };
 
 async function start(page: Page) {
   await dismissAnalyticsPrompt(page);
@@ -15,6 +16,57 @@ async function start(page: Page) {
   await page.goto('./#recommended');
   await expect(page.getByTestId('recommended-notes').getByTestId('note-card')).toHaveCount(20);
 }
+
+test('glamour category supports localized search, themes, favorites and preparation', async ({ page }) => {
+  await start(page);
+  const note = glamourNotes.find(note => note.items.some(item => item.id === 32799))!;
+  const cases = [
+    ['tw', '時裝', '篩選筆記', '套用'],
+    ['cn', '时装', '筛选笔记', '应用'],
+    ['en', 'Glamour', 'Filter Notes', 'Apply'],
+    ['ja', 'おしゃれ装備', 'ノートを絞り込む', '適用'],
+  ] as const;
+  for (const [locale, category, title, apply] of cases) {
+    await page.evaluate(locale => localStorage.setItem('frozen-rabbit-lang', locale), locale);
+    await page.reload();
+    const view = page.getByTestId('recommended-notes');
+    await view.getByRole('button', { name: title, exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: title });
+    await dialog.getByRole('checkbox', { name: category, exact: true }).check();
+    await dialog.getByRole('button', { name: apply, exact: true }).click();
+    await expect(view.getByTestId('note-card')).toHaveCount(20);
+    await view.getByRole('textbox').fill(note.name[locale]);
+    await expect(view.getByTestId('note-card')).toHaveCount(1);
+    await expect(view.getByRole('heading', { level: 3 })).toHaveText(note.name[locale]);
+    for (const dark of [false, true]) {
+      await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  }
+  await page.evaluate(() => localStorage.setItem('frozen-rabbit-lang', 'tw'));
+  await page.reload();
+  const view = page.getByTestId('recommended-notes');
+  await view.getByRole('textbox').fill('春意');
+  await expect(view.getByTestId('note-card')).toHaveCount(1);
+  await expect(view.getByRole('heading', { level: 3 })).toHaveText('春意服飾套裝');
+  await expect(view.getByTestId('note-card')).toContainText('這張筆記裡面有 (4)');
+  await page.screenshot({ path: `.cache/game-data/glamour-inventory/spring-${test.info().project.name}.png` });
+  await view.getByRole('textbox').fill('校園');
+  await expect(view.getByTestId('note-card')).toHaveCount(4);
+  await expect(view.getByText('校園平頂帽', { exact: true })).toHaveCount(4);
+  await expect(view.getByText('校園皮鞋', { exact: true })).toHaveCount(4);
+  await view.getByRole('textbox').fill('小牛皮騎手');
+  const card = view.getByTestId('note-card');
+  await expect(card).toHaveCount(1);
+  await card.getByRole('button', { name: '加入我的收藏' }).click();
+  await page.reload();
+  await navigateTo(page, '收藏的小筆記');
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('frozen-rabbit-favorites-data')!)[0]);
+  expect(saved.items).toEqual(note.items);
+  await page.getByTestId('note-card').getByRole('button', { name: /備料台/ }).click();
+  await expect(page).toHaveURL(/#workbench/);
+  await expect(page.getByRole('heading', { name: '小牛皮騎手外套', exact: true })).toBeVisible();
+});
 
 test('note filters apply, cancel and clear independently from keyword search', async ({ page }) => {
   await start(page);
@@ -59,15 +111,15 @@ test('note filter dialog fits all locales in light and dark themes', async ({ pa
     await page.reload();
     await page.getByTestId('recommended-notes').getByRole('button', { name: /篩選筆記|筛选笔记|Filter Notes|ノートを絞り込む/ }).click();
     const dialog = page.getByRole('dialog');
-    await expect(dialog.getByRole('checkbox')).toHaveCount(15);
+    await expect(dialog.getByRole('checkbox')).toHaveCount(16);
     const toggle = dialog.getByRole('button', { name: /展開全部職業|展开全部职业|Show All Jobs|すべてのジョブを表示/ });
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await toggle.click();
-    await expect(dialog.getByRole('checkbox')).toHaveCount(42);
+    await expect(dialog.getByRole('checkbox')).toHaveCount(43);
     const jobs = dialog.locator('fieldset').first();
     await jobs.getByRole('checkbox').last().check();
     await dialog.getByRole('button', { name: /收合職業|收起职业|Show Fewer Jobs|ジョブを折りたたむ/ }).click();
-    await expect(dialog.getByRole('checkbox')).toHaveCount(15);
+    await expect(dialog.getByRole('checkbox')).toHaveCount(16);
     await toggle.click();
     await expect(jobs.getByRole('checkbox').last()).toBeChecked();
     await dialog.getByRole('button', { name: /收合職業|收起职业|Show Fewer Jobs|ジョブを折りたたむ/ }).click();

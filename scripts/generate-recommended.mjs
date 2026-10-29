@@ -23,8 +23,8 @@ const jobs = Object.fromEntries(Object.values(roles).flat().map(job => [job,
 const weapons110 = new Set([9082, 9083, 9084, 9085, 9086, 9087, 9088, 9089, 9090, 9091, 9092, 10412, 10474, 10536, 20378, 20379]);
 // Corrections apply only to new composed notes. Existing curated notes remain byte-for-byte intact.
 const corrections = { 'lv100_ilv770.json': { 46068: 49307 }, 'lv60_ilv255.json': { 19613: 18086 } };
-// These leveling tiers intentionally offer only five armor pieces. Never fill gaps with older tools.
-const standaloneFiles = new Set(['lv51_ilv65.json', 'lv61_ilv180.json']);
+// Armor-only leveling tiers and curated glamour notes have no weapon/tool compositions.
+const standaloneFiles = new Set(['lv51_ilv65.json', 'lv61_ilv180.json', 'glamour.json']);
 const groups = [];
 for (const file of readdirSync(root + 'src/data/recommended').filter(file => file.endsWith('.json')).sort()) {
   if (standaloneFiles.has(file)) continue;

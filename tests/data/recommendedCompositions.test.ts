@@ -62,7 +62,7 @@ describe('ready-to-use recommended sets', () => {
   });
 
   it('uses Chinese piece counts and consistent level prefixes in every recommended title', () => {
-    for (const note of notes.filter(note => !note.id.startsWith('recommend_class_quests_'))) {
+    for (const note of notes.filter(note => !note.id.startsWith('recommend_class_quests_') && !note.id.startsWith('recommend_glamour_'))) {
       if (typeof note.name === 'string') throw new Error('Expected localized recommended name');
       for (const name of Object.values(note.name)) expect(name).toMatch(/^Lv\.\d+ iLv\d+/);
       expect(note.name.tw).not.toMatch(/\d+件/);
@@ -75,8 +75,8 @@ describe('ready-to-use recommended sets', () => {
   it('retains every existing note with stable and unique new identities', () => {
     const originals = readdirSync('src/data/recommended').filter(file => file.endsWith('.json'))
       .flatMap(file => JSON.parse(readFileSync('src/data/recommended/' + file, 'utf8')));
-    expect(baseRecommendedNotes).toHaveLength(131);
-    expect(notes).toHaveLength(511);
+    expect(baseRecommendedNotes).toHaveLength(296);
+    expect(notes).toHaveLength(676);
     expect(new Set(notes.map(note => note.id)).size).toBe(notes.length);
     for (const original of originals) expect(notes.find(note => note.id === original.id)).toEqual(original);
   });
@@ -85,6 +85,7 @@ describe('ready-to-use recommended sets', () => {
     const baseIds = new Set(baseRecommendedNotes.map(note => note.id));
     const key = (note: Note) => {
       if (typeof note.name === 'string') throw new Error('Expected localized recommended name');
+      if (note.id.startsWith('recommend_glamour_')) return [1, 999, 0];
       if (note.id.startsWith('recommend_class_quests_')) return [1, 0, 0];
       const [level, grades] = note.name.tw.split(' ');
       return [baseIds.has(note.id) ? 1 : 0, Number(level!.slice(3)), Math.max(...grades!.slice(3).split('+').map(Number))];

@@ -1,0 +1,5030 @@
+[
+  {
+    "id": "recommend_glamour_2650_2993",
+    "name": {
+      "tw": "公會服飾套裝",
+      "cn": "部队罩衣套装",
+      "en": "Company Tabard Set",
+      "ja": "カンパニータバードセット"
+    },
+    "items": [
+      {
+        "id": 2650,
+        "quantity": 1
+      },
+      {
+        "id": 2993,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_2996_3307",
+    "name": {
+      "tw": "貼身背心／草布內褲套裝",
+      "cn": "贴身背心 / 草布内裤套装",
+      "en": "Hempen Undershirt / Hempen Underpants Set",
+      "ja": "アンダーシャツ・アンダーパンツセット"
+    },
+    "items": [
+      {
+        "id": 2996,
+        "quantity": 1
+      },
+      {
+        "id": 3307,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_2997_3308",
+    "name": {
+      "tw": "緊身小背心／草布熱褲套裝",
+      "cn": "紧身小背心 / 草布热裤套装",
+      "en": "Hempen Camise / Hempen Pantalettes Set",
+      "ja": "カミーズ・パンタレットセット"
+    },
+    "items": [
+      {
+        "id": 2997,
+        "quantity": 1
+      },
+      {
+        "id": 3308,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_6978_6979_6980_6981",
+    "name": {
+      "tw": "高地服飾套裝",
+      "cn": "高地罩衫套装",
+      "en": "Highland Smock Set",
+      "ja": "ハイランドスモックセット"
+    },
+    "items": [
+      {
+        "id": 6978,
+        "quantity": 1
+      },
+      {
+        "id": 6979,
+        "quantity": 1
+      },
+      {
+        "id": 6980,
+        "quantity": 1
+      },
+      {
+        "id": 6981,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_6982_6983",
+    "name": {
+      "tw": "冰河服飾套裝",
+      "cn": "冰河外套套装",
+      "en": "Glacial Coat Set",
+      "ja": "グレイシャルコートセット"
+    },
+    "items": [
+      {
+        "id": 6982,
+        "quantity": 1
+      },
+      {
+        "id": 6983,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_7534_7535_7536_7537_7538",
+    "name": {
+      "tw": "水手／盛花服飾套裝",
+      "cn": "水手服 / 水手裤套装",
+      "en": "Sailor Shirt / Sailor Brais Set",
+      "ja": "セーラーシャツ・セーラーブレーセット"
+    },
+    "items": [
+      {
+        "id": 7534,
+        "quantity": 1
+      },
+      {
+        "id": 7535,
+        "quantity": 1
+      },
+      {
+        "id": 7536,
+        "quantity": 1
+      },
+      {
+        "id": 7537,
+        "quantity": 1
+      },
+      {
+        "id": 7538,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_7539_7540_7541_7542",
+    "name": {
+      "tw": "春意服飾套裝",
+      "cn": "春意礼服 / 春意长裙套装",
+      "en": "Spring Dress / Spring Skirt Set",
+      "ja": "スプリングドレス・スプリングスカートセット"
+    },
+    "items": [
+      {
+        "id": 7539,
+        "quantity": 1
+      },
+      {
+        "id": 7540,
+        "quantity": 1
+      },
+      {
+        "id": 7541,
+        "quantity": 1
+      },
+      {
+        "id": 7542,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_7543_8540_8541_13256_13257_13258_13259",
+    "name": {
+      "tw": "帽款合集（七款）",
+      "cn": "帽款合集（七款）",
+      "en": "Crafted Hats 7-style Collection",
+      "ja": "帽子7種セット"
+    },
+    "items": [
+      {
+        "id": 7543,
+        "quantity": 1
+      },
+      {
+        "id": 8540,
+        "quantity": 1
+      },
+      {
+        "id": 8541,
+        "quantity": 1
+      },
+      {
+        "id": 13256,
+        "quantity": 1
+      },
+      {
+        "id": 13257,
+        "quantity": 1
+      },
+      {
+        "id": 13258,
+        "quantity": 1
+      },
+      {
+        "id": 13259,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_9289",
+    "name": {
+      "tw": "樸素長裙",
+      "cn": "朴素长裙",
+      "en": "Plain Long Skirt",
+      "ja": "ロングスカート"
+    },
+    "items": [
+      {
+        "id": 9289,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13273",
+    "name": {
+      "tw": "擊拳手套",
+      "cn": "击拳手套",
+      "en": "Punching Gloves",
+      "ja": "パンチンググローブ"
+    },
+    "items": [
+      {
+        "id": 13273,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21941",
+    "name": {
+      "tw": "阿拉米格長外衣",
+      "cn": "阿拉米格长外衣",
+      "en": "Ala Mhigan Gown",
+      "ja": "アラミガンガウン"
+    },
+    "items": [
+      {
+        "id": 21941,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_35862",
+    "name": {
+      "tw": "紅緞帶",
+      "cn": "红缎带",
+      "en": "Red Ribbon",
+      "ja": "レッドリボン"
+    },
+    "items": [
+      {
+        "id": 35862,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_7546_7547",
+    "name": {
+      "tw": "輕鋼服飾套裝",
+      "cn": "轻钢肩甲 / 轻钢三角裤套装",
+      "en": "Light Steel Galerus / Light Steel Subligar Set",
+      "ja": "ライトスチールガレルース・ライトスチールサブリガセット"
+    },
+    "items": [
+      {
+        "id": 7546,
+        "quantity": 1
+      },
+      {
+        "id": 7547,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_7548_7549",
+    "name": {
+      "tw": "平紋服飾套裝",
+      "cn": "平纹披肩 / 平纹腰布裙套装",
+      "en": "Taffeta Shawl / Taffeta Loincloth Set",
+      "ja": "タフタショール・タフタロインクロスセット"
+    },
+    "items": [
+      {
+        "id": 7548,
+        "quantity": 1
+      },
+      {
+        "id": 7549,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8546_8547",
+    "name": {
+      "tw": "豹紋護身符／海灘裙套裝",
+      "cn": "豹纹护身符 / 豹纹男式海滩裙套装",
+      "en": "Coeurl Talisman / Coeurl Beach Maro Set",
+      "ja": "クァールタリスマン・クァールビーチマロセット"
+    },
+    "items": [
+      {
+        "id": 8546,
+        "quantity": 1
+      },
+      {
+        "id": 8547,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8546_8548",
+    "name": {
+      "tw": "豹紋護身符／短褲套裝",
+      "cn": "豹纹护身符 / 豹纹男式短裤套装",
+      "en": "Coeurl Talisman / Coeurl Beach Briefs Set",
+      "ja": "クァールタリスマン・クァールビーチショーツセット"
+    },
+    "items": [
+      {
+        "id": 8546,
+        "quantity": 1
+      },
+      {
+        "id": 8548,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8553_8554",
+    "name": {
+      "tw": "豹紋夏衣／海灘裙套裝",
+      "cn": "豹纹女式夏衣 / 豹纹女式海滩裙套装",
+      "en": "Coeurl Beach Halter / Coeurl Beach Pareo Set",
+      "ja": "クァールビーチホルター・クァールビーチパレオセット"
+    },
+    "items": [
+      {
+        "id": 8553,
+        "quantity": 1
+      },
+      {
+        "id": 8554,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8553_8555",
+    "name": {
+      "tw": "豹紋夏衣／夏褲套裝",
+      "cn": "豹纹女式夏衣 / 豹纹女式夏裤套装",
+      "en": "Coeurl Beach Halter / Coeurl Beach Tanga Set",
+      "ja": "クァールビーチホルター・クァールビーチタンガセット"
+    },
+    "items": [
+      {
+        "id": 8553,
+        "quantity": 1
+      },
+      {
+        "id": 8555,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8557_8559_8560_8561",
+    "name": {
+      "tw": "弦月睡衣（長睡帽款）套裝",
+      "cn": "弦月长睡帽 / 弦月睡袍 / 弦月睡裤套装",
+      "en": "Crescent Moon Cone / Crescent Moon Nightgown / Crescent Moon Bottoms Set",
+      "ja": "クレセントコーンキャップ・クレセントガウン・クレセントキュロットセット"
+    },
+    "items": [
+      {
+        "id": 8557,
+        "quantity": 1
+      },
+      {
+        "id": 8559,
+        "quantity": 1
+      },
+      {
+        "id": 8560,
+        "quantity": 1
+      },
+      {
+        "id": 8561,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8558_8559_8560_8561",
+    "name": {
+      "tw": "弦月睡衣（花睡帽款）套裝",
+      "cn": "弦月花睡帽 / 弦月睡袍 / 弦月睡裤套装",
+      "en": "Crescent Moon Nightcap / Crescent Moon Nightgown / Crescent Moon Bottoms Set",
+      "ja": "クレセントナイトキャップ・クレセントガウン・クレセントキュロットセット"
+    },
+    "items": [
+      {
+        "id": 8558,
+        "quantity": 1
+      },
+      {
+        "id": 8559,
+        "quantity": 1
+      },
+      {
+        "id": 8560,
+        "quantity": 1
+      },
+      {
+        "id": 8561,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_8563_8564_8703_8704_8705_9297_9298_10049_10050_13262_13263",
+    "name": {
+      "tw": "眼鏡合集（十一款）",
+      "cn": "眼镜合集（十一款）",
+      "en": "Crafted Glasses 11-style Collection",
+      "ja": "眼鏡11種セット"
+    },
+    "items": [
+      {
+        "id": 8563,
+        "quantity": 1
+      },
+      {
+        "id": 8564,
+        "quantity": 1
+      },
+      {
+        "id": 8703,
+        "quantity": 1
+      },
+      {
+        "id": 8704,
+        "quantity": 1
+      },
+      {
+        "id": 8705,
+        "quantity": 1
+      },
+      {
+        "id": 9297,
+        "quantity": 1
+      },
+      {
+        "id": 9298,
+        "quantity": 1
+      },
+      {
+        "id": 10049,
+        "quantity": 1
+      },
+      {
+        "id": 10050,
+        "quantity": 1
+      },
+      {
+        "id": 13262,
+        "quantity": 1
+      },
+      {
+        "id": 13263,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_9283_9284_9285",
+    "name": {
+      "tw": "伴郎服飾套裝",
+      "cn": "伴郎礼服 / 伴郎礼裤套装",
+      "en": "Best Man's Jacket / Best Man's Slacks Set",
+      "ja": "ベストマンジャケット・ベストマンスラックスセット"
+    },
+    "items": [
+      {
+        "id": 9283,
+        "quantity": 1
+      },
+      {
+        "id": 9284,
+        "quantity": 1
+      },
+      {
+        "id": 9285,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_9286_9287_9288",
+    "name": {
+      "tw": "伴娘服飾套裝",
+      "cn": "伴娘礼裙 / 伴娘长袜套装",
+      "en": "Bridesmaid's Dress / Bridesmaid's Tights Set",
+      "ja": "ブライズメイドドレス・ブライズメイドタイツセット"
+    },
+    "items": [
+      {
+        "id": 9286,
+        "quantity": 1
+      },
+      {
+        "id": 9287,
+        "quantity": 1
+      },
+      {
+        "id": 9288,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14852_14853",
+    "name": {
+      "tw": "駿鷹革護胸／短褲套裝",
+      "cn": "骏鹰革护胸 / 骏鹰革短裤套装",
+      "en": "Gryphonskin Breastguard / Gryphonskin Pantalettes Set",
+      "ja": "ヒッポグリフブレストガード・ヒッポグリフパンタレットセット"
+    },
+    "items": [
+      {
+        "id": 14852,
+        "quantity": 1
+      },
+      {
+        "id": 14853,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_9291",
+    "name": {
+      "tw": "駿鷹眼罩",
+      "cn": "骏鹰眼罩",
+      "en": "Gryphonskin Eyepatch",
+      "ja": "ヒッポグリフアイパッチ"
+    },
+    "items": [
+      {
+        "id": 9291,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14850_14851",
+    "name": {
+      "tw": "聖蜥蜴革背心／馬褲套裝",
+      "cn": "圣蜥蜴革背心 / 圣蜥蜴革马裤套装",
+      "en": "Uraeus Body Armor / Uraeus Breeches Set",
+      "ja": "ウラエウスボディアーマー・ウラエウスブリーチセット"
+    },
+    "items": [
+      {
+        "id": 14850,
+        "quantity": 1
+      },
+      {
+        "id": 14851,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_10387_10388_10389_10390_10391",
+    "name": {
+      "tw": "薩維奈短外套套裝",
+      "cn": "萨维奈短外套 / 萨维奈垮裤套装",
+      "en": "Thavnairian Bolero / Thavnairian Sarouel Set",
+      "ja": "サベネアンボレロ・サベネアンサルエルセット"
+    },
+    "items": [
+      {
+        "id": 10387,
+        "quantity": 1
+      },
+      {
+        "id": 10388,
+        "quantity": 1
+      },
+      {
+        "id": 10389,
+        "quantity": 1
+      },
+      {
+        "id": 10390,
+        "quantity": 1
+      },
+      {
+        "id": 10391,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_10392_10393_10394_10395_10396",
+    "name": {
+      "tw": "薩維奈舞裙套裝",
+      "cn": "萨维奈舞裙 / 萨维奈绑腿套装",
+      "en": "Thavnairian Bustier / Thavnairian Tights Set",
+      "ja": "サベネアンビスチェ・サベネアンタイツセット"
+    },
+    "items": [
+      {
+        "id": 10392,
+        "quantity": 1
+      },
+      {
+        "id": 10393,
+        "quantity": 1
+      },
+      {
+        "id": 10394,
+        "quantity": 1
+      },
+      {
+        "id": 10395,
+        "quantity": 1
+      },
+      {
+        "id": 10396,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13266_13267_13268_13269",
+    "name": {
+      "tw": "高貴緊身上衣套裝",
+      "cn": "高贵紧身上衣 / 高贵马裤套装",
+      "en": "High House Justaucorps / High House Breeches Set",
+      "ja": "ハイハウスジュストコール・ハイハウスブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13269,
+        "quantity": 1
+      },
+      {
+        "id": 13266,
+        "quantity": 1
+      },
+      {
+        "id": 13267,
+        "quantity": 1
+      },
+      {
+        "id": 13268,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13269_13270_13271",
+    "name": {
+      "tw": "高貴澎裙禮服套裝",
+      "cn": "高贵裙撑礼服套装",
+      "en": "High House Bustle Set",
+      "ja": "ハイハウス・バッスルドレスセット"
+    },
+    "items": [
+      {
+        "id": 13269,
+        "quantity": 1
+      },
+      {
+        "id": 13270,
+        "quantity": 1
+      },
+      {
+        "id": 13271,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13682_13683_13684_13685",
+    "name": {
+      "tw": "虹布緊身上衣套裝",
+      "cn": "虹布紧身上衣 / 虹布马裤套装",
+      "en": "Rainbow Justaucorps / Rainbow Breeches Set",
+      "ja": "レインボークロスジュストコール・レインボークロスブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13685,
+        "quantity": 1
+      },
+      {
+        "id": 13682,
+        "quantity": 1
+      },
+      {
+        "id": 13683,
+        "quantity": 1
+      },
+      {
+        "id": 13684,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13685_13686_13687",
+    "name": {
+      "tw": "虹布澎裙禮服套裝",
+      "cn": "虹布裙撑礼服套装",
+      "en": "Rainbow Bustle Set",
+      "ja": "レインボークロス・バッスルドレスセット"
+    },
+    "items": [
+      {
+        "id": 13685,
+        "quantity": 1
+      },
+      {
+        "id": 13686,
+        "quantity": 1
+      },
+      {
+        "id": 13687,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13272_13769_13770",
+    "name": {
+      "tw": "鷹獵人服飾套裝",
+      "cn": "鹰猎人衬衫 / 鹰猎人打底裤套装",
+      "en": "Falconer's Shirt / Falconer's Bottoms Set",
+      "ja": "ファルコナーシャツ・ファルコナーボトムセット"
+    },
+    "items": [
+      {
+        "id": 13272,
+        "quantity": 1
+      },
+      {
+        "id": 13769,
+        "quantity": 1
+      },
+      {
+        "id": 13770,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13688_13771_13772",
+    "name": {
+      "tw": "青麻襯衫／巨龍革服飾套裝",
+      "cn": "青麻衬衫 / 巨龙革打底裤套装",
+      "en": "Ramie Shirt / Dragonskin Bottoms Set",
+      "ja": "ラミーシャツ・ドラゴンレザーボトムセット"
+    },
+    "items": [
+      {
+        "id": 13688,
+        "quantity": 1
+      },
+      {
+        "id": 13771,
+        "quantity": 1
+      },
+      {
+        "id": 13772,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14830_14831_14832_14834",
+    "name": {
+      "tw": "遠征外套套裝",
+      "cn": "远征外套 / 远征腿套套装",
+      "en": "Expeditioner's Coat / Expeditioner's Kecks Set",
+      "ja": "エクスペディションコート・エクスペディションケクスセット"
+    },
+    "items": [
+      {
+        "id": 14830,
+        "quantity": 1
+      },
+      {
+        "id": 14834,
+        "quantity": 1
+      },
+      {
+        "id": 14831,
+        "quantity": 1
+      },
+      {
+        "id": 14832,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14833_14834_14835_14836",
+    "name": {
+      "tw": "遠征罩衣套裝",
+      "cn": "远征罩衣 / 远征热裤套装",
+      "en": "Expeditioner's Tabard / Expeditioner's Pantalettes Set",
+      "ja": "エクスペディションタバード・エクスペディションパンタレットセット"
+    },
+    "items": [
+      {
+        "id": 14833,
+        "quantity": 1
+      },
+      {
+        "id": 14834,
+        "quantity": 1
+      },
+      {
+        "id": 14835,
+        "quantity": 1
+      },
+      {
+        "id": 14836,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14924_14925_14926_14928",
+    "name": {
+      "tw": "長頸駝革外套套裝",
+      "cn": "长颈驼革外套 / 青麻腿套套装",
+      "en": "Dhalmelskin Coat / Ramie Kecks Set",
+      "ja": "ダルメルコート・ラミーケクスセット"
+    },
+    "items": [
+      {
+        "id": 14924,
+        "quantity": 1
+      },
+      {
+        "id": 14928,
+        "quantity": 1
+      },
+      {
+        "id": 14925,
+        "quantity": 1
+      },
+      {
+        "id": 14926,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14927_14928_14929_14930",
+    "name": {
+      "tw": "青麻短袖罩衣套裝",
+      "cn": "青麻短袖罩衣 / 青麻热裤套装",
+      "en": "Ramie Tabard / Ramie Pantalettes Set",
+      "ja": "ラミータバード・ラミーパンタレットセット"
+    },
+    "items": [
+      {
+        "id": 14927,
+        "quantity": 1
+      },
+      {
+        "id": 14928,
+        "quantity": 1
+      },
+      {
+        "id": 14929,
+        "quantity": 1
+      },
+      {
+        "id": 14930,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14868_14869_14894",
+    "name": {
+      "tw": "聖蜥蜴革外套／短裙套裝",
+      "cn": "圣蜥蜴革外套 / 圣蜥蜴革短裙套装",
+      "en": "Uraeus Coat / Uraeus Skirt Set",
+      "ja": "ウラエウスコート・ウラエウススカートセット"
+    },
+    "items": [
+      {
+        "id": 14869,
+        "quantity": 1
+      },
+      {
+        "id": 14868,
+        "quantity": 1
+      },
+      {
+        "id": 14894,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14939_14940_14941_14942_14943",
+    "name": {
+      "tw": "風絹／恐龍革服飾套裝",
+      "cn": "风绢短上衣 / 风绢打底裤套装",
+      "en": "Wind Silk Coatee / Wind Silk Bottoms Set",
+      "ja": "ウィンドシルクコーティー・ウィンドシルクボトムセット"
+    },
+    "items": [
+      {
+        "id": 14939,
+        "quantity": 1
+      },
+      {
+        "id": 14940,
+        "quantity": 1
+      },
+      {
+        "id": 14941,
+        "quantity": 1
+      },
+      {
+        "id": 14942,
+        "quantity": 1
+      },
+      {
+        "id": 14943,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15462_15463_15464_15465_15466",
+    "name": {
+      "tw": "新世界服飾套裝",
+      "cn": "新世界外套 / 新世界喇叭裤套装",
+      "en": "New World Jacket / New World Hose Set",
+      "ja": "ニューワールド・ジャケット・ニューワールド・ホーズセット"
+    },
+    "items": [
+      {
+        "id": 15462,
+        "quantity": 1
+      },
+      {
+        "id": 15463,
+        "quantity": 1
+      },
+      {
+        "id": 15464,
+        "quantity": 1
+      },
+      {
+        "id": 15465,
+        "quantity": 1
+      },
+      {
+        "id": 15466,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15472_15473_15474_15475",
+    "name": {
+      "tw": "倖存者服飾套裝",
+      "cn": "幸存者衬衫 / 幸存者七分裤套装",
+      "en": "Survival Shirt / Survival Halfslops Set",
+      "ja": "サバイバーシャツ・サバイバーハーフパンツセット"
+    },
+    "items": [
+      {
+        "id": 15472,
+        "quantity": 1
+      },
+      {
+        "id": 15473,
+        "quantity": 1
+      },
+      {
+        "id": 15474,
+        "quantity": 1
+      },
+      {
+        "id": 15475,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15472_15475_15476_15477",
+    "name": {
+      "tw": "極限倖存者套裝",
+      "cn": "极限幸存者衬衫 / 极限幸存者长裤套装",
+      "en": "Extreme Survival Shirt / Extreme Survival Slops Set",
+      "ja": "エクストリーム・サバイバーシャツ・エクストリーム・サバイバースロップセット"
+    },
+    "items": [
+      {
+        "id": 15472,
+        "quantity": 1
+      },
+      {
+        "id": 15476,
+        "quantity": 1
+      },
+      {
+        "id": 15477,
+        "quantity": 1
+      },
+      {
+        "id": 15475,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15921_15922_15923_15924",
+    "name": {
+      "tw": "月火坎肩套裝",
+      "cn": "月火男式坎肩 / 月火男式短裤套装",
+      "en": "Moonfire Vest / Moonfire Trunks Set",
+      "ja": "ムーンファイアベスト・ムーンファイアトランクスセット"
+    },
+    "items": [
+      {
+        "id": 15921,
+        "quantity": 1
+      },
+      {
+        "id": 15922,
+        "quantity": 1
+      },
+      {
+        "id": 15923,
+        "quantity": 1
+      },
+      {
+        "id": 15924,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15921_15925_15926_15927",
+    "name": {
+      "tw": "月火夏衣套裝",
+      "cn": "月火女式夏衣 / 月火女式夏裤套装",
+      "en": "Moonfire Halter / Moonfire Tanga Set",
+      "ja": "ムーンファイアホルター・ムーンファイアタンガセット"
+    },
+    "items": [
+      {
+        "id": 15921,
+        "quantity": 1
+      },
+      {
+        "id": 15925,
+        "quantity": 1
+      },
+      {
+        "id": 15926,
+        "quantity": 1
+      },
+      {
+        "id": 15927,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_15928_15929_15930_15931",
+    "name": {
+      "tw": "普通素材倖存者服飾套裝",
+      "cn": "亚麻幸存者衬衫 / 亚麻幸存者七分裤套装",
+      "en": "Linen Survival Shirt / Linen Survival Halfslops Set",
+      "ja": "リネンサバイバーシャツ・リネン・サバイバーハーフパンツセット"
+    },
+    "items": [
+      {
+        "id": 15928,
+        "quantity": 1
+      },
+      {
+        "id": 15929,
+        "quantity": 1
+      },
+      {
+        "id": 15930,
+        "quantity": 1
+      },
+      {
+        "id": 15931,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_16596_16597_16598_16909",
+    "name": {
+      "tw": "青麻斗篷服飾套裝",
+      "cn": "青麻斗篷 / 青麻工作裤套装",
+      "en": "Ramie Poncho / Ramie Slops Set",
+      "ja": "ラミーポンチョ・ラミースロップセット"
+    },
+    "items": [
+      {
+        "id": 16596,
+        "quantity": 1
+      },
+      {
+        "id": 16597,
+        "quantity": 1
+      },
+      {
+        "id": 16598,
+        "quantity": 1
+      },
+      {
+        "id": 16909,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_16599_16600_16601_16910",
+    "name": {
+      "tw": "羊絨斗篷服飾套裝",
+      "cn": "羊绒斗篷 / 羊绒工作裤套装",
+      "en": "Cashmere Poncho / Cashmere Slops Set",
+      "ja": "カシミヤポンチョ・カシミヤスロップセット"
+    },
+    "items": [
+      {
+        "id": 16599,
+        "quantity": 1
+      },
+      {
+        "id": 16600,
+        "quantity": 1
+      },
+      {
+        "id": 16601,
+        "quantity": 1
+      },
+      {
+        "id": 16910,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_16625_16626",
+    "name": {
+      "tw": "星絹布／獅鷲革服飾套裝",
+      "cn": "星绢布长袍套装",
+      "en": "Astral Silk Robe Set",
+      "ja": "アストラルシルクローブセット"
+    },
+    "items": [
+      {
+        "id": 16625,
+        "quantity": 1
+      },
+      {
+        "id": 16626,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_17462_17463_17464_17465",
+    "name": {
+      "tw": "呢絨背帶服飾套裝",
+      "cn": "呢绒背带衬衫 / 呢绒七分裤套装",
+      "en": "Wool Suspenders / Cropped Wool Slops Set",
+      "ja": "ウールサスペンダーシャツ・ウールクロップドパンツセット"
+    },
+    "items": [
+      {
+        "id": 17462,
+        "quantity": 1
+      },
+      {
+        "id": 17463,
+        "quantity": 1
+      },
+      {
+        "id": 17464,
+        "quantity": 1
+      },
+      {
+        "id": 17465,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_17466_17467_17468_17469",
+    "name": {
+      "tw": "法蘭絨背帶服飾套裝",
+      "cn": "法兰绒背带衬衫 / 法兰绒七分裤套装",
+      "en": "Flannel Suspenders / Cropped Flannel Slops Set",
+      "ja": "フランネルサスペンダーシャツ・フランネルクロップドパンツセット"
+    },
+    "items": [
+      {
+        "id": 17466,
+        "quantity": 1
+      },
+      {
+        "id": 17467,
+        "quantity": 1
+      },
+      {
+        "id": 17468,
+        "quantity": 1
+      },
+      {
+        "id": 17469,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_20470_20471_20472_20473_20474",
+    "name": {
+      "tw": "道士服飾套裝",
+      "cn": "道士袍服 / 道士长裤套装",
+      "en": "Taoist's Shirt / Taoist's Slops Set",
+      "ja": "道士袍服・道士脚衣セット"
+    },
+    "items": [
+      {
+        "id": 20470,
+        "quantity": 1
+      },
+      {
+        "id": 20471,
+        "quantity": 1
+      },
+      {
+        "id": 20472,
+        "quantity": 1
+      },
+      {
+        "id": 20473,
+        "quantity": 1
+      },
+      {
+        "id": 20474,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_20475_20476_20477_20478",
+    "name": {
+      "tw": "奧黛服飾套裝",
+      "cn": "奥黛 / 阔腿裤套装",
+      "en": "Ao Dai / Quan Set",
+      "ja": "アオザイ・クワンセット"
+    },
+    "items": [
+      {
+        "id": 20475,
+        "quantity": 1
+      },
+      {
+        "id": 20476,
+        "quantity": 1
+      },
+      {
+        "id": 20477,
+        "quantity": 1
+      },
+      {
+        "id": 20478,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21202",
+    "name": {
+      "tw": "薩維奈秋意襯衫",
+      "cn": "萨维奈秋意衬衫",
+      "en": "Thavnairian Wool Autumn Shirt",
+      "ja": "サベネアンカルゼ・オータムシャツ"
+    },
+    "items": [
+      {
+        "id": 21202,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21203",
+    "name": {
+      "tw": "薩維奈秋意禮服",
+      "cn": "萨维奈秋意礼服",
+      "en": "Thavnairian Wool Autumn Dress",
+      "ja": "サベネアンカルゼ・オータムドレス"
+    },
+    "items": [
+      {
+        "id": 21203,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21204",
+    "name": {
+      "tw": "拉札漢秋意襯衫",
+      "cn": "拉札罕秋意衬衫",
+      "en": "Hannish Wool Autumn Shirt",
+      "ja": "ラザハンカルゼ・オータムシャツ"
+    },
+    "items": [
+      {
+        "id": 21204,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21936",
+    "name": {
+      "tw": "冬意毛衣",
+      "cn": "冬意毛衣",
+      "en": "Winter Sweater",
+      "ja": "ウィンターセーター"
+    },
+    "items": [
+      {
+        "id": 21936,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21937",
+    "name": {
+      "tw": "冒險者毛衣",
+      "cn": "冒险者毛衣",
+      "en": "Adventuring Sweater",
+      "ja": "アドベンチャラーセーター"
+    },
+    "items": [
+      {
+        "id": 21937,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_22997_22998_22999_23000",
+    "name": {
+      "tw": "花花公子服飾套裝",
+      "cn": "花花公子皱边礼服衬衫 / 花花公子皱边裤套装",
+      "en": "Boulevardier's Ruffled Shirt / Boulevardier's Ruffled Pantaloons Set",
+      "ja": "ブレヴァディエ・ラッフルシャツ・ブレヴァディエ・ラッフルパンツセット"
+    },
+    "items": [
+      {
+        "id": 22997,
+        "quantity": 1
+      },
+      {
+        "id": 22998,
+        "quantity": 1
+      },
+      {
+        "id": 22999,
+        "quantity": 1
+      },
+      {
+        "id": 23000,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_23001_23002_23373_23374",
+    "name": {
+      "tw": "風尚服飾套裝",
+      "cn": "风尚褶边连衣裙 / 风尚花边短裙套装",
+      "en": "Quaintrelle's Ruffled Dress / Quaintrelle's Ruffled Skirt Set",
+      "ja": "クウェインチュレル・ラッフルドレス・クウェインチュレル・ラッフルスカートセット"
+    },
+    "items": [
+      {
+        "id": 23001,
+        "quantity": 1
+      },
+      {
+        "id": 23002,
+        "quantity": 1
+      },
+      {
+        "id": 23373,
+        "quantity": 1
+      },
+      {
+        "id": 23374,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_24004_24005_24006",
+    "name": {
+      "tw": "私語呢絨服飾套裝",
+      "cn": "私语呢绒大衣 / 私语呢绒打底裤套装",
+      "en": "Whisperfine Woolen Coat / Whisperfine Woolen Shorts Set",
+      "ja": "ウィスパーファインウール・コート・ウィスパーファインウール・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 24004,
+        "quantity": 1
+      },
+      {
+        "id": 24005,
+        "quantity": 1
+      },
+      {
+        "id": 24006,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_24591_24592_24593",
+    "name": {
+      "tw": "雨具服飾套裝",
+      "cn": "雨衣套装",
+      "en": "Raincoat Set",
+      "ja": "レインコートセット"
+    },
+    "items": [
+      {
+        "id": 24591,
+        "quantity": 1
+      },
+      {
+        "id": 24592,
+        "quantity": 1
+      },
+      {
+        "id": 24593,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_27938_27939_27940",
+    "name": {
+      "tw": "玻璃革兜帽坎肩套裝",
+      "cn": "玻璃革兜帽坎肩 / 玻璃革七分裤套装",
+      "en": "Hooded Fireglass Leather Vest / Cropped Fireglass Leather Slops Set",
+      "ja": "グラスレザー・フードベスト・グラスレザー・クロップドパンツセット"
+    },
+    "items": [
+      {
+        "id": 27938,
+        "quantity": 1
+      },
+      {
+        "id": 27939,
+        "quantity": 1
+      },
+      {
+        "id": 27940,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_27939_27940_27991",
+    "name": {
+      "tw": "冒險者兜帽坎肩套裝",
+      "cn": "冒险者兜帽坎肩 / 玻璃革七分裤套装",
+      "en": "Adventurer's Hooded Vest / Cropped Fireglass Leather Slops Set",
+      "ja": "アドベンチャラーフードベスト・グラスレザー・クロップドパンツセット"
+    },
+    "items": [
+      {
+        "id": 27991,
+        "quantity": 1
+      },
+      {
+        "id": 27939,
+        "quantity": 1
+      },
+      {
+        "id": 27940,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_27940_27941_27942",
+    "name": {
+      "tw": "夏季靛藍服飾套裝",
+      "cn": "夏季靛蓝衬衫 / 夏季靛蓝七分裤套装",
+      "en": "Summer Indigo Shirt / Cropped Summer Indigo Slops Set",
+      "ja": "サマーインディゴシャツ・サマーインディゴ・クロップドパンツセット"
+    },
+    "items": [
+      {
+        "id": 27941,
+        "quantity": 1
+      },
+      {
+        "id": 27942,
+        "quantity": 1
+      },
+      {
+        "id": 27940,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28588_28589",
+    "name": {
+      "tw": "都市服飾套裝",
+      "cn": "都市外套套装",
+      "en": "Urban Coat Set",
+      "ja": "アーバンコートセット"
+    },
+    "items": [
+      {
+        "id": 28588,
+        "quantity": 1
+      },
+      {
+        "id": 28589,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28590_28591",
+    "name": {
+      "tw": "叛逆服飾套裝",
+      "cn": "叛逆外套套装",
+      "en": "Rebel Coat Set",
+      "ja": "レベルコートセット"
+    },
+    "items": [
+      {
+        "id": 28590,
+        "quantity": 1
+      },
+      {
+        "id": 28591,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_30055_30056_30057",
+    "name": {
+      "tw": "達瑪斯卡服飾套裝",
+      "cn": "达尔马斯卡垂褶上装 / 达尔马斯卡垂褶下装套装",
+      "en": "Dalmascan Draped Top / Dalmascan Draped Bottoms Set",
+      "ja": "ダルマスカン・ドレープトップ・ダルマスカン・ドレープパンツセット"
+    },
+    "items": [
+      {
+        "id": 30055,
+        "quantity": 1
+      },
+      {
+        "id": 30056,
+        "quantity": 1
+      },
+      {
+        "id": 30057,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_30755_30756_30758",
+    "name": {
+      "tw": "南洋海濱軟甲褲套裝",
+      "cn": "南洋海滨衬衫 / 南洋海滨软甲裤套装",
+      "en": "Southern Seas Shirt / Southern Seas Trousers Set",
+      "ja": "サザンシーシャツ・サザンシートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 30755,
+        "quantity": 1
+      },
+      {
+        "id": 30756,
+        "quantity": 1
+      },
+      {
+        "id": 30758,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_30755_30757_30758",
+    "name": {
+      "tw": "南洋海濱短裙套裝",
+      "cn": "南洋海滨衬衫 / 南洋海滨短裙套装",
+      "en": "Southern Seas Shirt / Southern Seas Skirt Set",
+      "ja": "サザンシーシャツ・サザンシースカートセット"
+    },
+    "items": [
+      {
+        "id": 30755,
+        "quantity": 1
+      },
+      {
+        "id": 30757,
+        "quantity": 1
+      },
+      {
+        "id": 30758,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_32798_32799_32800_32801_32802",
+    "name": {
+      "tw": "小牛皮騎手服飾套裝",
+      "cn": "小牛皮骑手外套 / 小牛皮骑手打底裤套装",
+      "en": "Calfskin Rider's Jacket / Calfskin Rider's Bottoms Set",
+      "ja": "カーフスキン・ライダースジャケット・カーフスキン・ライダースボトムセット"
+    },
+    "items": [
+      {
+        "id": 32798,
+        "quantity": 1
+      },
+      {
+        "id": 32799,
+        "quantity": 1
+      },
+      {
+        "id": 32800,
+        "quantity": 1
+      },
+      {
+        "id": 32801,
+        "quantity": 1
+      },
+      {
+        "id": 32802,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_33655_33656_33657_33658",
+    "name": {
+      "tw": "前沿外套套裝",
+      "cn": "前沿外套 / 前沿软甲裤套装",
+      "en": "Frontier Jacket / Frontier Trousers Set",
+      "ja": "フロンティアジャケット・フロンティアトラウザーセット"
+    },
+    "items": [
+      {
+        "id": 33655,
+        "quantity": 1
+      },
+      {
+        "id": 33656,
+        "quantity": 1
+      },
+      {
+        "id": 33657,
+        "quantity": 1
+      },
+      {
+        "id": 33658,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_33659_33660_33661_33662",
+    "name": {
+      "tw": "前沿禮服套裝",
+      "cn": "前沿礼服套装",
+      "en": "Frontier Dress Set",
+      "ja": "フロンティアドレスセット"
+    },
+    "items": [
+      {
+        "id": 33659,
+        "quantity": 1
+      },
+      {
+        "id": 33660,
+        "quantity": 1
+      },
+      {
+        "id": 33661,
+        "quantity": 1
+      },
+      {
+        "id": 33662,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_35868_35869_35870_35871",
+    "name": {
+      "tw": "開心服飾套裝",
+      "cn": "开心披肩斗篷 / 开心骑兵裤套装",
+      "en": "Cape of Happiness / Hose of Happiness Set",
+      "ja": "ハピネスケープマント・ハピネスホーズセット"
+    },
+    "items": [
+      {
+        "id": 35868,
+        "quantity": 1
+      },
+      {
+        "id": 35869,
+        "quantity": 1
+      },
+      {
+        "id": 35870,
+        "quantity": 1
+      },
+      {
+        "id": 35871,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_36837_36838_36839_36840",
+    "name": {
+      "tw": "校園外套／下身套裝",
+      "cn": "校园外套 / 校园打底裤套装",
+      "en": "Varsity Jacket / Varsity Bottoms Set",
+      "ja": "ヴァーシティ・ジャケット・ヴァーシティ・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 36837,
+        "quantity": 1
+      },
+      {
+        "id": 36838,
+        "quantity": 1
+      },
+      {
+        "id": 36839,
+        "quantity": 1
+      },
+      {
+        "id": 36840,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_36837_36838_36840_36842",
+    "name": {
+      "tw": "校園外套／長裙套裝",
+      "cn": "校园外套 / 校园长裙套装",
+      "en": "Varsity Jacket / Varsity Skirt Set",
+      "ja": "ヴァーシティ・ジャケット・ヴァーシティ・スカートセット"
+    },
+    "items": [
+      {
+        "id": 36837,
+        "quantity": 1
+      },
+      {
+        "id": 36838,
+        "quantity": 1
+      },
+      {
+        "id": 36842,
+        "quantity": 1
+      },
+      {
+        "id": 36840,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_36837_36839_36840_36841",
+    "name": {
+      "tw": "系扣校園外套／下身套裝",
+      "cn": "系扣校园外套 / 校园打底裤套装",
+      "en": "Buttoned Varsity Jacket / Varsity Bottoms Set",
+      "ja": "ボタンド・ヴァーシティジャケット・ヴァーシティ・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 36837,
+        "quantity": 1
+      },
+      {
+        "id": 36841,
+        "quantity": 1
+      },
+      {
+        "id": 36839,
+        "quantity": 1
+      },
+      {
+        "id": 36840,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_36837_36840_36841_36842",
+    "name": {
+      "tw": "系扣校園外套／長裙套裝",
+      "cn": "系扣校园外套 / 校园长裙套装",
+      "en": "Buttoned Varsity Jacket / Varsity Skirt Set",
+      "ja": "ボタンド・ヴァーシティジャケット・ヴァーシティ・スカートセット"
+    },
+    "items": [
+      {
+        "id": 36837,
+        "quantity": 1
+      },
+      {
+        "id": 36841,
+        "quantity": 1
+      },
+      {
+        "id": 36842,
+        "quantity": 1
+      },
+      {
+        "id": 36840,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_38243_38244_38245_38246_38247",
+    "name": {
+      "tw": "法外執行者服飾套裝",
+      "cn": "法外执行者上衣 / 法外执行者长裤套装",
+      "en": "Lawless Enforcer's Jacket / Lawless Enforcer's Slacks Set",
+      "ja": "ワイルドエンフォーサー・ジャケット・ワイルドエンフォーサー・スラックスセット"
+    },
+    "items": [
+      {
+        "id": 38243,
+        "quantity": 1
+      },
+      {
+        "id": 38244,
+        "quantity": 1
+      },
+      {
+        "id": 38245,
+        "quantity": 1
+      },
+      {
+        "id": 38246,
+        "quantity": 1
+      },
+      {
+        "id": 38247,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_39308_39309_39310_39311_39312",
+    "name": {
+      "tw": "沙龍服務員坎肩套裝",
+      "cn": "沙龙服务员坎肩 / 沙龙服务员打底裤套装",
+      "en": "Salon Server's Vest / Salon Server's Bottoms Set",
+      "ja": "サロンサーバー・ベスト・サロンサーバー・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 39308,
+        "quantity": 1
+      },
+      {
+        "id": 39309,
+        "quantity": 1
+      },
+      {
+        "id": 39310,
+        "quantity": 1
+      },
+      {
+        "id": 39311,
+        "quantity": 1
+      },
+      {
+        "id": 39312,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_39308_39312_39313_39314_39315",
+    "name": {
+      "tw": "沙龍服務員禮服坎肩套裝",
+      "cn": "沙龙服务员礼服坎肩 / 沙龙服务员长裙套装",
+      "en": "Salon Server's Dress Vest / Salon Server's Skirt Set",
+      "ja": "サロンサーバー・ドレスベスト・サロンサーバー・スカートセット"
+    },
+    "items": [
+      {
+        "id": 39308,
+        "quantity": 1
+      },
+      {
+        "id": 39313,
+        "quantity": 1
+      },
+      {
+        "id": 39314,
+        "quantity": 1
+      },
+      {
+        "id": 39315,
+        "quantity": 1
+      },
+      {
+        "id": 39312,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_40404_40405_40406_40407",
+    "name": {
+      "tw": "樸素寢室服飾套裝",
+      "cn": "朴素寝室衬衫 / 朴素寝室打底裤套装",
+      "en": "Plain Pajama Shirt / Plain Pajama Bottoms Set",
+      "ja": "プレーンパジャマ・シャツ・プレーンパジャマ・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 40404,
+        "quantity": 1
+      },
+      {
+        "id": 40405,
+        "quantity": 1
+      },
+      {
+        "id": 40406,
+        "quantity": 1
+      },
+      {
+        "id": 40407,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_40408_40409_40410_40411",
+    "name": {
+      "tw": "仙人掌怪寢室服飾套裝",
+      "cn": "仙人刺寝室衬衫 / 仙人刺寝室打底裤套装",
+      "en": "Cactuar Pajama Shirt / Cactuar Pajama Bottoms Set",
+      "ja": "サボテンダーパジャマ・シャツ・サボテンダーパジャマ・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 40408,
+        "quantity": 1
+      },
+      {
+        "id": 40409,
+        "quantity": 1
+      },
+      {
+        "id": 40410,
+        "quantity": 1
+      },
+      {
+        "id": 40411,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_40412_40413_40414_40415",
+    "name": {
+      "tw": "陸行鳥寢室服飾套裝",
+      "cn": "陆行鸟寝室衬衫 / 陆行鸟寝室打底裤套装",
+      "en": "Chocobo Pajama Shirt / Chocobo Pajama Bottoms Set",
+      "ja": "チョコボパジャマ・シャツ・チョコボパジャマ・ボトムセット"
+    },
+    "items": [
+      {
+        "id": 40412,
+        "quantity": 1
+      },
+      {
+        "id": 40413,
+        "quantity": 1
+      },
+      {
+        "id": 40414,
+        "quantity": 1
+      },
+      {
+        "id": 40415,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_41592_41593_41594",
+    "name": {
+      "tw": "習武背心套裝",
+      "cn": "习武背心 / 习武工作裤套装",
+      "en": "Martial Artist's Vest / Martial Artist's Slops Set",
+      "ja": "マーシャルアーティスト・ベスト・マーシャルアーティスト・スロップセット"
+    },
+    "items": [
+      {
+        "id": 41592,
+        "quantity": 1
+      },
+      {
+        "id": 41593,
+        "quantity": 1
+      },
+      {
+        "id": 41594,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_41593_41594_41595",
+    "name": {
+      "tw": "習武無袖背心套裝",
+      "cn": "习武无袖背心 / 习武工作裤套装",
+      "en": "Martial Artist's Sleeveless Vest / Martial Artist's Slops Set",
+      "ja": "マーシャルアーティスト・スリーブレスベスト・マーシャルアーティスト・スロップセット"
+    },
+    "items": [
+      {
+        "id": 41595,
+        "quantity": 1
+      },
+      {
+        "id": 41593,
+        "quantity": 1
+      },
+      {
+        "id": 41594,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44246_44247_44248",
+    "name": {
+      "tw": "圖拉爾商人套裝",
+      "cn": "图拉尔商人衬衫 / 图拉尔商人及膝裤套装",
+      "en": "Turali Trader's Shirt / Turali Trader's Culottes Set",
+      "ja": "トラルトレーダー・シャツ・トラルトレーダー・キュロットセット"
+    },
+    "items": [
+      {
+        "id": 44246,
+        "quantity": 1
+      },
+      {
+        "id": 44247,
+        "quantity": 1
+      },
+      {
+        "id": 44248,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44247_44249_44250",
+    "name": {
+      "tw": "圖拉爾旅行者套裝",
+      "cn": "图拉尔旅行者衬衫 / 图拉尔商人及膝裤套装",
+      "en": "Turali Traveler's Shirt / Turali Trader's Culottes Set",
+      "ja": "トラルトラベラー・シャツ・トラルトレーダー・キュロットセット"
+    },
+    "items": [
+      {
+        "id": 44249,
+        "quantity": 1
+      },
+      {
+        "id": 44247,
+        "quantity": 1
+      },
+      {
+        "id": 44250,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44251_44252_44253_44254_44255",
+    "name": {
+      "tw": "科學家服飾套裝",
+      "cn": "科学家大衣 / 科学家马裤套装",
+      "en": "Scientist's Coat / Scientist's Breeches Set",
+      "ja": "サイエンティスト・コート・サイエンティスト・ブリーチセット"
+    },
+    "items": [
+      {
+        "id": 44251,
+        "quantity": 1
+      },
+      {
+        "id": 44252,
+        "quantity": 1
+      },
+      {
+        "id": 44253,
+        "quantity": 1
+      },
+      {
+        "id": 44254,
+        "quantity": 1
+      },
+      {
+        "id": 44255,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44650_44651_44652_44653",
+    "name": {
+      "tw": "冬季寬鬆直筒褲套裝",
+      "cn": "冬季宽松夹克 / 冬季宽松直筒裤套装",
+      "en": "Wintertide Blouson / Wintertide Culottes Set",
+      "ja": "ウィンタータイド・ブルゾン・ウィンタータイド・ワイドパンツセット"
+    },
+    "items": [
+      {
+        "id": 44650,
+        "quantity": 1
+      },
+      {
+        "id": 44651,
+        "quantity": 1
+      },
+      {
+        "id": 44652,
+        "quantity": 1
+      },
+      {
+        "id": 44653,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44650_44651_44653_44654",
+    "name": {
+      "tw": "冬季緊身短裙套裝",
+      "cn": "冬季宽松夹克 / 冬季紧身短裙套装",
+      "en": "Wintertide Blouson / Wintertide Sheath Skirt Set",
+      "ja": "ウィンタータイド・ブルゾン・ウィンタータイド・タイトスカートセット"
+    },
+    "items": [
+      {
+        "id": 44650,
+        "quantity": 1
+      },
+      {
+        "id": 44651,
+        "quantity": 1
+      },
+      {
+        "id": 44654,
+        "quantity": 1
+      },
+      {
+        "id": 44653,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47258_47259_47260",
+    "name": {
+      "tw": "夏令禮服套裝",
+      "cn": "夏令礼服 / 夏令礼裤套装",
+      "en": "Summertide Formal Jacket / Summertide Formal Slacks Set",
+      "ja": "サマーフォーマル・ジャケット・サマーフォーマル・スラックスセット"
+    },
+    "items": [
+      {
+        "id": 47258,
+        "quantity": 1
+      },
+      {
+        "id": 47259,
+        "quantity": 1
+      },
+      {
+        "id": 47260,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47261_47262",
+    "name": {
+      "tw": "夏令禮裙套裝",
+      "cn": "夏令礼裙套装",
+      "en": "Summertide Formal Dress Set",
+      "ja": "サマーフォーマル・ドレスセット"
+    },
+    "items": [
+      {
+        "id": 47261,
+        "quantity": 1
+      },
+      {
+        "id": 47262,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47915_47916_47917_47918",
+    "name": {
+      "tw": "霓虹街頭服飾套裝",
+      "cn": "霓虹街头宽松夹克 / 霓虹街头工装裤套装",
+      "en": "Neon Street Blouson / Neon Street Cargo Trousers Set",
+      "ja": "ネオンストリート・ブルゾン・ネオンストリート・カーゴパンツセット"
+    },
+    "items": [
+      {
+        "id": 47915,
+        "quantity": 1
+      },
+      {
+        "id": 47916,
+        "quantity": 1
+      },
+      {
+        "id": 47917,
+        "quantity": 1
+      },
+      {
+        "id": 47918,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47920_47921_47922_47923",
+    "name": {
+      "tw": "保鑣背心／長褲套裝",
+      "cn": "保镖背心 / 保镖长裤套装",
+      "en": "Bouncer's Vest / Bouncer's Slacks Set",
+      "ja": "バウンサーベスト・バウンサースラックスセット"
+    },
+    "items": [
+      {
+        "id": 47920,
+        "quantity": 1
+      },
+      {
+        "id": 47921,
+        "quantity": 1
+      },
+      {
+        "id": 47922,
+        "quantity": 1
+      },
+      {
+        "id": 47923,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47920_47921_47923_47928",
+    "name": {
+      "tw": "保鑣背心／槍帶長褲套裝",
+      "cn": "保镖背心 / 保镖枪带长裤套装",
+      "en": "Bouncer's Vest / Bouncer's Holster Slacks Set",
+      "ja": "バウンサーベスト・バウンサーズ・ホルスタースラックスセット"
+    },
+    "items": [
+      {
+        "id": 47920,
+        "quantity": 1
+      },
+      {
+        "id": 47921,
+        "quantity": 1
+      },
+      {
+        "id": 47928,
+        "quantity": 1
+      },
+      {
+        "id": 47923,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47919_47921_47922_47923",
+    "name": {
+      "tw": "保鑣槍帶背心／長褲套裝",
+      "cn": "保镖枪带背心 / 保镖长裤套装",
+      "en": "Bouncer's Holster Vest / Bouncer's Slacks Set",
+      "ja": "バウンサーズ・ホルスターベスト・バウンサースラックスセット"
+    },
+    "items": [
+      {
+        "id": 47919,
+        "quantity": 1
+      },
+      {
+        "id": 47921,
+        "quantity": 1
+      },
+      {
+        "id": 47922,
+        "quantity": 1
+      },
+      {
+        "id": 47923,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47919_47921_47923_47928",
+    "name": {
+      "tw": "保鑣槍帶背心／槍帶長褲套裝",
+      "cn": "保镖枪带背心 / 保镖枪带长裤套装",
+      "en": "Bouncer's Holster Vest / Bouncer's Holster Slacks Set",
+      "ja": "バウンサーズ・ホルスターベスト・バウンサーズ・ホルスタースラックスセット"
+    },
+    "items": [
+      {
+        "id": 47919,
+        "quantity": 1
+      },
+      {
+        "id": 47921,
+        "quantity": 1
+      },
+      {
+        "id": 47928,
+        "quantity": 1
+      },
+      {
+        "id": 47923,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_50252_50253_50254_50255_50256",
+    "name": {
+      "tw": "神話傳令官五件套裝",
+      "cn": "神话传令官长衣 / 神话传令官腰布裙套装",
+      "en": "Chiton of Legend / Loincloth of Legend Set",
+      "ja": "ミソスヘラルド・キトン・ミソスヘラルド・ロインクロスセット"
+    },
+    "items": [
+      {
+        "id": 50252,
+        "quantity": 1
+      },
+      {
+        "id": 50253,
+        "quantity": 1
+      },
+      {
+        "id": 50254,
+        "quantity": 1
+      },
+      {
+        "id": 50255,
+        "quantity": 1
+      },
+      {
+        "id": 50256,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52612_52613_52614",
+    "name": {
+      "tw": "素色衛衣系列（三款合集）",
+      "cn": "素色卫衣系列（三款合集）",
+      "en": "Plain Hooded Tunic 3-style Collection",
+      "ja": "プレーンフーディー（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52612,
+        "quantity": 1
+      },
+      {
+        "id": 52613,
+        "quantity": 1
+      },
+      {
+        "id": 52614,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52615_52616_52617",
+    "name": {
+      "tw": "夢魔衛衣系列（三款合集）",
+      "cn": "梦魔卫衣系列（三款合集）",
+      "en": "Succubus Hooded Tunic 3-style Collection",
+      "ja": "サキュバスフーディー（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52615,
+        "quantity": 1
+      },
+      {
+        "id": 52616,
+        "quantity": 1
+      },
+      {
+        "id": 52617,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52618_52619_52620",
+    "name": {
+      "tw": "歡慶衛衣系列（三款合集）",
+      "cn": "欢庆卫衣系列（三款合集）",
+      "en": "Festival Hooded Tunic 3-style Collection",
+      "ja": "フェスティバルフーディー（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52618,
+        "quantity": 1
+      },
+      {
+        "id": 52619,
+        "quantity": 1
+      },
+      {
+        "id": 52620,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52621_52622_52623",
+    "name": {
+      "tw": "斜紋褲系列（三款合集）",
+      "cn": "斜纹裤系列（三款合集）",
+      "en": "Twill Trousers 3-style Collection",
+      "ja": "ツイルパンツ（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52621,
+        "quantity": 1
+      },
+      {
+        "id": 52622,
+        "quantity": 1
+      },
+      {
+        "id": 52623,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52624_52625_52626",
+    "name": {
+      "tw": "破損斜紋褲系列（三款合集）",
+      "cn": "破损斜纹裤系列（三款合集）",
+      "en": "Worn Twill Trousers 3-style Collection",
+      "ja": "ダメージド・ツイルパンツ（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52624,
+        "quantity": 1
+      },
+      {
+        "id": 52625,
+        "quantity": 1
+      },
+      {
+        "id": 52626,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_52627_52628_52629",
+    "name": {
+      "tw": "水洗斜紋褲系列（三款合集）",
+      "cn": "水洗斜纹裤系列（三款合集）",
+      "en": "Stonewashed Twill Trousers 3-style Collection",
+      "ja": "ウォッシュド・ツイルパンツ（3タイプセット）"
+    },
+    "items": [
+      {
+        "id": 52627,
+        "quantity": 1
+      },
+      {
+        "id": 52628,
+        "quantity": 1
+      },
+      {
+        "id": 52629,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_14841_14842_14843_14844_14845_14846_14847_14848_14849",
+    "name": {
+      "tw": "古典玫瑰頭花（九色合集）",
+      "cn": "古典玫瑰头花（九色合集）",
+      "en": "Oldrose Corsage 9-color Collection",
+      "ja": "オールドローズオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 14841,
+        "quantity": 1
+      },
+      {
+        "id": 14842,
+        "quantity": 1
+      },
+      {
+        "id": 14843,
+        "quantity": 1
+      },
+      {
+        "id": 14844,
+        "quantity": 1
+      },
+      {
+        "id": 14845,
+        "quantity": 1
+      },
+      {
+        "id": 14846,
+        "quantity": 1
+      },
+      {
+        "id": 14847,
+        "quantity": 1
+      },
+      {
+        "id": 14848,
+        "quantity": 1
+      },
+      {
+        "id": 14849,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_16616_16617_16618_16619_16620_16621_16622_16623_16624",
+    "name": {
+      "tw": "三色堇頭花（九色合集）",
+      "cn": "三色堇头花（九色合集）",
+      "en": "Viola Corsage 9-color Collection",
+      "ja": "パンジーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 16616,
+        "quantity": 1
+      },
+      {
+        "id": 16617,
+        "quantity": 1
+      },
+      {
+        "id": 16618,
+        "quantity": 1
+      },
+      {
+        "id": 16619,
+        "quantity": 1
+      },
+      {
+        "id": 16620,
+        "quantity": 1
+      },
+      {
+        "id": 16621,
+        "quantity": 1
+      },
+      {
+        "id": 16622,
+        "quantity": 1
+      },
+      {
+        "id": 16623,
+        "quantity": 1
+      },
+      {
+        "id": 16624,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_17537_17538_17539_17540_17541_17542_17543_17544_17545",
+    "name": {
+      "tw": "櫻花頭花（九色合集）",
+      "cn": "樱花头花（九色合集）",
+      "en": "Cherry Blossom Corsage 9-color Collection",
+      "ja": "チェリーブロッサムオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 17537,
+        "quantity": 1
+      },
+      {
+        "id": 17538,
+        "quantity": 1
+      },
+      {
+        "id": 17539,
+        "quantity": 1
+      },
+      {
+        "id": 17540,
+        "quantity": 1
+      },
+      {
+        "id": 17541,
+        "quantity": 1
+      },
+      {
+        "id": 17542,
+        "quantity": 1
+      },
+      {
+        "id": 17543,
+        "quantity": 1
+      },
+      {
+        "id": 17544,
+        "quantity": 1
+      },
+      {
+        "id": 17545,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_20261_20262_20263_20264_20265_20266_20267_20268_20269",
+    "name": {
+      "tw": "雛菊頭花（九色合集）",
+      "cn": "雏菊头花（九色合集）",
+      "en": "Daisy Corsage 9-color Collection",
+      "ja": "マーガレットオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 20261,
+        "quantity": 1
+      },
+      {
+        "id": 20262,
+        "quantity": 1
+      },
+      {
+        "id": 20263,
+        "quantity": 1
+      },
+      {
+        "id": 20264,
+        "quantity": 1
+      },
+      {
+        "id": 20265,
+        "quantity": 1
+      },
+      {
+        "id": 20266,
+        "quantity": 1
+      },
+      {
+        "id": 20267,
+        "quantity": 1
+      },
+      {
+        "id": 20268,
+        "quantity": 1
+      },
+      {
+        "id": 20269,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_20805_20806_20807_20808_20809_20810_20811_20812_20813",
+    "name": {
+      "tw": "光明百合頭花（九色合集）",
+      "cn": "光明百合头花（九色合集）",
+      "en": "Brightlily Corsage 9-color Collection",
+      "ja": "リリーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 20805,
+        "quantity": 1
+      },
+      {
+        "id": 20806,
+        "quantity": 1
+      },
+      {
+        "id": 20807,
+        "quantity": 1
+      },
+      {
+        "id": 20808,
+        "quantity": 1
+      },
+      {
+        "id": 20809,
+        "quantity": 1
+      },
+      {
+        "id": 20810,
+        "quantity": 1
+      },
+      {
+        "id": 20811,
+        "quantity": 1
+      },
+      {
+        "id": 20812,
+        "quantity": 1
+      },
+      {
+        "id": 20813,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_21926_21927_21928_21929_21930_21931_21932_21933_21934",
+    "name": {
+      "tw": "鬱金香腕帶（九色合集）",
+      "cn": "郁金香腕带（九色合集）",
+      "en": "Tulip Corsage 9-color Collection",
+      "ja": "チューリップオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 21926,
+        "quantity": 1
+      },
+      {
+        "id": 21927,
+        "quantity": 1
+      },
+      {
+        "id": 21928,
+        "quantity": 1
+      },
+      {
+        "id": 21929,
+        "quantity": 1
+      },
+      {
+        "id": 21930,
+        "quantity": 1
+      },
+      {
+        "id": 21931,
+        "quantity": 1
+      },
+      {
+        "id": 21932,
+        "quantity": 1
+      },
+      {
+        "id": 21933,
+        "quantity": 1
+      },
+      {
+        "id": 21934,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_23098_23099_23100_23101_23102_23103_23104_23105_23106",
+    "name": {
+      "tw": "大麗花頭花（九色合集）",
+      "cn": "大丽花头花（九色合集）",
+      "en": "Dahlia Corsage 9-color Collection",
+      "ja": "ダリアオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 23098,
+        "quantity": 1
+      },
+      {
+        "id": 23099,
+        "quantity": 1
+      },
+      {
+        "id": 23100,
+        "quantity": 1
+      },
+      {
+        "id": 23101,
+        "quantity": 1
+      },
+      {
+        "id": 23102,
+        "quantity": 1
+      },
+      {
+        "id": 23103,
+        "quantity": 1
+      },
+      {
+        "id": 23104,
+        "quantity": 1
+      },
+      {
+        "id": 23105,
+        "quantity": 1
+      },
+      {
+        "id": 23106,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_24175_24176_24177_24178_24179_24180_24181_24182_24183",
+    "name": {
+      "tw": "馬蹄蓮頭花（九色合集）",
+      "cn": "马蹄莲头花（九色合集）",
+      "en": "Arum Corsage 9-color Collection",
+      "ja": "カラーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 24175,
+        "quantity": 1
+      },
+      {
+        "id": 24176,
+        "quantity": 1
+      },
+      {
+        "id": 24177,
+        "quantity": 1
+      },
+      {
+        "id": 24178,
+        "quantity": 1
+      },
+      {
+        "id": 24179,
+        "quantity": 1
+      },
+      {
+        "id": 24180,
+        "quantity": 1
+      },
+      {
+        "id": 24181,
+        "quantity": 1
+      },
+      {
+        "id": 24182,
+        "quantity": 1
+      },
+      {
+        "id": 24183,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_24859_24860_24861_24862_24863_24864_24865_24866_24867",
+    "name": {
+      "tw": "鈴蘭頭花（九色合集）",
+      "cn": "铃兰头花（九色合集）",
+      "en": "Lily of the Valley Corsage 9-color Collection",
+      "ja": "リリーオブバレーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 24859,
+        "quantity": 1
+      },
+      {
+        "id": 24860,
+        "quantity": 1
+      },
+      {
+        "id": 24861,
+        "quantity": 1
+      },
+      {
+        "id": 24862,
+        "quantity": 1
+      },
+      {
+        "id": 24863,
+        "quantity": 1
+      },
+      {
+        "id": 24864,
+        "quantity": 1
+      },
+      {
+        "id": 24865,
+        "quantity": 1
+      },
+      {
+        "id": 24866,
+        "quantity": 1
+      },
+      {
+        "id": 24867,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_27924_27925_27926_27927_27928_27929_27930_27931_27932",
+    "name": {
+      "tw": "繡球頭花（九色合集）",
+      "cn": "绣球头花（九色合集）",
+      "en": "Hydrangea Corsage 9-color Collection",
+      "ja": "ハイドレインジャオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 27924,
+        "quantity": 1
+      },
+      {
+        "id": 27925,
+        "quantity": 1
+      },
+      {
+        "id": 27926,
+        "quantity": 1
+      },
+      {
+        "id": 27927,
+        "quantity": 1
+      },
+      {
+        "id": 27928,
+        "quantity": 1
+      },
+      {
+        "id": 27929,
+        "quantity": 1
+      },
+      {
+        "id": 27930,
+        "quantity": 1
+      },
+      {
+        "id": 27931,
+        "quantity": 1
+      },
+      {
+        "id": 27932,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28799_28800_28801_28802_28803_28804_28805_28806_28807",
+    "name": {
+      "tw": "風鈴頭花（九色合集）",
+      "cn": "风铃头花（九色合集）",
+      "en": "Campanula Corsage 9-color Collection",
+      "ja": "カンパニュラオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 28799,
+        "quantity": 1
+      },
+      {
+        "id": 28800,
+        "quantity": 1
+      },
+      {
+        "id": 28801,
+        "quantity": 1
+      },
+      {
+        "id": 28802,
+        "quantity": 1
+      },
+      {
+        "id": 28803,
+        "quantity": 1
+      },
+      {
+        "id": 28804,
+        "quantity": 1
+      },
+      {
+        "id": 28805,
+        "quantity": 1
+      },
+      {
+        "id": 28806,
+        "quantity": 1
+      },
+      {
+        "id": 28807,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_29984_29985_29986_29987_29988_30131_30132_30133_30134",
+    "name": {
+      "tw": "風信子頭花（九色合集）",
+      "cn": "风信子头花（九色合集）",
+      "en": "Hyacinth Corsage 9-color Collection",
+      "ja": "ヒヤシンスオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 29984,
+        "quantity": 1
+      },
+      {
+        "id": 29985,
+        "quantity": 1
+      },
+      {
+        "id": 29986,
+        "quantity": 1
+      },
+      {
+        "id": 29987,
+        "quantity": 1
+      },
+      {
+        "id": 29988,
+        "quantity": 1
+      },
+      {
+        "id": 30131,
+        "quantity": 1
+      },
+      {
+        "id": 30132,
+        "quantity": 1
+      },
+      {
+        "id": 30133,
+        "quantity": 1
+      },
+      {
+        "id": 30134,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_31092_31093_31094_31095_31096_31097_31098_31099_31100",
+    "name": {
+      "tw": "大波斯菊頭花（九色合集）",
+      "cn": "秋英头花（九色合集）",
+      "en": "Cosmos Corsage 9-color Collection",
+      "ja": "コスモスオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 31092,
+        "quantity": 1
+      },
+      {
+        "id": 31093,
+        "quantity": 1
+      },
+      {
+        "id": 31094,
+        "quantity": 1
+      },
+      {
+        "id": 31095,
+        "quantity": 1
+      },
+      {
+        "id": 31096,
+        "quantity": 1
+      },
+      {
+        "id": 31097,
+        "quantity": 1
+      },
+      {
+        "id": 31098,
+        "quantity": 1
+      },
+      {
+        "id": 31099,
+        "quantity": 1
+      },
+      {
+        "id": 31100,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_33028_33029_33030_33031_33032_33033_33034_33035_33036",
+    "name": {
+      "tw": "康乃馨耳環（九色合集）",
+      "cn": "康乃馨耳环（九色合集）",
+      "en": "Carnation Earring 9-color Collection",
+      "ja": "カーネーションイヤリング 全9色セット"
+    },
+    "items": [
+      {
+        "id": 33028,
+        "quantity": 1
+      },
+      {
+        "id": 33029,
+        "quantity": 1
+      },
+      {
+        "id": 33030,
+        "quantity": 1
+      },
+      {
+        "id": 33031,
+        "quantity": 1
+      },
+      {
+        "id": 33032,
+        "quantity": 1
+      },
+      {
+        "id": 33033,
+        "quantity": 1
+      },
+      {
+        "id": 33034,
+        "quantity": 1
+      },
+      {
+        "id": 33035,
+        "quantity": 1
+      },
+      {
+        "id": 33036,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_33874_33875_33876_33877_33878_33879_33880_33881_33882",
+    "name": {
+      "tw": "蝴蝶蘭耳飾（九色合集）",
+      "cn": "蝴蝶兰耳饰（九色合集）",
+      "en": "Moth Orchid Earring 9-color Collection",
+      "ja": "胡蝶蘭耳飾り 全9色セット"
+    },
+    "items": [
+      {
+        "id": 33874,
+        "quantity": 1
+      },
+      {
+        "id": 33875,
+        "quantity": 1
+      },
+      {
+        "id": 33876,
+        "quantity": 1
+      },
+      {
+        "id": 33877,
+        "quantity": 1
+      },
+      {
+        "id": 33878,
+        "quantity": 1
+      },
+      {
+        "id": 33879,
+        "quantity": 1
+      },
+      {
+        "id": 33880,
+        "quantity": 1
+      },
+      {
+        "id": 33881,
+        "quantity": 1
+      },
+      {
+        "id": 33882,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_35991_35992_35993_35994_35995_35996_35997_35998_35999",
+    "name": {
+      "tw": "紫燈花耳環（九色合集）",
+      "cn": "紫灯花耳环（九色合集）",
+      "en": "Triteleia Earring 9-color Collection",
+      "ja": "トリテレイアイヤリング 全9色セット"
+    },
+    "items": [
+      {
+        "id": 35991,
+        "quantity": 1
+      },
+      {
+        "id": 35992,
+        "quantity": 1
+      },
+      {
+        "id": 35993,
+        "quantity": 1
+      },
+      {
+        "id": 35994,
+        "quantity": 1
+      },
+      {
+        "id": 35995,
+        "quantity": 1
+      },
+      {
+        "id": 35996,
+        "quantity": 1
+      },
+      {
+        "id": 35997,
+        "quantity": 1
+      },
+      {
+        "id": 35998,
+        "quantity": 1
+      },
+      {
+        "id": 35999,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_37293_37294_37295_37296_37297_37298_37299_37300_37301",
+    "name": {
+      "tw": "比爾格紫羅蘭項環（九色合集）",
+      "cn": "比尔格紫罗兰项环（九色合集）",
+      "en": "Byregotia Choker 9-color Collection",
+      "ja": "ビエルゴヴァイオレットチョーカー 全9色セット"
+    },
+    "items": [
+      {
+        "id": 37293,
+        "quantity": 1
+      },
+      {
+        "id": 37294,
+        "quantity": 1
+      },
+      {
+        "id": 37295,
+        "quantity": 1
+      },
+      {
+        "id": 37296,
+        "quantity": 1
+      },
+      {
+        "id": 37297,
+        "quantity": 1
+      },
+      {
+        "id": 37298,
+        "quantity": 1
+      },
+      {
+        "id": 37299,
+        "quantity": 1
+      },
+      {
+        "id": 37300,
+        "quantity": 1
+      },
+      {
+        "id": 37301,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_38560_38561_38562_38563_38564_38565_38566_38567_38568",
+    "name": {
+      "tw": "香豌豆花項鍊（九色合集）",
+      "cn": "香豌豆花项链（九色合集）",
+      "en": "Sweet Pea Necklace 9-color Collection",
+      "ja": "スイートピーネックレス 全9色セット"
+    },
+    "items": [
+      {
+        "id": 38560,
+        "quantity": 1
+      },
+      {
+        "id": 38561,
+        "quantity": 1
+      },
+      {
+        "id": 38562,
+        "quantity": 1
+      },
+      {
+        "id": 38563,
+        "quantity": 1
+      },
+      {
+        "id": 38564,
+        "quantity": 1
+      },
+      {
+        "id": 38565,
+        "quantity": 1
+      },
+      {
+        "id": 38566,
+        "quantity": 1
+      },
+      {
+        "id": 38567,
+        "quantity": 1
+      },
+      {
+        "id": 38568,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_39316_39317_39318_39319_39320_39321_39322_39323_39324",
+    "name": {
+      "tw": "牽牛花頭花（九色合集）",
+      "cn": "牵牛花头花（九色合集）",
+      "en": "Morning Glory Corsage 9-color Collection",
+      "ja": "モーニンググローリーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 39316,
+        "quantity": 1
+      },
+      {
+        "id": 39317,
+        "quantity": 1
+      },
+      {
+        "id": 39318,
+        "quantity": 1
+      },
+      {
+        "id": 39319,
+        "quantity": 1
+      },
+      {
+        "id": 39320,
+        "quantity": 1
+      },
+      {
+        "id": 39321,
+        "quantity": 1
+      },
+      {
+        "id": 39322,
+        "quantity": 1
+      },
+      {
+        "id": 39323,
+        "quantity": 1
+      },
+      {
+        "id": 39324,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_40395_40396_40397_40398_40399_40400_40401_40402_40403",
+    "name": {
+      "tw": "菊花頭花（九色合集）",
+      "cn": "菊花头花（九色合集）",
+      "en": "Chrysanthemum Corsage 9-color Collection",
+      "ja": "クリサンセマムオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 40395,
+        "quantity": 1
+      },
+      {
+        "id": 40396,
+        "quantity": 1
+      },
+      {
+        "id": 40397,
+        "quantity": 1
+      },
+      {
+        "id": 40398,
+        "quantity": 1
+      },
+      {
+        "id": 40399,
+        "quantity": 1
+      },
+      {
+        "id": 40400,
+        "quantity": 1
+      },
+      {
+        "id": 40401,
+        "quantity": 1
+      },
+      {
+        "id": 40402,
+        "quantity": 1
+      },
+      {
+        "id": 40403,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_41509_41510_41511_41512_41513_41514_41515_41516_41517",
+    "name": {
+      "tw": "魯冰花頭花（九色合集）",
+      "cn": "鲁冰花头花（九色合集）",
+      "en": "Lupin Corsage 9-color Collection",
+      "ja": "ルピナスオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 41509,
+        "quantity": 1
+      },
+      {
+        "id": 41510,
+        "quantity": 1
+      },
+      {
+        "id": 41511,
+        "quantity": 1
+      },
+      {
+        "id": 41512,
+        "quantity": 1
+      },
+      {
+        "id": 41513,
+        "quantity": 1
+      },
+      {
+        "id": 41514,
+        "quantity": 1
+      },
+      {
+        "id": 41515,
+        "quantity": 1
+      },
+      {
+        "id": 41516,
+        "quantity": 1
+      },
+      {
+        "id": 41517,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_43613_43614_43615_43616_43617_43618_43619_43620_43621",
+    "name": {
+      "tw": "向日葵頭花（九色合集）",
+      "cn": "向日葵头花（九色合集）",
+      "en": "Sunflower Corsage 9-color Collection",
+      "ja": "サンフラワーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 43613,
+        "quantity": 1
+      },
+      {
+        "id": 43614,
+        "quantity": 1
+      },
+      {
+        "id": 43615,
+        "quantity": 1
+      },
+      {
+        "id": 43616,
+        "quantity": 1
+      },
+      {
+        "id": 43617,
+        "quantity": 1
+      },
+      {
+        "id": 43618,
+        "quantity": 1
+      },
+      {
+        "id": 43619,
+        "quantity": 1
+      },
+      {
+        "id": 43620,
+        "quantity": 1
+      },
+      {
+        "id": 43621,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_44823_44824_44825_44826_44827_44828_44829_44830_44831",
+    "name": {
+      "tw": "卡特蘭頭花（九色合集）",
+      "cn": "卡特兰头花（九色合集）",
+      "en": "Cattleya Corsage 9-color Collection",
+      "ja": "カトレアオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 44823,
+        "quantity": 1
+      },
+      {
+        "id": 44824,
+        "quantity": 1
+      },
+      {
+        "id": 44825,
+        "quantity": 1
+      },
+      {
+        "id": 44826,
+        "quantity": 1
+      },
+      {
+        "id": 44827,
+        "quantity": 1
+      },
+      {
+        "id": 44828,
+        "quantity": 1
+      },
+      {
+        "id": 44829,
+        "quantity": 1
+      },
+      {
+        "id": 44830,
+        "quantity": 1
+      },
+      {
+        "id": 44831,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47212_47213_47214_47215_47216_47217_47218_47219_47222",
+    "name": {
+      "tw": "大季花花環（九色合集）",
+      "cn": "大季花花环（九色合集）",
+      "en": "Champa Corsage 9-color Collection",
+      "ja": "チャンパーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 47212,
+        "quantity": 1
+      },
+      {
+        "id": 47213,
+        "quantity": 1
+      },
+      {
+        "id": 47214,
+        "quantity": 1
+      },
+      {
+        "id": 47215,
+        "quantity": 1
+      },
+      {
+        "id": 47216,
+        "quantity": 1
+      },
+      {
+        "id": 47217,
+        "quantity": 1
+      },
+      {
+        "id": 47218,
+        "quantity": 1
+      },
+      {
+        "id": 47219,
+        "quantity": 1
+      },
+      {
+        "id": 47222,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_47941_47942_47943_47944_47945_47946_47947_47948_47949",
+    "name": {
+      "tw": "葉子花耳環（九色合集）",
+      "cn": "叶子花耳环（九色合集）",
+      "en": "Paperflower Earring 9-color Collection",
+      "ja": "ペーパーフラワーイヤリング 全9色セット"
+    },
+    "items": [
+      {
+        "id": 47941,
+        "quantity": 1
+      },
+      {
+        "id": 47942,
+        "quantity": 1
+      },
+      {
+        "id": 47943,
+        "quantity": 1
+      },
+      {
+        "id": 47944,
+        "quantity": 1
+      },
+      {
+        "id": 47945,
+        "quantity": 1
+      },
+      {
+        "id": 47946,
+        "quantity": 1
+      },
+      {
+        "id": 47947,
+        "quantity": 1
+      },
+      {
+        "id": 47948,
+        "quantity": 1
+      },
+      {
+        "id": 47949,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_49764_49765_49766_49767_49768_49769_49770_49771_49772",
+    "name": {
+      "tw": "山茶花頭花（九色合集）",
+      "cn": "山茶花头花（九色合集）",
+      "en": "Tea Flower Corsage 9-color Collection",
+      "ja": "ティーフラワーオーナメント 全9色セット"
+    },
+    "items": [
+      {
+        "id": 49764,
+        "quantity": 1
+      },
+      {
+        "id": 49765,
+        "quantity": 1
+      },
+      {
+        "id": 49766,
+        "quantity": 1
+      },
+      {
+        "id": 49767,
+        "quantity": 1
+      },
+      {
+        "id": 49768,
+        "quantity": 1
+      },
+      {
+        "id": 49769,
+        "quantity": 1
+      },
+      {
+        "id": 49770,
+        "quantity": 1
+      },
+      {
+        "id": 49771,
+        "quantity": 1
+      },
+      {
+        "id": 49772,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_51199_51200_51201_51202_51203_51204_51205_51206_51207",
+    "name": {
+      "tw": "矢車菊手鏈（九色合集）",
+      "cn": "矢车菊手链（九色合集）",
+      "en": "Cornflower Wristlets 9-color Collection",
+      "ja": "コーンフラワーリストレット 全9色セット"
+    },
+    "items": [
+      {
+        "id": 51199,
+        "quantity": 1
+      },
+      {
+        "id": 51200,
+        "quantity": 1
+      },
+      {
+        "id": 51201,
+        "quantity": 1
+      },
+      {
+        "id": 51202,
+        "quantity": 1
+      },
+      {
+        "id": 51203,
+        "quantity": 1
+      },
+      {
+        "id": 51204,
+        "quantity": 1
+      },
+      {
+        "id": 51205,
+        "quantity": 1
+      },
+      {
+        "id": 51206,
+        "quantity": 1
+      },
+      {
+        "id": 51207,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13804_13805_13806_13807_13808",
+    "name": {
+      "tw": "亞拉戈禦敵五件套裝（複製品）",
+      "cn": "亚拉戈重甲（复制品） / 亚拉戈重腿甲（复制品）套装",
+      "en": "Replica Heavy Allagan Armor / Replica Heavy Allagan Cuisses Set",
+      "ja": "レプリカ・ヘヴィアラガンアーマー・レプリカ・ヘヴィアラガンクウィスセット"
+    },
+    "items": [
+      {
+        "id": 13804,
+        "quantity": 1
+      },
+      {
+        "id": 13805,
+        "quantity": 1
+      },
+      {
+        "id": 13806,
+        "quantity": 1
+      },
+      {
+        "id": 13807,
+        "quantity": 1
+      },
+      {
+        "id": 13808,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13809_13810_13811_13812_13813",
+    "name": {
+      "tw": "亞拉戈制敵五件套裝（複製品）",
+      "cn": "亚拉戈制敌胸甲（复制品） / 亚拉戈制敌软甲裤（复制品）套装",
+      "en": "Replica Allagan Cuirass of Maiming / Replica Allagan Trousers of Maiming Set",
+      "ja": "レプリカ・アラガンスレイヤーキュイラス・レプリカ・アラガンスレイヤートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13809,
+        "quantity": 1
+      },
+      {
+        "id": 13810,
+        "quantity": 1
+      },
+      {
+        "id": 13811,
+        "quantity": 1
+      },
+      {
+        "id": 13812,
+        "quantity": 1
+      },
+      {
+        "id": 13813,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13814_13815_13816_13817_13818",
+    "name": {
+      "tw": "亞拉戈強襲五件套裝（複製品）",
+      "cn": "亚拉戈强袭胸甲（复制品） / 亚拉戈强袭软甲裤（复制品）套装",
+      "en": "Replica Allagan Cuirass of Striking / Replica Allagan Trousers of Striking Set",
+      "ja": "レプリカ・アラガンストライカーキュイラス・レプリカ・アラガンストライカートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13814,
+        "quantity": 1
+      },
+      {
+        "id": 13815,
+        "quantity": 1
+      },
+      {
+        "id": 13816,
+        "quantity": 1
+      },
+      {
+        "id": 13817,
+        "quantity": 1
+      },
+      {
+        "id": 13818,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13819_13820_13821_13822_13823",
+    "name": {
+      "tw": "亞拉戈精準五件套裝（複製品）",
+      "cn": "亚拉戈精准胸甲（复制品） / 亚拉戈精准软甲裤（复制品）套装",
+      "en": "Replica Allagan Cuirass of Aiming / Replica Allagan Trousers of Aiming Set",
+      "ja": "レプリカ・アラガンレンジャーキュイラス・レプリカ・アラガンレンジャートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13819,
+        "quantity": 1
+      },
+      {
+        "id": 13820,
+        "quantity": 1
+      },
+      {
+        "id": 13821,
+        "quantity": 1
+      },
+      {
+        "id": 13822,
+        "quantity": 1
+      },
+      {
+        "id": 13823,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13829_13830_13831_13832_13833",
+    "name": {
+      "tw": "亞拉戈詠咒五件套裝（複製品）",
+      "cn": "亚拉戈咏咒束腰衣（复制品） / 亚拉戈咏咒软甲裤（复制品）套装",
+      "en": "Replica Allagan Tunic of Casting / Replica Allagan Breeches of Casting Set",
+      "ja": "レプリカ・アラガンキャスターチュニック・レプリカ・アラガンキャスターブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13829,
+        "quantity": 1
+      },
+      {
+        "id": 13830,
+        "quantity": 1
+      },
+      {
+        "id": 13831,
+        "quantity": 1
+      },
+      {
+        "id": 13832,
+        "quantity": 1
+      },
+      {
+        "id": 13833,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13824_13825_13826_13827_13828",
+    "name": {
+      "tw": "亞拉戈治癒五件套裝（複製品）",
+      "cn": "亚拉戈治愈束腰衣（复制品） / 亚拉戈治愈软甲裤（复制品）套装",
+      "en": "Replica Allagan Tunic of Healing / Replica Allagan Breeches of Healing Set",
+      "ja": "レプリカ・アラガンヒーラーチュニック・レプリカ・アラガンヒーラーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13824,
+        "quantity": 1
+      },
+      {
+        "id": 13825,
+        "quantity": 1
+      },
+      {
+        "id": 13826,
+        "quantity": 1
+      },
+      {
+        "id": 13827,
+        "quantity": 1
+      },
+      {
+        "id": 13828,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13848_13849_13850_13851_13852",
+    "name": {
+      "tw": "亞拉戈高位禦敵五件套裝（複製品）",
+      "cn": "亚拉戈高位重长衣（复制品） / 亚拉戈高位御敌软甲裤（复制品）套装",
+      "en": "Replica Heavy High Allagan Coat / Replica High Allagan Trousers of Fending Set",
+      "ja": "レプリカ・ハイアラガン・ヘヴィコート・レプリカ・ハイアラガン・ディフェンダートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13848,
+        "quantity": 1
+      },
+      {
+        "id": 13849,
+        "quantity": 1
+      },
+      {
+        "id": 13850,
+        "quantity": 1
+      },
+      {
+        "id": 13851,
+        "quantity": 1
+      },
+      {
+        "id": 13852,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13853_13854_13855_13856_13857",
+    "name": {
+      "tw": "亞拉戈高位制敵五件套裝（複製品）",
+      "cn": "亚拉戈高位制敌胸甲（复制品） / 亚拉戈高位制敌软甲裤（复制品）套装",
+      "en": "Replica High Allagan Cuirass of Maiming / Replica High Allagan Trousers of Maiming Set",
+      "ja": "レプリカ・ハイアラガン・スレイヤーキュイラス・レプリカ・ハイアラガン・スレイヤートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13853,
+        "quantity": 1
+      },
+      {
+        "id": 13854,
+        "quantity": 1
+      },
+      {
+        "id": 13855,
+        "quantity": 1
+      },
+      {
+        "id": 13856,
+        "quantity": 1
+      },
+      {
+        "id": 13857,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13858_13859_13860_13861_13862",
+    "name": {
+      "tw": "亞拉戈高位強襲五件套裝（複製品）",
+      "cn": "亚拉戈高位强袭胸甲（复制品） / 亚拉戈高位强袭软甲裤（复制品）套装",
+      "en": "Replica High Allagan Cuirass of Striking / Replica High Allagan Trousers of Striking Set",
+      "ja": "レプリカ・ハイアラガン・ストライカーキュイラス・レプリカ・ハイアラガン・ストライカートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 13858,
+        "quantity": 1
+      },
+      {
+        "id": 13859,
+        "quantity": 1
+      },
+      {
+        "id": 13860,
+        "quantity": 1
+      },
+      {
+        "id": 13861,
+        "quantity": 1
+      },
+      {
+        "id": 13862,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13863_13864_13865_13866_13867",
+    "name": {
+      "tw": "亞拉戈高位精準五件套裝（複製品）",
+      "cn": "亚拉戈高位精准长衣（复制品） / 亚拉戈高位精准马裤（复制品）套装",
+      "en": "Replica High Allagan Coat of Aiming / Replica High Allagan Breeches of Aiming Set",
+      "ja": "レプリカ・ハイアラガン・レンジャーコート・レプリカ・ハイアラガン・レンジャーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13863,
+        "quantity": 1
+      },
+      {
+        "id": 13864,
+        "quantity": 1
+      },
+      {
+        "id": 13865,
+        "quantity": 1
+      },
+      {
+        "id": 13866,
+        "quantity": 1
+      },
+      {
+        "id": 13867,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13873_13874_13875_13876_13877",
+    "name": {
+      "tw": "亞拉戈高位詠咒五件套裝（複製品）",
+      "cn": "亚拉戈高位咏咒长衣（复制品） / 亚拉戈高位咏咒马裤（复制品）套装",
+      "en": "Replica High Allagan Coat of Casting / Replica High Allagan Breeches of Casting Set",
+      "ja": "レプリカ・ハイアラガン・キャスターコート・レプリカ・ハイアラガン・キャスターブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13873,
+        "quantity": 1
+      },
+      {
+        "id": 13874,
+        "quantity": 1
+      },
+      {
+        "id": 13875,
+        "quantity": 1
+      },
+      {
+        "id": 13876,
+        "quantity": 1
+      },
+      {
+        "id": 13877,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13868_13869_13870_13871_13872",
+    "name": {
+      "tw": "亞拉戈高位治癒五件套裝（複製品）",
+      "cn": "亚拉戈高位治愈长衣（复制品） / 亚拉戈高位治愈喇叭裤（复制品）套装",
+      "en": "Replica High Allagan Coat of Healing / Replica High Allagan Pantaloons of Healing Set",
+      "ja": "レプリカ・ハイアラガン・ヒーラーコート・レプリカ・ハイアラガン・ヒーラーパンタロンセット"
+    },
+    "items": [
+      {
+        "id": 13868,
+        "quantity": 1
+      },
+      {
+        "id": 13869,
+        "quantity": 1
+      },
+      {
+        "id": 13870,
+        "quantity": 1
+      },
+      {
+        "id": 13871,
+        "quantity": 1
+      },
+      {
+        "id": 13872,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13892_13893_13894_13895_13896",
+    "name": {
+      "tw": "巴哈姆特禦敵五件套裝（複製品）",
+      "cn": "龙神御敌战甲（复制品） / 龙神御敌垮裤（复制品）套装",
+      "en": "Replica Dreadwyrm Armor of Fending / Replica Dreadwyrm Sarouel of Fending Set",
+      "ja": "レプリカ・バハムート・ディフェンダーアーマー・レプリカ・バハムート・ディフェンダーサルエルセット"
+    },
+    "items": [
+      {
+        "id": 13892,
+        "quantity": 1
+      },
+      {
+        "id": 13893,
+        "quantity": 1
+      },
+      {
+        "id": 13894,
+        "quantity": 1
+      },
+      {
+        "id": 13895,
+        "quantity": 1
+      },
+      {
+        "id": 13896,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13897_13898_13899_13900_13901",
+    "name": {
+      "tw": "巴哈姆特制敵五件套裝（複製品）",
+      "cn": "龙神制敌战铠（复制品） / 龙神制敌马裤（复制品）套装",
+      "en": "Replica Dreadwyrm Mail of Maiming / Replica Dreadwyrm Breeches of Maiming Set",
+      "ja": "レプリカ・バハムート・スレイヤーメイル・レプリカ・バハムート・スレイヤーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13897,
+        "quantity": 1
+      },
+      {
+        "id": 13898,
+        "quantity": 1
+      },
+      {
+        "id": 13899,
+        "quantity": 1
+      },
+      {
+        "id": 13900,
+        "quantity": 1
+      },
+      {
+        "id": 13901,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13902_13903_13904_13905_13906",
+    "name": {
+      "tw": "巴哈姆特強襲五件套裝（複製品）",
+      "cn": "龙神强袭斗服（复制品） / 龙神强袭长裤（复制品）套装",
+      "en": "Replica Dreadwyrm Cyclas of Striking / Replica Dreadwyrm Slops of Striking Set",
+      "ja": "レプリカ・バハムート・ストライカーシクラス・レプリカ・バハムート・ストライカースロップセット"
+    },
+    "items": [
+      {
+        "id": 13902,
+        "quantity": 1
+      },
+      {
+        "id": 13903,
+        "quantity": 1
+      },
+      {
+        "id": 13904,
+        "quantity": 1
+      },
+      {
+        "id": 13905,
+        "quantity": 1
+      },
+      {
+        "id": 13906,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13922_13923_13924_13925_13926",
+    "name": {
+      "tw": "巴哈姆特游擊五件套裝（複製品）",
+      "cn": "龙神游击斗服（复制品） / 龙神游击长裤（复制品）套装",
+      "en": "Replica Dreadwyrm Cyclas of Scouting / Replica Dreadwyrm Slops of Scouting Set",
+      "ja": "レプリカ・バハムート・スカウトシクラス・レプリカ・バハムート・スカウトスロップセット"
+    },
+    "items": [
+      {
+        "id": 13922,
+        "quantity": 1
+      },
+      {
+        "id": 13923,
+        "quantity": 1
+      },
+      {
+        "id": 13924,
+        "quantity": 1
+      },
+      {
+        "id": 13925,
+        "quantity": 1
+      },
+      {
+        "id": 13926,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13907_13908_13909_13910_13911",
+    "name": {
+      "tw": "巴哈姆特精準五件套裝（複製品）",
+      "cn": "龙神精准罩衣（复制品） / 龙神精准马裤（复制品）套装",
+      "en": "Replica Dreadwyrm Tabard of Aiming / Replica Dreadwyrm Breeches of Aiming Set",
+      "ja": "レプリカ・バハムート・レンジャータバード・レプリカ・バハムート・レンジャーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 13907,
+        "quantity": 1
+      },
+      {
+        "id": 13908,
+        "quantity": 1
+      },
+      {
+        "id": 13909,
+        "quantity": 1
+      },
+      {
+        "id": 13910,
+        "quantity": 1
+      },
+      {
+        "id": 13911,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13917_13918_13919_13920_13921",
+    "name": {
+      "tw": "巴哈姆特詠咒五件套裝（複製品）",
+      "cn": "龙神咏咒长袍（复制品） / 龙神咏咒灯笼裤（复制品）套装",
+      "en": "Replica Dreadwyrm Robe of Casting / Replica Dreadwyrm Tonban of Casting Set",
+      "ja": "レプリカ・バハムート・キャスターローブ・レプリカ・バハムート・キャスタートンバンセット"
+    },
+    "items": [
+      {
+        "id": 13917,
+        "quantity": 1
+      },
+      {
+        "id": 13918,
+        "quantity": 1
+      },
+      {
+        "id": 13919,
+        "quantity": 1
+      },
+      {
+        "id": 13920,
+        "quantity": 1
+      },
+      {
+        "id": 13921,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_13912_13913_13914_13915_13916",
+    "name": {
+      "tw": "巴哈姆特治癒五件套裝（複製品）",
+      "cn": "龙神治愈长袍（复制品） / 龙神治愈束脚裤（复制品）套装",
+      "en": "Replica Dreadwyrm Robe of Healing / Replica Dreadwyrm Tonban of Healing Set",
+      "ja": "レプリカ・バハムート・ヒーラーローブ・レプリカ・バハムート・ヒーラートンバンセット"
+    },
+    "items": [
+      {
+        "id": 13912,
+        "quantity": 1
+      },
+      {
+        "id": 13913,
+        "quantity": 1
+      },
+      {
+        "id": 13914,
+        "quantity": 1
+      },
+      {
+        "id": 13915,
+        "quantity": 1
+      },
+      {
+        "id": 13916,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28808_28809_28810_28811_28812",
+    "name": {
+      "tw": "空賊禦敵五件套裝（複製品）",
+      "cn": "空贼御敌外套（复制品） / 空贼御敌斗裤（复制品）套装",
+      "en": "Replica Sky Pirate's Coat of Fending / Replica Sky Pirate's Gaskins of Fending Set",
+      "ja": "レプリカ・スカイパイレーツ・ディフェンダーコート・レプリカ・スカイパイレーツ・ディフェンダーガスキンセット"
+    },
+    "items": [
+      {
+        "id": 28808,
+        "quantity": 1
+      },
+      {
+        "id": 28809,
+        "quantity": 1
+      },
+      {
+        "id": 28810,
+        "quantity": 1
+      },
+      {
+        "id": 28811,
+        "quantity": 1
+      },
+      {
+        "id": 28812,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28813_28814_28815_28816_28817",
+    "name": {
+      "tw": "空賊制敵五件套裝（複製品）",
+      "cn": "空贼制敌外套（复制品） / 空贼制敌斗裤（复制品）套装",
+      "en": "Replica Sky Pirate's Coat of Maiming / Replica Sky Pirate's Gaskins of Maiming Set",
+      "ja": "レプリカ・スカイパイレーツ・スレイヤーコート・レプリカ・スカイパイレーツ・スレイヤーガスキンセット"
+    },
+    "items": [
+      {
+        "id": 28813,
+        "quantity": 1
+      },
+      {
+        "id": 28814,
+        "quantity": 1
+      },
+      {
+        "id": 28815,
+        "quantity": 1
+      },
+      {
+        "id": 28816,
+        "quantity": 1
+      },
+      {
+        "id": 28817,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28818_28819_28820_28821_28822",
+    "name": {
+      "tw": "空賊強襲五件套裝（複製品）",
+      "cn": "空贼强袭短衣（复制品） / 空贼强袭软甲裤（复制品）套装",
+      "en": "Replica Sky Pirate's Jacket of Striking / Replica Sky Pirate's Trousers of Striking Set",
+      "ja": "レプリカ・スカイパイレーツ・ストライカージャケット・レプリカ・スカイパイレーツ・ストライカートラウザーセット"
+    },
+    "items": [
+      {
+        "id": 28818,
+        "quantity": 1
+      },
+      {
+        "id": 28819,
+        "quantity": 1
+      },
+      {
+        "id": 28820,
+        "quantity": 1
+      },
+      {
+        "id": 28821,
+        "quantity": 1
+      },
+      {
+        "id": 28822,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28828_28829_28830_28831_28832",
+    "name": {
+      "tw": "空賊游擊五件套裝（複製品）",
+      "cn": "空贼游击短衣（复制品） / 空贼游击软甲裤（复制品）套装",
+      "en": "Replica Sky Pirate's Jacket of Scouting / Replica Sky Pirate's Trousers of Scouting Set",
+      "ja": "レプリカ・スカイパイレーツ・スカウトジャケット・レプリカ・スカイパイレーツ・スカウトトラウザーセット"
+    },
+    "items": [
+      {
+        "id": 28828,
+        "quantity": 1
+      },
+      {
+        "id": 28829,
+        "quantity": 1
+      },
+      {
+        "id": 28830,
+        "quantity": 1
+      },
+      {
+        "id": 28831,
+        "quantity": 1
+      },
+      {
+        "id": 28832,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28823_28824_28825_28826_28827",
+    "name": {
+      "tw": "空賊精準五件套裝（複製品）",
+      "cn": "空贼精准坎肩（复制品） / 空贼精准五分裤（复制品）套装",
+      "en": "Replica Sky Pirate's Vest of Aiming / Replica Sky Pirate's Halfslops of Aiming Set",
+      "ja": "レプリカ・スカイパイレーツ・レンジャーベスト・レプリカ・スカイパイレーツ・レンジャーハーフパンツセット"
+    },
+    "items": [
+      {
+        "id": 28823,
+        "quantity": 1
+      },
+      {
+        "id": 28824,
+        "quantity": 1
+      },
+      {
+        "id": 28825,
+        "quantity": 1
+      },
+      {
+        "id": 28826,
+        "quantity": 1
+      },
+      {
+        "id": 28827,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28838_28839_28840_28841_28842",
+    "name": {
+      "tw": "空賊詠咒五件套裝（複製品）",
+      "cn": "空贼咏咒长衣（复制品） / 空贼咏咒打底裤（复制品）套装",
+      "en": "Replica Sky Pirate's Coat of Casting / Replica Sky Pirate's Bottoms of Casting Set",
+      "ja": "レプリカ・スカイパイレーツ・キャスターコート・レプリカ・スカイパイレーツ・キャスターボトムセット"
+    },
+    "items": [
+      {
+        "id": 28838,
+        "quantity": 1
+      },
+      {
+        "id": 28839,
+        "quantity": 1
+      },
+      {
+        "id": 28840,
+        "quantity": 1
+      },
+      {
+        "id": 28841,
+        "quantity": 1
+      },
+      {
+        "id": 28842,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28833_28834_28835_28836_28837",
+    "name": {
+      "tw": "空賊治癒五件套裝（複製品）",
+      "cn": "空贼治愈长衣（复制品） / 空贼治愈打底裤（复制品）套装",
+      "en": "Replica Sky Pirate's Coat of Healing / Replica Sky Pirate's Bottoms of Healing Set",
+      "ja": "レプリカ・スカイパイレーツ・ヒーラーコート・レプリカ・スカイパイレーツ・ヒーラーボトムセット"
+    },
+    "items": [
+      {
+        "id": 28833,
+        "quantity": 1
+      },
+      {
+        "id": 28834,
+        "quantity": 1
+      },
+      {
+        "id": 28835,
+        "quantity": 1
+      },
+      {
+        "id": 28836,
+        "quantity": 1
+      },
+      {
+        "id": 28837,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28843_28844_28845_28846_28847",
+    "name": {
+      "tw": "空鼠禦敵五件套裝（複製品）",
+      "cn": "空鼠御敌格斗服（复制品） / 空鼠御敌马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Fending / Replica Sky Rat Breeches of Fending Set",
+      "ja": "レプリカ・スカイラット・ディフェンダーハーネス・レプリカ・スカイラット・ディフェンダーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28843,
+        "quantity": 1
+      },
+      {
+        "id": 28844,
+        "quantity": 1
+      },
+      {
+        "id": 28845,
+        "quantity": 1
+      },
+      {
+        "id": 28846,
+        "quantity": 1
+      },
+      {
+        "id": 28847,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28848_28849_28850_28851_28852",
+    "name": {
+      "tw": "空鼠制敵五件套裝（複製品）",
+      "cn": "空鼠制敌格斗服（复制品） / 空鼠制敌马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Maiming / Replica Sky Rat Breeches of Maiming Set",
+      "ja": "レプリカ・スカイラット・スレイヤーハーネス・レプリカ・スカイラット・スレイヤーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28848,
+        "quantity": 1
+      },
+      {
+        "id": 28849,
+        "quantity": 1
+      },
+      {
+        "id": 28850,
+        "quantity": 1
+      },
+      {
+        "id": 28851,
+        "quantity": 1
+      },
+      {
+        "id": 28852,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28853_28854_28855_28856_28857",
+    "name": {
+      "tw": "空鼠強襲五件套裝（複製品）",
+      "cn": "空鼠强袭格斗服（复制品） / 空鼠强袭马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Striking / Replica Sky Rat Breeches of Striking Set",
+      "ja": "レプリカ・スカイラット・ストライカーハーネス・レプリカ・スカイラット・ストライカーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28853,
+        "quantity": 1
+      },
+      {
+        "id": 28854,
+        "quantity": 1
+      },
+      {
+        "id": 28855,
+        "quantity": 1
+      },
+      {
+        "id": 28856,
+        "quantity": 1
+      },
+      {
+        "id": 28857,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28863_28864_28865_28866_28867",
+    "name": {
+      "tw": "空鼠游擊五件套裝（複製品）",
+      "cn": "空鼠游击格斗服（复制品） / 空鼠游击马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Scouting / Replica Sky Rat Breeches of Scouting Set",
+      "ja": "レプリカ・スカイラット・スカウトハーネス・レプリカ・スカイラット・スカウトブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28863,
+        "quantity": 1
+      },
+      {
+        "id": 28864,
+        "quantity": 1
+      },
+      {
+        "id": 28865,
+        "quantity": 1
+      },
+      {
+        "id": 28866,
+        "quantity": 1
+      },
+      {
+        "id": 28867,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28858_28859_28860_28861_28862",
+    "name": {
+      "tw": "空鼠精準五件套裝（複製品）",
+      "cn": "空鼠精准格斗服（复制品） / 空鼠精准马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Aiming / Replica Sky Rat Breeches of Aiming Set",
+      "ja": "レプリカ・スカイラット・レンジャーハーネス・レプリカ・スカイラット・レンジャーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28858,
+        "quantity": 1
+      },
+      {
+        "id": 28859,
+        "quantity": 1
+      },
+      {
+        "id": 28860,
+        "quantity": 1
+      },
+      {
+        "id": 28861,
+        "quantity": 1
+      },
+      {
+        "id": 28862,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28873_28874_28875_28876_28877",
+    "name": {
+      "tw": "空鼠詠咒五件套裝（複製品）",
+      "cn": "空鼠咏咒格斗服（复制品） / 空鼠咏咒马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Casting / Replica Sky Rat Breeches of Casting Set",
+      "ja": "レプリカ・スカイラット・キャスターハーネス・レプリカ・スカイラット・キャスターブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28873,
+        "quantity": 1
+      },
+      {
+        "id": 28874,
+        "quantity": 1
+      },
+      {
+        "id": 28875,
+        "quantity": 1
+      },
+      {
+        "id": 28876,
+        "quantity": 1
+      },
+      {
+        "id": 28877,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_glamour_28868_28869_28870_28871_28872",
+    "name": {
+      "tw": "空鼠治癒五件套裝（複製品）",
+      "cn": "空鼠治愈格斗服（复制品） / 空鼠治愈马裤（复制品）套装",
+      "en": "Replica Sky Rat Harness of Healing / Replica Sky Rat Breeches of Healing Set",
+      "ja": "レプリカ・スカイラット・ヒーラーハーネス・レプリカ・スカイラット・ヒーラーブリーチセット"
+    },
+    "items": [
+      {
+        "id": 28868,
+        "quantity": 1
+      },
+      {
+        "id": 28869,
+        "quantity": 1
+      },
+      {
+        "id": 28870,
+        "quantity": 1
+      },
+      {
+        "id": 28871,
+        "quantity": 1
+      },
+      {
+        "id": 28872,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-28T00:00:00.000Z"
+  }
+]
