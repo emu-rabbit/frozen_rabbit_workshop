@@ -8,6 +8,54 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
   {
+    version: '1.3.2',
+    date: '2026-10-29',
+    changes: [
+      {
+        tw: '共新增208筆私心筆記',
+        cn: '共新增208篇私心笔记',
+        en: 'Added a total of 208 notes to Rabbit\'s Picks',
+        ja: '「うさぎのオススメ」に合計208件のノートを追加しました'
+      },
+      {
+        tw: '新增時裝類型筆記',
+        cn: '新增时装类型笔记',
+        en: 'Added glamour notes',
+        ja: 'ミラプリ用装備のノートを追加しました'
+      },
+      {
+        tw: '新增潛水艇部件類型筆記',
+        cn: '新增潜水艇部件类型笔记',
+        en: 'Added submersible component notes',
+        ja: '潜水艦パーツのノートを追加しました'
+      },
+      {
+        tw: '新增職業任務類型筆記',
+        cn: '新增职业任务类型笔记',
+        en: 'Added class quest notes',
+        ja: 'クラスクエストのノートを追加しました'
+      },
+      {
+        tw: '新增工具強化任務類型筆記',
+        cn: '新增工具强化任务类型笔记',
+        en: 'Added tool enhancement quest notes',
+        ja: '道具強化クエストのノートを追加しました'
+      },
+      {
+        tw: '新增私心筆記的篩選功能',
+        cn: '新增私心笔记的筛选功能',
+        en: 'Added filters for Rabbit\'s Picks',
+        ja: '「うさぎのオススメ」に絞り込み機能を追加しました'
+      },
+      {
+        tw: '提升一些網站使用者體驗',
+        cn: '提升一些网站用户体验',
+        en: 'Improved several aspects of the website user experience',
+        ja: 'サイトの使い勝手をいくつか改善しました'
+      }
+    ]
+  },
+  {
     version: '1.3.1',
     date: '2026-09-09',
     changes: [
