@@ -9,7 +9,7 @@ describe('recommended note filters', () => {
     expect(combatJobs).toContain('BLU');
     for (const note of notes) {
       const metadata = getRecommendedMetadata(note);
-      if (metadata.type === 'glamour') {
+      if (metadata.type === 'glamour' || metadata.type === 'submarine') {
         expect(metadata.jobs).toEqual([]);
         expect(metadata.level).toBe(0);
         continue;
@@ -56,6 +56,10 @@ describe('recommended note filters', () => {
     expect(filter(searchRecommendedNotes('小牛皮'), { jobs: [], levels: [], types: ['glamour'] })).toHaveLength(1);
     expect(filter(glamour, { jobs: ['PLD'], levels: [], types: ['glamour'] })).toHaveLength(0);
     expect(filter(glamour, { jobs: [], levels: [50], types: ['glamour'] })).toHaveLength(0);
-    expect(battle.length + professions.length + quests.length + glamour.length).toBe(notes.length);
+    const submarines = filter(notes, { jobs: [], levels: [], types: ['submarine'] });
+    expect(submarines).toHaveLength(6);
+    expect(filter(submarines, { jobs: ['ARM'], levels: [], types: ['submarine'] })).toHaveLength(0);
+    expect(filter(submarines, { jobs: [], levels: [50], types: ['submarine'] })).toHaveLength(0);
+    expect(battle.length + professions.length + quests.length + glamour.length + submarines.length).toBe(notes.length);
   });
 });

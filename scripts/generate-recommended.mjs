@@ -24,7 +24,7 @@ const weapons110 = new Set([9082, 9083, 9084, 9085, 9086, 9087, 9088, 9089, 9090
 // Corrections apply only to new composed notes. Existing curated notes remain byte-for-byte intact.
 const corrections = { 'lv100_ilv770.json': { 46068: 49307 }, 'lv60_ilv255.json': { 19613: 18086 } };
 // Armor-only leveling tiers and curated glamour notes have no weapon/tool compositions.
-const standaloneFiles = new Set(['lv51_ilv65.json', 'lv61_ilv180.json', 'glamour.json']);
+const standaloneFiles = new Set(['lv51_ilv65.json', 'lv61_ilv180.json', 'glamour.json', 'submarine.json']);
 const groups = [];
 for (const file of readdirSync(root + 'src/data/recommended').filter(file => file.endsWith('.json')).sort()) {
   if (standaloneFiles.has(file)) continue;

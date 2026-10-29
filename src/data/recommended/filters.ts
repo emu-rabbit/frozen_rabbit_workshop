@@ -16,7 +16,7 @@ const roleJobs: Record<string, string[]> = {
 };
 export const combatJobs = Object.entries(roleJobs).filter(([role]) => !['Crafting', 'Gathering'].includes(role)).flatMap(([, jobs]) => jobs);
 export const levelBands = [50, 60, 70, 80, 90, 100];
-export type RecommendedNoteType = 'combatEquipment' | 'professionEquipment' | 'quest' | 'glamour';
+export type RecommendedNoteType = 'combatEquipment' | 'professionEquipment' | 'quest' | 'glamour' | 'submarine';
 export interface RecommendedFilters {
   jobs: string[];
   levels: number[];
@@ -33,6 +33,7 @@ for (const group of definitions.groups) {
 }
 
 export function getRecommendedMetadata(note: Note) {
+  if (note.id.startsWith('recommend_submarine_')) return { type: 'submarine' as const, level: 0, jobs: [] as string[] };
   // Glamour series names may mention combat roles, but belong to their own category.
   if (note.id.startsWith('recommend_glamour_')) return { type: 'glamour' as const, level: 0, jobs: [] as string[] };
   const name = typeof note.name === 'string' ? note.name : note.name.en;

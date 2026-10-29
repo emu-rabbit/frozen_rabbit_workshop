@@ -1,0 +1,170 @@
+[
+  {
+    "id": "recommend_submarine_1111",
+    "name": {
+      "tw": "1111潛水艇",
+      "cn": "1111潜水艇",
+      "en": "1111 Submersible",
+      "ja": "1111潜水艦"
+    },
+    "items": [
+      {
+        "id": 21794,
+        "quantity": 1
+      },
+      {
+        "id": 21795,
+        "quantity": 1
+      },
+      {
+        "id": 21792,
+        "quantity": 1
+      },
+      {
+        "id": 21793,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_submarine_3124",
+    "name": {
+      "tw": "3124潛水艇",
+      "cn": "3124潜水艇",
+      "en": "3124 Submersible",
+      "ja": "3124潜水艦"
+    },
+    "items": [
+      {
+        "id": 22528,
+        "quantity": 1
+      },
+      {
+        "id": 21795,
+        "quantity": 1
+      },
+      {
+        "id": 21796,
+        "quantity": 1
+      },
+      {
+        "id": 23904,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_submarine_1121",
+    "name": {
+      "tw": "1121潛水艇",
+      "cn": "1121潜水艇",
+      "en": "1121 Submersible",
+      "ja": "1121潜水艦"
+    },
+    "items": [
+      {
+        "id": 21794,
+        "quantity": 1
+      },
+      {
+        "id": 21795,
+        "quantity": 1
+      },
+      {
+        "id": 21796,
+        "quantity": 1
+      },
+      {
+        "id": 21793,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_submarine_3113",
+    "name": {
+      "tw": "3113潛水艇",
+      "cn": "3113潜水艇",
+      "en": "3113 Submersible",
+      "ja": "3113潜水艦"
+    },
+    "items": [
+      {
+        "id": 22528,
+        "quantity": 1
+      },
+      {
+        "id": 21795,
+        "quantity": 1
+      },
+      {
+        "id": 21792,
+        "quantity": 1
+      },
+      {
+        "id": 22527,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_submarine_5124_modified",
+    "name": {
+      "tw": "5124改潛水艇",
+      "cn": "5124改潜水艇",
+      "en": "5124 Modified Submersible",
+      "ja": "5124改潜水艦"
+    },
+    "items": [
+      {
+        "id": 24366,
+        "quantity": 1
+      },
+      {
+        "id": 24351,
+        "quantity": 1
+      },
+      {
+        "id": 24352,
+        "quantity": 1
+      },
+      {
+        "id": 24361,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  },
+  {
+    "id": "recommend_submarine_5142",
+    "name": {
+      "tw": "5142潛水艇",
+      "cn": "5142潜水艇",
+      "en": "5142 Submersible",
+      "ja": "5142潜水艦"
+    },
+    "items": [
+      {
+        "id": 24346,
+        "quantity": 1
+      },
+      {
+        "id": 21795,
+        "quantity": 1
+      },
+      {
+        "id": 23903,
+        "quantity": 1
+      },
+      {
+        "id": 21797,
+        "quantity": 1
+      }
+    ],
+    "createdAt": "2026-10-29T00:00:00.000Z"
+  }
+]

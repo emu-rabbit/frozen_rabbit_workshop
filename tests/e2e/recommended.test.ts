@@ -1,6 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 import { dismissAnalyticsPrompt, navigateTo } from './utils/test-helpers';
 import glamourNotes from '../../src/data/recommended/glamour.json' with { type: 'json' };
+import submarineNotes from '../../src/data/recommended/submarine.json' with { type: 'json' };
 
 async function start(page: Page) {
   await dismissAnalyticsPrompt(page);
@@ -16,6 +17,45 @@ async function start(page: Page) {
   await page.goto('./#recommended');
   await expect(page.getByTestId('recommended-notes').getByTestId('note-card')).toHaveCount(20);
 }
+
+test('submersible category supports six builds, localized search, favorites and preparation', async ({ page }) => {
+  await start(page);
+  const note = submarineNotes.find(note => note.id === 'recommend_submarine_5124_modified')!;
+  for (const [locale, category, title, apply] of [
+    ['tw', '潛水艇部件', '篩選筆記', '套用'],
+    ['cn', '潜水艇部件', '筛选笔记', '应用'],
+    ['en', 'Submersible Components', 'Filter Notes', 'Apply'],
+    ['ja', '潜水艦パーツ', 'ノートを絞り込む', '適用'],
+  ] as const) {
+    await page.evaluate(locale => localStorage.setItem('frozen-rabbit-lang', locale), locale);
+    await page.reload();
+    const view = page.getByTestId('recommended-notes');
+    await view.getByRole('button', { name: title, exact: true }).click();
+    const dialog = page.getByRole('dialog', { name: title });
+    await dialog.getByRole('checkbox', { name: category, exact: true }).check();
+    await dialog.getByRole('button', { name: apply, exact: true }).click();
+    await expect(view.getByTestId('note-card')).toHaveCount(6);
+    await expect(view.getByRole('heading', { level: 3 })).toHaveText(submarineNotes.map(note => note.name[locale]));
+    await view.getByRole('textbox').fill(note.name[locale]);
+    await expect(view.getByTestId('note-card')).toHaveCount(1);
+    for (const dark of [false, true]) {
+      await page.evaluate(dark => document.documentElement.classList.toggle('dark', dark), dark);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  }
+  await page.evaluate(() => localStorage.setItem('frozen-rabbit-lang', 'tw'));
+  await page.reload();
+  const view = page.getByTestId('recommended-notes');
+  await view.getByRole('textbox').fill('5124改');
+  await view.getByTestId('note-card').getByRole('button', { name: '加入我的收藏' }).click();
+  await page.reload();
+  await navigateTo(page, '收藏的小筆記');
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('frozen-rabbit-favorites-data')!)[0]);
+  expect(saved.items).toEqual(note.items);
+  await page.getByTestId('note-card').getByRole('button', { name: /備料台/ }).click();
+  await expect(page).toHaveURL(/#workbench/);
+  await expect(page.getByRole('heading', { name: '希爾德拉改級船體', exact: true })).toBeVisible();
+});
 
 test('glamour category supports localized search, themes, favorites and preparation', async ({ page }) => {
   await start(page);
