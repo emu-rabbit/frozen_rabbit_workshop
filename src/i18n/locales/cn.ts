@@ -82,7 +82,7 @@ export default {
       title: '筛选笔记', jobs: '装备职业', levels: '装备等级', types: '笔记类型',
       craftingGathering: '能工巧匠与大地使者', combat: '战斗职业',
       expandJobs: '展开全部职业', collapseJobs: '收起职业',
-      combatEquipment: '战斗职业套装', professionEquipment: '生产采集职业套装', quest: '巧匠职业任务', glamour: '时装', submarine: '潜水艇部件', relicTools: '遗物工具任务需求', apply: '应用',
+      combatEquipment: '战斗职业套装', professionEquipment: '生产采集职业套装', quest: '巧匠职业任务', glamour: '时装', submarine: '潜水艇部件', relicTools: '主工具强化任务', apply: '应用',
     },
     title: '兔肉私心笔记',
     description: '搜索职业或品级，找到你要的套装。想修改笔记？复制 JSON 到「笔记工作台」就能编辑。',

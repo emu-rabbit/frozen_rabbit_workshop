@@ -55,8 +55,8 @@ describe('relic tool quest requirements', () => {
     expect(filter(notes, { jobs: ['CUL'], levels: [80], types: ['relicTools'] })).toHaveLength(7);
     expect(filter(notes, { jobs: ['MIN'], levels: [], types: ['relicTools'] })).toHaveLength(0);
     expect(filter(searchRecommendedNotes('CRP Stage 6'), { jobs: [], levels: [], types: ['relicTools'] })).toHaveLength(1);
-    expect(searchRecommendedNotes('莫雯卓越工具/木工師第一階段需求')).toHaveLength(0);
-    expect(searchRecommendedNotes('莫雯卓越工具/木工師需求大總匯')).toHaveLength(1);
+    expect(searchRecommendedNotes('莫雯卓越工具 木工師第一階段需求')).toHaveLength(0);
+    expect(searchRecommendedNotes('莫雯卓越工具 木工師需求大總匯')).toHaveLength(1);
   });
 
   it('keeps non-craftable materials in the recipe closure and merges them without filtering', () => {

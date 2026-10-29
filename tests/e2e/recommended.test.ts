@@ -21,10 +21,10 @@ async function start(page: Page) {
 test('relic tool requirements support localized filters, collections, favorites and raw materials', async ({ page }) => {
   await start(page);
   for (const [locale, category, title, apply, name] of [
-    ['tw', '遺物工具任務需求', '篩選筆記', '套用', '莫雯卓越工具/木工師需求大總匯'],
-    ['cn', '遗物工具任务需求', '筛选笔记', '应用', '莫雯卓越工具/刻木匠需求大总汇'],
-    ['en', 'Relic Tool Quest Requirements', 'Filter Notes', 'Apply', 'Splendorous Tools/Carpenter Complete Requirements'],
-    ['ja', '道具強化クエスト必要アイテム', 'ノートを絞り込む', '適用', 'モーエンツール/木工師全段階必要アイテム'],
+    ['tw', '工具強化任務', '篩選筆記', '套用', '莫雯卓越工具 木工師需求大總匯'],
+    ['cn', '主工具强化任务', '筛选笔记', '应用', '莫雯卓越工具 刻木匠需求大总汇'],
+    ['en', 'Tool Enhancement Quests', 'Filter Notes', 'Apply', 'Splendorous Tools Carpenter Complete Requirements'],
+    ['ja', '主道具強化', 'ノートを絞り込む', '適用', 'モーエンツール 木工師全段階必要アイテム'],
   ] as const) {
     await page.evaluate(locale => localStorage.setItem('frozen-rabbit-lang', locale), locale);
     await page.reload();
@@ -45,13 +45,13 @@ test('relic tool requirements support localized filters, collections, favorites 
   await page.evaluate(() => localStorage.setItem('frozen-rabbit-lang', 'tw'));
   await page.reload();
   const view = page.getByTestId('recommended-notes');
-  await view.getByRole('textbox').fill('莫雯卓越工具/能工巧匠需求大總匯');
+  await view.getByRole('textbox').fill('莫雯卓越工具 能工巧匠需求大總匯');
   await expect(view.getByTestId('note-card')).toHaveCount(1);
   await expect(view.getByTestId('note-card')).toContainText('這張筆記裡面有 (1200)');
-  await view.getByRole('textbox').fill('天鋼工具/能工巧匠需求大總匯');
+  await view.getByRole('textbox').fill('天鋼工具 能工巧匠需求大總匯');
   await expect(view.getByTestId('note-card')).toHaveCount(1);
   await expect(view.getByTestId('note-card')).toContainText('這張筆記裡面有 (872)');
-  await view.getByRole('textbox').fill('莫雯卓越工具/木工師需求大總匯');
+  await view.getByRole('textbox').fill('莫雯卓越工具 木工師需求大總匯');
   await view.getByTestId('note-card').getByRole('button', { name: '加入我的收藏' }).click();
   await page.reload();
   await navigateTo(page, '收藏的小筆記');

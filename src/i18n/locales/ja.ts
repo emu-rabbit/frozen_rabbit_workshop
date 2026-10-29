@@ -82,7 +82,7 @@ export default {
       title: 'ノートを絞り込む', jobs: '装備ジョブ', levels: '装備レベル', types: 'ノートの種類',
       craftingGathering: 'クラフター・ギャザラー', combat: '戦闘ジョブ',
       expandJobs: 'すべてのジョブを表示', collapseJobs: 'ジョブを折りたたむ',
-      combatEquipment: '戦闘ジョブ装備セット', professionEquipment: 'クラフター・ギャザラー装備セット', quest: 'クラフタークラスクエスト', glamour: 'おしゃれ装備', submarine: '潜水艦パーツ', relicTools: '道具強化クエスト必要アイテム', apply: '適用',
+      combatEquipment: '戦闘ジョブ装備セット', professionEquipment: 'クラフター・ギャザラー装備セット', quest: 'クラフタークラスクエスト', glamour: 'おしゃれ装備', submarine: '潜水艦パーツ', relicTools: '主道具強化', apply: '適用',
     },
     title: 'うさぎのオススメ',
     description: 'ジョブ名やアイテムレベルで、お目当てのセットを検索。ノートを編集するには、JSONを「ノート作業台」にコピーしてください。',

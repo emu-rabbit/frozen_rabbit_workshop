@@ -52,10 +52,10 @@ const relicToolNotes: Note[] = relicToolRequirements.flatMap(series => {
     return {
       id,
       name: {
-        tw: `${series.name.tw}/${names.tw}${stage === null ? '需求大總匯' : `第${numerals[stage]}階段需求`}`,
-        cn: `${series.name.cn}/${names.cn}${stage === null ? '需求大总汇' : `第${numerals[stage]}阶段需求`}`,
-        en: `${series.name.en}/${names.en} ${stage === null ? 'Complete Requirements' : `Stage ${stage + 1} Requirements`}`,
-        ja: `${series.name.ja}/${names.ja}${stage === null ? '全段階必要アイテム' : `第${stage + 1}段階必要アイテム`}`,
+        tw: `${series.name.tw} ${names.tw}${stage === null ? '需求大總匯' : `第${numerals[stage]}階段需求`}`,
+        cn: `${series.name.cn} ${names.cn}${stage === null ? '需求大总汇' : `第${numerals[stage]}阶段需求`}`,
+        en: `${series.name.en} ${names.en} ${stage === null ? 'Complete Requirements' : `Stage ${stage + 1} Requirements`}`,
+        ja: `${series.name.ja} ${names.ja}${stage === null ? '全段階必要アイテム' : `第${stage + 1}段階必要アイテム`}`,
       },
       get items() { return items ??= getItems(); },
       createdAt: '2026-10-29T00:00:00.000Z',
