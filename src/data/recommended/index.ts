@@ -30,6 +30,9 @@ import lv71_ilv330 from './lv71_ilv330.json';
 import lv81_ilv480 from './lv81_ilv480.json';
 import lv91_ilv610 from './lv91_ilv610.json';
 import classQuests1To60 from './class_quests_1_60.json';
+import glamour from './glamour.json';
+import submarine from './submarine.json';
+import relicToolNotes, { relicToolMetadata } from './relicTools';
 
 export const baseRecommendedNotes: Note[] = [
   ...(classQuests1To60 as Note[]),
@@ -59,6 +62,9 @@ export const baseRecommendedNotes: Note[] = [
   ...(lv71_ilv330 as Note[]),
   ...(lv81_ilv480 as Note[]),
   ...(lv91_ilv610 as Note[]),
+  ...(glamour as Note[]),
+  ...(submarine as Note[]),
+  ...relicToolNotes,
 ];
 
 const allRecommendedNotes: Note[] = [
@@ -70,11 +76,13 @@ const allRecommendedNotes: Note[] = [
   const level = Number(name.match(/^Lv\.(\d+)/i)?.[1] ?? 0);
   const grades = name.match(/iLv(\d+(?:\+\d+)*)/i)?.[1];
   const ilvl = grades ? Math.max(...grades.split('+').map(Number)) : 0;
-  return { note, level, ilvl };
-}).sort((a, b) => a.level - b.level || a.ilvl - b.ilvl).map(entry => entry.note);
+  const categoryOrder = relicToolMetadata.has(note.id) ? 3 : note.id.startsWith('recommend_submarine_') ? 2 : note.id.startsWith('recommend_glamour_') ? 1 : 0;
+  return { note, level, ilvl, categoryOrder };
+}).sort((a, b) => a.categoryOrder - b.categoryOrder || a.level - b.level || a.ilvl - b.ilvl).map(entry => entry.note);
 
 const aliases = new Map<string, string>();
 const searchPriorities = new Map<string, number>();
+for (const [id, metadata] of relicToolMetadata) aliases.set(id, metadata.jobs.join(' '));
 for (const group of compositions.groups) {
   for (const job of [...Object.keys(group.variants), 'all']) {
     aliases.set(`recommend_${group.base}_${job.toLowerCase()}`, job === 'all' ? Object.keys(group.variants).join(' ') : job);

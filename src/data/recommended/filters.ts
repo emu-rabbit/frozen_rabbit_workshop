@@ -1,5 +1,6 @@
 import type { Note } from '../../types/note';
 import definitions from './generated/compositions.json';
+import { relicToolMetadata } from './relicTools';
 
 export const craftingJobs = ['CRP', 'BSM', 'ARM', 'GSM', 'LTW', 'WVR', 'ALC', 'CUL'];
 export const gatheringJobs = ['MIN', 'BTN', 'FSH'];
@@ -16,7 +17,7 @@ const roleJobs: Record<string, string[]> = {
 };
 export const combatJobs = Object.entries(roleJobs).filter(([role]) => !['Crafting', 'Gathering'].includes(role)).flatMap(([, jobs]) => jobs);
 export const levelBands = [50, 60, 70, 80, 90, 100];
-export type RecommendedNoteType = 'combatEquipment' | 'professionEquipment' | 'quest';
+export type RecommendedNoteType = 'combatEquipment' | 'professionEquipment' | 'quest' | 'glamour' | 'submarine' | 'relicTools';
 export interface RecommendedFilters {
   jobs: string[];
   levels: number[];
@@ -33,6 +34,11 @@ for (const group of definitions.groups) {
 }
 
 export function getRecommendedMetadata(note: Note) {
+  const relic = relicToolMetadata.get(note.id);
+  if (relic) return { type: 'relicTools' as const, ...relic };
+  if (note.id.startsWith('recommend_submarine_')) return { type: 'submarine' as const, level: 0, jobs: [] as string[] };
+  // Glamour series names may mention combat roles, but belong to their own category.
+  if (note.id.startsWith('recommend_glamour_')) return { type: 'glamour' as const, level: 0, jobs: [] as string[] };
   const name = typeof note.name === 'string' ? note.name : note.name.en;
   const questJob = note.id.match(/^recommend_class_quests_1_60_(\w+)$/)?.[1]?.toUpperCase();
   const role = Object.keys(roleJobs).find(role => new RegExp(`\\b${role}\\b`).test(name));

@@ -9,6 +9,11 @@ describe('recommended note filters', () => {
     expect(combatJobs).toContain('BLU');
     for (const note of notes) {
       const metadata = getRecommendedMetadata(note);
+      if (metadata.type === 'glamour' || metadata.type === 'submarine') {
+        expect(metadata.jobs).toEqual([]);
+        expect(metadata.level).toBe(0);
+        continue;
+      }
       expect(metadata.jobs.length, note.id).toBeGreaterThan(0);
       if (metadata.type !== 'quest') expect(metadata.level, note.id).toBeGreaterThanOrEqual(50);
     }
@@ -45,6 +50,18 @@ describe('recommended note filters', () => {
     expect(battle.every(note => getRecommendedMetadata(note).jobs.every(job => combatJobs.includes(job)))).toBe(true);
     expect(professions.every(note => getRecommendedMetadata(note).jobs.every(job => [...craftingJobs, ...gatheringJobs].includes(job)))).toBe(true);
     const quests = filter(notes, { jobs: [], levels: [], types: ['quest'] });
-    expect(battle.length + professions.length + quests.length).toBe(notes.length);
+    const glamour = filter(notes, { jobs: [], levels: [], types: ['glamour'] });
+    expect(glamour).toHaveLength(165);
+    expect(glamour.every(note => note.id.startsWith('recommend_glamour_'))).toBe(true);
+    expect(filter(searchRecommendedNotes('小牛皮'), { jobs: [], levels: [], types: ['glamour'] })).toHaveLength(1);
+    expect(filter(glamour, { jobs: ['PLD'], levels: [], types: ['glamour'] })).toHaveLength(0);
+    expect(filter(glamour, { jobs: [], levels: [50], types: ['glamour'] })).toHaveLength(0);
+    const submarines = filter(notes, { jobs: [], levels: [], types: ['submarine'] });
+    expect(submarines).toHaveLength(6);
+    expect(filter(submarines, { jobs: ['ARM'], levels: [], types: ['submarine'] })).toHaveLength(0);
+    expect(filter(submarines, { jobs: [], levels: [50], types: ['submarine'] })).toHaveLength(0);
+    const relics = filter(notes, { jobs: [], levels: [], types: ['relicTools'] });
+    expect(relics).toHaveLength(29);
+    expect(battle.length + professions.length + quests.length + glamour.length + submarines.length + relics.length).toBe(notes.length);
   });
 });
