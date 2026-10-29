@@ -60,6 +60,8 @@ describe('recommended note filters', () => {
     expect(submarines).toHaveLength(6);
     expect(filter(submarines, { jobs: ['ARM'], levels: [], types: ['submarine'] })).toHaveLength(0);
     expect(filter(submarines, { jobs: [], levels: [50], types: ['submarine'] })).toHaveLength(0);
-    expect(battle.length + professions.length + quests.length + glamour.length + submarines.length).toBe(notes.length);
+    const relics = filter(notes, { jobs: [], levels: [], types: ['relicTools'] });
+    expect(relics).toHaveLength(29);
+    expect(battle.length + professions.length + quests.length + glamour.length + submarines.length + relics.length).toBe(notes.length);
   });
 });

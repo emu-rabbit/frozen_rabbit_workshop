@@ -17,7 +17,7 @@ const jobOptionsId = useId()
 const visibleJobGroups = computed(() => jobsExpanded.value
   ? jobGroups
   : [{ key: 'craftingGathering', jobs: [...craftingJobs, ...gatheringJobs].slice(0, 6) }])
-const noteTypes: RecommendedNoteType[] = ['combatEquipment', 'professionEquipment', 'quest', 'glamour', 'submarine']
+const noteTypes: RecommendedNoteType[] = ['combatEquipment', 'professionEquipment', 'quest', 'glamour', 'submarine', 'relicTools']
 const choiceClass = 'flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 px-2.5 py-2 text-sm cursor-pointer has-[:checked]:border-soft-green-500 has-[:checked]:bg-soft-green-50 dark:has-[:checked]:bg-soft-green-900/30'
 </script>
 
