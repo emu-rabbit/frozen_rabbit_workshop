@@ -1,14 +1,14 @@
 {
   "generator": "frozen-rabbit-workshop-game-data",
-  "version": "0d5d6534146e60d8d70d31c93bfcbaae18bdc7927ecd4d6a8f71510675ae02e8",
+  "version": "bdb30f7dd8f526aae44fcdddc97099eefc314549fb55daef3753a6b11ca21f03",
   "formatVersion": 2,
   "source": {
     "repository": "ffxiv-teamcraft/ffxiv-teamcraft",
-    "commit": "acc77d406cc50a78caf0210f805ec7b069607af0",
+    "commit": "36c0e6045fed3162c1c51aba2250a2638193b29f",
     "files": {
       "item-search.index": {
-        "bytes": 4189135,
-        "sha256": "975c3be478f1f29ef6c608fe4fa0f317b3d1e7588ee112d53188c7d440cf12f9"
+        "bytes": 4191923,
+        "sha256": "015197cd5ca319369d632ab8534da97f59ce2d720561dde19ca284f075961a31"
       },
       "equipment.json": {
         "bytes": 6769869,
@@ -27,20 +27,20 @@
         "sha256": "2b704958cecb2c0dfe346fcf1d344142d6feb5aee407d22bac93dccffa2e9849"
       },
       "items.json": {
-        "bytes": 9715482,
-        "sha256": "369768ac85fc2982543cb02b6abd56b5de4fb580d6e709f721bcaecf7c412ecb"
+        "bytes": 9715767,
+        "sha256": "1516033ac5191559b39d9129ad3c380e0cbaf68d0bbadb6fcc667943c6dc844c"
       },
       "tw/tw-items.json": {
-        "bytes": 2316809,
-        "sha256": "b88ccc584a013d65f8f9aa8b34d65a0e8d5806826921ab1f91c6271ead39b281"
+        "bytes": 2396577,
+        "sha256": "91f9b39d935262f96c57e3dc88c0ca0212d6aec433a79fdef3a8d1bb70c875c7"
       },
       "zh/zh-items.json": {
         "bytes": 2611736,
         "sha256": "366dd6521adb197c7a77a37fe0debf3a4189fd841ef331558e3a063c384574c1"
       },
       "item-icons.json": {
-        "bytes": 3630288,
-        "sha256": "3bd0cd83e0a69babc685e5cfd4c45422038e330fd931f127548cb85a77ef8035"
+        "bytes": 3630456,
+        "sha256": "1bc929c084302713452a405a8417725af3089083648f2b5ed4ce5030535cf0b5"
       },
       "gathering-items.json": {
         "bytes": 286786,
@@ -59,44 +59,44 @@
         "sha256": "9c7b3193f37a75727b0a315c72950a21b762e14c1c990c2fe47f8280e343d4af"
       },
       "tw/tw-places.json": {
-        "bytes": 217184,
-        "sha256": "43a4882b17d24671030564abaded6ed896d50210c7ad45db0fed22614bb49385"
+        "bytes": 223203,
+        "sha256": "de8d528d90ca2be5d4d82903967c8fe80fdc8fae62b5fe39d5670981a3e3d575"
       },
       "zh/zh-places.json": {
         "bytes": 235172,
         "sha256": "8ec193c5861330c7260b4dab3a3a8ea046cdc425579e97cc80cb6793e09602f0"
       },
       "shops.json": {
-        "bytes": 9451851,
-        "sha256": "e10047d796717f2c26bc5d0691fa212c497fd3221e989a0272f500c490b8ac16"
+        "bytes": 9454113,
+        "sha256": "6310d0472aa5ce53054de5bd6e405dfe95065e0cae620bec716adce4f485ddb6"
       },
       "npcs.json": {
-        "bytes": 17198081,
-        "sha256": "6cd33fe799fd506045ed7e2214e061be5e9f4f8f72e3c950c2977609ab13bd1a"
+        "bytes": 17200707,
+        "sha256": "0c7873a8ac2c08bda6e95ac048fdf5643bbf33481c8cb70439c25a84b9a1c8a0"
       },
       "tw/tw-npcs.json": {
-        "bytes": 1346665,
-        "sha256": "16563c48d99f513c095d8d75a4dce4915ada1372e3a50ebb435dfb470df0ab94"
+        "bytes": 1381702,
+        "sha256": "cf5d832953b64aef62c4db099dde2a9f24dec8781f3fbffce8e9f904e048340b"
       },
       "zh/zh-npcs.json": {
         "bytes": 1430127,
         "sha256": "38f39122e9e04d90518ef014ad6546c7059a2da026d0034052893f30ee28563f"
       },
       "drop-sources.json": {
-        "bytes": 12556,
-        "sha256": "7efae2037ca0e4286658d44091bb3374e3a68bbff149d5ead862c8ca3cd64cc5"
+        "bytes": 12565,
+        "sha256": "cc80bc44f942c226721ad89d244f54a86d639de25b9d875b56d3c67ead1f3491"
       },
       "monsters.json": {
-        "bytes": 9520464,
-        "sha256": "8544059e9e6838421dc0e41e73d58369dd062a5a9483c1d5e587811ac0e03a55"
+        "bytes": 9524749,
+        "sha256": "6ad4e77b2e9f4f7766e508a30afecf63fc3935d82b2dadb73316890e71e6374e"
       },
       "mobs.json": {
-        "bytes": 2160683,
-        "sha256": "b8fc129416ccf5b259fdbc008d6dbd496a79af3ad975e690f67ca7c3e5c6a7fd"
+        "bytes": 2160739,
+        "sha256": "b33b82b25be0531d3c767630be76508bc5d6f9862c3b23d9073f10efc1dc0241"
       },
       "tw/tw-mobs.json": {
-        "bytes": 615547,
-        "sha256": "1ce9dd243f37a01696114fe992a5fa686f3ac5c8a69834957f3afabc40f67d06"
+        "bytes": 631287,
+        "sha256": "5b68fdf779b5eb42a01fdeb807b7fb3b2f2969c1b5128febcb340940f9eb7948"
       },
       "zh/zh-mobs.json": {
         "bytes": 658357,
@@ -122,10 +122,10 @@
   },
   "bundles": {
     "catalog": {
-      "file": "catalog.a35de896eba4f6197c149867d92addd2fe93d6d658d6ed2a76172824a8d841a9.bin",
-      "sha256": "a35de896eba4f6197c149867d92addd2fe93d6d658d6ed2a76172824a8d841a9",
-      "bytes": 586040,
-      "jsonBytes": 4701678,
+      "file": "catalog.0ca6d467151859248de6aa4b4747841484a86cab23c3a3f5e458eba753ec6244.bin",
+      "sha256": "0ca6d467151859248de6aa4b4747841484a86cab23c3a3f5e458eba753ec6244",
+      "bytes": 588509,
+      "jsonBytes": 4712669,
       "encoding": "gzip",
       "records": 14153
     },
@@ -138,18 +138,18 @@
       "records": 14188
     },
     "sources": {
-      "file": "sources.a97eb53e0b1b11c13d26bf839be839cadb5eae212bcb4b0c140fad28dcb99578.bin",
-      "sha256": "a97eb53e0b1b11c13d26bf839be839cadb5eae212bcb4b0c140fad28dcb99578",
-      "bytes": 194852,
-      "jsonBytes": 3176007,
+      "file": "sources.e0f5f891902293c8906a9874b86d591c9ae349fa2202cd0dda587dcf446ecb39.bin",
+      "sha256": "e0f5f891902293c8906a9874b86d591c9ae349fa2202cd0dda587dcf446ecb39",
+      "bytes": 195004,
+      "jsonBytes": 3176661,
       "encoding": "gzip",
       "records": 648
     }
   },
   "notice": {
-    "file": "NOTICE.1e1bbdbfcab258a04604a9812fe0ac5e095ca299a58fc8bc65d6928ec4f5f746.txt",
+    "file": "NOTICE.44bca52e25deaa0a5f86e23f14dd230650bf3f66f7d100696e27642e5eb25dc6.txt",
     "bytes": 1697,
-    "sha256": "1e1bbdbfcab258a04604a9812fe0ac5e095ca299a58fc8bc65d6928ec4f5f746"
+    "sha256": "44bca52e25deaa0a5f86e23f14dd230650bf3f66f7d100696e27642e5eb25dc6"
   },
   "patches": {
     "sha256": "f127a5113d5005d2061a58736435f5ea73cef23356a55e98e3fd2f88fc5cf9ba",
@@ -159,16 +159,20 @@
   },
   "updateSummary": {
     "tw": [
-      "新增7.56訓獸師資料"
+      "同步台服 7.3 的繁中物品名稱，補齊 352 筆譯名並更新 37 筆既有譯名。",
+      "更新部分地名與 NPC 的繁中名稱，並同步 Teamcraft 的怪物掉落來源。"
     ],
     "cn": [
-      "新增7.56驯兽师数据"
+      "同步繁中服 7.3 的繁体中文物品名称，补全 352 条译名并更新 37 条现有译名。",
+      "更新部分地名和 NPC 的繁体中文名称，并同步 Teamcraft 的怪物掉落来源。"
     ],
     "en": [
-      "Added patch 7.56 Beastmaster data"
+      "Synced Traditional Chinese item names with the Taiwanese release of patch 7.3, adding 352 translations and revising 37.",
+      "Updated some Traditional Chinese place and NPC names and synced monster drop sources from Teamcraft."
     ],
     "ja": [
-      "パッチ7.56の魔獣使いデータを追加"
+      "台湾版パッチ7.3に合わせ、アイテムの繁体字中国語名を352件追加し、既存の翻訳37件を更新しました。",
+      "一部の地名とNPC名の繁体字中国語表記を更新し、モンスターのドロップ元をTeamcraftのデータと同期しました。"
     ]
   },
   "diagnostics": {

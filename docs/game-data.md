@@ -2,7 +2,7 @@
 
 ## 架構與資料範圍
 
-Teamcraft 原始資料只由 `scripts/generate-game-data.mjs` 在維護者產包時下載。瀏覽器只讀本站 `game-data/`，不會回退到 Teamcraft staging。Universalis 市場行情及 XIVAPI 圖示仍為外部服務。
+`scripts/generate-game-data.mjs` 在維護者產包時從 Teamcraft 下載原始資料，或讀取已核對的本機快照。瀏覽器只讀本站 `game-data/`，不會回退到 Teamcraft staging。Universalis 市場行情及 XIVAPI 圖示仍為外部服務。
 
 | 包 | 內容 | 載入時機 |
 | --- | --- | --- |
@@ -29,7 +29,7 @@ Teamcraft 原始資料只由 `scripts/generate-game-data.mjs` 在維護者產包
 - 目前快照的開拓覆蓋檢查：44 採集、6 屯貨倉庫、20 種植、9 畜牧、28 製作、81 工坊產品、25 建築／地標，共 213 項，無未分類項目。範圍為本站配方產物與材料，不表示收錄遊戲全部無人島物品；`tests/unit/islandSources.test.ts` 驗證真實簽入包，更新快照時須檢視分類變化。
 - 缺資料的舊筆記仍保留 ID 與數量，顯示未知物品；不刪使用者資料。
 
-目前快照 `acc77d406cc50a78caf0210f805ec7b069607af0`：catalog 14,153 筆，recipes 14,188 筆（含 25 個負 ID 產物），sources 648 個普通採集節點。三包合計約 0.96 MB 壓縮／10.62 MB JSON；精確位元組與其餘診斷以 manifest 為準。相較前次快照，本次 recipes 與 sources 包內容相同；catalog 更新裝備適用職業與分類資料。
+目前快照 `36c0e6045fed3162c1c51aba2250a2638193b29f` 取自本機 Teamcraft clone 的[台服 7.3 PR #3359](https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/pull/3359) head。catalog 有 14,153 筆物品，recipes 有 14,188 筆配方（含 25 個負 ID 產物），sources 有 648 個普通採集節點。三包合計約 0.96 MB 壓縮／10.63 MB JSON，精確位元組與其餘診斷以 manifest 為準。相較前次快照，catalog 補齊 352 筆繁中物品名稱並修訂 37 筆既有譯名，sources 更新部分地名、NPC 名稱及怪物掉落資料，recipes 的內容定址檔案沿用前一版。
 
 ## 本站名稱補丁
 

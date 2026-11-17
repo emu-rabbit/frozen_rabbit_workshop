@@ -47,9 +47,10 @@ describe('curated glamour notes', () => {
     expect(glamour.filter(note => note.name.en.includes('Replica '))).toHaveLength(33);
   });
 
-  it('includes later-patch items with Chinese-derived draft titles without changing dictionary names', () => {
+  it('keeps curated titles independent of the catalog translation coverage', () => {
     const missing = new Set(glamour.flatMap(note => note.items).filter(item => !byId.get(item.id)!.names.tw).map(item => item.id));
-    expect(missing.size).toBe(55);
+    expect(missing.size).toBe(41);
+    expect(byId.get(47258)?.names.tw).toBe('夏令禮服');
     expect(glamour.find(note => note.items.some(item => item.id === 6979))!.name.tw).toBe('高地服飾套裝');
     const spring = glamour.filter(note => note.items.some(item => item.id === 7540 || item.id === 7541));
     expect(spring).toHaveLength(1);

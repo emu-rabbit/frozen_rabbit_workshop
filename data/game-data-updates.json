@@ -4,5 +4,23 @@
     "cn": ["新增7.56驯兽师数据"],
     "en": ["Added patch 7.56 Beastmaster data"],
     "ja": ["パッチ7.56の魔獣使いデータを追加"]
+  },
+  "36c0e6045fed3162c1c51aba2250a2638193b29f": {
+    "tw": [
+      "同步台服 7.3 的繁中物品名稱，補齊 352 筆譯名並更新 37 筆既有譯名。",
+      "更新部分地名與 NPC 的繁中名稱，並同步 Teamcraft 的怪物掉落來源。"
+    ],
+    "cn": [
+      "同步繁中服 7.3 的繁体中文物品名称，补全 352 条译名并更新 37 条现有译名。",
+      "更新部分地名和 NPC 的繁体中文名称，并同步 Teamcraft 的怪物掉落来源。"
+    ],
+    "en": [
+      "Synced Traditional Chinese item names with the Taiwanese release of patch 7.3, adding 352 translations and revising 37.",
+      "Updated some Traditional Chinese place and NPC names and synced monster drop sources from Teamcraft."
+    ],
+    "ja": [
+      "台湾版パッチ7.3に合わせ、アイテムの繁体字中国語名を352件追加し、既存の翻訳37件を更新しました。",
+      "一部の地名とNPC名の繁体字中国語表記を更新し、モンスターのドロップ元をTeamcraftのデータと同期しました。"
+    ]
   }
 }
