@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: '24.x'
           cache: 'npm'
 
       - name: Cache node modules
@@ -96,7 +96,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: '24.x'
           cache: 'npm'
 
       - name: Resolve deployment branches
