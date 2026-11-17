@@ -1,5 +1,5 @@
 Frozen Rabbit Workshop game data
-Source: https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/tree/28cd7763e23781cd17650a7ae7a336688815360a
+Source: https://github.com/ffxiv-teamcraft/ffxiv-teamcraft/tree/36c0e6045fed3162c1c51aba2250a2638193b29f
 Modified: selected fields, canonical IDs, four-language normalization and gzip packaging.
 Name patch island-names-tw: https://github.com/thewakingsands/ffxiv-datamining-tc/tree/e203c7e46dd80fd2a967e5741b30e3c9fad0c767 (see data/game-data-patches for rows and checksums).
 Game content and trademarks remain the property of their respective owners.
